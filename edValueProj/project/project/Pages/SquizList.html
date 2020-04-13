@@ -31,7 +31,8 @@
             user = JSON.parse(localStorage["user"]);
             bodymail = user.Mail.split(".")[0];
             endmail = user.Mail.split(".")[1];
-            userEmail = bodymail + "," + endmail;
+            //userEmail = bodymail + "," + endmail;
+            userEmail="zz@gmail.com"
             
 
             ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)

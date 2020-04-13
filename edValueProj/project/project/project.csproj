@@ -294,6 +294,7 @@
     <Content Include="Pages\Assignment_assignment.html" />
     <Content Include="Pages\classInfo.html" />
     <Content Include="images\clipart-school-cartoon-2.jpg" />
+    <Content Include="Pages\Github.html" />
     <Content Include="Pages\HtmlPage3 - Copy - Copy.html" />
     <Content Include="Pages\intelligencequiz.html" />
     <Content Include="Pages\loadCity.html" />

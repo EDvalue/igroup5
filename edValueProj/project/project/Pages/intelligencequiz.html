@@ -30,7 +30,7 @@
         $(document).ready(function () {
             console.log("ready!");
             user = JSON.parse(localStorage["user"])
-            document.getElementById("talmid").innerHTML = "שלום " + user.Name;
+            document.getElementById("talmid").innerHTML = "שלום " + user.Name+" "+user.LastName;
 
             $("#send").click(function () {
 
@@ -53,13 +53,12 @@
                 mail = user.Mail;
                 var dict = {
                     "mail": mail,
-                    "תוך אישית": intelli[0],
-                    "נטורליסטית": intelli[1],
-                    "לוגית": intelli[2],
-                    "מרחבית": intelli[3],
-                    "לשונית": intelli[4],
-                    "תנועתית": intelli[5],
-                    "מוזיקלית": intelli[6],
+                    "personal": intelli[0],
+                    "logically": intelli[1],
+                    "spatial": intelli[2],
+                    "tongue": intelli[3],
+                    "Movemental": intelli[4],
+                    "musically": intelli[5],
                 };
 
 
@@ -147,7 +146,7 @@
 
                 </P>
             </div>
-            <div id="quiz">
+            <!--<div id="quiz">
                 <h5>אינטלגנציה נטורליסטית</h5>
                 <P dir="rtl">
 
@@ -167,7 +166,7 @@
                     <BR>
 
                 </P>
-            </div>
+            </div>-->
 
             <div id="quiz">
                 <h5>אינטלגנציה לוגית מתמטית</h5>
@@ -177,16 +176,16 @@
 
 
                     <BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני מחשב/ת מספרים בראש בקלות<BR>
-                    <input type="checkbox" id="2" name="2" value="1"> מתמטיקה ומדעים הם המקצועות האהובים עליי<BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני אוהב/ת משחקים וחידות היגיון<BR>
-                    <input type="checkbox" id="2" name="2" value="1">  אני אוהב/ת לערוך ניסויים קטנים (בבית/ במטבח...)<BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני עוקב/ת אחר התפתחויות מדעיות חדשות<BR>
-                    <input type="checkbox" id="2" name="2" value="1"> אני שואל/ת שאלות רבות לגבי הדרך שבה דברים פועלים<BR>
-                    <input type="checkbox" id="2" name="2" value="1"> אני מחפש/ת לכל דבר הסבר רציונלי (הגיוני)<BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני מרגיש/ה יותר בנוח עם דברים שנבחנו; נמדדו או כומתו (מלשון כמות) בדרך כלשהי<BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני זוכר/ת בקלות מספרים<BR>
-                    <input type="checkbox" id="2" name="2" value="1">אני אוהב/ת חידות עם מספרים
+                    <input type="checkbox" id="2" name="1" value="1">אני מחשב/ת מספרים בראש בקלות<BR>
+                    <input type="checkbox" id="2" name="1" value="1"> מתמטיקה ומדעים הם המקצועות האהובים עליי<BR>
+                    <input type="checkbox" id="2" name="1" value="1">אני אוהב/ת משחקים וחידות היגיון<BR>
+                    <input type="checkbox" id="2" name="1" value="1">  אני אוהב/ת לערוך ניסויים קטנים (בבית/ במטבח...)<BR>
+                    <input type="checkbox" id="2" name="1" value="1">אני עוקב/ת אחר התפתחויות מדעיות חדשות<BR>
+                    <input type="checkbox" id="2" name="1" value="1"> אני שואל/ת שאלות רבות לגבי הדרך שבה דברים פועלים<BR>
+                    <input type="checkbox" id="2" name="1" value="1"> אני מחפש/ת לכל דבר הסבר רציונלי (הגיוני)<BR>
+                    <input type="checkbox" id="2" name="1" value="1">אני מרגיש/ה יותר בנוח עם דברים שנבחנו; נמדדו או כומתו (מלשון כמות) בדרך כלשהי<BR>
+                    <input type="checkbox" id="2" name="1" value="1">אני זוכר/ת בקלות מספרים<BR>
+                    <input type="checkbox" id="2" name="1" value="1">אני אוהב/ת חידות עם מספרים
                     <BR>
 
                 </p>
@@ -200,16 +199,16 @@
 
 
                     <BR>
-                    <input type="checkbox" id="3" name="3" value="1">כשאני עוצמ/ת עיניים אני בדרך כלל רואה תמונות ברורות<BR>
-                    <input type="checkbox" id="3" name="3" value="1"> אני רגיש/ה לצבע<BR>
-                    <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת להסתכל בתמונות (בספרים/תערוכות)<BR>
-                    <input type="checkbox" id="3" name="3" value="1">  אני מתעניינת/ במבנים/ בעיצובי פנים וחוץ של בניינים ובתים<BR>
-                    <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת משחקי הרכבה; מבוכים ומשחקים חזותיים אחרים<BR>
-                    <input type="checkbox" id="3" name="3" value="1">באופן כללי אני יכול/ה למצוא את דרכי במקום לא מוכר<BR>
-                    <input type="checkbox" id="3" name="3" value="1"> אני אוהב/ת לשרבט/לצייר<BR>
-                    <input type="checkbox" id="3" name="3" value="1">אני יכול/ה לדמיין בקלות איך משהו יראה- למשל ממעוף הציפור<BR>
-                    <input type="checkbox" id="3" name="3" value="1">כשאני בחנות רהיטים- אני יכול/ה לדמיין בקלות איך הרהיטים משתלבים בחדר<BR>
-                    <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת פעילות הנושאת אופי אמנותי
+                    <input type="checkbox" id="3" name="2" value="1">כשאני עוצמ/ת עיניים אני בדרך כלל רואה תמונות ברורות<BR>
+                    <input type="checkbox" id="3" name="2" value="1"> אני רגיש/ה לצבע<BR>
+                    <input type="checkbox" id="3" name="2" value="1">אני אוהב/ת להסתכל בתמונות (בספרים/תערוכות)<BR>
+                    <input type="checkbox" id="3" name="2" value="1">  אני מתעניינת/ במבנים/ בעיצובי פנים וחוץ של בניינים ובתים<BR>
+                    <input type="checkbox" id="3" name="2" value="1">אני אוהב/ת משחקי הרכבה; מבוכים ומשחקים חזותיים אחרים<BR>
+                    <input type="checkbox" id="3" name="2" value="1">באופן כללי אני יכול/ה למצוא את דרכי במקום לא מוכר<BR>
+                    <input type="checkbox" id="3" name="2" value="1"> אני אוהב/ת לשרבט/לצייר<BR>
+                    <input type="checkbox" id="3" name="2" value="1">אני יכול/ה לדמיין בקלות איך משהו יראה- למשל ממעוף הציפור<BR>
+                    <input type="checkbox" id="3" name="2" value="1">כשאני בחנות רהיטים- אני יכול/ה לדמיין בקלות איך הרהיטים משתלבים בחדר<BR>
+                    <input type="checkbox" id="3" name="2" value="1">אני אוהב/ת פעילות הנושאת אופי אמנותי
                     <BR>
 
                 </p>
@@ -218,16 +217,16 @@
                 <h5>אינטלגנציה לשונית</h5>
                 <p>
                     <BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת לספר סיפורים<BR>
-                    <input type="checkbox" id="4" name="4" value="1"> אני אוהב/ת להקשיב לדיבור: סיפור/ רדיו וכו'<BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת משחקים עם מילים כגון שבץ נא; ושעשועי מילים כגון תשבצים.)<BR>
-                    <input type="checkbox" id="4" name="4" value="1">המקצועות ספרות; היסטוריה ואזרחות אהובים עליי יותר מפיזיקה; מתמטיקה וכימיה<BR>
-                    <input type="checkbox" id="4" name="4" value="1">כשאני נוסע/ת אני שמ/ה לב למילים על השלטים ולוחות המודעות יותר מאשר לנוף<BR>
-                    <input type="checkbox" id="4" name="4" value="1">דברים שאני כותב/ת זוכים להערכתם של אחרים<BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת לקרוא<BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני בעל/ת זיכרון טוב לשמות מקומות ולפרטים<BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני בעל/ת אוצר מילים רחב יחסית<BR>
-                    <input type="checkbox" id="4" name="4" value="1">אני אוהבת/ חרוזים
+                    <input type="checkbox" id="4" name="3" value="1">אני אוהב/ת לספר סיפורים<BR>
+                    <input type="checkbox" id="4" name="3" value="1"> אני אוהב/ת להקשיב לדיבור: סיפור/ רדיו וכו'<BR>
+                    <input type="checkbox" id="4" name="3" value="1">אני אוהב/ת משחקים עם מילים כגון שבץ נא; ושעשועי מילים כגון תשבצים.)<BR>
+                    <input type="checkbox" id="4" name="3" value="1">המקצועות ספרות; היסטוריה ואזרחות אהובים עליי יותר מפיזיקה; מתמטיקה וכימיה<BR>
+                    <input type="checkbox" id="4" name="3" value="1">כשאני נוסע/ת אני שמ/ה לב למילים על השלטים ולוחות המודעות יותר מאשר לנוף<BR>
+                    <input type="checkbox" id="4" name="3" value="1">דברים שאני כותב/ת זוכים להערכתם של אחרים<BR>
+                    <input type="checkbox" id="4" name="3" value="1">אני אוהב/ת לקרוא<BR>
+                    <input type="checkbox" id="4" name="3" value="1">אני בעל/ת זיכרון טוב לשמות מקומות ולפרטים<BR>
+                    <input type="checkbox" id="4" name="3" value="1">אני בעל/ת אוצר מילים רחב יחסית<BR>
+                    <input type="checkbox" id="4" name="3" value="1">אני אוהבת/ חרוזים
                     <BR>
 
                 </p>
@@ -238,16 +237,16 @@
                 <h5>אינטלגנציה תנועתית</h5>
                 <p>
                     <BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני עוסק/ת באופן קבוע בספורט כלשהו או בפעילות גופנית<BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני זז/ה; מתופפ/ת או מגלה חוסר מנוחה כאשר יושב/ת במקום אחד הרבה זמן<BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לעבוד בידיים – לתפור; לרקום; לגלף וכו'.)<BR>
-                    <input type="checkbox" id="5" name="5" value="1"> כשאני לומד/ת מיומנות חדשה אני מוכרח/ה לתרגל אותה<BR>
-                    <input type="checkbox" id="5" name="5" value="1">הרעיונות הטובים ביותר עולים בדעתי בשעת פעילות פיזית<BR>
-                    <input type="checkbox" id="5" name="5" value="1">בשעת שיחה אני מרבה להשתמש בתנועות ידיים וגוף<BR>
-                    <input type="checkbox" id="5" name="5" value="1">לרוב כשאני מאזינ/ה למוזיקה אני מתנועעת<BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לפרק דברים ואחר להרכיבם מחדש<BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לגעת בכל דבר שאני רואה<BR>
-                    <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת משחקי כדור
+                    <input type="checkbox" id="5" name="4" value="1">אני עוסק/ת באופן קבוע בספורט כלשהו או בפעילות גופנית<BR>
+                    <input type="checkbox" id="5" name="4" value="1">אני זז/ה; מתופפ/ת או מגלה חוסר מנוחה כאשר יושב/ת במקום אחד הרבה זמן<BR>
+                    <input type="checkbox" id="5" name="4" value="1">אני אוהב/ת לעבוד בידיים – לתפור; לרקום; לגלף וכו'.)<BR>
+                    <input type="checkbox" id="5" name="4" value="1"> כשאני לומד/ת מיומנות חדשה אני מוכרח/ה לתרגל אותה<BR>
+                    <input type="checkbox" id="5" name="4" value="1">הרעיונות הטובים ביותר עולים בדעתי בשעת פעילות פיזית<BR>
+                    <input type="checkbox" id="5" name="4" value="1">בשעת שיחה אני מרבה להשתמש בתנועות ידיים וגוף<BR>
+                    <input type="checkbox" id="5" name="4" value="1">לרוב כשאני מאזינ/ה למוזיקה אני מתנועעת<BR>
+                    <input type="checkbox" id="5" name="4" value="1">אני אוהב/ת לפרק דברים ואחר להרכיבם מחדש<BR>
+                    <input type="checkbox" id="5" name="4" value="1">אני אוהב/ת לגעת בכל דבר שאני רואה<BR>
+                    <input type="checkbox" id="5" name="4" value="1">אני אוהב/ת משחקי כדור
                     <BR>
                 </p>
             </div>
@@ -257,16 +256,16 @@
 
 
                     <BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני יכול/ה להבחין בזיוף מוזיקלי<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני מקשיב/ה הרבה למוזיקה<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני מנגנ/ת בכלי מוזיקלי'.)<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני אוהב/ת לשיר<BR>
-                    <input type="checkbox" id="6" name="6" value="1">חיי היו אומללים ללא מוזיקה<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני יכול/ה להתחבר למקצב של יצירה מוזיקלית תוך שימוש בכלי הקשה פשוט<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני מכיר/ה מנגינות רבות ושונות של שירים ויצירות מוזיקליות<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני מסוגל/ת לחזור בצורה מדויקת למדי על קטע מוזיקלי לאחר שמיעה אחת בלבד<BR>
-                    <input type="checkbox" id="6" name="6" value="1">אני מזמזמ/ת לעצמי באופן קבוע<BR>
-                    <input type="checkbox" id="6" name="6" value="1">בחשיבה; בשיחה; בהרצאה – אני מרבה להשתמש בדימויים מעולם המוזיקה
+                    <input type="checkbox" id="6" name="5" value="1">אני יכול/ה להבחין בזיוף מוזיקלי<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני מקשיב/ה הרבה למוזיקה<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני מנגנ/ת בכלי מוזיקלי'.)<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני אוהב/ת לשיר<BR>
+                    <input type="checkbox" id="6" name="5" value="1">חיי היו אומללים ללא מוזיקה<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני יכול/ה להתחבר למקצב של יצירה מוזיקלית תוך שימוש בכלי הקשה פשוט<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני מכיר/ה מנגינות רבות ושונות של שירים ויצירות מוזיקליות<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני מסוגל/ת לחזור בצורה מדויקת למדי על קטע מוזיקלי לאחר שמיעה אחת בלבד<BR>
+                    <input type="checkbox" id="6" name="5" value="1">אני מזמזמ/ת לעצמי באופן קבוע<BR>
+                    <input type="checkbox" id="6" name="5" value="1">בחשיבה; בשיחה; בהרצאה – אני מרבה להשתמש בדימויים מעולם המוזיקה
                     <BR>
 
                 </p>
@@ -282,159 +281,5 @@
 
         </div>
 
-
-    
-
-
-
-    <!--<div>
-        <div dir="rtl">
-            <h3>מבחן אינטילגנציות</h3>
-
-
-        </div>
-
-
-        <P dir="rtl">
-            אינטלגציה תוך אישית
-
-
-            <BR>
-            <input type="checkbox" id="0" name="0" value="1"> אני מהרהר/ת הרבה על דברים שאני עומד/ת לבצע או לאחר מעשה<BR>
-            <input type="checkbox" id="0" name="0" value="1"> אני מסוגל/ת ללמוד מכישלונות<BR>
-            <input type="checkbox" id="0" name="0" value="1">יש לי תחומי עניין שאני שומר/ת לעצמי<BR>
-            <input type="checkbox" id="0" name="0" value="1">אני מכוונ/ת את עצמי ליעדים שקבעתי לעצמי בחיים<BR>
-            <input type="checkbox" id="0" name="0" value="1"> אני מודע/ת ליכולותיי ולחולשותיי<BR>
-            <input type="checkbox" id="0" name="0" value="1"> אני בעל/ת חשיבה עצמאית<BR>
-            <input type="checkbox" id="0" name="0" value="1"> אני כותב/ת יומן<BR>
-            <input type="checkbox" id="0" name="0" value="1">אני מעדיפ/ה לעבוד לבד מאשר בקבוצה<BR>
-            <input type="checkbox" id="0" name="0" value="1">אני יודע/ת לבטא היטב את תחושותיי ורגשותיי<BR>
-            <input type="checkbox" id="0" name="0" value="1">אני יודע/ת להקשיב לעצמי (להיות מודעת לרגשותיי; רצונותיי; צרכיי וכדומה)
-            <BR>
-
-        </P>
-
-        <P dir="rtl">
-
-            אינטלגנציה נטורליסטית
-
-            <BR>
-            <input type="checkbox" id="1" name="1" value="1"> אני אוהב/ת לטייל בטבע וליהנות מהמראות<BR>
-            <input type="checkbox" id="1" name="1" value="1"> אני זוכר/ת בקלות יחסית שמות של צמחים ובעלי חיים<BR>
-            <input type="checkbox" id="1" name="1" value="1">אני מגדל/ת או רוצה לגדל בעלי חיים<BR>
-            <input type="checkbox" id="1" name="1" value="1">אני מגדל/ת עצים/ גינה<BR>
-            <input type="checkbox" id="1" name="1" value="1"> אני מבינ/ה את החשיבות שבתזונה בריאה ומשתדלת לחיות על פי עקרונותיה<BR>
-            <input type="checkbox" id="1" name="1" value="1"> אני מרבה להסתכל בשמיים; בכוכבים; במעוף הציפורים<BR>
-            <input type="checkbox" id="1" name="1" value="1"> אני חובב/ת סרטי טבע<BR>
-            <input type="checkbox" id="1" name="1" value="1">אני מעדיפ/ה ארוחה בטבע על פני ארוחה במסעדה סגורה<BR>
-            <input type="checkbox" id="1" name="1" value="1">אני מעדיפ/ה לגור בכפר ולא בעיר<BR>
-            <input type="checkbox" id="1" name="1" value="1">הליכה בטבע מרגיעה אותי)
-            <BR>
-
-        </P>
-        <p>
-            אינטלגנציה לוגית מתמטית
-
-
-
-            <BR>
-            <input type="checkbox" id="2" name="2" value="1">אני מחשב/ת מספרים בראש בקלות<BR>
-            <input type="checkbox" id="2" name="2" value="1"> מתמטיקה ומדעים הם המקצועות האהובים עליי<BR>
-            <input type="checkbox" id="2" name="2" value="1">אני אוהב/ת משחקים וחידות היגיון<BR>
-            <input type="checkbox" id="2" name="2" value="1">  אני אוהב/ת לערוך ניסויים קטנים (בבית/ במטבח...)<BR>
-            <input type="checkbox" id="2" name="2" value="1">אני עוקב/ת אחר התפתחויות מדעיות חדשות<BR>
-            <input type="checkbox" id="2" name="2" value="1"> אני שואל/ת שאלות רבות לגבי הדרך שבה דברים פועלים<BR>
-            <input type="checkbox" id="2" name="2" value="1"> אני מחפש/ת לכל דבר הסבר רציונלי (הגיוני)<BR>
-            <input type="checkbox" id="2" name="2" value="1">אני מרגיש/ה יותר בנוח עם דברים שנבחנו; נמדדו או כומתו (מלשון כמות) בדרך כלשהי<BR>
-            <input type="checkbox" id="2" name="2" value="1">אני זוכר/ת בקלות מספרים<BR>
-            <input type="checkbox" id="2" name="2" value="1">אני אוהב/ת חידות עם מספרים
-            <BR>
-
-        </p>
-
-
-
-        <p>
-            אינטלגנציה מרחבית
-
-
-
-            <BR>
-            <input type="checkbox" id="3" name="3" value="1">כשאני עוצמ/ת עיניים אני בדרך כלל רואה תמונות ברורות<BR>
-            <input type="checkbox" id="3" name="3" value="1"> אני רגיש/ה לצבע<BR>
-            <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת להסתכל בתמונות (בספרים/תערוכות)<BR>
-            <input type="checkbox" id="3" name="3" value="1">  אני מתעניינת/ במבנים/ בעיצובי פנים וחוץ של בניינים ובתים<BR>
-            <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת משחקי הרכבה; מבוכים ומשחקים חזותיים אחרים<BR>
-            <input type="checkbox" id="3" name="3" value="1">באופן כללי אני יכול/ה למצוא את דרכי במקום לא מוכר<BR>
-            <input type="checkbox" id="3" name="3" value="1"> אני אוהב/ת לשרבט/לצייר<BR>
-            <input type="checkbox" id="3" name="3" value="1">אני יכול/ה לדמיין בקלות איך משהו יראה- למשל ממעוף הציפור<BR>
-            <input type="checkbox" id="3" name="3" value="1">כשאני בחנות רהיטים- אני יכול/ה לדמיין בקלות איך הרהיטים משתלבים בחדר<BR>
-            <input type="checkbox" id="3" name="3" value="1">אני אוהב/ת פעילות הנושאת אופי אמנותי
-            <BR>
-
-        </p>
-        <p>
-            אינטלגנציה לשונית
-
-
-
-            <BR>
-            <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת לספר סיפורים<BR>
-            <input type="checkbox" id="4" name="4" value="1"> אני אוהב/ת להקשיב לדיבור: סיפור/ רדיו וכו'<BR>
-            <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת משחקים עם מילים כגון שבץ נא; ושעשועי מילים כגון תשבצים.)<BR>
-            <input type="checkbox" id="4" name="4" value="1">המקצועות ספרות; היסטוריה ואזרחות אהובים עליי יותר מפיזיקה; מתמטיקה וכימיה<BR>
-            <input type="checkbox" id="4" name="4" value="1">כשאני נוסע/ת אני שמ/ה לב למילים על השלטים ולוחות המודעות יותר מאשר לנוף<BR>
-            <input type="checkbox" id="4" name="4" value="1">דברים שאני כותב/ת זוכים להערכתם של אחרים<BR>
-            <input type="checkbox" id="4" name="4" value="1">אני אוהב/ת לקרוא<BR>
-            <input type="checkbox" id="4" name="4" value="1">אני בעל/ת זיכרון טוב לשמות מקומות ולפרטים<BR>
-            <input type="checkbox" id="4" name="4" value="1">אני בעל/ת אוצר מילים רחב יחסית<BR>
-            <input type="checkbox" id="4" name="4" value="1">אני אוהבת/ חרוזים
-            <BR>
-
-        </p>
-
-
-
-        <p>
-            אינטלגנציה תנועתית
-
-
-
-            <BR>
-            <input type="checkbox" id="5" name="5" value="1">אני עוסק/ת באופן קבוע בספורט כלשהו או בפעילות גופנית<BR>
-            <input type="checkbox" id="5" name="5" value="1">אני זז/ה; מתופפ/ת או מגלה חוסר מנוחה כאשר יושב/ת במקום אחד הרבה זמן<BR>
-            <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לעבוד בידיים – לתפור; לרקום; לגלף וכו'.)<BR>
-            <input type="checkbox" id="5" name="5" value="1"> כשאני לומד/ת מיומנות חדשה אני מוכרח/ה לתרגל אותה<BR>
-            <input type="checkbox" id="5" name="5" value="1">הרעיונות הטובים ביותר עולים בדעתי בשעת פעילות פיזית<BR>
-            <input type="checkbox" id="5" name="5" value="1">בשעת שיחה אני מרבה להשתמש בתנועות ידיים וגוף<BR>
-            <input type="checkbox" id="5" name="5" value="1">לרוב כשאני מאזינ/ה למוזיקה אני מתנועעת<BR>
-            <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לפרק דברים ואחר להרכיבם מחדש<BR>
-            <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת לגעת בכל דבר שאני רואה<BR>
-            <input type="checkbox" id="5" name="5" value="1">אני אוהב/ת משחקי כדור
-            <BR>
-        </p>
-        <p>
-            אינטלגנציה שמיעתית- מוזיקלית
-
-            <BR>
-            <input type="checkbox" id="6" name="6" value="1">אני יכול/ה להבחין בזיוף מוזיקלי<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני מקשיב/ה הרבה למוזיקה<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני מנגנ/ת בכלי מוזיקלי'.)<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני אוהב/ת לשיר<BR>
-            <input type="checkbox" id="6" name="6" value="1">חיי היו אומללים ללא מוזיקה<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני יכול/ה להתחבר למקצב של יצירה מוזיקלית תוך שימוש בכלי הקשה פשוט<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני מכיר/ה מנגינות רבות ושונות של שירים ויצירות מוזיקליות<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני מסוגל/ת לחזור בצורה מדויקת למדי על קטע מוזיקלי לאחר שמיעה אחת בלבד<BR>
-            <input type="checkbox" id="6" name="6" value="1">אני מזמזמ/ת לעצמי באופן קבוע<BR>
-            <input type="checkbox" id="6" name="6" value="1">בחשיבה; בשיחה; בהרצאה – אני מרבה להשתמש בדימויים מעולם המוזיקה
-            <BR>
-        </p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <button id="send">שלח</button>
-
-    </div>-->
 </body>
 </html>
