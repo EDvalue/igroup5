@@ -1,0 +1,234 @@
+﻿#tList {
+    float: left;
+    width:100%;
+    color: white;
+}
+#info{
+    float: left;
+    text-align: center;
+    color: white;
+    height: 600px;
+}
+#quiz {
+    float: left;
+    color: white;
+    
+}
+#header{
+
+    text-align:center;
+    width:100%;
+    margin-bottom:5%;
+}
+#container {
+    height: 100%;
+    background-color: rgba(65, 55, 55, 0.75);
+    background-image: url('../images/EDvalueBig.png');
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+
+
+#tList > ul, #sList > ul {
+    text-align: right;
+    font-weight: bold;
+    list-style:none;
+    padding:1%;
+}
+#Smenue{
+    visibility:hidden;
+    position:fixed;
+    z-index:3;
+    
+
+}
+#tList > ul > li, #sList > ul > li {
+    background-color: #007bff;
+    margin-top: 5%;
+    text-align: center;
+    margin-left:2%;
+}
+ #sList > ul > li{
+
+     margin-left:3%;
+     width:100%;
+
+ }
+
+    #tList > ul > li > a, #sList > ul > li > a {
+        color: white;
+    }
+        #tList > ul > li > a:hover, #sList > ul > li > a:hover {
+            color: rgba(255, 255, 255, 0.75)
+        }
+
+@media(max-width:1000px) {
+    #Smenue {
+        visibility: visible;
+    }
+}
+
+/*search*/
+.searchbar {
+  margin-bottom:12%;
+    height: 60px;
+    background-color: #353b48;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.search_input {
+    color: white;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0px;
+    line-height: 40px;
+    transition: width 0.4s linear;
+}
+
+.searchbar:hover > .search_input {
+    padding: 0 10px;
+    margin-left:3%;
+    width: 200px;
+    transition: width 0.4s linear;
+}
+
+.searchbar:hover > .search_icon {
+    background: white;
+    color: #e74c3c;
+}
+
+.search_icon {
+    height: 40px;
+    width: 40px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+}
+
+/*------------------------------*/
+
+
+#task {
+    border:1px groove white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 120px;
+    width: 200px;
+    margin-bottom:3%;
+    margin-top:2%;
+    background: linear-gradient(to bottom right,rgb(77, 77, 255),#fff);
+}
+    #task:hover{
+        transform:scale(1.05);
+        z-index:2;
+    }
+.fr,.sr,.tr {
+    width:100%;
+    display: flex;
+}
+.cancel{
+    
+    margin-right:auto;
+}
+    .cancel > ion-icon {
+        color: red;
+    }
+    .c_time > span {
+        font-size: 12px;
+        border-right: 1px dotted white;
+        padding-right: 30%;
+    }
+.isActive{
+    display:flex;
+    align-items:baseline;
+    flex:0 0 60%
+   
+}
+.c_time {
+  flex:1;
+  
+}
+    #data {
+        display: flex;
+        margin-top: auto;
+        width: 90%;
+        justify-content: space-between;
+    }
+.time{
+    margin-right:auto;
+}
+
+.notification {
+    width: 40px;
+    font-size:20px;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 50% 50%;
+    background-color: #1BADDD;
+    padding-top: 2%;
+    transform: translate(.0em, -.3em);
+    box-shadow: #1BADDD 1px 1px;
+}
+.tr{
+    justify-items: baseline;
+}
+#sList{
+    
+    min-height:250px;
+    max-height:350px;
+    overflow-y:scroll;
+   
+}
+#btn{
+ margin-bottom:5%;
+}
+#statistic{
+    border-top:1px dotted white;
+    padding-top:4%;
+   
+}
+
+#slTitle{
+    text-align:center;
+    border-bottom:1px dotted white;
+}
+/*hide list*/
+
+.hide_list_teams {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
+}
+
+.change .bar2 {
+    opacity: 0;
+}
+
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
+}
+
+/*-------------*/

@@ -1,0 +1,56 @@
+﻿body {
+    direction: rtl;
+    text-align: right;
+}
+p {
+    direction: rtl;
+    text-align: right;
+    color: black;
+    
+}
+form {
+    direction: rtl;
+    text-align: right;
+}
+
+
+div {
+    direction: rtl;
+    text-align: right;
+}
+body {
+    text-align: right;
+    background-color: #f1f1f1;
+}
+#bar {
+    background-color: #007bff;
+    height:48px;
+    margin: 0;
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+}
+h6{
+    color:white;
+    text-align:center;
+    padding-top:1%;
+}
+h3{
+    text-align:center;
+    margin-right:7%;
+}
+h5 {
+    margin-right: 34%
+}
+#quiz {
+    margin-top:3%;
+    direction: rtl;
+    text-align: right;
+    color: black;
+    background-color: white;
+    border-color: white;
+    border-radius: 5px;
+    width: 50%;
+    margin-right: 25%;
+}
+#last{
+    margin-right:30%;
+}

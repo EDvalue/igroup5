@@ -1,0 +1,72 @@
+﻿
+#addFB{
+    z-index:20;
+    position:absolute;
+    top:25%;
+    left:25%;
+    background-color:#0094ff;
+}
+th.sorting {
+    margin: 0;
+    text-align: center;
+    font-size: 18px;
+    margin: auto;
+}
+#header {
+    border-bottom: 48px solid #007bff;
+    margin: 0;
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+    color: black;
+    width: 100%;
+}
+
+#inte_questionnaire{
+    height:225px;
+    border-top:1px dotted white
+}
+.inte_img{
+    margin-top:auto;
+}
+#tbl_int img:hover{
+    transform:scale(1.04)
+}
+
+
+
+
+#insertStar {
+    flex: 0 1 auto;
+    margin-right: 15%;
+    font-size: 20px;
+}
+#grade_input>input{
+    width:100%;
+    font-size:20px;
+    text-align:center;
+}
+
+#grade_input {
+    flex: 0 1 15%;
+}
+
+#myFBform {
+    display: flex;
+    flex-direction: column;
+}
+#grade {
+    display: flex;
+}
+#assigment{
+    background-color:#1B4DDD;
+    position:absolute;
+    top:30%;
+    left:30%;
+}
+#assigmentForm{
+    display:flex;
+    flex-direction:column;
+
+}
+#task_div{
+    position:relative;
+}

@@ -1,0 +1,11 @@
+﻿#subject img{
+    width:240px;
+    height:227px;
+    padding-top:3%
+}
+#container,html,body {
+    height: 100%
+}
+#bar h5 {
+    margin-left:2%;
+}

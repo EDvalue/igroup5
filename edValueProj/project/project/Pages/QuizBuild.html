@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+    <link href="../CSS/QuizBuild.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+
+    </script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.14.0/full/ckeditor.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <title></title>
+    <script>
+        var count = 0;
+        //var data = [];
+        var quiz = {};
+        var quizOBJ;
+        var Questionnaire;
+        //var ans = [];
+        var QmetaData, QuestionnaireData, userOBJ;
+        var subjectHold;
+
+        $(document).ready(function () {
+
+            $("#quizForm").submit(function () {
+                CreateJson('edit');
+                return false;
+            });
+        });
+
+        function init() {
+
+
+            subjectHold = localStorage['quizSubject'];
+            if (subjectHold == "Bimg") {
+
+                subjectHold = 'Bible'
+            } else if (subjectHold == 'Himg') {
+                subjectHold = 'History'
+            } else { subjectHold = 'Science' }
+
+            if (localStorage["user"]) {
+                userOBJ = JSON.parse(localStorage["user"]);
+            }
+
+
+            if (localStorage["metaData-Questionnaire"]) {
+                QmetaData = JSON.parse(localStorage["metaData-Questionnaire"]);
+            }
+
+            if (QmetaData.quizMode == "edit" && localStorage["edit-Questionnaire"]) {
+                QuestionnaireData = JSON.parse(localStorage["edit-Questionnaire"]);
+
+                printQuestions();
+            }
+
+            $("#inteligence").val(QmetaData.HInteligence);
+            $("#forClass").val(QmetaData.Grade);
+            $("#title").val(QmetaData.Title);
+
+        }
+
+        function printQuestions() {
+
+            for (quest in QuestionnaireData.Question) {
+
+                $("#AddQestion").trigger('click');
+                CKEDITOR.instances['text' + count].setData(QuestionnaireData.Question[quest].Content)
+                $("#" + count).val(QuestionnaireData.Question[quest].Type).trigger('change');
+                if (QuestionnaireData.Question[quest].Type == 'A' || QuestionnaireData.Question[quest].Type == 'M') {
+                    $("#Q" + count + " #ans_upload #op div:last-child>input[type='text']").val(QuestionnaireData.Question[quest].Answer[0].Content)
+                    if (QuestionnaireData.Question[quest].Answer[0].IsRight)
+                        $("#Q" + count + " #ans_upload #op div:last-child>input[type='checkbox']").prop('checked', true)
+                    if (QuestionnaireData.Question[quest].Type == 'A') {
+
+                        for (var i = 1; i < QuestionnaireData.Question[quest].Answer.length; i++) {
+
+                            AddOptionRadio(count);
+                            $("#Q" + count + " #ans_upload #op div:last-child>input[type='text']").val(QuestionnaireData.Question[quest].Answer[i].Content)
+                            if (QuestionnaireData.Question[quest].Answer[i].IsRight)
+                                $("#Q" + count + " #ans_upload #op div:last-child>input[type='checkbox']").prop('checked', true)
+
+
+                        }
+
+                    } else {
+
+                        for (var i = 1; i < QuestionnaireData.Question[quest].Answer.length; i++) {
+
+                            AddOptionMRadio(count);
+                            $("#Q" + count + " #ans_upload #op div:last-child>input[type='text']").val(QuestionnaireData.Question[quest].Answer[i].Content)
+                            if (QuestionnaireData.Question[quest].Answer[i].IsRight)
+                                $("#Q" + count + " #ans_upload #op div:last-child>input[type='checkbox']").prop('checked', true)
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+
+        }
+
+        function ShowOption() {
+
+            count++;
+            NewQestionString = ` <div id='Q${count}' class='Qclass'>
+
+                           <div id="question_content">
+                         <div id="title"><p>הכנס תוכן שאלה</p></div>
+
+                    <div id='txtArea'>
+
+                        <textarea required dir='rtl' id='text${count}' rows='10' cols='150'>  </textarea>
+
+                    </div>
+
+                </div>
+
+                <div id="question_controll">
+                    <div id="ans_controll">
+                        <span>:איך תראה התשובה</span>
+                        <select required onchange='BuildAnswer(this)' id="${count}">
+                            <option value=''> Choose Option </option>
+                            <option value='A'>אמריקאי </option>
+                            <option value='O'> פתוחה </option>
+                            <option value='U'>העלאת קובץ</option>
+                            <option value='M'> בחירה מרובה </option>
+                        </select>
+                         <div class="adding_btn"></div>
+
+
+                    </div>
+                    <div id="remove_QBTN">
+                        <button type="button" onclick=removeQ(this.parentNode.parentNode.parentNode)>הסר שאלה</button>
+                    </div>
+                </div>
+                <div id="ans_upload">
+                    <div id='op'>
+
+                    </div>
+                    <div id="add_VI">
+                        <div id="img_add">
+                          <input type="file" class="btn btn-info" onchange="showFile(${count})" accept="image/*" />
+                          <div id="img_holder">
+                             <img src="" width="150" alt="תצוגה מקדימה">
+                            </div>
+
+                       </div>
+                        <div id="video_add">
+                          <input type="file" class="btn btn-info" onchange="showFile(${count})"  accept="image/*" />
+                        </div>
+                    </div>
+                   </div>
+                 </div>`;
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            $('#main').append(NewQestionString);
+            CKEDITOR.replace(`text${count}`);
+
+
+
+
+        }
+
+        function showFile(num) {
+            var mydiv = document.querySelector(`#Q${num} #img_add`);
+            var demoImage = mydiv.querySelector('img');
+            var file = mydiv.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+
+                demoImage.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+            console.log(file)
+        }
+
+        function BuildAnswer(arg) {
+            console.log(arg)
+            holder = arg.parentNode.parentNode.classList
+            choose = $("#" + arg.id + " :selected").val(); // The text content of the selected option
+            console.log(holder)
+            if (holder.length > 1) {
+                $(arg.parentNode.parentNode).removeClass();
+            }
+            $("#Q" + arg.id).addClass("Qclass");
+            $("#Q" + arg.id).addClass("C" + choose);
+
+
+            if (choose == 'A') {
+                $("#Q" + arg.id).find('#op').text("");
+
+                strA = "";
+                strA += "<button type='button' onclick=AddOptionRadio(" + arg.id + ")>Add Option </button>";
+                $("#Q" + arg.id + " .adding_btn").text("")
+                $("#Q" + arg.id + " .adding_btn").append(strA);
+                AddOptionRadio(arg.id);
+
+            }
+            else if (choose == 'O') {
+                AddOptionText(arg.id)
+
+
+            }
+            else if (choose == 'U') {
+                AddOptionUpload(arg.id)
+
+            } else if (choose == 'M') {
+
+                $("#Q" + arg.id).find('#op').text("");
+
+                strM = "";
+                strM += "<button type='button' onclick=AddOptionMRadio(" + arg.id + ")>Add Option </button>";
+                $("#Q" + arg.id + " .adding_btn").text("")
+                $("#Q" + arg.id + " .adding_btn").append(strM);
+
+                AddOptionMRadio(arg.id)
+
+            }
+        }
+
+        function AddOptionUpload(num) {
+
+            $("#Q" + num).find('#ans_controll').find('button').remove();
+            $("#Q" + num).find('#op').text("");
+            str = "העלאת קובץ נבחרה"
+            $("#Q" + num).find('#op').text(str);
+        }
+
+        function AddOptionText(num) {
+
+            $("#Q" + num).find('#ans_controll').find('button').remove();
+            $("#Q" + num).find('#op').text("");
+            str1 = "";
+            str1 += "נבחר מענה בכתב"
+            $("#Q" + num).find('#op').append(str1);
+        }
+
+        function AddOptionMRadio(num, arg) {
+            console.log(arg)
+
+            strMradio = "";
+            strMradio += "<div><span>:הכנס אופציה</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
+            $("#Q" + num).find('#op').append(strMradio);
+
+
+
+        }
+
+        function AddOptionRadio(num, arg) {
+            console.log(arg)
+
+            str1 = "";
+            str1 += "<div><span>:הכנס אופציה</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
+            $("#Q" + num).find('#op').append(str1);
+
+            connectCHK();
+
+
+        }
+
+        function connectCHK() {
+            $("input:checkbox").on('click', function () {
+                // in the handler, 'this' refers to the box clicked on
+                var $box = $(this);
+                if ($box.is(":checked")) {
+                    // the name of the box is retrieved using the .attr() method
+                    // as it is assumed and expected to be immutable
+                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                    // the checked state of the group/box on the other hand will change
+                    // and the current value is retrieved using .prop() method
+                    $(group).prop("checked", false);
+                    $box.prop("checked", true);
+                } else {
+                    $box.prop("checked", false);
+                }
+            });
+        }
+
+        // function save(divArg) {
+
+        //    const files = $("#"+divArg+'> input[type=file]')[0].files
+        //    const formData = new FormData()
+
+        //    for (let i = 0; i < files.length; i++) {
+        //        let file = files[i]
+
+        //        formData.append('files[]', file)
+        //    }
+        //    const url = '../api/upload';
+        //    fetch(url, {
+        //        method: 'POST',
+        //        body: formData,
+
+        //    }).then((response) => response.json())
+        //        .then((result) => {
+        //            console.log('Success:', result);
+        //            data = JSON.parse(result)
+        //            url3 = data.url;
+        //            url1 = url3.split("wwwRoot");
+        //            link= "proj.ruppin.ac.il" + url1[1];
+        //            return url3;
+
+
+        //        })
+        //}
+
+        function CreateJson(val) {
+            page = {};
+            data = [];
+            Answer = [];
+
+            Questionnaire = {
+                "TaskId": QmetaData.TaskId,
+                "QuizID": userOBJ.Mail.split('@')[0] + "|" + new Date().getTime() + "|" + userOBJ.IdNumber,
+                "Title": $('#title').val(),
+                "Inteligence": {
+
+                    "Name": QmetaData.HInteligence,
+                    "Ename":QmetaData.EInteligence,
+                },
+
+                'Sub': subjectHold,
+            };
+
+
+            for (var i = 1; i <= count; i++) {
+                if (document.getElementById("Q" + i)) {
+                    hold = $("#Q" + i);
+
+                    content = CKEDITOR.instances['text' + i].getData();
+                    arrTextInput = $(hold).find('input[type=text]');
+                    arrCHKInput = $(hold).find('input[type=checkbox]');
+                    Answer = [];
+                    for (var x = 0; x < arrTextInput.length; x++) {
+                        console.log(x)
+                        obj = {
+                            Content: arrTextInput[x].value,
+                            IsRight: arrCHKInput[x].checked * 1,
+                        }
+                        Answer.push(obj)
+
+                    }
+                    //imgLink = save("img_add");
+                    //videoLink=save("video_add")
+                    Question = {
+                        "QuestionId": i + "|" + new Date().getTime() + "|",
+                        "Type": document.getElementById("Q" + i).classList[1][1],
+                        "Content": content,
+                        "Answer": Answer,
+                        "ImgLink": "" /*imgLink*/,
+                        "VideoLink": "" /*videoLink*/,
+                        "OrderNum": i,
+
+                    },
+
+                        data.push(Question);
+                }
+
+
+            }
+
+            Questionnaire['Question'] = data;
+
+            if (val == 'show') {
+                localStorage["quiz"] = JSON.stringify(Questionnaire);
+                window.open('showQuiz.html');
+            } else {
+                ajaxCall("POST", "../api/Teacher/PostQuiz", JSON.stringify(Questionnaire), PostQuizSuccess, PostQuizError)
+            }
+
+        }
+
+        function getQuizesSuccess(data) {
+            console.log(data)
+        }
+
+        function getQuizesError(data) {
+            console.log(data)
+        }
+
+        function PostQuizSuccess(data) {
+            console.log(data)
+            window.opener.location.reload();
+            $('body').text ( "");
+            swal({
+                
+                   title: "גרסה חדשה נוצרה בהצלחה",
+                   icon: "success",
+               })
+                    .then(function (confirm) {
+                        if (confirm)  window.close();
+                        else  window.close();
+                    })
+           
+
+        }
+
+
+        function PostQuizError(data) {
+            console.log(data)
+        }
+
+        function removeQ(val) {
+            console.log(val)
+            $("#" + val.id).remove();
+        }
+
+        function bringList() {
+
+            ajaxCall("GET", "../api/EDvalue/subList/" + subjectHold, "", GetbringListSuccess, GetbringListError)
+        }
+
+        function GetbringListSuccess(data) {
+            console.log(data)
+            if ($('input[name="chk"]:checked').length > 0) {
+
+
+                $("#titleSel").show();
+                $("#title").hide();
+            } else {
+                $("#titleSel").hide();
+                $("#title").show();
+            }
+
+        }
+
+        function GetbringListError(data) {
+
+        }
+    </script>
+
+
+</head>
+<body dir="rtl" onload="init()">
+    <div id="bg"></div>
+
+    <form id="quizForm">
+
+        <div id="controll" class="container-fluid">
+            <div class="inf">
+
+                <div id="nav" class="col-lg-9">
+
+                    <div id="cntrl_BTNS">
+                        <button type="button" id='AddQestion' onclick='ShowOption()'>הוסף שאלה</button>
+                        <input type="button" id='create' onclick='CreateJson("show")' value="צפייה מקדימה" />
+                        <button id="upload">שלח</button>
+                    </div>
+
+                    <div id="cntrl_fields">
+                        <div id="task_title">
+                            <span>שם מטלה: </span><input disabled id="title" type="text" class="form-control" />
+                        </div>
+
+                        <div id="task_grade">
+                            <span>שכבת גיל: </span>
+                            <select disabled id="forClass" class="form-control">
+                                <option value="">בחר כיתה</option>
+                                <option value="7">כיתה-ז</option>
+                                <option value="8">כיתה-ח</option>
+                                <option value="9">כיתה-ט</option>
+                            </select>
+                        </div>
+                        <div id="task_int">
+                            <span>אינטליגנציה: </span>
+                            <input disabled type="text" class="form-control" id="inteligence" />
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <div id="main"></div>
+
+    </form>
+   
+
+</body>
+</html>

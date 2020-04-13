@@ -1,0 +1,82 @@
+﻿
+body {
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+h3{
+    font-size:1.75em;
+}
+
+#conect_deatails {
+    display:flex;
+    flex-direction:column;
+}
+
+a{
+    color:#1B4DDD;
+    font-size:15px;
+}
+
+#password{
+    margin-top:5%;
+}
+#button_deatails > img {
+    width: 30%;
+    height: 30%;
+    margin-bottom:7%;
+   
+}
+
+#button_deatails {
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+#conect {
+    background: linear-gradient(#007bff,#ffff);
+    font-size: 21px;
+   
+    width: 70%;
+}
+
+#passForget {
+    margin-top: 10px;
+    font-size: 15px;
+    color:#1B4DDD;
+    border-bottom:1px solid #1B4DDD;
+    width:max-content;
+   
+}
+
+    #passForget:hover {
+       transform:scale(1.06)
+    }
+
+    #details {
+        color: snow;
+        border: 3px groove white;
+        display: flex;
+        align-items: center;
+        height: 210px;
+    }
+
+
+
+#header {
+    text-align: center;
+    border-bottom: 48px solid #007bff;
+    margin: 0;
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+}
+
+#main {
+    display: flex;
+    padding-top: 10%;
+    justify-content: center;
+    padding-top: 2%;
+    height: 100vh;
+}

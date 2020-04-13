@@ -1,0 +1,58 @@
+﻿#statistics{
+    border: 1px groove white;
+    max-height:300px;
+    text-align:center;
+}
+#quizes {
+    width: 80%;
+    position: absolute;
+    top: 40%;
+    left: 12%;
+    text-align: center;
+}
+
+
+#quizInfo {
+    border: 3px groove white;
+    box-shadow: 2px 2px rgba(255, 255, 255, 0.79);
+    height: 120px;
+    background: linear-gradient(to bottom right,rgb(77, 77, 255),#fff);
+    display: flex;
+    align-items: center;
+}
+
+    #quizInfo:hover {
+        transform: scale(1.03, 1.03);
+        background-color: rgba(72, 93, 215, 0.30);
+        z-index: 3;
+    }
+
+body, html {
+    overflow-x: hidden;
+    background-color: rgba(65, 55, 55, 0.75);
+    height: 100%;
+    background-image: url('../images/EDvalueBig.png');
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#container {
+    height:100%;
+    background-color: rgba(65, 55, 55, 0.75);
+}
+
+.imgQuiz {
+    flex: 0 1 90px;
+    background-color: #fff;
+}
+.content {
+    flex: 1 ;
+    
+}
+.imgQuiz>img{
+    flex: 0 0 inherit;
+    width:100%;
+    height:inherit;
+    display:block;
+}

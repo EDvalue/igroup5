@@ -1,0 +1,60 @@
+﻿#SlistR, #SlistA {
+    /*border: 1px groove black;*/
+    text-align: center;
+    min-width: 200px;
+    overflow-y: scroll;
+    max-height: 380px;
+    /*background: linear-gradient(to bottom right,rgba(27, 173, 221, 0.83),rgba(255, 255, 255, 0.56));*/
+    background-color:white;
+    margin-bottom:6%;
+    margin-top:0;
+    padding-bottom:6%;
+}
+
+#header {
+    border-bottom: 48px solid #007bff;
+    margin: 0;
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+}
+.teacher {
+    display: flex;
+    align-items: baseline;
+    width: 91.5%;
+    background-color: white;
+    margin: 2% 8% 2% 0;
+}
+    .teacher span {
+        margin-right:3%;
+    }
+
+    .teacher:hover {
+        background-color: #f1f1f1;
+    }
+#container{
+    margin:0;
+    padding:0;
+}
+#main .col-lg-3 div {
+    background: white;
+    border-radius:5px;
+    border-color:white;
+}
+#main .col-lg-3 h3 {
+    margin-top: 18%;
+    margin-bottom: 0;
+    padding-top: 7%
+}
+#teacherlist{
+    text-align:right;
+    padding-right:8%;
+}
+#SbyId{
+    margin-left:11%;
+    
+}
+#btnControll{
+    margin-top:6%;
+}
+#sAdd .col-lg-3{
+    padding-left:0;
+}

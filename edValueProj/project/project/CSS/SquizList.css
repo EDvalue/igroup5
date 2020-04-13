@@ -1,0 +1,205 @@
+﻿#subject {
+    border: 3px groove white;
+    box-shadow: 2px 2px rgba(255, 255, 255, 0.79);
+    height: 340px;
+    width:208px;
+    /*background: linear-gradient(to bottom right,rgb(77, 77, 255),#fff);*/
+    background:white;
+    float: right;
+    display: flex;
+    align-items: center;
+    display:flex;
+    flex-direction:column;
+    margin-top:1%;
+    margin-bottom:1%;
+}
+#cBTN{
+    display:flex;
+    flex-direction:column;
+    margin-right:auto;
+}
+#active, #Nactive {
+    margin-right:3%;
+    margin-top:7%;
+    display: flex;
+    flex-direction: column;
+    text-align :right;
+}
+
+    #subject:hover {
+        transform: scale(1.03, 1.03);
+        background-color: rgba(72, 93, 215, 0.30);
+        z-index:3;
+    }
+
+body {
+    background-color: rgba(65, 55, 55, 0.75);
+}
+
+.imgQuiz {
+    
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40%;
+    margin-top: auto;
+    align-items:stretch;
+}
+    .imgQuiz>img:nth-child(1){
+        box-shadow:4px 4px rgba(254, 100, 54, 0.74)
+    }
+
+    .imgQuiz > img:nth-child(1):hover {
+        box-shadow: 4px 4px rgba(254, 100, 54, 0.74)
+    }
+    .imgQuiz > img:nth-child(2) {
+        box-shadow: 4px 4px rgba(93, 254, 54, 0.74)
+    }
+
+        .imgQuiz > img:nth-child(2):hover {
+            box-shadow: 4px 4px rgba(93, 254, 54, 0.74)
+        }
+
+        .imgQuiz > img:nth-child(3):hover {
+            box-shadow: 4px 4px rgba(172, 54, 254, 0.74)
+        }
+    .imgQuiz > img:nth-child(3) {
+        box-shadow: 4px 4px rgba(172, 54, 254, 0.74)
+    }
+    .imgQuiz > img:nth-child(4):hover {
+        box-shadow: 4px 4px rgba(11, 11, 251, 0.74)
+    }
+
+    .imgQuiz > img:nth-child(4) {
+        box-shadow: 4px 4px rgba(11, 11, 251, 0.74)
+    }
+    .imgQuiz > img:nth-child(5):hover {
+        box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
+    }
+
+    .imgQuiz > img:nth-child(5) {
+        box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
+    }
+        .imgQuiz > img:nth-child(6):hover {
+            box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
+        }
+
+    .imgQuiz > img:nth-child(6) {
+        box-shadow: 4px 4px rgba(251, 217, 11, 0.74)
+    }
+
+    .imgQuiz > img {
+        display: block;
+        margin-right: 1.5%;
+        height: 46px;
+    }
+.imgQuestionnire{
+    text-align:center;
+}
+h3 {
+    color:#1BADDD;
+    margin-bottom:3%;
+}
+    .content_new {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+#tasks {
+    width: 100%;
+    text-align:center;
+}
+#container{
+    height:auto;
+}
+#taskName{
+    display:flex;
+}
+#cBTN > button {
+    margin-right: auto;
+    margin-top: 5%;
+    width: 122%;
+    padding: 0;
+    font-size: 12px;
+    background: linear-gradient(to bottom right,rgba(77, 77, 255, 0.67),#fff);
+}
+.imgQuiz > img:hover {
+    background: #ff6e42;
+    color: #fffcfb;
+    transform: translate(.5em, .3em);
+    transition: all .25s linear;
+    box-shadow: -0.3em 0.3em 0 #e1e1e1;
+}
+.name_date{
+    display:flex;
+    align-items:baseline;
+}
+#ladder {
+    width: 80%;
+    margin-right: 10%;
+    display: flex;
+    font-weight: 800;
+    color: #E94F37;
+}
+    #ladder > p:nth-child(3), #ladder > ion-icon:nth-child(2) {
+        margin-right: auto;
+    }
+.name_date > p:nth-child(2) {
+    margin-right: auto;
+}
+
+/*משימות בביצוע*/
+
+.content_active{
+    display:flex;
+    padding:0;
+    width:100%
+}
+.imgQuestionnire {
+    text-align: center;
+}
+.Time{
+    display:flex;
+    align-items:baseline;
+}
+.fb {
+    display: flex;
+    align-items:center;
+    justify-items:center;
+}
+.fb>p,.cq>p{
+    margin:0;
+}
+
+.right {
+    display: flex;
+    flex: 0 0 81%;
+    align-items: start;
+    flex-direction: column;
+}
+
+.opt{
+    display:flex;
+    width:100%;
+}
+.cq {
+    margin-right: 15%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    padding-right: 3%;
+    border-right: 1px dotted white;
+}
+  
+
+.leftt {
+    display: flex;
+    flex-direction: column;
+}
+
+/*----------------*/
