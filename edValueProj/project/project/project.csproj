@@ -290,7 +290,10 @@
     <Content Include="images\spatial.png" />
     <Content Include="images\Bible.jpg" />
     <Content Include="images\tongue.png" />
-    <Content Include="images\תנועתית ללא שם.jpg" />
+    <Content Include="images\MovementalN.jpg" />
+    <Content Include="images\logicallyN.jpg" />
+    <Content Include="images\PersonalN.jpg" />
+    <Content Include="images\musicallyN.jpg" />
     <Content Include="Pages\Assignment_assignment.html" />
     <Content Include="Pages\classInfo.html" />
     <Content Include="images\clipart-school-cartoon-2.jpg" />
@@ -304,10 +307,10 @@
     <Content Include="images\stat.png" />
     <Content Include="images\טעינת קבצים.jpg" />
     <Content Include="images\לוגית.png" />
-    <Content Include="images\לשונית ללא שם.jpg" />
+    <Content Include="images\tongueN.jpg" />
     <Content Include="images\לשונית.png" />
     <Content Include="images\מוסיקלית.png" />
-    <Content Include="images\מרחבית ללא שם.jpg" />
+    <Content Include="images\SpatialN.jpg" />
     <Content Include="images\מרחבית.png" />
     <Content Include="Pages\addTohenManager.html" />
     <Content Include="Pages\addStudentToClass.html" />
@@ -354,6 +357,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -10,6 +10,7 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <link href="../CSS/Assignment_assignment.css" rel="stylesheet" />
 
+
     <script type="text/javascript" charset="utf-8" src="https://rawgit.com/hebcal/hebcal-js/master/client/hebcal.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 
@@ -248,7 +249,7 @@
                                 }
 
                                 score = parseInt(sum / cFB);
-                                return "✨".repeat(score) + `<br /><a> from ${cFB} fb</a>`
+                                return "<ion-icon name='star'></ion-icon>".repeat(score) + `<br /><a> from ${cFB} fb</a>`
 
                             }
 
@@ -272,7 +273,7 @@
         function updateStar(num) {
 
             $("#insertStar").text("");
-            $("#insertStar").append("✨".repeat(num))
+            $("#insertStar").append("<ion-icon name='star'></ion-icon>".repeat(num))
 
         }
 
@@ -319,7 +320,7 @@
             for (x in my_quiz.FbList) {
                 countFB++;
                 sumScore += my_quiz.FbList[x].Score;
-                fbStars = "🎇".repeat(my_quiz.FbList[x].Score);
+                fbStars = "<ion-icon name='star'></ion-icon>".repeat(my_quiz.FbList[x].Score);
                 fbstr = `<div class="fbDiv">
                                                       <div class="fb_content">
                                                          <p>${my_quiz.FbList[x].Content}</p>
@@ -331,7 +332,7 @@
             }
 
             avg = parseInt(sumScore / countFB);
-            stars = "✨".repeat(avg);
+            stars = "<ion-icon name='star'></ion-icon>".repeat(avg);
             $("#q_score").text('')
             $("#q_score").append(`<h3>${avg}</h3><span>${stars}</span>`)
             $("#w_fb").show("2s")
@@ -342,14 +343,14 @@
 
             fb_quiz = this.parentNode.getAttribute('name');
             $("#addFB").show();
-            $("#insertStar").val("✨✨✨")
+            $("#insertStar").val("<ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon>")
             $("#grade_input input").val(3);
 
         }
 
         function sendFBdiv() {
             $("#addFB").show();
-            $("#insertStar").val("✨✨✨")
+            $("#insertStar").val("<ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon>")
             $("#grade_input input").val(3);
         }
 
@@ -401,6 +402,8 @@
     <div id="addFB">
         <div onclick="closeAddFB()" id="close_addFB">X</div>
         <div id="fbTitle">
+            
+
             <h3>משוב חדש</h3>
         </div>
         <div id="fb_form">
@@ -411,7 +414,7 @@
                         <input onchange="updateStar(this.value)" type="number" min="1" max="5" />
                     </div>
 
-                    <div id="insertStar">✨✨✨</div>
+                    <div id="insertStar"><ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon></div>
                 </div>
                 <div id="content_fb">
                     <div><span>תוכן משוב</span></div>
