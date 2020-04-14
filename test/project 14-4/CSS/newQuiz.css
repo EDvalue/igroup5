@@ -1,0 +1,75 @@
+﻿body, html {
+	margin: 0;
+	/*overflow-x: hidden;*/
+	height: 100%;
+	background-color:#f1f1f1;
+}
+html {
+	height: max-content;
+}
+#container {
+	height: max-content;
+	/*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
+	background:#f1f1f1;
+}
+
+#subjects {
+	width: 80%;
+	position: absolute;
+	top: 35%;
+	left: 12%;
+	text-align: center;
+	background-color: #f1f1f1;
+}
+
+#subject {
+	float: left;
+	background-color: white;
+	border: 7px solid #f1f1f1;
+	border-radius: 14px
+}
+
+#Himg, #Simg, #Bimg {
+	width: 80%;
+	margin-top: 32px;
+	/*height:200px;*/
+	/*float:left;*/
+	/*border:2px groove black;*/
+}
+#header {
+	color: black;
+	width:100%
+}
+#mindcetImg, #title {
+	float: left;
+	text-align:center;
+}
+#imgLogo {
+	float: left;
+	text-align: right;
+	
+}
+	#imgLogo img {
+		/*border:1px solid black;
+	border-radius:50% 50%;*/
+		width: 160px;
+		height: 60px;
+		margin-top: 4%;
+		margin-right:3%;
+	}
+	#mindcetImg > img {
+		border: 1px solid black;
+		border-radius: 50% 50%;
+		width: 150px;
+		margin-top: 2%;
+	}
+
+#title {
+	margin-top: 2.5%;
+	color:black;
+}
+ 
+p {
+	margin-top: 10px;
+}
+

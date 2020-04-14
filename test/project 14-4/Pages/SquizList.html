@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+    <link href="../CSS/SquizList.css" rel="stylesheet" />
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+        var user;
+        var pArr = [];
+        var IPoints;
+
+        $(document).ready(function () {
+            user = JSON.parse(localStorage["user"]);
+            bodymail = user.Mail.split(".")[0];
+            endmail = user.Mail.split(".")[1];
+            userEmail = bodymail + "," + endmail;
+            
+
+            ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
+            console.log(IPoints)
+            
+        });
+
+        function ConectSuccess(data) {
+            console.log(data);
+
+            IPoints = data;
+            IPoints.sort(function (a, b) {
+                return a.Points - b.Points
+            })
+            console.log(IPoints);
+            var str="";
+            for (var i = 6; i > 0; i--)
+            {
+                str+="<img src='../images/"+IPoints[i].Name+".jpg'/>"
+            }
+            console.log(str);
+            document.getElementById("intelliO").innerHTML = str;
+            {
+
+            }
+            
+
+
+
+        }
+
+        function ConectError(err) {
+            console.log(err)
+        }
+
+
+    </script>
+
+
+</head>
+<body dir="rtl">
+
+    <div id="container">
+
+        <div id="header" class="row">
+
+            <div id="imgLogo" class="col-lg-3">
+
+                <img src="../images/EDvalueSmall.png" />
+
+            </div>
+
+            <div id="title" class="col-lg-6">
+                <h1>המשימות שלי‍</h1>
+                <p>בחר משימה מתאימה</p>
+            </div>
+
+            <div id="mindcetImg" class="col-lg-3">
+                <!--<img src="../images/MindCet.png" />-->
+            </div>
+
+        </div>
+
+
+        <div id="Nactive">
+
+            <div id="NacTitle">
+                <h3>משימות חדשות </h3>
+            </div>
+
+            <div id="tasks" class="row">
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_new">
+                        <div class="name_date">
+                            <p>שם משימה</p>
+
+                            <p>עבור:</p><span>22/05/2020</span> <ion-icon name="caret-back-outline"></ion-icon>
+                        </div>
+
+                        <div id="intelliO" class="imgQuiz">
+
+                            <img src="../images/תנועתית ללא שם.jpg" />
+                            <img src="../images/מרחבית ללא שם.jpg" />
+                            <img src="../images/לשונית ללא שם.jpg" />
+                            <img src="../images/תנועתית ללא שם.jpg" />
+                            <img src="../images/מרחבית ללא שם.jpg" />
+                            <img src="../images/לשונית ללא שם.jpg" />
+                        </div>
+                        <div id="ladder">
+                            <p>מומלץ מאוד</p>
+                            <ion-icon name="analytics-outline" size="large"></ion-icon>
+                            <p>פחות מומלץ</p>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+
+        <div id="active">
+
+            <div id="acTitle">
+                <h3>משימות פעילות</h3>
+            </div>
+
+            <div id="tasks" class="row">
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>שם משימה....</p>
+                            </div>
+                            <div class="Time">
+                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>22.22.2222</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/תנועתית ללא שם.jpg" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <div id="active">
+
+            <div id="acTitle">
+                <h3>משימות שעברו</h3>
+            </div>
+
+            <div id="tasks" class="row">
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>שם משימה....</p>
+                            </div>
+                            <div class="Time">
+                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>22.22.2222</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/תנועתית ללא שם.jpg" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>שם משימה....</p>
+                            </div>
+                            <div class="Time">
+                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>22.22.2222</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/תנועתית ללא שם.jpg" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>שם משימה....</p>
+                            </div>
+                            <div class="Time">
+                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>22.22.2222</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/תנועתית ללא שם.jpg" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>שם משימה....</p>
+                            </div>
+                            <div class="Time">
+                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>22.22.2222</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/תנועתית ללא שם.jpg" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</body>
+</html>

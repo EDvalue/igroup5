@@ -1,0 +1,41 @@
+﻿body {
+    direction: rtl;
+    text-align: right;
+}
+p {
+    direction: rtl;
+    text-align: right;
+    color:white;
+}
+form {
+    direction: rtl;
+    text-align: right;
+}
+h3 {
+    direction: rtl;
+    text-align: right;
+}
+h5 {
+    direction: rtl;
+    text-align: right;
+}
+div {
+    direction: rtl;
+    text-align: right;
+}
+body {
+    text-align: right;
+    background-color: rgba(65, 55, 55, 0.75);
+}
+#container, html {
+ 
+ 
+}
+#quiz {
+  
+
+ 
+}
+#header {
+    
+}

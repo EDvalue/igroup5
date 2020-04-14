@@ -1,0 +1,118 @@
+﻿#myClassForm{
+   text-align:right;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+   padding-bottom:2%;
+   width:100%
+}
+#btns_class {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center
+        
+}
+
+th {
+    margin: 0;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    margin: auto;
+   
+}
+thead {
+    background: linear-gradient(#007bff,#fff);
+}
+
+td {
+    text-align: center;
+}
+#SalesTable_length {
+    color: white;
+    font-size: 14px;
+}
+
+#Ttitle {
+    width: 80%;
+    margin-right: 10%;
+    text-align: center;
+    margin-top: 4%;
+    margin-bottom: 3%;
+    color: white;
+    font-size: 45px;
+}
+
+html, body, #container {
+    background: linear-gradient(rgba(65, 55, 55, 0.65),#fff);
+    
+}
+.sorting {
+    text-align: center;
+    
+}
+
+#school_uDetails {
+    margin-right: 25%;
+}
+#det_Uadding{
+    margin-top:10px;
+}
+
+#editDIV {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px dotted white;
+}
+
+#editUDiv {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    top: auto;
+    left: auto;
+    right: 30%;
+    border: 1px solid white;
+    z-index: 3;
+    background: linear-gradient(#fff,#1B4DDD);
+    display: flex;
+    flex-direction: column;
+}
+
+.selected {
+    background:linear-gradient(#fff,#1B4DDD);
+}
+
+.form-group.row{
+    width: 100%;
+    float: right;
+    margin-left: 35%;
+}
+
+#btns_class>input{
+
+    margin-right:3%;
+}
+
+#st_table{
+    width:80%;
+    margin-right:10%;
+}
+@media only screen and (max-width:574px) {
+    #editUDiv {
+        width: 100%;
+        height: 400px;
+        position: absolute;
+        top: 27%;
+        left: 0;
+        right: 0;
+        border: 1px solid white;
+        z-index: 3;
+        background: linear-gradient(#fff,#1B4DDD);
+        display: flex;
+        flex-direction: column;
+    }
+
+}

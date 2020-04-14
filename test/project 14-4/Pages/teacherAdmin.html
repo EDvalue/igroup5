@@ -1,0 +1,640 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCalls.js"></script>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title></title>
+    <script>
+        var userOBJ;
+        const maxClassnum = 30;
+        var schoolTeacherSearch;//save the origin teacher scode
+        var moseSt;
+        var classes;
+
+        $(document).ready(function () {
+
+            userOBJ = JSON.parse(localStorage["user"]);
+            //localStorage.removeItem("user");
+
+            $("#myUserForm").submit(function (e) {
+                createUpdateUser();
+                return false;
+            });
+
+
+        
+            $("#classAdd").submit(function (e) {
+                createNewClass();
+                return false;
+            })
+            bringSClasses()
+            $("#addingDiv").hide();
+
+            $('#UserAdd').hide();
+            $("#classAdd").hide();
+        });
+        //user Search//
+        function showUser() {
+
+
+            modeSt = "edit"
+
+            bodymail = $(".search_input").val().split(".")[0];
+            endmail = $(".search_input").val().split(".")[1];
+            userEmail = bodymail + "," + endmail;
+            if (userEmail != "") {
+                ajaxCall("GET", "../api/Teacher/getUserByMail/" + userEmail, "", getUserByMailSuccess, getUserByMailError)
+            } else {
+                swal({
+                    title: "נסה שוב!",
+                    text: "אנא הכנס מייל של משתמש",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                });
+            }
+
+
+        }
+
+        function postNewClassSuccess(data) {
+            console.log(data);
+            //Class.Slist = [];
+            //Class.Name = Class.EdTeacher.Name+Class.Grade + "\`" + Class.GradeNumber;
+            //classes.push(Class);
+            //getClassBySchoolSuccess(classes);
+            //Class = "";
+            closeDivUS();
+            $("#NCgrade").val("");
+            $("#NCnumber").val("");
+            $("#TList").val("");
+            $("#classForSchool").val("");
+            swal("✔ כיתה נפתחה בהצלחה");
+        }
+
+        
+
+        function postNewClassError(err) {
+            console.log(err);
+               swal({
+                     title: "נסה שוב!",
+                     text: "שגיאה בניסיון לפתיחת כיתה",
+                     icon: "warning",
+                     buttons: true,
+                     dangerMode: true
+               });
+        }
+
+        function getUserByMailSuccess(data) {
+            console.log(data);
+            if (data.hasOwnProperty('Email')) {
+                $("#addingDiv").show();
+                $('#UserAdd').show();
+
+
+                $("#userId").val(data.IdNumber);
+                $("#userName").val(data.Name);
+                $("#userLName").val(data.LastName);
+                $("#userMail").val(data.Email);
+                $("#schoolList").val(data.SCode);
+
+                var val = data.SCode;
+                $('#schoolNU option[id=' + val + ']').prop('selected', 'selected');
+
+
+                if (data.Type == 'Student') {
+
+                    $('#Grade').val(data.Grade);
+                    $('#classNum').val(data.ClassNumber);
+                    $('#uType option[value="s"]').prop('selected', 'selected');
+                    $("#class_STdet").css("visibility", "visibale");
+                    $("#teacher_det").css("visibility", "hidden");
+                    $('#uType').prop('disabled', true);
+                } else if (data.Type == 'Teacher') {
+                    $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
+                    $('#uType option[value="t"]').prop('selected', 'selected');
+                    $('#uType').prop('disabled', true);
+                    $("#teacher_det").css("visibility", "visibale");
+                    $("#class_STdet").css("visibility", "hidden");
+
+                    schoolTeacherSearch = data.SCode;
+                }
+            } else {
+                swal({
+                    title: "נסה שוב!",
+                    text: "מייל של המשתמש שגויה",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                });
+            }
+        }
+
+        function getUserByMailError(err) {
+
+            console.log(err)
+        }
+
+        //-----------------------------------------------//
+
+        //create object//
+        function closeDivUS() {
+            $("#addingDiv").hide();
+            $('#SchoolAdd').hide();
+            $('#UserAdd').hide();
+            $("#disbackg").css("visibility", "hidden");
+        }
+
+        function createNewClass() {
+
+            Class = {
+                "Grade": $("#NCgrade").val(),
+                "GradeNumber": $("#NCnumber").val(),
+                "InSchool": $("#classForSchool").val().split("-")[0],
+                "Name": $("#NCnumber").val() + "`" + $("#NCgrade").val() + "-" + $("#TList").val().split("-")[1].split(" ")[0],
+                EdTeacher: {
+                    "Mail": $('#TList').val().split("-")[0],
+                    "Name": $('#TList').val().split("-")[1].split(' ')[0],
+                    "LastName":$('#TList').val().split("-")[1].split(' ')[1]
+                }
+
+            }
+
+            ajaxCall("POST", "../api/Admin/postNewClass", JSON.stringify(Class), postNewClassSuccess, postNewClassError)
+
+          }
+
+        function newClass() {
+
+            valID = userOBJ.SCode;
+            
+
+            ajaxCall("GET", "../api/Admin/getTeacherByScode/" + valID, "", getTeacherByScodeSuccess, getTeacherByScodeError)
+
+            $("#addingDiv").show();
+            $('#UserAdd').hide();
+            $("#classAdd").show();
+            $("#classForSchool").val(valID)
+
+        }
+
+        function addUser() {
+
+            
+            modeSt = "new";
+            $('#uType option[value=""]').prop('selected', true);
+            $("#addingDiv").show();
+            $('#UserAdd').show();
+            $("#classAdd").hide();
+            $("#schoolList").val(userOBJ.SCode);
+            $("#class_STdet").css("visibility", "hidden");
+            $("#teacher_det").css("visibility", "hidden");
+            $("#classNum").prop('disabled', true);
+            $('#uType').prop('disabled', false);
+            $("#disbackg").css("visibility", "visible");
+
+        }
+
+        function getTeacherByScodeSuccess(data) {
+            console.log(data);
+            str = "";
+            for (x in data) {
+
+                str += `<option id='${data[x].IdNumber}'>${data[x].Mail}-${data[x].Name} ${data[x].LastName}</option>`;
+            }
+
+            document.getElementById("TeacherNC").innerHTML = str;
+
+        }
+
+        function getTeacherByScodeError(err) { }
+
+        function getusertype() {
+
+
+            type = $('#uType').find(":selected").text();
+            if (type == "תלמיד") {
+
+                $("#class_STdet").css("visibility", "visible");
+                $("#teacher_det").css("visibility", "hidden");
+                $("#class_STdet>#Grade,class_STdet>#classNum").attr('required', '');
+                $('#teacher_det > select').removeAttr('required');
+                //$("#class_STdet>#Grade,#class_STdet>#classNum").prop('disabled', false);
+
+            } else {
+
+                $("#class_STdet").css("visibility", "hidden");
+                $("#teacher_det").css("visibility", "visible");
+                $('#teacher_det > select').attr('required', '');
+                $('#Grade,#classNum').removeAttr('required');
+                $("#Grade,#classNum").prop('disabled', true);
+            }
+
+        }
+
+        function bringNumbers(stat) {
+            bc = "";
+            //bring classes numbers of school or grade//
+            $("#class_STdet>#classNum").prop('disabled', false);
+            if (stat == "newClassMode") {
+                val = $('#classForSchool').val().split('-')[0];
+                bc = val + "," + $("#NCgrade").val();
+
+            } else if (stat == "studentMode") {
+
+                val = userOBJ.SCode
+
+                bc = val + "," + $("#class_STdet>#Grade").val();
+
+            }
+
+            ajaxCall("GET", "../api/Admin/getnumbers/" + bc, "", getnumbersSuccess, getnumbersError);
+
+        }
+
+        function getnumbersSuccess(data) {
+            console.log(data);
+
+            numstrNew = "";
+            numstrExists = "";
+            for (var i = 1; i < maxClassnum; i++) {
+
+                if (data.indexOf(i) == -1) {
+
+                    numstrNew += `<option value=${i}>${i}</option>`
+
+                } else { numstrExists += `<option value=${i}>${i}</option>` }
+
+            }
+
+
+            $("#NCnumber").append(numstrNew);
+            $("#class_STdet>#classNum").append(numstrExists);
+        }
+
+        function getnumbersError(err) {
+            console.log(err);
+        }
+
+        function createUpdateUser() {
+            var uType = $('#uType').find(":selected").text();
+            uArr = [];
+            User = {
+
+                "IdNumber": $("#userId").val(),
+                "Name": $("#userName").val(),
+                "LastName": $("#userLName").val(),
+                "Mail": $("#userMail").val(),
+                "Password": $("#userId").val(),
+                "Type": $('#uType').find(":selected").text(),
+                "SCode": $("#schoolList").val(),
+            }
+
+
+            if (uType == "תלמיד") {
+                User.Grade = $("#Grade").val();
+                User.ClassNumber = $("#classNum").val();
+            } else {
+                User.SchoolAdmin = $("#teacher_det>select").val();
+                if (User.SchoolAdmin != schoolTeacherSearch && modeSt == 'edit') {
+                    User.SchoolPass = 'pass';
+                } else {
+                    User.SchoolPass = 'nopass';
+                }
+            }
+
+
+            uArr.push(User)
+            if (modeSt == "new") {
+                modeSt = "";
+                apiLink = "../api/Admin/postNewUser";
+                ajaxCall("POST", apiLink, JSON.stringify(uArr), postNewUserSuccess, postNewUserError)
+            } else {
+                modeSt = "";
+                apiLink = "../api/Admin/UpdateUser";
+                ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUserSuccess, UpdateUserError)
+            }
+
+        }
+
+        function postNewUserSuccess(data) {
+
+            console.log(data);
+            closeDivUS();
+            swal("✔משתמש נוסף בהצלחה")
+            $("#userId").val("");
+            $("#userName").val("");
+            $("#userLName").val("");
+            $("#userMail").val("");
+            $("#teacher_det>select").val("0")
+            $('#Grade').val("");
+            $('#classNum').val("");
+        }
+
+        function postNewUserError(err) {
+
+            console.log(err);
+        }
+
+        function UpsateUserSuccess(data) {
+            console.log(data)
+            closeDivUS();
+            swal("✔העדכון הסתיים בהצלחה")
+            $("#userId").val("");
+            $("#userName").val("");
+            $("#userLName").val("");
+            $("#userMail").val("");
+            $("#teacher_det>select").val("0")
+            $('#Grade').val("");
+            $('#classNum').val("");
+        }
+
+        function UpdateUserError(err) {
+            console.log(err)
+        }
+
+        //---------------------------------------------------------------------//
+
+        //school classes//
+
+        function showme(arg) {
+            sortedClasses = [];
+            for (c in classes) {
+                if (classes[c].Grade == arg||arg==0) {
+
+                    sortedClasses.push(classes[c])
+                }
+            }
+
+            printClasses(sortedClasses);
+        }
+
+        function showClassInfo(arg) {
+            
+            myClass = classes[arg.id];
+            localStorage["class"] = JSON.stringify(myClass);
+            localStorage["userInClassInfo"]="teacher"
+            window.open("classInfo.html");
+
+        }
+
+        function getClassBySchoolSuccess(data) { 
+            classes = data;
+            printClasses(classes);
+        }
+
+        function printClasses(data) {
+             str1 = "";
+          
+            for (x in data) {
+                //data[x].Name = data[x].Name.replace("`", "'");
+                str1 += `<div class='col-lg-4 col-md-6 col-sm-6'>
+                                <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
+                                    <div id='imgc'><img src='../images/cita.jpeg' /></div>
+                                    <div id='className'> <label> ${data[x].Name} </label></div>
+                                    <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
+                                    <div id='CmetaData'>
+                                        <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
+                                        <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                    </div>
+                                </div>
+                             </div>`
+            }
+
+
+            $("#classes").text("");
+            $("#classes").append(str1);
+
+        }
+
+        function getClassBySchoolError(err) {
+            console.log(err)
+        }
+
+        function bringSClasses() {
+            alert("")
+            sc =userOBJ.SCode;
+            apiLink = "../api/Admin/getClassBySchool/" + sc;
+
+            ajaxCall("GET", apiLink, "", getClassBySchoolSuccess, getClassBySchoolError);
+          }
+
+       //---------------------------------------------------------------------//
+    </script>
+</head>
+<body dir="rtl">
+
+    <div id="disbackg"></div>
+    <div id="addingDiv">
+
+        <a onclick="closeDivUS()"><span>Close x</span></a>
+
+        <div id="UserAdd">
+            <div id="addContent">
+                <form id="myUserForm">
+                    <div dir="rtl" id="Title"><h4>צור משתמש חדש</h4></div>
+
+                    <div id="utDIV">
+                        <label>סוג: </label>
+                        <select onchange="getusertype()" id="uType" required name="uType">
+
+                            <option value="">בחר סוג משתמש</option>
+
+                            <option value="s">תלמיד</option>
+                            <option value="t">מורה</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="det_Uadding">
+
+                        <div id="personal_uDetails">
+                            <label>ת"ז: </label><input id="userId" class="form-control" type="text" />
+                            <label>שם פרטי: </label><input id="userName" class="form-control" type="text" />
+                            <label>שם משפחה: </label><input id="userLName" class="form-control" type="text" />
+                            <label>מייל: </label><input id="userMail" class="form-control" type="email" />
+                        </div>
+                        <div id="school_uDetails">
+
+                            <label>מוסד חינוכי:</label>
+                            <input type="text" disabled="disabled" required id="schoolList" class="form-control" />
+
+
+                            <div id="teacher_det">
+                                <label>הרשאות ניהול</label>
+                                <select>
+                                    <option value="0">לא</option>
+                                    <option value="1">כן</option>
+                                </select>
+                            </div>
+                            <div id="class_STdet">
+                                <label>שכבה: </label>
+                                <select onchange="bringNumbers('studentMode')" id="Grade" class="form-control">
+                                    <option value="">בחר שכבה</option>
+                                    <option value="7">ז</option>
+                                    <option value="8">ח</option>
+                                    <option value="9">ט</option>
+
+                                </select>
+                                <label>מספר כיתה: </label>
+                                <select id="classNum" class="form-control" type="text">
+                                    <option value="">בחר מספר</option>
+                                </select>
+                            </div>
+
+                            <div  id="sendBTN">
+                                <input type="submit" class="btn btn-primary btn-lg" />
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div id="classAdd">
+            <div id="addContent">
+                <form id="myCForm">
+                    <div dir="rtl" id="Title"><h4>הוסף כיתה</h4></div>
+
+                    <label>שכבה: </label>
+                    <select onchange="bringNumbers('newClassMode')" id="NCgrade" class="form-control">
+                        <option value="">בחר שכבה</option>
+                        <option value="7">ז</option>
+                        <option value="8">ח</option>
+                        <option value="9">ט</option>
+                    </select>
+
+                    <label>מספר כיתה: </label>
+                    <select id="NCnumber" class="form-control" required>
+                        <option value=""> בחר מספר</option>
+                    </select>
+                    <label>מורה מחנך:</label>
+                    <input onchange="" required id="TList" class="form-control" list="TeacherNC" name="SLA">
+                    <datalist id="TeacherNC">
+                    </datalist>
+
+
+                    <label>מוסד חינוכי: </label><input id="classForSchool" class="form-control" disabled="disabled" type="text" />
+
+                    <div id="sendBTN">
+                        <input type="submit" class="btn btn-primary btn-lg" />
+                    </div>
+
+
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="container">
+
+        <div id="header" class="row">
+
+            <div id="imgLogo" class="col-lg-3">
+
+                <img src="../images/EDvalueSmall.png" />
+
+            </div>
+
+            <div id="title" class="col-lg-6">
+                <h3>ניהול מערכת</h3>
+
+            </div>
+
+            <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                <!--<img src="../images/MindCet.png" />-->
+
+            </div>
+
+        </div>
+
+        <div id="sNav">
+            
+                <div id="createClass">
+                    <button onclick="newClass()" class="btn btn-primary ">הוסף כיתה</button>
+                </div>
+
+                <div id="createUser">
+                    <button onclick="addUser()" class="btn btn-primary ">
+                        <ion-icon name="person-add-outline"></ion-icon>פתח משתמש
+                    </button>
+                </div>
+            
+            <div id="search">
+
+
+                <div class="container">
+
+
+                    <div class="d-flex justify-content-center ">
+                        <div class="searchbar">
+                            <input class="search_input" type="text" placeholder=" חיפוש תלמיד/מורה">
+                            <a class="search_icon"><i onclick="showUser()" class="fas fa-search"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="School_Classes">
+
+            <div id="selector">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Choose Option
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="7" onclick="showme(this.id)">שכבה ז</p>
+                    <p id="8" onclick="showme(this.id)">שכבה ח</p>
+                    <p id="9" onclick="showme(this.id)">שכבה ט</p>
+                    <p id="0" onclick="showme(this.id)">כולם</p>
+                    <p id="0" onclick="showme(this.id)">כולם</p>
+                </div>
+            </div>
+            <div id="classes" class="row">
+
+                <div class="col-lg-4 col-sm-4">
+                    <div id="cInS">
+
+
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>

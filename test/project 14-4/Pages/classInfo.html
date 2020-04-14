@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <link href="../CSS/SchoolAdmin.css" rel="stylesheet" />
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <link href="../CSS/classInfo.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+    <script>
+        var classPage;
+        var editClassMode = 'off';
+        var myStudent,st_id;
+        var tbl;
+        var uType;//save the user type in page//
+
+
+        $(document).ready(function () {
+
+            $("#myClassForm").submit(function (e) {
+                updateClass();
+                return false;
+            });
+
+           $("#myUserForm").submit(function (e) {
+                UpdateUser();
+                return false;
+            });
+
+            $("#uType").prop('disabled', 'disabled');
+            $('#uType').val('s');
+            $("#editUDiv").toggle()
+
+            $("#saveBTN").prop('disabled', 'disabled');
+            $("#className,#edTeacher,#edTeacher,#GradeClass,#classNumClass").prop("disabled", "disabled")
+            classPage = JSON.parse(localStorage["class"]);
+            if (localStorage["userInClassInfo"]) {
+                 uType = localStorage["userInClassInfo"];
+              if (uType == "teacher") {
+                   $("#schoolList").prop("disabled", "disabled")
+              }
+            }
+           
+            runPage();
+            createSTtable();
+            ajaxCall("GET", "../api/Admin/getTeacherByScode/" + classPage.InSchool, "", getTeacherBySchoolSuccess, getTeacherBySchoolError)
+
+             ajaxCall("GET", "../api/Admin/getAllschool", "", getSchoolSuccess, getSchoolError);
+        });
+
+        
+        function getSchoolSuccess(data) {
+
+            str = "";
+            for (x in data) {
+
+                str += `<option id='${data[x].SchoolCode}' value="${data[x].Name}">${data[x].SchoolCode}</option>`;
+            }
+
+            document.getElementById('schoolNU').innerHTML = str;
+        }
+
+        function getSchoolError(err) {
+            console.log(err)
+        }
+
+       function UpdateUser() {
+            var uType = $('#uType').find(":selected").text();
+
+            uArr = [];
+
+            User = {
+
+                "IdNumber": $("#userId").val(),
+                "Name": $("#userName").val().replace("'","`"),
+                "LastName": $("#userLName").val().replace("'","`"),
+                "Mail": $("#userMail").val().replace("'","`"),
+                "Password": $("#userId").val(),
+     
+            }
+           
+           myStudent = User;
+           st_id = User.Mail;
+                 User.Type = $('#uType').find(":selected").text();
+                User.Grade = $("#Grade").val();
+                User.ClassNumber = $("#classNum").val();
+          
+                User.SCode = 460154;
+                //$('#schoolNU').val('s');
+           
+            uArr.push(User)
+ 
+              apiLink = "../api/Admin/UpdateUser";
+              ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUser1Success, UpdateUser1Error)
+            
+
+       }
+
+        function renderTable(tbl, newData) {
+
+            tbl.clear();
+            for (var i = 0; i < newData.length; i++) {
+                tbl.row.add(newData[i]);
+            }
+            tbl.draw();
+
+        }
+
+        function UpsateUser1Success(data) {
+            console.log(data)
+            for (x in classPage.Slist) {
+                if(classPage.Slist[i].Mail == st_id) {
+
+                   classPage.Slist[i]=myStudent
+                   
+
+                }
+            }
+            renderTable(tbl,classPage.Slist)
+        }
+
+        function UpdateUser1Error(err) {
+            console.log(err)
+        }
+
+        function getTeacherBySchoolSuccess(data) {
+            console.log(data);
+
+            str = "";
+            for (x in data) {
+
+                str += `<option id='${data[x].Mail}' value="${data[x].Mail}">${data[x].Name} ${data[x].LastName}</option>`;
+            }
+
+            $("#teacherList").append(str);
+        }
+
+        function updateClass() {
+            var selected;
+            var options = $('#teacherList')[0].options;
+            var val = $('#edTeacher').val();
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].id === val) {
+                    selected = val;
+                    break;
+                }
+            }
+
+              
+            classPage["Name"] = $("#className").val().replace("'","`");
+            classPage["Grade"] = $("#GradeClass").val();
+            classPage["GradeNumber"] = $("#classNumClass").val();
+            classPage["InSchool"] = classPage.InSchool;
+            classPage["EdTeacher"]["Mail"] = selected;
+ 
+            
+
+            ajaxCall("PUT", "../api/Admin/updateclass", JSON.stringify(classPage), updateclassSuccess, updateclassError)
+
+        }
+
+        function updateclassSuccess(data) {
+            console.log(data);
+            runPage();
+            swal('✔עדכון הסתיים בהצלחה')
+        }
+
+        function updateclassError(err) {
+            console.log(err)
+        }
+
+        function getTeacherBySchoolError(err) {
+            console.log(err);
+        }
+
+        function runPage() {
+            document.getElementById("title").innerHTML = `<h1> ${classPage.Name} </h1>`;
+            $("#className").val(classPage.Name);
+            $("#classNumClass").val(classPage.GradeNumber);
+            $('#myClassForm option[value="' + classPage.Grade + '"]').prop('selected', 'selected');
+
+        }
+
+        function buttonEvents() {
+
+            $(document).on("click", ".editBtn", function () {
+                mode = "edit";
+                $(".editBtn,.viewBtn").prop('disabled', 'disabled');
+                markSelected(this);
+                $("#editUDiv").toggle("slow")
+                populateFields(this.getAttribute('data-stId'));
+
+
+            });
+        }
+
+        function populateFields(SId) {
+              st_id = SId;
+              myStudent = geStudent(SId);
+            $("#userId").val(myStudent.IdNumber);
+            $("#userName").val(myStudent.Name);
+            $("#userLName").val(myStudent.LastName);
+            $("#userMail").val(myStudent.Mail);
+            $('#Grade option[value="'+classPage.Grade+'"]').prop('selected', true);
+            $("#classNum").val(classPage.GradeNumber);
+
+        }
+
+        function geStudent(id) {
+            for (i in classPage.Slist) {
+                if ( classPage.Slist[i].Mail == id)
+                    return classPage.Slist[i];
+            }
+            return null;
+        }
+
+        function markSelected(btn) {
+            $("#ST tr").removeClass("selected");
+            row = (btn.parentNode).parentNode;
+            row.className = 'selected';
+        }
+
+        function createSTtable() {
+
+            try {
+                tbl = $('#ST').DataTable({
+
+                    data: classPage.Slist,
+                    pageLength: 5,
+                    columns: [
+                        {
+                            render: function (data, type, row, meta) {
+                                let stData = "data-stId='" + row.Mail + "'";
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + stData + "> Edit </button>";
+                              
+
+                                return editBtn
+                            }
+                        },
+                        { data: "IdNumber" },
+                        { data: "Mail" },
+                        { data: "LastName" },
+                        { data: "Name" },
+
+
+                    ],
+                });
+                buttonEvents();
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+
+        function closePOPdiv() {
+            $("#editUDiv").toggle("slow")
+            $(".viewBtn,.editBtn").prop('disabled', false);
+             $("#ST tr").removeClass("selected");
+        }
+
+        function changeMode() {
+            if (editClassMode == 'off') {
+
+                editClassMode = 'on'
+                $("#saveBTN").prop('disabled', false);
+                $("#className,#edTeacher,#edTeacher,#GradeClass,#classNumClass").prop("disabled", false)
+                $("#editMode").val("סגור לעריכה");
+
+            } else {
+                editClassMode = 'off';
+                $("#saveBTN").prop('disabled', 'disabled');
+                $("#className,#edTeacher,#edTeacher,#Grade,#classNum").prop("disabled", 'disabled')
+                $("#editMode").val("מצב עריכה");
+
+            }
+        }
+
+    </script>
+</head>
+<body dir="rtl">
+
+    <div id="editUDiv">
+
+        <a onclick="closePOPdiv()"><span>close x</span></a>
+       
+        
+            <div id="addContent">
+                <form id="myUserForm">
+                    <div dir="rtl" id="Title"><h2>צור משתמש חדש</h2></div>
+
+                    <div id="utDIV">
+                        <label>סוג: </label>
+                        <select onchange="getusertype()" id="uType" name="uType">
+
+                            <option required value="">בחר סוג משתמש</option>
+
+                            <option value="s">תלמיד</option>
+                            <option value="t">מורה</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="det_Uadding">
+
+                        <div id="personal_uDetails">
+                            <label>ת"ז: </label><input required pattern="[0-9]{9}" maxlength="9" id="userId" class="form-control" type="text" />
+                            <label>שם פרטי: </label><input required ng-pattern="/^[\u05D0-\u05F3]+$/g" id="userName" class="form-control" type="text" />
+                            <label>שם משפחה: </label><input ng-pattern="/^[\u05D0-\u05F3]+$/g" required id="userLName" class="form-control" type="text" />
+                            <label>מייל: </label><input required id="userMail" class="form-control" type="email" />
+                        </div>
+                        <div id="school_uDetails">
+
+                            <label>מוסד חינוכי:</label>
+                            <input onchange="" required id="schoolList" class="form-control" list="schoolNU" name="SLA">
+                            <datalist id="schoolNU">
+                            </datalist>
+                            <div id="class_STdet">
+                                <label>שכבה: </label>
+                                <select required id="Grade" class="form-control">
+                                    <option value="">בחר שכבה</option>
+                                    <option value="7">ז</option>
+                                    <option value="8">ח</option>
+                                    <option value="9">ט</option>
+                                </select>
+                                <label>מספר כיתה: </label><input required id="classNum" class="form-control" type="text" />
+                            </div>
+                            <div id="sendBTN">
+                                <input type="submit" class="btn btn-primary btn-lg" />
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+      
+        </div>
+      
+
+    </div>
+
+    <div id="container" class="container-fluid">
+        <div id="header" class="row">
+
+            <div id="imgLogo" class="col-lg-3">
+
+                <img src="../images/EDvalueSmall.png" />
+
+            </div>
+
+            <div id="title" class="col-lg-6">
+                <h1> </h1>
+                <p>בחר בית ספר מרשימה</p>
+            </div>
+
+            <div id="mindcetImg" class="col-lg-3">
+                <img src="../images/MindCet.png" />
+            </div>
+
+
+        </div>
+        <div id="editDIV">
+            <form id="myClassForm">
+                <div class="form-group row">
+                    <div class="form-group col-sm-3">
+                        <label><span class="red-star">🛫 </span>שם הכיתה:</label>
+                        <input required id="className" type="text" class="form-control">
+
+                    </div>
+
+
+                    <div class="form-group col-sm-3">
+                        <label><span class="red-star">🛬 </span>מורה מחנכת:</label>
+                        <input required id="edTeacher" list="teacherList" class="form-control">
+                        <datalist id="teacherList">
+                        </datalist>
+                    </div>
+
+
+                    <div class="form-group col-sm-3">
+                        <label><span class="red-star">⏳</span>שכבת גיל</label>
+                        <select required id="GradeClass" class="form-control">
+                            <option value="">בחר שכבה</option>
+                            <option value="7">ז</option>
+                            <option value="8">ח</option>
+                            <option value="9">ט</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-3">
+                        <label><span class="red-star">⌛</span>מספר כיתה</label>
+                        <input type="number" class="form-control" id="classNumClass" placeholder="Enter class number" required />
+                    </div>
+
+
+
+                </div>
+
+                <div id="btns_class">
+                    <button type="submit" class="btn btn-primary btn-lg" id="saveBTN">Save</button>
+                    <input type="button" onclick="changeMode()" class="btn btn-success btn-lg" id="editMode" value="מצב עריכה" />
+                </div>
+
+            </form>
+        </div>
+
+        <div id="st_table">
+            <div id="Ttitle">
+                <h3>רשימת תלמידים</h3>
+            </div>
+            <table id="ST" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ת"ז</th>
+                        <th>אימייל</th>
+                        <th>שם משפחה</th>
+                        <th>שם פרטי</th>
+
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

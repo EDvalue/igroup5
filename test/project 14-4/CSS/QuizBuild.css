@@ -1,0 +1,164 @@
+﻿
+
+    
+
+#controll {
+    background-color: rgba(65, 55, 55, 0.75);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1%;
+    color: white;
+    z-index: 3;
+}
+
+.Qclass {
+    display:flex;
+    flex-direction:column;
+	border-bottom: 1px dotted black;
+	width: 100%;
+    color:#1B4DDD;
+    font-size:18px;
+	padding-bottom: 5%;
+	margin-bottom: 10%;
+}
+#question_content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 16px;
+    margin-bottom: 3%;
+}
+#question_controll {
+    display: flex;
+    justify-content: space-evenly;
+    width: 45%;
+}
+#ans_controll {
+    display: flex;
+    justify-content: space-evenly;
+}
+#ans_upload {
+    display: flex;
+}
+#add_VI {
+    display: flex;
+    flex-direction: column;
+}
+#img_add,#video_add {
+    display: flex;
+    align-items: center;
+    width:max content;
+    height:100px;
+    border:1px groove white;
+}
+input[type=checkbox]{
+    zoom:2;
+}
+#op {
+    margin-top: 4%;
+    margin-bottom: 1%;
+    margin-left: 25%;
+    flex: 0 1 36%;
+    color:#1B4DDD;
+    font-size:22px;
+    font-weight:bold;
+}
+#img_add input{
+    width:55%;
+}
+#img_holder{
+    border:1px solid #1B4DDD;
+}
+#img_add img {
+    height: 99px;
+    width: 180px;
+}
+
+
+
+textarea {
+    margin-bottom: 1%;
+    padding-bottom: 2%;
+    border: 1px solid black;
+    border-bottom-left-radius: 10%;
+    float: right;
+}
+
+#txtArea {
+	margin-left:5%;
+}
+
+#title, #forClass, #inteligence {
+    font-size: 22px;
+}
+
+
+#nav {
+    display:flex;
+    width:80%;
+    margin-left:10%;
+    align-content:center;
+    flex-direction:column;
+	margin-top: 1%;
+	text-align: center;
+	float: left;
+	border: 1px solid white;
+}
+
+#cntrl_fields {
+    display: flex;
+    justify-content: space-evenly;
+}
+ #cntrl_fields div{
+        display:flex;
+        flex-direction:column;
+ }
+ 
+#task_title{
+ flex:0 1 35%;
+}
+
+#cntrl_BTNS {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+body {
+    margin: 0;
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-size: contain;
+    background-attachment: fixed;
+    background-image: url('../images/EDvalueSmall.png');
+}
+
+
+#main {
+    width: 100%;
+   
+}
+/*#bg {
+   
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 60%;
+    height: 50%;
+    z-index: -3;
+}*/
+
+
+    
+
+#create,#AddQestion,#upload {
+    background-color: rgba(65, 55, 55, 0.75);
+    border: 1px solid rgba(65, 55, 55, 0.75);
+    border-bottom: 1px solid rgba(117, 136, 245, 0.90);
+    padding-bottom: 1%;
+    width: 20%;
+    color: snow;
+}
+
+

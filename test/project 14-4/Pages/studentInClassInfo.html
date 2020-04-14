@@ -1,0 +1,465 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../CSS/studentInClassInfo.css" rel="stylesheet" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+    <script>
+        var studentsArr = [];
+        var userOBJ;
+        var xLabels = [];
+        var yLabels = [];
+        var xLableCharts = new Array();
+        var yLableBibleChart = new Array();
+        var yLableScienceChart = new Array();
+        var yLableHistoryChart = new Array();
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 20
+                },
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: 'black',
+                        fontSize: 25
+                    },
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: 'black',
+                        fontSize: 25
+                    },
+                }]
+            },
+
+        };
+        var myChart;
+        var task;
+        var bibleChart;
+        var historyChart;
+        var scienceChart;
+
+        $(document).ready(function () {
+            // userOBJ = JSON.parse(localStorage["user"])
+
+            ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
+            //ajaxCall("GET", "../api/Student/getStudentByEmail/" + userOBJ.StudentEmail, "", getByEmailSuccess, getByEmailError)
+            //getDataIntelligence();
+            UpdateTaskDoughnut();
+            //ChartIt();
+        });
+
+        function getSuccess(data) {
+            studentsArr = data;
+            console.log(studentsArr);
+
+            for (var i = 0; i < studentsArr.length; i++) {
+                if (studentsArr[i].SubjectName == "Bible") {
+                    yLableBibleChart.push(studentsArr[i].Grade);
+                    xLableCharts.push(studentsArr[i].IntelligenceName)
+                }
+
+                else if (studentsArr[i].SubjectName == "Science")
+                    yLableScienceChart.push(studentsArr[i].Grade);
+                else if (studentsArr[i].SubjectName == "History")
+                    yLableHistoryChart.push(studentsArr[i].Grade);
+
+            }
+            console.log("this is bible chart : ");
+            console.log(yLableBibleChart);
+            console.log("this is science chart : ");
+            console.log(yLableScienceChart);
+            console.log("this is history chart : ");
+            console.log(yLableHistoryChart);
+            console.log("this is x for charts: ");
+            console.log(xLableCharts);
+            
+        }
+        function getError(err) {
+            console.log(err);
+
+        }
+        function getByEmailSuccess(data) {
+
+            console.log(data);
+
+        }
+        function getByEmailError(err) {
+            console.log(err);
+
+        }
+        function ChartIt() {
+            //myChart.destroy();
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: xLableCharts,
+                    datasets: [
+                        {
+                            label: 'Bible',
+                            data: yLableBibleChart,
+                            backgroundColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(255, 99, 132, 2)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Science',
+                            data: yLableScienceChart,
+                            backgroundColor: 'rgba(255, 150, 132, 1)',
+                            borderColor: 'rgba(255, 150, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'History',
+                            data: yLableHistoryChart,
+                            backgroundColor: 'rgba(255, 13, 22, 1)',
+                            borderColor: 'rgba(255, 13, 22, 1)',
+                            borderWidth: 1
+                        },
+
+                    ]
+                },
+                options: options
+            });
+        }
+         function updateBible() { 
+         
+          //  b = document.getElementById('BibleChart');
+         //   toggle_visibility(b);
+            var ctx = document.getElementById('BibleChart').getContext('2d');
+
+               bibleChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xLableCharts,
+                        datasets: [
+                            {
+                            label: 'Bible',
+                            data: yLableBibleChart,
+                            backgroundColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(255, 99, 132, 2)',
+                            borderWidth: 1
+                            },
+                        ]
+                    },
+                    options: options
+                });   
+        }
+        
+        function updateScience() {
+
+           // s = document.getElementById('ScienceChart');
+            //toggle_visibility(s);
+            var ctx = document.getElementById('ScienceChart').getContext('2d');
+
+                scienceChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xLableCharts,
+                        datasets: [
+                            {
+                                label: 'Science',
+                                data: yLableScienceChart,
+                                backgroundColor: 'rgba(255, 150, 132, 1)',
+                                borderColor: 'rgba(255, 150, 132, 1)',
+                                borderWidth: 1
+                            },
+                        ]
+                    },
+                    options: options
+                });
+        }
+
+        function updateHistory() {   
+
+           // h = document.getElementById('HistoryChart');
+           // toggle_visibility(h);
+            var ctx = document.getElementById('HistoryChart').getContext('2d');
+
+                historyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xLableCharts,
+                        datasets: [
+                            {
+                                label: 'History',
+                                data: yLableHistoryChart,
+                                backgroundColor: 'rgba(255, 13, 22, 1)',
+                                borderColor: 'rgba(255, 13, 22, 1)',
+                                borderWidth: 1
+                            },
+                        ]
+                    },
+                    options: options
+                });
+
+        }
+        function UpdateTaskDoughnut() {
+            var ctx2 = document.getElementById('TasksDoughnut').getContext('2d');
+
+            task = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['הוגש', 'לא הוגש'],
+                    datasets: [
+                        {
+
+                            data: [2, 3],
+                            backgroundColor: ['rgba(152,251,152)', 'rgba(135,206,250)'],
+
+                        },
+
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            // This more specific font property overrides the global property
+                            fontColor: 'black',
+                            fontSize: 15
+                        },
+                    },
+
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+        function ChartChange() {
+            var x = document.getElementById("mySelect").value;
+          //  var statDiv = document.getElementById("statistics");
+            var FirstCharts = document.getElementById("FirstCharts");
+            var SecondCharts = document.getElementById("SecondCharts");
+            var ThirdCharts = document.getElementById("ThirdCharts");
+            var FourthCharts = document.getElementById("FourthCharts");
+            if (x == "FirstCharts") {
+             //   statDiv.style.display = "block";
+                FirstCharts.style.display = "block";
+                SecondCharts.style.display = "none";
+                // ThirdCharts.style.display = "none";
+                //FourthCharts.style.display = "none";
+                ChartIt();
+            }
+            else if (x == "SecondCharts") {
+            //    statDiv.style.display = "block";
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "block";
+                //ThirdCharts.style.display = "none";
+                //FourthCharts.style.display = "none";
+                updateBible();
+                updateScience();
+                updateHistory();
+            }
+            else {
+               // statDiv.style.display = "none";
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+            }
+           /* else if (x == "ThirdCharts") {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "block";
+                FourthCharts.style.display = "none";
+                updateScience();
+            }
+            else if (x == "FourthCharts") {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "none";
+                FourthCharts.style.display = "block";
+                updateHistory();
+            }
+            else {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "none";
+                FourthCharts.style.display = "none";
+            }*/
+
+        }
+    </script>
+</head>
+<body dir="rtl">
+    <div id="container">
+        <div id="header" class="row">
+
+            <div id="imgLogo" class="col-lg-3">
+
+                <img src="../images/EDvalueSmall.png" />
+
+            </div>
+
+            <div id="title" class="col-lg-6">
+                <h3> שלום מורה</h3>
+
+            </div>
+
+            <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                <!--<img src="../images/MindCet.png" />-->
+
+            </div>
+
+        </div>
+
+        <div id="Tcontroll">
+            <div id="TControlBtns">
+                <button id="newClassBTN" class="btn btn-primary " onclick="CnewTeam()">צור קבוצה חדשה</button>
+
+                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
+                    הכיתות שלי
+                </button>
+                <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
+                    <option value="" disabled selected hidden>בחר גרף</option>
+                    <option value="FirstCharts">כולם ביחד</option>
+                    <option value="SecondCharts">כולם לחוד</option>
+                    <option value="CloseAll">לסגור הכל</option>
+                </select>
+                <div id="nav_cnt" class="dropdown-menu">
+
+
+                </div>
+            </div>
+
+            <div class="searchDiv">
+                <div class="d-flex justify-content-center ">
+                    <div class="searchbar">
+                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
+                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="statistics" >
+            <div class="row" id="FirstCharts" style="display:none">
+
+                <div class="col-12 " id="mixedChart">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="row" id="SecondCharts" style="display:none">
+                <div class="col-4 canvasDiv" >
+                    <canvas id="BibleChart"></canvas>
+                </div>
+                <div class="col-4 canvasDiv" >
+                    <canvas id="HistoryChart"></canvas>
+                </div>
+                <div class="col-4 canvasDiv" >
+                    <canvas id="ScienceChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+        <div id="quizes">
+
+            <h3>כאן יופיעו משימות שניתן לצפות או לבדוק אותן</h3>
+
+            <div id="quizList" class="row">
+
+                <div id="quizInfo" class="col-lg-4">
+                    <div class="imgQuiz">
+                        <img src="../images/מרחבית.png" />
+
+                    </div>
+                    <div class="content">
+                        <p>שם משימה</p>
+                    </div>
+
+                </div>
+
+
+                <div id="quizInfo" class="col-lg-4">
+                    <div class="imgQuiz">
+                        <img src="../images/מרחבית.png" />
+
+                    </div>
+                    <div class="content">
+                        <p>שם משימה</p>
+                    </div>
+
+                </div>
+
+
+                <div id="quizInfo" class="col-lg-4">
+                    <div class="imgQuiz">
+                        <img src="../images/מרחבית.png" />
+
+                    </div>
+                    <div class="content">
+                        <p>שם משימה</p>
+                    </div>
+
+                </div>
+
+
+                <div id="quizInfo" class="col-lg-4">
+                    <div class="imgQuiz">
+                        <img src="../images/מרחבית.png" />
+
+                    </div>
+                    <div class="content">
+                        <p>שם משימה</p>
+                    </div>
+
+                </div>
+
+
+                <div id="quizInfo" class="col-lg-4">
+                    <div class="imgQuiz">
+                        <img src="../images/מרחבית.png" />
+
+                    </div>
+                    <div class="content">
+                        <p>שם משימה</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

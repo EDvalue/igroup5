@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
+
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    
+    <script>
+
+        var myClasses;
+        var myTeams;
+        var  userOBJ ;
+
+        $(document).ready(function () {
+
+            userOBJ = JSON.parse(localStorage["user"])
+            //localStorage.removeItem("user");
+
+            if (!userOBJ.SchoolAdmin) {
+            $("#saBTN").hide()
+            
+            }
+            if (!userOBJ.IsEditor) {
+                $("#EditorBTN").hide();
+            }
+            repMail=userOBJ.Mail.replace('@','~').replace('.',',')
+            ajaxCall("GET", "../api/Teacher/getClassesbyEmail/"+repMail,"",getClassesbyMailSuccess,getClassesbyMailError)
+            ajaxCall("GET","../api/Teacher/getTeamsbyMail/"+repMail,"",getTeamsbyMailSuccess,getTeamsbyMailError)
+        });
+
+        
+
+        function getClassesbyMailSuccess(data) {
+            console.log(data)
+            myClasses = data;
+
+            for (c in data) {
+
+                str = `<p id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
+                $("#nav_cnt").append(str);
+            }
+
+        }
+        function getClassesbyMailError(err) {
+            console.log(err);
+        }
+
+        function getTeamsbyMailSuccess(data) {
+            console.log(data)
+            myTeams = data;
+             $("#teams").text("");
+            imgId = '';
+            for (t in data) {
+
+                teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
+                <div id="team_bar">
+                    <div id="addTaskBTN">
+                        <button onclick="openAddTaskPage()">הוספת משימה</button>
+                 
+                    </div>
+                    <div id="name">
+                        <p>${data[t].Title}</p>
+                    </div>
+                    <div id="numOfS">
+                        <p dir="ltr">${data[t].StudentList.length} S</p>
+                    </div>
+                </div>
+
+                <div id="sub_img">
+                   <a id="${data[t].Id}" href="manageClass.html">
+                        <img onclick="openTeam(${data[t].Id})" id="subImg_el" src="${data[t].Subject.ImgLink}" />
+                    </a>
+                </div>
+
+              </div>`;
+
+                $("#teams").append(teamStr);
+            }
+        }
+
+        function openTeam(tId) {
+
+            for (team in myTeams) {
+                if (myTeams[team].TeamId == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    $("#"+myTeams[team].TeamId).trigger('click')
+                }
+            }
+        }
+
+        function getTeamsbyMailError(err) {
+            console.log(err);
+        }
+        function CnewTeam() {
+
+            localStorage['user'] = JSON.stringify(userOBJ);
+            localStorage['TeamMode']="new"
+            window.open('addStudentToClass.html')
+        }
+
+        function f1() {
+            window.open('newQuiz.html')
+        }
+
+        function openAddTaskPage(val) {
+          window.open("Assignment_assignment.html")
+        }
+        function openTApage() {
+            localStorage["user"] = JSON.stringify(userOBJ);
+            window.open("teacherAdmin.html");
+        }
+
+    </script>
+
+</head>
+<body dir="rtl">
+    
+    <div id="container">
+
+        <div id="header" class="row">
+
+            <div id="imgLogo" class="col-lg-3">
+
+                <img src="../images/EDvalueSmall.png" />
+
+            </div>
+
+            <div id="title" class="col-lg-6">
+                <h3> שלום,מורה</h3>
+                <!--<p>בחר קבוצה מתאימה</p>-->
+            </div>
+
+            <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                <!--<img src="../images/MindCet.png" />-->
+
+            </div>
+
+        </div>
+        <div id="Tcontroll">
+            <div id="TControlBtns">
+                <button id="newClassBTN" class="btn btn-primary " onclick="CnewTeam()">צור קבוצה חדשה</button>
+
+                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
+                    הכיתות שלי
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+
+
+                </div>
+
+                <button id="EditorBTN" class="btn btn-primary " onclick="f1()">צור/ערוך משימה</button>
+
+                <button disable id="saBTN" class="btn btn-primary " onclick="openTApage()">ניהול מערכת</button>
+            </div>
+            
+            <div class="searchDiv">
+                <div class="d-flex justify-content-center ">
+                    <div class="searchbar">
+                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
+                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="choose"class="row">
+            <p>בחר קבוצה מתאימה</p>
+        </div>
+        <div id="teams" class="row">
+            
+
+
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>
