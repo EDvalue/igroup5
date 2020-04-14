@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title></title>
     <link href="../CSS/manageClass.css" rel="stylesheet" />
-    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -19,10 +19,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
 
         function addRemoveS() {
-            localStorage['TeamMode']="edit"
             window.open('addStudentToClass.html')
         }
 
@@ -38,11 +38,253 @@
             $("#teamList").toggle();
 
         }
+
+
+
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 20
+                },
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: 'black',
+                        fontSize: 25
+                    },
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: 'black',
+                        fontSize: 25
+                    },
+                }]
+            },
+
+        };
+        var chart1;
+        var chart2;
+        var chart3;
+        var chart4;
+
+
+
+        function ChartOne() {
+
+            var ctx = document.getElementById('chart1').getContext('2d');
+
+            chart1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
+                    datasets: [
+                        {
+                            label: 'Bible',
+                            data: [12, 7, 22, 17, 10],
+                            backgroundColor: 'rgb(0,123,254)',
+                            borderColor: 'rgb(0,123,254)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: options,
+
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            });
+
+        }
+        function ChartTwo() {
+
+            var ctx = document.getElementById('chart2').getContext('2d');
+
+            chart2 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
+                    datasets: [
+                        {
+                            label: 'Bible',
+                            data: [14, 2, 15, 20, 6],
+                            backgroundColor: 'rgba(222, 222, 132, 1)',
+                            borderColor: 'rgba(222, 222, 132, 2)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: options,
+
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            });
+
+        }
+        function ChartThree() {
+
+            var ctx = document.getElementById('chart3').getContext('2d');
+
+            chart3 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
+                    datasets: [
+                        {
+                            label: 'History',
+                            data: [12, 7, 22, 17, 10],
+                            backgroundColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(255, 99, 132, 2)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: options,
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            });
+
+        }
+        function ChartFour() {
+
+            var ctx = document.getElementById('chart4').getContext('2d');
+
+            chart4 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
+                    datasets: [
+                        {
+                            label: 'History',
+                            data: [44, 55, 32, 14, 22],
+                            backgroundColor: 'rgba(200, 150, 132, 1)',
+                            borderColor: 'rgba(200, 150, 132, 2)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: options,
+
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            });
+
+        }
+        function UpdateTaskDoughnut() {
+            var ctx2 = document.getElementById('chart3').getContext('2d');
+
+            task = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['הוגש', 'לא הוגש'],
+                    datasets: [
+                        {
+
+                            data: [2, 3],
+                            backgroundColor: ['rgba(152,251,152)', 'rgba(135,206,250)'],
+
+                        },
+
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            // This more specific font property overrides the global property
+                            fontColor: 'black',
+                            fontSize: 15
+                        },
+                    },
+
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+
+        function ChartChange() {
+            var x = document.getElementById("mySelect").value;
+            var FirstCharts = document.getElementById("FirstCharts");
+            var SecondCharts = document.getElementById("SecondCharts");
+            var ThirdCharts = document.getElementById("ThirdCharts");
+            if (x == "FirstCharts") {
+                FirstCharts.style.display = "block";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "none";
+                ChartOne();
+            }
+            else if (x == "SecondCharts") {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "block";
+                ThirdCharts.style.display = "none";
+                UpdateTaskDoughnut();
+            }
+            else if (x == "ThirdCharts") {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "block";
+                ChartTwo();
+                ChartFour();
+            }
+            else {
+                FirstCharts.style.display = "none";
+                SecondCharts.style.display = "none";
+                ThirdCharts.style.display = "none";
+            }
+
+        }
     </script>
 </head>
 <body dir="rtl">
-    <div id="container" class="container-fluid">
+    <div id="container">
         <div id="header">
+            <div class="row">
+
+                <div id="imgLogo" class="col-lg-3">
+
+                    <img src="../images/EDvalueSmall.png" />
+
+                </div>
+
+                <div id="title" class="col-lg-6">
+                    <h1>שם הקבוצה...</h1>
+
+                </div>
+
+                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                    <!--<img src="../images/MindCet.png" />-->
+
+                </div>
+
+            </div>
             <div class="dropdown" id="Smenue">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     סנן לפי כיתה
@@ -50,19 +292,46 @@
 
                 <div class="dropdown-menu">
 
-                    <a class="dropdown-item" href="#statistic">סטטיסטיקה</a>
+                    <a class="dropdown-item" href="#statistics">סטטיסטיקה</a>
                     <a class="dropdown-item" href="#kidsList">רשימת תלמידים</a>
                     <a class="dropdown-item" href="#quiz">משימות</a>
 
                 </div>
             </div>
-            <h1>שם הקבוצה...</h1>
+
         </div>
 
-       
+        <div id="Tcontroll">
+            <div id="TControlBtns">
+
+                <button class="btn btn-primary" onclick="addRemoveS()">ניהול קבוצה</button>
+                <button class="btn btn-primary" onclick="addQuiz()">הוסף מטלה</button>
+                <button class="btn btn-primary" onclick="">הכיתה שלי</button>
+                <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
+                    <option value="" disabled selected hidden>בחר אפשרות</option>
+                    <option value="FirstCharts">גרף 1</option>
+                    <option value="SecondCharts">גרף 2</option>
+                    <option value="ThirdCharts">גרף 3</option>
+                    <option value="CloseAll">לסגור הכל</option>
+                </select>
+
+
+
+            </div>
+
+            <div class="searchDiv">
+                <div class="justify-content-center ">
+                    <div class="searchbar">
+                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
+                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <div class="row" id="main">
-            <div class="hide_list_teams change" onclick="myFunction(this)">
+            <div class="hide_list_teams change">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
@@ -91,15 +360,38 @@
 
 
             </div>
+
             <div id="info" class="col">
+                <div id="statistics">
+                    <div class="content">
+                        <div class="row" id="FirstCharts" style="display:none">
+                            <div class="wrapper col-12"><canvas id="chart1"></canvas></div>
+
+                        </div>
+                        <div class="row" id="SecondCharts" style="display:none">
+                            <div class="wrapper col-12"><canvas id="chart3"></canvas></div>
 
 
-                <div id="class_info">
-                    <div id="btn">
-                        <button class="btn btn-primary btn-lg" onclick="addRemoveS()">ניהול קבוצה</button>
-                        <button class="btn btn-primary btn-lg" onclick="addQuiz()">הוסף מטלה</button>
-                        <button class="btn btn-primary btn-lg" onclick="">הכיתה שלי</button>
+                        </div>
+                        <div class="row" id="ThirdCharts" style="display:none">
+                            <div class="col-6" style="float:left"><canvas id="chart2"></canvas></div>
+                            <div class="col-6"><canvas id="chart4"></canvas></div>
+
+                        </div>
+                        <table id="ThirdCharts" width="100%" style="display:none">
+                            <tr width="100%">
+                                <td width="50%">
+                                    <canvas id="chart2"></canvas>
+                                </td>
+
+                            </tr>
+                        </table>
                     </div>
+
+                </div>
+
+                <div id="class_info" style="margin-top:10%">
+
 
                     <div class="row" id="tasks">
                         <div class="col-sm-4" id="task">
@@ -260,10 +552,7 @@
 
                 </div>
 
-                <div id="statistic">
-                    <p>כאן תופיע סטטיסטיקה אודות כל הכיתה</p>
-                    <img src="../images/stat.png" />
-                </div>
+
 
 
 
