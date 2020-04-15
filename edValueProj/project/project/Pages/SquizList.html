@@ -23,22 +23,123 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script>
-        var user;
+        var userOBJ;
         var pArr = [];
         var IPoints;
+        var NactiveArr = [], activeOpenArr = [], activeCloseArr = [];
 
         $(document).ready(function () {
+<<<<<<< HEAD
+            userOBJ = JSON.parse(localStorage["user"]);
+           
+            userEmail = "zz@gmail.com".replace(".",",");
+            getTask = userEmail + "_794491584812899283jj";
+
+
+=======
            // user = JSON.parse(localStorage["user"]);
             //bodymail = user.Mail.split(".")[0];
             //endmail = user.Mail.split(".")[1];
             //userEmail = bodymail + "," + endmail;
             userEmail="zz@gmail,com"
+>>>>>>> 7bd3bc62ffb0eb8be2053d67e1d045c1cacc4116
             
 
-            ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
-            console.log(IPoints)
+            //ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
+            //console.log(IPoints)
+
+            ajaxCall("GET","../api/Student/getSTasks/"+ getTask,"",getSTasksSuccess,getSTasksError)
             
         });
+
+        function getSTasksSuccess(data) {
+            console.log(data);
+            for (x in data) {
+                if (data[x].Task.Grade == 0) {
+
+                    NactiveArr.push(data[x])
+                } else if (data[x].TillDate < new Date()) {
+
+                    activeOpenArr.push(data[x])
+                } else { activeCloseArr.push(data[x])}
+            }
+
+            printNacrive(NactiveArr);
+            printActiveOpen(activeOpenArr);
+            printActiveClose(activeCloseArr);
+
+
+            
+        }
+
+        function printNacrive(data) {
+
+            for (x in data) {
+                str = `
+                 <div id="subject" class="col-lg-4">
+
+                    <div class="content_new">
+                        <div class="name_date">
+                            <p>${data[x].Task.Title}</p>
+
+                            <p>עבור:</p><span>${data[x].ForDate}</span> <ion-icon name="caret-back-outline"></ion-icon>
+                        </div>
+
+                        <div id="intelliO" class="imgQuiz">`
+                for (i in data[x].Task.QuizList) {
+                    str += `<img onclick="chooseQuestionnaire(this)" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                }
+
+                str += ` </div>
+                        <div id="ladder">
+                            <p>מומלץ מאוד</p>
+                            <ion-icon name="analytics-outline" size="large"></ion-icon>
+                            <p>פחות מומלץ</p>
+
+                        </div>
+                    </div>
+
+
+                </div>`;
+                $("#Nactive #tasks").text("")
+                $("#Nactive #tasks").append(str)
+            }
+        }
+
+        function printActiveOpen(data) {
+
+        }
+
+        function printActiveClose() {
+
+        }
+
+        function chooseQuestionnaire(val) {
+            alert(val.getAttribute('quiz'))
+
+            localStorage["perform_showQuiz_mode"] = "student";
+            for (t in NactiveArr) {
+                if (NactiveArr[t].Task.TaskId == val.getAttribute('task')) {
+
+                    for (q in NactiveArr[t].Task.QuizList) {
+                        if ( NactiveArr[t].Task.QuizList[q].QuizID == val.getAttribute('quiz')) {
+                            NactiveArr[t].Task.QuizList[q].Title = NactiveArr[t].Task.Title;
+                            NactiveArr[t].Task.QuizList[q].TaskId = NactiveArr[t].Task.TaskId;
+                            localStorage["quiz"] = JSON.stringify(NactiveArr[t].Task.QuizList[q]);
+
+                            window.open("showQuiz.html");
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        function getSTasksError(err) {
+            console.log(err);
+        }
 
         function ConectSuccess(data) {
             console.log(data);
@@ -53,15 +154,9 @@
             {
                 str+="<img src='../images/"+IPoints[i].Name+"N.jpg'/>"
             }
-            console.log(str);
-            document.getElementById("intelliO").innerHTML = str;
-            {
-
-            }
-            
-
-
-
+              console.log(str);
+              document.getElementById("intelliO").innerHTML = str;
+          
         }
 
         function ConectError(err) {

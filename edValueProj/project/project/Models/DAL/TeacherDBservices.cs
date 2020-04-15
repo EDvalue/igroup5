@@ -62,11 +62,11 @@ namespace project.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
                 String select1 = "  select q.IntelligenceName,q.creationTime,q.QuestionnaireId,i.EnglishName as QEnglishName,";
-                String select2 = " qu.QuestionnaireId,qu.QuestionId,qu.OrderNum,qu.Content,qu.[Type],qu.ImgLink,qu.VideoLink,Count(qu.QuestionId) as num_of_Q,a.Content AS ans_content,a.IsRight,Count(a.AnswerId)as num_of_ans ";
+                String select2 = " qu.QuestionnaireId,qu.QuestionId,qu.OrderNum,qu.Content,qu.[Type],qu.ImgLink,qu.VideoLink,Count(qu.QuestionId) as num_of_Q,a.Content AS ans_content,a.IsRight,a.AnswerId,Count(a.AnswerId)as num_of_ans ";
                 String from1 = " from(select [TaskId],[IntelligenceName],max([QuestionnaireId])as QuestionnaireId,MAX([creationTime])as creationTime ";
                 String from2 = "   from Questionnaire  group by [TaskId],[IntelligenceName])q inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] inner join Question as qu on qu.QuestionnaireId=q.QuestionnaireId left join Answer as a on a.QuestionId=qu.QuestionId ";
                 String where = "where q.TaskId='"+taskNum+"'";
-                String groupby = "  group by  q.IntelligenceName,q.creationTime,q.QuestionnaireId,i.EnglishName,qu.QuestionnaireId,qu.QuestionId,qu.OrderNum,qu.Content,qu.[Type],qu.ImgLink,qu.VideoLink,a.Content,a.IsRight ";
+                String groupby = "  group by  q.IntelligenceName,q.creationTime,q.QuestionnaireId,i.EnglishName,qu.QuestionnaireId,qu.QuestionId,qu.OrderNum,qu.Content,qu.[Type],qu.ImgLink,qu.VideoLink,a.Content,a.IsRight,a.AnswerId ";
                 String selectSTR = select1 + select2 + from1 + from2+where+groupby;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -101,7 +101,7 @@ namespace project.Models.DAL
                     }
 
                     if(dr["ans_content"] != DBNull.Value)
-                    que.Answer.Add(new Answer(dr["ans_content"].ToString(),Convert.ToBoolean(dr["IsRight"])));
+                    que.Answer.Add(new Answer(dr["ans_content"].ToString(),Convert.ToBoolean(dr["IsRight"]), Convert.ToInt32(dr["AnswerId"])));
     
 
                 }

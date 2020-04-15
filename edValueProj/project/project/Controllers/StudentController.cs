@@ -38,11 +38,18 @@ namespace project.Controllers
 
             c =s.getIntelligence(val);
             return c;
-            }
-            
+        }
+
+        [HttpGet]
+        [Route("api/Student/getSTasks/{data}")]
+        public List<RealetedTask> getSTasks(string data)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.getSTasks(data);
         }
 
 
-
-
     }
+
+
+}

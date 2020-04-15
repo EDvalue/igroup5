@@ -237,6 +237,7 @@
     <Compile Include="Models\Inteligence.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Quiz.cs" />
+    <Compile Include="Models\RealetedTask.cs" />
     <Compile Include="Models\School.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\StudentInClass.cs" />

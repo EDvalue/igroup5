@@ -304,14 +304,14 @@
         }
 
         function iconOpenETask(val, quiz) {
-
+            
             myTask = getTaskById(val.getAttribute('img-QuizId'));
             for (q in myTask.QuizList) {
                 if (myTask.QuizList[q].Inteligence.Ename == quiz.id) {
 
                     myTask.QuizList[q].Title = myTask.Title;
                     localStorage["quiz"] = JSON.stringify(myTask.QuizList[q]);
-
+                  
                     window.open("showQuiz.html")
                     break;
                 }
