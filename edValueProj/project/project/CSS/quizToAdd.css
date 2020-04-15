@@ -1,6 +1,7 @@
 ﻿
 #container{
    height:max-content;
+   padding:0;
 }
 #task_div{
     margin-top:6%;
@@ -19,15 +20,14 @@
         height:50px;
     }
 
-    .fb > p {
-        background-color: #5bc0de;
-        color: white;
-        padding: 2px;
-        text-align: center;
-        border-radius: 7px;
-    }
+.fb > p {
+    background-color: white;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 0;
+}
     .fb > p:hover {
-        background-color: rgba(91, 192, 222, 0.90);
+        color: orange;
         transform:scale(1.01);
     }
 .fb {
@@ -52,12 +52,26 @@ ion-icon:hover {
    
     font-size: 27px;
 }
-    #add_task {
-        border-bottom: 1px dotted white;
+#add_task {
+    
+	background-color: #007bff;
+	height: 48px;
+	margin: 0;
+	box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+	color: white;
+	
+}
+    #add_task .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    #add_task .form-group {
+        margin-top: 1%;
+        color: black;
     }
 
-td{
-    text-align:center;
+td {
+    text-align: center;
 }
 #questionnaire_div {
     position: absolute;
@@ -68,23 +82,27 @@ td{
     width: 50%;
     height: 500px;
     z-index: 10;
-    background-color: mintcream;
+    background-color: #f1f1f1;
     padding: 0 1% 1% 1%;
     border: 2px groove white;
 }
-
-.inte_BTN>input {
-    width:100%;
+.inte_BTN{
+    margin-bottom:6%;
+}
+.inte_BTN > input {
+    width: 100%;
 }
 .inte_img > img {
     width: 100%;
     height:150px;
 }
 #inte_questionnaire {
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    border: 2px groove white;
+    border: 5px solid #f1f1f1;
     height: 225px;
+    background-color: white;
 }
 #inte_questionnaire:hover{
     transform:scale(1.05);
@@ -98,7 +116,7 @@ td{
 }
 #close_questionnaire_div > p {
     margin: 0;
-    border: 1px solid black;
+    
     width: max-content;
 }
 #close_questionnaire_div>P:hover {
@@ -136,7 +154,8 @@ td{
     width: 50%;
     height: 500px;
     z-index: 15;
-    background-color: #0094ff;
+    background-color: white;
+    text-align:center;
 }
 
 
@@ -206,3 +225,6 @@ td{
     }
 }
 
+#task_table .btn-info{
+    margin-left:9%;
+}

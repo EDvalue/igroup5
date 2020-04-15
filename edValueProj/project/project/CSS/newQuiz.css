@@ -85,6 +85,9 @@ p {
 		margin-right: 2%;
 		padding-top: 1%;
 	}
+.viewBtn btn btn-info{
+	margin-left:13%;
+}
 /*#add_task {
 	background-color: #007bff;
 	height: 48px;

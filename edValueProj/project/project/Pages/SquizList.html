@@ -29,12 +29,20 @@
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [];
 
         $(document).ready(function () {
+<<<<<<< HEAD
             userOBJ = JSON.parse(localStorage["user"]);
            
             userEmail = "zz@gmail.com".replace(".",",");
             getTask = userEmail + "_794491584812899283jj";
 
 
+=======
+           // user = JSON.parse(localStorage["user"]);
+            //bodymail = user.Mail.split(".")[0];
+            //endmail = user.Mail.split(".")[1];
+            //userEmail = bodymail + "," + endmail;
+            userEmail="zz@gmail,com"
+>>>>>>> 7bd3bc62ffb0eb8be2053d67e1d045c1cacc4116
             
 
             //ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
@@ -142,9 +150,9 @@
             })
             console.log(IPoints);
             var str="";
-            for (var i = 6; i > 0; i--)
+            for (var i = 5; i > -1; i--)
             {
-                str+="<img src='../images/"+IPoints[i].Name+".jpg'/>"
+                str+="<img src='../images/"+IPoints[i].Name+"N.jpg'/>"
             }
               console.log(str);
               document.getElementById("intelliO").innerHTML = str;
@@ -203,12 +211,12 @@
 
                         <div id="intelliO" class="imgQuiz">
 
-                            <img src="../images/תנועתית ללא שם.jpg" />
-                            <img src="../images/מרחבית ללא שם.jpg" />
-                            <img src="../images/לשונית ללא שם.jpg" />
-                            <img src="../images/תנועתית ללא שם.jpg" />
-                            <img src="../images/מרחבית ללא שם.jpg" />
-                            <img src="../images/לשונית ללא שם.jpg" />
+                            <img src="../images/MovementalN.jpg" />
+                            <img src="../images/SpatialN.jpg" />
+                            <img src="../images/tongueN.jpg" />
+                            <img src="../images/musicallyN.jpg" />
+                            <img src="../images/PersonalN.jpg" />
+                            <img src="../images/logicallyN.jpg" />
                         </div>
                         <div id="ladder">
                             <p>מומלץ מאוד</p>

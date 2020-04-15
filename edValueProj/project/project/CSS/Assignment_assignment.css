@@ -56,17 +56,31 @@ th.sorting {
 #grade {
     display: flex;
 }
-#assigment{
-    background-color:#1B4DDD;
-    position:absolute;
-    top:30%;
-    left:30%;
+#assigment 
+{
+    background-color: #f1f1f1;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    border: 1px solid black;
+    border-radius: 4px;
 }
+
 #assigmentForm{
     display:flex;
     flex-direction:column;
 
 }
+    #assigmentForm .btn {
+        background-color: #007bff;
+    }
 #task_div{
     position:relative;
+}
+.inte_BTN{
+    margin-bottom:6%;
+}
+
+.fb  p {
+    margin-right:19%
 }
