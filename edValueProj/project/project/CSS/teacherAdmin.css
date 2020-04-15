@@ -116,7 +116,7 @@ datalist {
 }*/
 
 #createClass, #createUser {
-    margin-right: 3%;
+    margin-right: 0;
 }
 
 #cityFilt {
@@ -321,9 +321,8 @@ place {
 }
 #nav_cnt {
     text-align: center;
-    background-color: rgba(27, 77, 221, 0.67);
-    
-}
+    background-color: white;
+ }
  #nav_cnt > p:hover {
         background: linear-gradient(rgba(116, 116, 224, 0.69),#fff);
         ;
