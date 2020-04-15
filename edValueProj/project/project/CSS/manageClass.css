@@ -69,8 +69,8 @@ body, html {
 /*------------------------------*/
 .searchDiv {
     height: 22px;
-    margin-right: 59%;
-    width: 10%;
+    margin-right: auto;
+    
 }
 
 canvas {
