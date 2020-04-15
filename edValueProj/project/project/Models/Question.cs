@@ -14,6 +14,8 @@ namespace project.Models
         string videoLink;
         int orderNum;
         string questionId;
+        string ansContent;
+        
 
         
         public Question(){}
@@ -36,5 +38,6 @@ namespace project.Models
         public string VideoLink { get => videoLink; set => videoLink = value; }
         public int OrderNum { get => orderNum; set => orderNum = value; }
         public string QuestionId { get => questionId; set => questionId = value; }
+        public string AnsContent { get => ansContent; set => ansContent = value; }
     }
 }

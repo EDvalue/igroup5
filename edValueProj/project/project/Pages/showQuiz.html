@@ -14,9 +14,15 @@
     <script>
         var str;
         var el
+        var perform_showQuiz_mode;
 
 
         function init() {
+
+            if (localStorage["userMode"]) {
+
+                perform_showQuiz_mode = localStorage["userMode"];
+            }
 
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
@@ -25,7 +31,7 @@
                         <div id='main'>`
             for (qu in el.Question) {
 
-                quizString += `<div id='${qu}' class='${el.Question[qu].Type}'>`
+                quizString += `<form id=quizForm><div id='${qu}' class='${el.Question[qu].Type}'>`
                 if (el.Question[qu].ImgLink != "" || el.Question[qu].VideoLink != "") {
                     quizString += `<div id="extraData"></div>`
                 }
@@ -35,9 +41,16 @@
                    quizString += `<div id="Question_answer">`
                     for (y in el.Question[qu].Answer) {
                         if (el.Question[qu].Answer[y].IsRight) {
-                            quizString += `<div id="AmericanAmswerBlock">
-                                                            <span>${parseInt(y) + 1}</span><input type="checkbox" checked name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>
-                                                           </div>`
+                            quizString += `<div id="AmericanAmswerBlock">`
+                            if (perform_showQuiz_mode == 'teacher') {
+
+                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox" checked name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                            } else {
+
+                                 quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                            }
+                                                            
+                                     quizString+= `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
                                  <span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>
@@ -59,23 +72,34 @@
                     for (y in el.Question[qu].Answer) {
 
                         if (el.Question[qu].Answer[y].IsRight) {
-                            quizString += `<div id="AmericanAmswerBlock">
-                                                            <span>${parseInt(y) + 1}</span><input type="checkbox" checked /> <p>${el.Question[qu].Answer[y].Content}</p>
-                                                           </div>`
+                            quizString += `<div id="AmericanAmswerBlock">`
+                            if (perform_showQuiz_mode == "teacher") {
+                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox" checked /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                            } else {
+                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                            }
+                                                            
+                            quizString +=  `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
                                  <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
                                  </div>`
                         }
 
-                      }
+                    }
 
 
                 }
+
+                
                
                 quizString += '</div>'
+
+                if (perform_showQuiz_mode == "student") {
+                    quizString+=`<div id=submitDIV><input type="submit" class="btn info-btn" /></div>`
+                }
             }
-            quizString += '</div>'
+            quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
              CKEDITOR.replace('textarea');
 

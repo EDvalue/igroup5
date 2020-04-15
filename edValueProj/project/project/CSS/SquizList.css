@@ -37,7 +37,7 @@ body {
 }
 
 .imgQuiz {
-    
+    flex-direction: row-reverse;
     color: white;
     font-size: 18px;
     display: flex;
@@ -45,7 +45,7 @@ body {
     justify-content: center;
     flex: 0 0 40%;
     margin-top: auto;
-    align-items:stretch;
+    align-items: stretch;
 }
     .imgQuiz>img:nth-child(1){
         box-shadow:4px 4px rgba(254, 100, 54, 0.74)

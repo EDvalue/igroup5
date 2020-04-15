@@ -150,6 +150,141 @@ namespace project.Models.DAL
 
             return command;
         }
+
+        public List<RealetedTask>getSTasks(string userEmail,string teamId)
+        {
+            
+
+            SqlConnection con = null;
+
+            List<RealetedTask> rtList = new List<RealetedTask>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String part1 = " select t.TaskId,t.Title,t.Grade,t.SubjectName,rt.TeamId,Max(q.[creationTime]),rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,";
+                String part2 = "MAX(q.[QuestionnaireId]) AS QuestionnaireId,q.[IntelligenceName],i.[Name],pio.points,MAX(quest.QuestionId) AS QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId";
+                String part3 = "  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note], case when pq.[StudentId]='" + userEmail+"' then 1 else 0 END as IsChoose  ";
+                String part4 = " from Task AS t inner join [dbo].[RealatedTo] AS rt on rt.TaskId=t.TaskId and  rt.TeamId='794491584812899283jj' inner join [dbo].[Questionnaire] as q on q.TaskId=rt.TaskId  ";
+                String part5 = "   inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName]  inner join Question as quest on quest.QuestionnaireId=q.QuestionnaireId and rt.Date_Assignment>=q.creationTime   ";
+                String part6 = "  inner join PointsInIntelligence as pio on pio.IntelligenceName=i.EnglishName and pio.StudentEmail='" + userEmail + "' left join Answer as a on a.QuestionId=quest.QuestionId  ";
+                String part7 = " left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=q.[QuestionnaireId] and pq.[StudentId]='zz@gmail.com' left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId] ";
+                String part8 = " group by t.TaskId,q.IntelligenceName,i.[Name],rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode ";
+                String part9 = ",pq.[Note],ac.[AnswerId],ao.[FileLink],ao.[Answer],pq.StudentId,t.Title,t.Grade,t.SubjectName,pio.points,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content,a.IsRight,ac.AnswerId,a.AnswerId order by points";
+                String selectSTR = part1+part2+part3+part4+part5+part6+part7+part8+part9;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                RealetedTask rt = new RealetedTask();
+                rt.Task = new Task();
+                rt.Task.QuizList = new List<Quiz>();
+                Quiz q = new Quiz();
+                Question que = new Question();
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    if (dr["TaskId"].ToString() != rt.Task.TaskId)
+                    {
+                        if (rt.Task.TaskId != null)
+                        {
+                            rtList.Add(rt);
+                        }
+                        rt.Task = new Task();
+                        rt.Task.QuizList = new List<Quiz>();
+                        rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
+                        rt.Task.TaskId = dr["TaskId"].ToString();
+                        rt.Task.Title = dr["Title"].ToString();
+                        rt.Task.Grade =0;
+                        rt.Note = dr["Note"].ToString();
+                        rt.Task.Sub = new Subject(dr["SubjectName"].ToString(), "");
+                        rt.YearOfStudy = dr["YearOfStudy"].ToString();
+                        rt.ForDate = Convert.ToDateTime(dr["ForDate"]);
+                        rt.TillDate = Convert.ToDateTime(dr["OpenTill"]);
+                        rt.AssigmentDate = Convert.ToDateTime(dr["Date_Assignment"]);
+                    }
+                    if (dr["QuestionnaireId"].ToString() != q.QuizID)
+                    {
+                        if (q.QuizID != null)
+                        {
+                            rt.Task.QuizList.Add(q);
+                        }
+                          
+                        q = new Quiz();
+                        q.Question = new List<Question>();
+                        q.QuizID = dr["QuestionnaireId"].ToString();
+                        q.TaskId = dr["IsChoose"].ToString();
+                        if (q.TaskId == "1") {
+                            rt.Task.Grade =1;
+                        }
+                        q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(), dr["IntelligenceName"].ToString());
+          
+                    }
+                        
+                    
+
+                    if (dr["QuestionId"].ToString() != que.QuestionId)
+                    {
+
+                        que = new Question(dr["Type"].ToString(), dr["Content"].ToString(), new List<Answer>(), dr["ImgLink"].ToString(), dr["VideoLink"].ToString(), Convert.ToInt32(dr["OrderNum"]), dr["QuestionId"].ToString());
+                        que.Answer = new List<Answer>();
+                        q.Question.Add(que);
+                    }
+
+                    if (dr["ans_content"] != DBNull.Value)
+                    {
+                        que.Answer.Add(new Answer(dr["ans_content"].ToString(), Convert.ToBoolean(dr["IsRight"]),Convert.ToInt32(dr["AnswerId"])));
+
+                        if (dr["picked"] != DBNull.Value)
+                        {
+                            que.Answer[que.Answer.Count - 1].IsPicked = true;
+                        }
+                        else
+                        {
+                            que.Answer[que.Answer.Count - 1].IsPicked = false;
+                        }
+                    }else if (dr["Answer"] != DBNull.Value|| dr["FileLink"] != DBNull.Value)
+                    {
+                        if (dr["FileLink"] != DBNull.Value)
+                        {
+                            que.AnsContent = dr["FileLink"].ToString();
+                        }
+                        else
+                        {
+                            que.AnsContent = dr["Answer"].ToString();
+                        }
+                            
+                    }
+                        
+
+
+                   
+                }
+                rt.Task.QuizList.Add(q);
+                rtList.Add(rt);
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            
+
+            return rtList;
+        }
+
+
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
         {
 
@@ -167,7 +302,7 @@ namespace project.Models.DAL
         }
         
     }
-    }
+}
 
 
  
