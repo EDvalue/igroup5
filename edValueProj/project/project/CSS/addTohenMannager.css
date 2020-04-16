@@ -52,8 +52,10 @@
     margin-left:11%;
     
 }
-#btnControll{
-    margin-top:3%;
+#btnControll {
+    margin-top: 3%;
+    margin-left:0;
+    float:none;
 }
 #sAdd .col-lg-3{
     padding-left:0;

@@ -160,6 +160,13 @@ label{
     border-radius: 5px;
     border-color: white;
 }
+#btnControll {
+    padding: 0;
+    margin-left: 4px;
+    margin-top: 3px;
+    float: right;
+    margin-right: 11%;
+}
 #sAdd > #btnControll {
     padding: 0;
     margin-left: 4px;

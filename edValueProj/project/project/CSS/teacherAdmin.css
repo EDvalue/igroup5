@@ -282,6 +282,10 @@ place {
     margin-right: 30%;
     justify-content: center
 }
+    #utDIV label {
+        margin-top: 5px;
+        margin-left: 5px;
+    }
 
 #school_uDetails {
     margin-right: 6%;
