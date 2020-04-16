@@ -29,20 +29,20 @@
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [];
 
         $(document).ready(function () {
-<<<<<<< HEAD
+
             userOBJ = JSON.parse(localStorage["user"]);
            
             userEmail = "zz@gmail.com".replace(".",",");
-            getTask = userEmail + "_794491584812899283jj";
+            getTask = userEmail + "_794491584802217252jj";
 
 
-=======
+
            // user = JSON.parse(localStorage["user"]);
             //bodymail = user.Mail.split(".")[0];
             //endmail = user.Mail.split(".")[1];
             //userEmail = bodymail + "," + endmail;
-            userEmail="zz@gmail,com"
->>>>>>> 7bd3bc62ffb0eb8be2053d67e1d045c1cacc4116
+           
+
             
 
             //ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
@@ -73,9 +73,9 @@
         }
 
         function printNacrive(data) {
-
+            str = "";
             for (x in data) {
-                str = `
+                str += `
                  <div id="subject" class="col-lg-4">
 
                     <div class="content_new">
@@ -101,9 +101,10 @@
 
 
                 </div>`;
-                $("#Nactive #tasks").text("")
-                $("#Nactive #tasks").append(str)
+                
             }
+            $("#Nactive #tasks").text("")
+             $("#Nactive #tasks").append(str)
         }
 
         function printActiveOpen(data) {

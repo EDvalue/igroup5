@@ -53,6 +53,7 @@
 
             if (localStorage["active_teacher_team"]) {
                 team = JSON.parse(localStorage["active_teacher_team"]);
+                console.log(team)
                 teamid = team.Id;
             }
 
@@ -211,7 +212,7 @@
             }
 
             let unique = distinct.filter((item, i, ar) => ar.indexOf(item) === i);
-            unique = unique.reverse();
+             unique.sort(function(a, b){return a-b})
             for (x in unique) {
 
                 rdStr += `<div id="number_class">
@@ -346,6 +347,7 @@
 
             fillList();
             newSt = [];
+            $("#select_all #number_class>input[type='checkbox']").prop("checked", false)
 
 
         }

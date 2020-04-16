@@ -83,10 +83,10 @@
                     </div>
                 </div>
 
-                <div id="sub_img">
-                   <a id="${data[t].Id}" href="manageClass.html">
-                        <img onclick="openTeam(${data[t].Id})" id="subImg_el" src="${data[t].Subject.ImgLink}" />
-                    </a>
+                <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
+                   <a  href="manageClass.html"></a>
+                        <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
+                    
                 </div>
 
               </div>`;
@@ -95,13 +95,16 @@
             }
         }
 
-        function openTeam(tId) {
+        function openTeam(val) {
 
+            tId = val.getAttribute("team_id");
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                       var href =$(val).children("a").attr('href');
+                        window.location.href = href;
            
-                    $("#"+myTeams[team].TeamId).trigger('click')
+                    
                 }
             }
         }

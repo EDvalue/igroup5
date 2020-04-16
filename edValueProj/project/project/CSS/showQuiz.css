@@ -2,12 +2,21 @@
     margin:0;
 }
 #main {
-   margin-left:10%;
+   margin-left:5%;
+   margin-right:5%;
     margin-top:5%;
-    width:80%;
+    width:90%;
+    text-align:right;
 }
 #main>div{
     margin:25px 5px 25px 0;
+}
+
+#submitDIV {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin:10% 0 5% 0;
 }
 
 #AmericanAmswerBlock {

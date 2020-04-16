@@ -46,14 +46,15 @@
                         localStorage['userMode'] = "teacher";
                         window.open("teacherDahBoard.html");
                     } else {
-                        if (user.IsCompleteIquizz == true)
-                        {
+                        if (user.IsCompleteIquizz == true) {
                             localStorage['userMode'] = "student";
                             window.open("studentDashboard.html");
                         }
-                        else
+                        else {
                             localStorage['userMode'] = "student";
                             window.open("intelligencequiz.html");
+                        }
+                            
                     }
                 } else {
                     swal("wrong user name or password❌")

@@ -9,8 +9,11 @@
     <link href="../CSS/showQuiz.css" rel="stylesheet" />
 
     <script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <title></title>
-    
+
     <script>
         var str;
         var el
@@ -28,17 +31,17 @@
             document.getElementsByTagName('body')[0].innerHTML = ""
             el = JSON.parse(localStorage['quiz']);
             quizString += `<div id='QuizTitle'><h1>${el.Title}</h1> </div>
-                        <div id='main'>`
+                                <div id='main' dir="rtl">`
             for (qu in el.Question) {
 
-                quizString += `<form id=quizForm><div id='${qu}' class='${el.Question[qu].Type}'>`
+                quizString += `<form id=quizForm><div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class='${el.Question[qu].Type}'>`
                 if (el.Question[qu].ImgLink != "" || el.Question[qu].VideoLink != "") {
                     quizString += `<div id="extraData"></div>`
                 }
-                quizString += `<div id="Question_content"><p>${el.Question[qu].Content}</p></div>`
-                 //quizString += `<div id="Question_answer">`
+                quizString += `<div  id="Question_content"><p>${el.Question[qu].Content}</p></div>`
+                //quizString += `<div id="Question_answer">`
                 if (el.Question[qu].Type == 'A') {
-                   quizString += `<div id="Question_answer">`
+                    quizString += `<div id="Question_answer">`
                     for (y in el.Question[qu].Answer) {
                         if (el.Question[qu].Answer[y].IsRight) {
                             quizString += `<div id="AmericanAmswerBlock">`
@@ -47,14 +50,14 @@
                                 quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox" checked name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
 
-                                 quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
                             }
-                                                            
-                                     quizString+= `</div>`
+
+                            quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                 <span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>
-                                 </div>`
+                                         <span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>
+                                         </div>`
                         }
 
                     }
@@ -78,12 +81,12 @@
                             } else {
                                 quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             }
-                                                            
-                            quizString +=  `</div>`
+
+                            quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                 <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
-                                 </div>`
+                                         <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
+                                         </div>`
                         }
 
                     }
@@ -91,17 +94,17 @@
 
                 }
 
-                
-               
+
+
                 quizString += '</div>'
 
                 if (perform_showQuiz_mode == "student") {
-                    quizString+=`<div id=submitDIV><input type="submit" class="btn info-btn" /></div>`
+                    quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
                 }
             }
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
-             CKEDITOR.replace('textarea');
+            CKEDITOR.replace('textarea');
 
             connectCHK();
         }

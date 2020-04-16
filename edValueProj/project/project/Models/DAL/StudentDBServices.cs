@@ -162,15 +162,15 @@ namespace project.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String part1 = " select t.TaskId,t.Title,t.Grade,t.SubjectName,rt.TeamId,Max(q.[creationTime]),rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,";
-                String part2 = "MAX(q.[QuestionnaireId]) AS QuestionnaireId,q.[IntelligenceName],i.[Name],pio.points,MAX(quest.QuestionId) AS QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId";
-                String part3 = "  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note], case when pq.[StudentId]='" + userEmail+"' then 1 else 0 END as IsChoose  ";
-                String part4 = " from Task AS t inner join [dbo].[RealatedTo] AS rt on rt.TaskId=t.TaskId and  rt.TeamId='794491584812899283jj' inner join [dbo].[Questionnaire] as q on q.TaskId=rt.TaskId  ";
-                String part5 = "   inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName]  inner join Question as quest on quest.QuestionnaireId=q.QuestionnaireId and rt.Date_Assignment>=q.creationTime   ";
-                String part6 = "  inner join PointsInIntelligence as pio on pio.IntelligenceName=i.EnglishName and pio.StudentEmail='" + userEmail + "' left join Answer as a on a.QuestionId=quest.QuestionId  ";
-                String part7 = " left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=q.[QuestionnaireId] and pq.[StudentId]='zz@gmail.com' left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId] ";
-                String part8 = " group by t.TaskId,q.IntelligenceName,i.[Name],rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode ";
-                String part9 = ",pq.[Note],ac.[AnswerId],ao.[FileLink],ao.[Answer],pq.StudentId,t.Title,t.Grade,t.SubjectName,pio.points,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content,a.IsRight,ac.AnswerId,a.AnswerId order by points";
+                String part1 = " select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy,tbl.IntelligenceName,tbl.[Name],tbl.creationTime,tbl.QuestionnaireId";
+                String part2 = " ,pio.points,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],";
+                String part3 = " case when pq.[StudentId]='zz@gmail.com' then 1 else 0 END as IsChoose ";
+                String part4 = "  from (select t.taskId,t.Title,t.SubjectName,rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy,q.IntelligenceName,i.[Name],max(q.creationTime)as creationTime,max(q.QuestionnaireId) as QuestionnaireId ";
+                String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='794491584802217252jj' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
+                String part6 = "  inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] group by t.taskId,t.Title,t.SubjectName,q.IntelligenceName,i.[Name],rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy)as tbl  ";
+                String part7 = "  inner join Question as quest on quest.QuestionnaireId=tbl.QuestionnaireId inner join PointsInIntelligence as pio on pio.IntelligenceName=tbl.IntelligenceName and pio.StudentEmail='zz@gmail.com' ";
+                String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='zz@gmail.com' ";
+                String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId]  order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
                 String selectSTR = part1+part2+part3+part4+part5+part6+part7+part8+part9;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -189,14 +189,17 @@ namespace project.Models.DAL
                     {
                         if (rt.Task.TaskId != null)
                         {
+                            rt.Task.QuizList.Add(q);
                             rtList.Add(rt);
                         }
+                        rt = new RealetedTask();
                         rt.Task = new Task();
                         rt.Task.QuizList = new List<Quiz>();
                         rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
                         rt.Task.TaskId = dr["TaskId"].ToString();
                         rt.Task.Title = dr["Title"].ToString();
                         rt.Task.Grade =0;
+                        if(dr["Note"]!=DBNull.Value)
                         rt.Note = dr["Note"].ToString();
                         rt.Task.Sub = new Subject(dr["SubjectName"].ToString(), "");
                         rt.YearOfStudy = dr["YearOfStudy"].ToString();
