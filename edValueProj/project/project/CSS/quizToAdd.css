@@ -68,6 +68,8 @@ ion-icon:hover {
     #add_task .form-group {
         margin-top: 1%;
         color: black;
+        padding-right: 2%;
+        padding-left: 2%;
     }
 
 td {

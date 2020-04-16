@@ -135,7 +135,7 @@
 
 #holder>p{
 
-    font-size:30px;
+    font-size:16px;
 }
 label{
     
@@ -144,13 +144,13 @@ label{
 
 #submitter{
     margin-top:3px;
+    float:right;
 }
 .form-group > .form-control {
     margin-right: 6%;
     margin-top: 1%;
     margin-bottom: -4.5%;
-    
-    
+    width:46%;
 }
 .form-group .col-sm-3 .col-lg-3{
     margin-left:12%;
@@ -159,4 +159,24 @@ label{
     background: white;
     border-radius: 5px;
     border-color: white;
+}
+#sAdd > #btnControll {
+    padding: 0;
+    margin-left: 4px;
+    margin-top: 3px;
+    float: right;
+    margin-right: 11%;
+}
+
+#metaData div:first-child {
+    margin-right: 31%;
+    
+    margin-left: -13.85%;
+}
+#metaData div:nth-child(2) {
+    
+    margin-left: -13.85%;
+}
+#searchDeatails {
+    margin-bottom: 2%;
 }
