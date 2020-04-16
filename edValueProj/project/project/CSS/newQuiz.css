@@ -96,4 +96,8 @@ p {
 	color: white;
 	text-align: center;
 }*/
-	
+#saveBTN {
+	color: #fff;
+	background-color: #5bc0de;
+	border-color: #46b8da;
+}
