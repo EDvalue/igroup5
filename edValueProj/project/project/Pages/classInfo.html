@@ -150,6 +150,7 @@
             }
 
             $("#teacherList").append(str);
+             $("#teacherList option:first").attr('selected','selected');
         }
 
         function updateClass() {
@@ -195,6 +196,13 @@
             $("#className").val(classPage.Name);
             $("#classNumClass").val(classPage.GradeNumber);
             $('#myClassForm option[value="' + classPage.Grade + '"]').prop('selected', 'selected');
+            $("#edTeacher").prop("value",classPage.EdTeacher.Mail) ;
+            
+
+
+        }
+
+        function chooseFdataList(index) {
 
         }
 
@@ -389,7 +397,7 @@
 
                     <div class="form-group col-sm-3">
                         <label><span class="red-star">🛬 </span>מורה מחנכת:</label>
-                        <input required id="edTeacher" list="teacherList" class="form-control">
+                        <input required id="edTeacher" list="teacherList" class="form-control" value="">
                         <datalist id="teacherList">
                         </datalist>
                     </div>
