@@ -29,6 +29,7 @@
         var schoolTeacherSearch;//save the origin teacher scode
         var moseSt;
         var classes;
+        var User;//save data of new or update user
 
         $(document).ready(function () {
 
@@ -348,6 +349,37 @@
             $("#teacher_det>select").val("0")
             $('#Grade').val("");
             $('#classNum').val("");
+
+            for (c in classes) {
+
+                if (classes[c].InSchool == User.SCode && classes[c].Grade==User.Grade&classes[c].GradeNumber==User.ClassNumber) {
+                    user1=adjustUser(User);
+                    classes[c].Slist.push(user1);
+                    printClasses(classes)
+                    break;
+                }
+
+                
+            }
+        }
+
+        function adjustUser(user) {
+            user = {
+
+
+                Grade: user.Grade,
+                ClassNumber: user.GradeNumber,
+                IsCompleteIquizz: false,
+                Inteligence: null,
+                 Name: user.Name,
+                LastName: user.LastName,
+                 Password: null,
+                 Mail: user.Mail,
+                 IdNumber: user.IdNumber,
+                 SCode: user.SCode,
+            }
+           
+            return user;
         }
 
         function postNewUserError(err) {

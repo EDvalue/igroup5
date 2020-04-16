@@ -652,23 +652,23 @@ namespace project.Models
 
                     String cStr = BuildUserInsertCommand(u);
                     cmd = CreateCommand(cStr, con);
-                    try
-                    {
+                try
+                {
                     reportRow = new Dictionary<string, string>();
-                     
-                        numEffected += cmd.ExecuteNonQuery(); // execute the command
-                        reportRow.Add("type", "user");
-                        reportRow.Add("id", u.Mail);
-                        reportRow.Add("message", "success");
-                        reportRow.Add("details", "user of student succeed");
-                        report.Add(reportRow);
+
+                    numEffected += cmd.ExecuteNonQuery(); // execute the command
+                    reportRow.Add("type", "user");
+                    reportRow.Add("id", u.Mail);
+                    reportRow.Add("message", "success");
+                    reportRow.Add("details", "user of student succeed");
+                    report.Add(reportRow);
 
 
-                    }
-                   catch (SqlException ex)
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 2627)
                     {
-                      if (ex.Number == 2627)
-                      {
                         reportRow = new Dictionary<string, string>();
                         reportRow.Add("type", "user");
                         reportRow.Add("id", u.Mail);
@@ -677,7 +677,18 @@ namespace project.Models
 
                         report.Add(reportRow);
                         continue;
-                      }
+                    }
+                    else if (ex.Number == 547)
+                    {
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "user");
+                        reportRow.Add("id", u.Mail);
+                        reportRow.Add("message", "invalid row data");
+                        reportRow.Add("details", "one of the row data is not valid");
+
+                        report.Add(reportRow);
+                        continue;
+                    }
                     if (con != null)
                     {
                         // close the db connection
@@ -714,6 +725,17 @@ namespace project.Models
                         reportRow.Add("id", u.Mail);
                         reportRow.Add("message", "already in DB");
                         reportRow.Add("details", "student is already in DB(the user does open)");
+                        report.Add(reportRow);
+                        continue;
+                    }
+                    else if (ex.Number == 547)
+                    {
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "student");
+                        reportRow.Add("id", u.Mail);
+                        reportRow.Add("message", "invalid row data");
+                        reportRow.Add("details", "probably class or classNumber incorrect");
+
                         report.Add(reportRow);
                         continue;
                     }
