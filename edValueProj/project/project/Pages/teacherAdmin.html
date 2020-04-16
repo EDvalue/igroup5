@@ -30,9 +30,11 @@
         var moseSt;
         var classes;
         var User;//save data of new or update user
+        var st_mail_update;
 
         $(document).ready(function () {
 
+            
             userOBJ = JSON.parse(localStorage["user"]);
             //localStorage.removeItem("user");
 
@@ -120,16 +122,19 @@
 
                 var val = data.SCode;
                 $('#schoolNU option[id=' + val + ']').prop('selected', 'selected');
+                st_mail_update = data.Email;
 
 
                 if (data.Type == 'Student') {
 
-                    $('#Grade').val(data.Grade);
-                    $('#classNum').val(data.ClassNumber);
-                    $('#uType option[value="s"]').prop('selected', 'selected');
+                     $('#uType option[value="s"]').prop('selected', 'selected')
+                    $("#class_STdet").css("visibility", "visible");
+                    $('#Grade').val(data.Grade).trigger('change');
+                    $('#classNum').val(data.ClassNumber); 
                     $("#class_STdet").css("visibility", "visibale");
                     $("#teacher_det").css("visibility", "hidden");
                     $('#uType').prop('disabled', true);
+                    
                 } else if (data.Type == 'Teacher') {
                     $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
                     $('#uType option[value="t"]').prop('selected', 'selected');
@@ -139,6 +144,7 @@
 
                     schoolTeacherSearch = data.SCode;
                 }
+
             } else {
                 swal({
                     title: "נסה שוב!",
@@ -163,6 +169,8 @@
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
             $("#disbackg").css("visibility", "hidden");
+            $("#UserAdd input[type='text'],#addingDiv select").val('');
+            $("#NCgrade,#NCnumber").val('')
         }
 
         function createNewClass() {
@@ -234,7 +242,7 @@
 
             type = $('#uType').find(":selected").text();
             if (type == "תלמיד") {
-
+                 $("#Grade").prop('disabled',false);
                 $("#class_STdet").css("visibility", "visible");
                 $("#teacher_det").css("visibility", "hidden");
                 $("#class_STdet>#Grade,class_STdet>#classNum").attr('required', '');
@@ -287,7 +295,7 @@
 
             }
 
-
+            $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
         }
@@ -301,13 +309,15 @@
             uArr = [];
             User = {
 
+
                 "IdNumber": $("#userId").val(),
-                "Name": $("#userName").val(),
-                "LastName": $("#userLName").val(),
-                "Mail": $("#userMail").val(),
+                "Name": $("#userName").val().replace("'", "`"),
+                "LastName": $("#userLName").val().replace("'", "`"),
+                "Mail": $("#userMail").val().replace("'", "`"),
                 "Password": $("#userId").val(),
                 "Type": $('#uType').find(":selected").text(),
-                "SCode": $("#schoolList").val(),
+                "orginal_mail": st_mail_update,
+                "SCode":$("#schoolList").val(),
             }
 
 
@@ -332,23 +342,20 @@
             } else {
                 modeSt = "";
                 apiLink = "../api/Admin/UpdateUser";
-                ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUserSuccess, UpdateUserError)
+                ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpdateUserSuccess, UpdateUserError)
             }
 
         }
+
+      
 
         function postNewUserSuccess(data) {
 
             console.log(data);
             closeDivUS();
+            
             swal("✔משתמש נוסף בהצלחה")
-            $("#userId").val("");
-            $("#userName").val("");
-            $("#userLName").val("");
-            $("#userMail").val("");
-            $("#teacher_det>select").val("0")
-            $('#Grade').val("");
-            $('#classNum').val("");
+          
 
             for (c in classes) {
 
@@ -387,17 +394,45 @@
             console.log(err);
         }
 
-        function UpsateUserSuccess(data) {
+        function UpdateUserSuccess(data) {
             console.log(data)
             closeDivUS();
+            
             swal("✔העדכון הסתיים בהצלחה")
-            $("#userId").val("");
-            $("#userName").val("");
-            $("#userLName").val("");
-            $("#userMail").val("");
-            $("#teacher_det>select").val("0")
-            $('#Grade').val("");
-            $('#classNum').val("");
+            //$("#userId").val("");
+            //$("#userName").val("");
+            //$("#userLName").val("");
+            //$("#userMail").val("");
+            //$("#teacher_det>select").val("0")
+            //$('#Grade').val("");
+            //$('#classNum').val("");
+
+            if (classes) {
+
+                if (classes[0].InSchool == User.SCode) {
+
+                    for (c in classes) {
+
+                        if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
+                            user1 = adjustUser(User)
+                            for (s in classes[c].Slist) {
+
+                                if (classes[c].Slist[s].Mail == user1.Mail) {
+
+                                    classes[c].Slist[s] = user1;
+                                    break;
+                                }
+                            }
+
+
+                        }
+                    }
+
+                }
+
+            }
+           
+          
         }
 
         function UpdateUserError(err) {
@@ -499,12 +534,12 @@
                     </div>
 
                     <div class="det_Uadding">
-
+                    
                         <div id="personal_uDetails">
-                            <label>ת"ז: </label><input id="userId" class="form-control" type="text" />
-                            <label>שם פרטי: </label><input id="userName" class="form-control" type="text" />
-                            <label>שם משפחה: </label><input id="userLName" class="form-control" type="text" />
-                            <label>מייל: </label><input id="userMail" class="form-control" type="email" />
+                            <label>ת"ז: </label><input pattern="^[0-9]{9}$" maxlength="9" id="userId" required class="form-control" type="text" />
+                            <label>שם פרטי: </label><input pattern="[א-ת]{2,15}"  id="userName" required class="form-control" type="text" />
+                            <label>שם משפחה: </label><input pattern="[א-ת]{2,15}"  id="userLName" required class="form-control" type="text" />
+                            <label>מייל: </label><input id="userMail" required class="form-control" type="email" />
                         </div>
                         <div id="school_uDetails">
 
@@ -514,14 +549,14 @@
 
                             <div id="teacher_det">
                                 <label>הרשאות ניהול</label>
-                                <select>
+                                <select required>
                                     <option value="0">לא</option>
                                     <option value="1">כן</option>
                                 </select>
                             </div>
                             <div id="class_STdet">
                                 <label>שכבה: </label>
-                                <select onchange="bringNumbers('studentMode')" id="Grade" class="form-control">
+                                <select onchange="bringNumbers('studentMode')" id="Grade" required class="form-control">
                                     <option value="">בחר שכבה    </option>
                                     <option value="7">ז</option>
                                     <option value="8">ח</option>
@@ -529,12 +564,12 @@
 
                                 </select>
                                 <label>מספר כיתה: </label>
-                                <select id="classNum" class="form-control" type="text">
+                                <select required id="classNum" class="form-control" type="text">
                                     <option value="">בחר מספר</option>
                                 </select>
                             </div>
 
-                            <div  id="sendBTN">
+                            <div id="sendBTN">
                                 <input type="submit" class="btn btn-primary btn-lg" />
                             </div>
                         </div>
