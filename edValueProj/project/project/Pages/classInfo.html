@@ -196,7 +196,7 @@
             $("#className").val(classPage.Name);
             $("#classNumClass").val(classPage.GradeNumber);
             $('#myClassForm option[value="' + classPage.Grade + '"]').prop('selected', 'selected');
-            $("#edTeacher").prop("value",classPage.EdTeacher.Mail) ;
+            $("#edTeacher").prop("value",classPage.EdTeacher.Mail).trigger("keypress") ;
             
 
 
@@ -228,6 +228,9 @@
             $("#userMail").val(myStudent.Mail);
             $('#Grade option[value="'+classPage.Grade+'"]').prop('selected', true);
             $("#classNum").val(classPage.GradeNumber);
+            $("#schoolList").prop("value", classPage.InSchool);
+         
+
 
         }
 
@@ -339,7 +342,7 @@
                         <div id="school_uDetails">
 
                             <label>מוסד חינוכי:</label>
-                            <input onchange="" required id="schoolList" class="form-control" list="schoolNU" name="SLA">
+                            <input onchange="" required id="schoolList" class="form-control" list="schoolNU" name="SLA" value="">
                             <datalist id="schoolNU">
                             </datalist>
                             <div id="class_STdet">

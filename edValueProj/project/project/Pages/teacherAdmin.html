@@ -7,7 +7,7 @@
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
 
-
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -24,17 +24,18 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title></title>
     <script>
+        var searchedUser = {}, classPicked = {};
         var userOBJ;
         const maxClassnum = 30;
         var schoolTeacherSearch;//save the origin teacher scode
         var moseSt;
-        var classes;
+        var classes,sortedClasses;
         var User;//save data of new or update user
         var st_mail_update;
 
         $(document).ready(function () {
 
-            
+
             userOBJ = JSON.parse(localStorage["user"]);
             //localStorage.removeItem("user");
 
@@ -44,7 +45,7 @@
             });
 
 
-        
+
             $("#classAdd").submit(function (e) {
                 createNewClass();
                 return false;
@@ -81,11 +82,7 @@
 
         function postNewClassSuccess(data) {
             console.log(data);
-            //Class.Slist = [];
-            //Class.Name = Class.EdTeacher.Name+Class.Grade + "\`" + Class.GradeNumber;
-            //classes.push(Class);
-            //getClassBySchoolSuccess(classes);
-            //Class = "";
+          
             closeDivUS();
             $("#NCgrade").val("");
             $("#NCnumber").val("");
@@ -94,21 +91,22 @@
             swal("✔ כיתה נפתחה בהצלחה");
         }
 
-        
+
 
         function postNewClassError(err) {
             console.log(err);
-               swal({
-                     title: "נסה שוב!",
-                     text: "שגיאה בניסיון לפתיחת כיתה",
-                     icon: "warning",
-                     buttons: true,
-                     dangerMode: true
-               });
+            swal({
+                title: "נסה שוב!",
+                text: "שגיאה בניסיון לפתיחת כיתה",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            });
         }
 
         function getUserByMailSuccess(data) {
             console.log(data);
+            searchedUser = data;
             if (data.hasOwnProperty('Email')) {
                 $("#addingDiv").show();
                 $('#UserAdd').show();
@@ -121,26 +119,23 @@
                 $("#schoolList").val(data.SCode);
 
                 var val = data.SCode;
-                $('#schoolNU option[id=' + val + ']').prop('selected', 'selected');
                 st_mail_update = data.Email;
-
-
                 if (data.Type == 'Student') {
-
-                     $('#uType option[value="s"]').prop('selected', 'selected')
-                    $("#class_STdet").css("visibility", "visible");
-                    $('#Grade').val(data.Grade).trigger('change');
-                    $('#classNum').val(data.ClassNumber); 
-                    $("#class_STdet").css("visibility", "visibale");
-                    $("#teacher_det").css("visibility", "hidden");
                     $('#uType').prop('disabled', true);
+                    $('#uType option[value="s"]').prop('selected', 'selected').trigger('change')
+                    $("#class_STdet").css("visibility", "visible");
+                    $('#Grade option[value="'+data.Grade+'"]').prop('selected', 'selected').trigger('change');
+                    $('#classNum').val(data.ClassNumber);
+                   
                     
+
                 } else if (data.Type == 'Teacher') {
                     $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
-                    $('#uType option[value="t"]').prop('selected', 'selected');
+                    $('#uType option[value="t"]').prop('selected', 'selected').trigger('change');
                     $('#uType').prop('disabled', true);
-                    $("#teacher_det").css("visibility", "visibale");
-                    $("#class_STdet").css("visibility", "hidden");
+                   
+                   
+                   
 
                     schoolTeacherSearch = data.SCode;
                 }
@@ -169,8 +164,9 @@
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
             $("#disbackg").css("visibility", "hidden");
-            $("#UserAdd input[type='text'],#addingDiv select").val('');
+            $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
             $("#NCgrade,#NCnumber").val('')
+            
         }
 
         function createNewClass() {
@@ -183,19 +179,19 @@
                 EdTeacher: {
                     "Mail": $('#TList').val().split("-")[0],
                     "Name": $('#TList').val().split("-")[1].split(' ')[0],
-                    "LastName":$('#TList').val().split("-")[1].split(' ')[1]
+                    "LastName": $('#TList').val().split("-")[1].split(' ')[1]
                 }
 
             }
 
             ajaxCall("POST", "../api/Admin/postNewClass", JSON.stringify(Class), postNewClassSuccess, postNewClassError)
 
-          }
+        }
 
         function newClass() {
 
             valID = userOBJ.SCode;
-            
+
 
             ajaxCall("GET", "../api/Admin/getTeacherByScode/" + valID, "", getTeacherByScodeSuccess, getTeacherByScodeError)
 
@@ -208,7 +204,7 @@
 
         function addUser() {
 
-            
+
             modeSt = "new";
             $('#uType option[value=""]').prop('selected', true);
             $("#addingDiv").show();
@@ -242,7 +238,7 @@
 
             type = $('#uType').find(":selected").text();
             if (type == "תלמיד") {
-                 $("#Grade").prop('disabled',false);
+                $("#Grade").prop('disabled', false);
                 $("#class_STdet").css("visibility", "visible");
                 $("#teacher_det").css("visibility", "hidden");
                 $("#class_STdet>#Grade,class_STdet>#classNum").attr('required', '');
@@ -295,9 +291,23 @@
 
             }
 
+
+
             $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
+
+            if (searchedUser.ClassNumber) {
+
+                $('#classNum').val(searchedUser.ClassNumber);
+                searchedUser = "";
+
+            } else if(classPicked.GradeNumber) {
+
+                $('#classNum').val(classPicked.GradeNumber);
+                classPicked=""
+            }
+                
         }
 
         function getnumbersError(err) {
@@ -317,7 +327,7 @@
                 "Password": $("#userId").val(),
                 "Type": $('#uType').find(":selected").text(),
                 "orginal_mail": st_mail_update,
-                "SCode":$("#schoolList").val(),
+                "SCode": $("#schoolList").val(),
             }
 
 
@@ -347,26 +357,26 @@
 
         }
 
-      
+
 
         function postNewUserSuccess(data) {
 
             console.log(data);
             closeDivUS();
-            
+
             swal("✔משתמש נוסף בהצלחה")
-          
+
 
             for (c in classes) {
 
-                if (classes[c].InSchool == User.SCode && classes[c].Grade==User.Grade&classes[c].GradeNumber==User.ClassNumber) {
-                    user1=adjustUser(User);
+                if (classes[c].InSchool == User.SCode && classes[c].Grade == User.Grade & classes[c].GradeNumber == User.ClassNumber) {
+                    user1 = adjustUser(User);
                     classes[c].Slist.push(user1);
-                    printClasses(classes)
+                    printClasses(sortedClasses)
                     break;
                 }
 
-                
+
             }
         }
 
@@ -378,14 +388,14 @@
                 ClassNumber: user.GradeNumber,
                 IsCompleteIquizz: false,
                 Inteligence: null,
-                 Name: user.Name,
+                Name: user.Name,
                 LastName: user.LastName,
-                 Password: null,
-                 Mail: user.Mail,
-                 IdNumber: user.IdNumber,
-                 SCode: user.SCode,
+                Password: null,
+                Mail: user.Mail,
+                IdNumber: user.IdNumber,
+                SCode: user.SCode,
             }
-           
+
             return user;
         }
 
@@ -397,7 +407,7 @@
         function UpdateUserSuccess(data) {
             console.log(data)
             closeDivUS();
-            
+
             swal("✔העדכון הסתיים בהצלחה")
             //$("#userId").val("");
             //$("#userName").val("");
@@ -431,8 +441,8 @@
                 }
 
             }
-           
-          
+
+
         }
 
         function UpdateUserError(err) {
@@ -446,7 +456,7 @@
         function showme(arg) {
             sortedClasses = [];
             for (c in classes) {
-                if (classes[c].Grade == arg||arg==0) {
+                if (classes[c].Grade == arg || arg == 0) {
 
                     sortedClasses.push(classes[c])
                 }
@@ -456,35 +466,37 @@
         }
 
         function showClassInfo(arg) {
-            
+
             myClass = classes[arg.id];
             localStorage["class"] = JSON.stringify(myClass);
-            localStorage["userInClassInfo"]="teacher"
-            window.open("classInfo.html");
+            localStorage["userInClassInfo"] = "teacher"
+            location.assign("classInfo.html");
 
         }
 
-        function getClassBySchoolSuccess(data) { 
+        function getClassBySchoolSuccess(data) {
             classes = data;
+            sortedClasses = data;
             printClasses(classes);
         }
 
         function printClasses(data) {
-             str1 = "";
-          
+            str1 = "";
+
             for (x in data) {
                 //data[x].Name = data[x].Name.replace("`", "'");
                 str1 += `<div class='col-lg-4 col-md-6 col-sm-6'>
-                                <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
-                                    <div id='imgc'><img src='../images/cita.jpeg' /></div>
-                                    <div id='className'> <label> ${data[x].Name} </label></div>
-                                    <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
-                                    <div id='CmetaData'>
-                                        <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
-                                        <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+ <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="add-outline"></ion-icon></div>
+                                    <div onclick="showClassInfo(this)" id="${x}" class='cInS'>                                        
+                                        <div id='imgc'><img src='../images/cita.jpeg' /></div>
+                                        <div id='className'> <label> ${data[x].Name} </label></div>
+                                        <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
+                                        <div id='CmetaData'>
+                                            <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
+                                            <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                        </div>
                                     </div>
-                                </div>
-                             </div>`
+                                 </div>`
             }
 
 
@@ -493,19 +505,33 @@
 
         }
 
+        function addShere(num) {
+            $("#addingDiv").show();
+            $('#UserAdd').show();
+            $("#classAdd").hide();
+            classPicked = sortedClasses[num];
+            $("#schoolList").val(sortedClasses[num].InSchool);
+           
+            $('#Grade').val(sortedClasses[num].Grade).trigger('change');
+            $('#classNum').val(sortedClasses[num].GradeNumber);
+            $('#uType').prop('disabled',true);
+            $('#uType option[value="s"]').prop('selected', 'selected').trigger('change')
+     
+        }
+
         function getClassBySchoolError(err) {
             console.log(err)
         }
 
         function bringSClasses() {
-            alert("")
-            sc =userOBJ.SCode;
+            
+            sc = userOBJ.SCode;
             apiLink = "../api/Admin/getClassBySchool/" + sc;
 
             ajaxCall("GET", apiLink, "", getClassBySchoolSuccess, getClassBySchoolError);
-          }
+        }
 
-       //---------------------------------------------------------------------//
+        //---------------------------------------------------------------------//
     </script>
 </head>
 <body dir="rtl">
@@ -685,7 +711,7 @@
                     <p id="8" onclick="showme(this.id)">שכבה ח</p>
                     <p id="9" onclick="showme(this.id)">שכבה ט</p>
                     <p id="0" onclick="showme(this.id)">כולם</p>
-                    <p id="0" onclick="showme(this.id)">כולם</p>
+                   
                 </div>
             </div>
             <div id="classes" class="row">

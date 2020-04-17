@@ -10,19 +10,40 @@ html {
 
     border-bottom:2px solid white;
 }
+#icon_AddS {
+    justify-content: flex-end;
+    display: flex;
+    margin-right: auto;
+    border-radius: 50% 50%;
+    margin-left: 3%;
+    margin-top: 0%;
+    background-color: #fff;
+    width: max-content;
+}
 
-#sNav {
-    /*margin-top: 2%;
+#createUser > button {
+    align-items: center;
+    display: flex;
+}
+
+
+    #icon_AddS ion-icon{
+        color:forestgreen;
+        font-size:30px;
+        z-index:2;
+    }
+    #sNav {
+        /*margin-top: 2%;
     width: 80%;
     margin-right: 5%;*/
-    width: 100%;
-    background-color: #007bff;
-    display: flex;
-    margin-top: 1%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
-    box-shadow:  0 5px 6px -3px rgba(0, 0, 0, .4);
-}
+        width: 100%;
+        background-color: #007bff;
+        display: flex;
+        margin-top: 1%;
+        padding-top: 0.5%;
+        padding-bottom: 0.5%;
+        box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
+    }
 
 
 #search{
@@ -76,7 +97,7 @@ datalist {
 }
 #imgc{
     width:17%;
-    margin-top:13%;
+    margin-top:3%;
 }
 #classes {
     margin-top: 3%;
