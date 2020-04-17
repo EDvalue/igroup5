@@ -60,11 +60,15 @@ th.sorting {
 {
     background-color: #f1f1f1;
     position: absolute;
-    top: 30%;
+    top: 25%;
     left: 30%;
     border: 1px solid black;
     border-radius: 4px;
+    text-align:center;
 }
+    #assigment a{
+        text-align:left;
+    }
 
 #assigmentForm{
     display:flex;
@@ -74,6 +78,13 @@ th.sorting {
     #assigmentForm .btn {
         background-color: #007bff;
     }
+#class_date {
+    margin-left: -12%;
+}
+
+#submition_date {
+    padding: 4px;
+}
 #task_div{
     position:relative;
 }
