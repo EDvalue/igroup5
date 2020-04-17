@@ -192,7 +192,7 @@
         }
 
         function runPage() {
-            document.getElementById("title").innerHTML = `<h1> ${classPage.Name} </h1>`;
+            document.getElementById("title").innerHTML = `<h2> ${classPage.Name} </h2>`;
             $("#className").val(classPage.Name);
             $("#classNumClass").val(classPage.GradeNumber);
             $('#myClassForm option[value="' + classPage.Grade + '"]').prop('selected', 'selected');
@@ -257,7 +257,7 @@
                             render: function (data, type, row, meta) {
                                 let stData = "data-stId='" + row.Mail + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + stData + "> Edit </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + stData + "> ערוך </button>";
                               
 
                                 return editBtn
@@ -389,14 +389,14 @@
             <form id="myClassForm">
                 <div class="form-group row">
                     <div class="form-group col-sm-3">
-                        <label><span class="red-star">🛫 </span>שם הכיתה:</label>
+                        <label><span class="red-star"> </span>שם הכיתה</label>
                         <input required id="className" type="text" class="form-control">
 
                     </div>
 
 
                     <div class="form-group col-sm-3">
-                        <label><span class="red-star">🛬 </span>מורה מחנכת:</label>
+                        <label><span class="red-star"> </span>מורה מחנכת</label>
                         <input required id="edTeacher" list="teacherList" class="form-control" value="">
                         <datalist id="teacherList">
                         </datalist>
@@ -404,7 +404,7 @@
 
 
                     <div class="form-group col-sm-3">
-                        <label><span class="red-star">⏳</span>שכבת גיל</label>
+                        <label><span class="red-star"></span>שכבת גיל</label>
                         <select required id="GradeClass" class="form-control">
                             <option value="">בחר שכבה</option>
                             <option value="7">ז</option>
@@ -414,7 +414,7 @@
                     </div>
 
                     <div class="form-group col-sm-3">
-                        <label><span class="red-star">⌛</span>מספר כיתה</label>
+                        <label><span class="red-star"></span>מספר כיתה</label>
                         <input type="number" class="form-control" id="classNumClass" placeholder="Enter class number" required />
                     </div>
 
@@ -423,8 +423,8 @@
                 </div>
 
                 <div id="btns_class">
-                    <button type="submit" class="btn btn-primary btn-lg" id="saveBTN">Save</button>
-                    <input type="button" onclick="changeMode()" class="btn btn-success btn-lg" id="editMode" value="מצב עריכה" />
+                    <button type="submit" class="btn btn-primary " id="saveBTN">שמור</button>
+                    <input type="button" onclick="changeMode()" class="btn btn-success " id="editMode" value="מצב עריכה" />
                 </div>
 
             </form>

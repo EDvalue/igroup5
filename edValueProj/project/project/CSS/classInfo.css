@@ -17,22 +17,28 @@
 th {
     margin: 0;
     text-align: center;
-    color: white;
+    color: black;
     font-size: 18px;
     margin: auto;
    
 }
 thead {
-    background: linear-gradient(#007bff,#fff);
+    background: #f1f1f1;
 }
 
 td {
     text-align: center;
 }
 #SalesTable_length {
-    color: white;
+    color: black;
     font-size: 14px;
 }
+#title {
+    margin-top: 1.5%;
+    margin-bottom: 1%;
+    color:black;
+}
+
 
 #Ttitle {
     width: 80%;
@@ -40,7 +46,7 @@ td {
     text-align: center;
     margin-top: 4%;
     margin-bottom: 3%;
-    color: white;
+    color: black;
     font-size: 45px;
 }
 
@@ -95,7 +101,7 @@ td {
     width:22%
 }
 #btns_class > input {
-    margin-right: 3%;
+    margin-right: 3px;
 }
 
 #st_table{
