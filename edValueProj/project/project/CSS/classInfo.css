@@ -17,22 +17,28 @@
 th {
     margin: 0;
     text-align: center;
-    color: white;
+    color: black;
     font-size: 18px;
     margin: auto;
    
 }
 thead {
-    background: linear-gradient(#007bff,#fff);
+    background: #f1f1f1;
 }
 
 td {
     text-align: center;
 }
 #SalesTable_length {
-    color: white;
+    color: black;
     font-size: 14px;
 }
+#title {
+    margin-top: 1.5%;
+    margin-bottom: 1%;
+    color:black;
+}
+
 
 #Ttitle {
     width: 80%;
@@ -40,14 +46,10 @@ td {
     text-align: center;
     margin-top: 4%;
     margin-bottom: 3%;
-    color: white;
+    color: black;
     font-size: 45px;
 }
 
-html, body, #container {
-    background: linear-gradient(rgba(65, 55, 55, 0.65),#fff);
-    
-}
 .sorting {
     text-align: center;
     
@@ -64,7 +66,8 @@ html, body, #container {
     width: 100%;
     display: flex;
     align-items: center;
-    border-bottom: 1px dotted white;
+    
+
 }
 
 #editUDiv {
@@ -85,15 +88,20 @@ html, body, #container {
     background:linear-gradient(#fff,#1B4DDD);
 }
 
-.form-group.row{
+.form-group.row {
     width: 100%;
     float: right;
-    margin-left: 35%;
+   padding-left: 3%;
+    
+    background-color: #007bff;
+    
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
 }
-
-#btns_class>input{
-
-    margin-right:3%;
+.form-group .col-sm-3 {
+    width:22%
+}
+#btns_class > input {
+    margin-right: 3px;
 }
 
 #st_table{
