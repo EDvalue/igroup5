@@ -40,25 +40,25 @@
 
             function ConectSuccess(data) {
                 console.log(data);
-                if (data.IdNumber) {
+                if (data.Name) {
                     localStorage["user"] = JSON.stringify(data);
                     user = JSON.parse(localStorage["user"])
                     console.log(user)
                     console.log(user.IsCompleteIquizz)
                     if (data.hasOwnProperty('IsEditor')) {
                         localStorage['userMode'] = "teacher";
-                        window.open("teacherDahBoard.html");
-                    } else {
+                        location.assign("teacherDahBoard.html");
+                    } else if (user.IsCompleteIquizz) {
                         if (user.IsCompleteIquizz == true) {
                             localStorage['userMode'] = "student";
-                            window.open("studentDashboard.html");
+                            location.replace("studentDashboard.html");
                         }
                         else {
                             localStorage['userMode'] = "student";
-                            window.open("intelligencequiz.html");
+                            location.replace ("intelligencequiz.html");
                         }
-                            
-                    }
+
+                    } else { location.replace("systemManager.html")}
                 } else {
                     swal("wrong user name or password❌")
                 }

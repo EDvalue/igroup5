@@ -61,7 +61,8 @@ namespace project.Models.DAL
             Teacher t = new Teacher();
             Student s = new Student();
             User u = new User();
-            int count = 0;
+            int counteacher = 0;
+            int countstudent = 0;
 
             try
             {
@@ -85,13 +86,13 @@ namespace project.Models.DAL
                     s.Mail = dr["Email"].ToString();
                     s.SCode = Convert.ToInt32(dr["SchoolCode"]);
                     s.IsCompleteIquizz = Convert.ToBoolean(dr["CompletedIQuiz"]);
-                    count++;
+                    countstudent++;
 
                     
                 }
 
 
-                if (count == 0)
+                if (countstudent == 0)
                 {
                     con.Close();
                     dr = null;
@@ -116,9 +117,30 @@ namespace project.Models.DAL
                         t.SCode = Convert.ToInt32(dr["SchoolCode"]);
                         t.SchoolAdmin = Convert.ToBoolean(dr["SchoolAdmin"]);
                         t.IsEditor = Convert.ToBoolean(dr["isEditor"]);
+                        counteacher++;
 
                     }
-                }
+
+
+                    if (counteacher == 0)
+                    {
+                        con.Close();
+                        dr = null;
+                        cmd.Connection = null;
+                        con = connect("DBConnectionString");
+
+                        selectSTR = "select * from [Admin]  where [Admin].UserName='" + conection["Email"] + "' and " + " [Admin].Password='" + conection["Password"] + "'";
+                        cmd = new SqlCommand(selectSTR, con);
+                        dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                        while (dr.Read())
+                        {
+                            
+                            u.Name = dr["UserName"].ToString();
+                         
+                        }
+                    }
+                }   
 
 
             }
@@ -136,14 +158,18 @@ namespace project.Models.DAL
 
             }
 
-            if (count > 0)
+            if (countstudent > 0)
             {
                 return s;
             }
-            else
+            else if(counteacher>0)
             {
 
                 return t;
+            }
+            else
+            {
+                return u;
             }
 
         }
