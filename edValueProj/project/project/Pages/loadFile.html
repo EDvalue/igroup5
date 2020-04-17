@@ -33,6 +33,11 @@
 
             $("#report").hide()
 
+            $('input[type=file]').change(function () {
+                var filePath = $(this).val();
+                $("#fileRoute").val(filePath);
+            });
+
         });
         var rep;
         function uploadDocument() {
@@ -184,11 +189,13 @@
                     <p>  הכנס את מיקום הקובץ המלא ולחץ שגר,אנא וודא שהפרטים בקובץ מולאו נכון ובהתאם לפורמט</p>
                 </div>
                 <div class="row" id="uploadFile">
-                    <div id="sendBTN"> <button onclick="uploadDocument()" class="btn btn-primary btn-lg">שלח</button> </div>
-
+                    <div id="bringFile"><input type="file" /></div>
+          
                     <div class="form-group col-lg-4" id="file">
                         <label><span>📂</span>הכנס קובץ</label>
                         <input dir="rtl" type="text" class="form-control" id="fileRoute" placeholder="הכנס קובץ" required />
+
+                        <div id="sendBTN"> <button onclick="uploadDocument()" class="btn btn-primary btn-lg">שלח</button> </div>
 
                     </div>
 

@@ -101,8 +101,9 @@
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
                        var href =$(val).children("a").attr('href');
-                        window.location.href = href;
+                        location.assign(href);
            
                     
                 }
@@ -116,12 +117,14 @@
 
             localStorage['user'] = JSON.stringify(userOBJ);
             localStorage['TeamMode']="new"
-            window.open('addStudentToClass.html')
+            location.assign('addStudentToClass.html')
         }
 
         function f1() {
-            window.open('newQuiz.html')
+            location.assign('newQuiz.html')
         }
+
+        
 
         function openAddTaskPage(tId) {
             for (team in myTeams) {
@@ -131,11 +134,11 @@
                     $("#"+myTeams[team].TeamId).trigger('click')
                 }
             }
-          window.open("Assignment_assignment.html")
+          location.assign("Assignment_assignment.html")
         }
         function openTApage() {
             localStorage["user"] = JSON.stringify(userOBJ);
-            window.open("teacherAdmin.html");
+            location.assign("teacherAdmin.html");
         }
 
     </script>
