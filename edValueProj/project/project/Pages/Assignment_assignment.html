@@ -372,6 +372,10 @@
 
             $("#addFB").hide("1s")
         }
+        function closeDivUS() {
+            $("#assigment").hide();
+            
+        }
         //---------------------------//
 
         function postFBSuccess(data) {
@@ -534,9 +538,9 @@
     </div>
 
     <div id="assigment">
-
+        
         <form id="assigmentForm">
-
+            <a onclick="closeDivUS()"><span>Close x</span></a>
             <div id="class_date">
                 <span>עבור תאריך:</span>
                 <input type="datetime-local" />
@@ -547,7 +551,7 @@
 
             </div>
             <div id="assignmentFormBtn">
-                <input type="submit" class="btn btn-info" value="שלח"/>
+                <input type="submit" class="btn btn-info" value="שלח" />
             </div>
 
         </form>
