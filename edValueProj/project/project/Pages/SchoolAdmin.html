@@ -13,7 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Popper JS -->
-    <a href="SchoolAdmin.html">SchoolAdmin.html</a>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
@@ -25,7 +25,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script>
-        var searchedUser = {};
+        var searchedUser = {}, classPicked = {};
         var activeSc;
         var modeSc = "";//save mode of class (edit/new)
         var modeSt = "";//save mode of user (edit/new)
@@ -38,6 +38,8 @@
         var st_mail_update;
 
         $(document).ready(function () {
+
+             $("#TList,#CitySCHOOLlist,#schoolList").focusout(validate)
 
             $("#myUserForm").submit(function (e) {
                 creatUpdateUser();
@@ -72,6 +74,33 @@
         });
 
         //----------------------------------------------------------------------//
+
+        
+        function validate() {
+            optionValuesArr = [];
+            var val = $('#' + this.id).val();
+            var dl = $("#" + this.getAttribute('name'));
+            var options = $("#" + this.getAttribute('name'))[0].options
+            
+            for (var i = 0; i < options.length; i++) {
+
+                optionValuesArr.push(options[i].value);
+            }
+
+                
+
+            if (val == "") {
+                
+                this.val('')
+                return false;
+            } else if (optionValuesArr.indexOf(val) === -1) {
+                this.value=''
+                swal("item not in from list.!");
+                return false;
+                
+
+            }
+        }
 
         //-----------schoolpickerFUNC-----------------//
 
@@ -113,9 +142,12 @@
         }
 
         function addShere(num) {
+            modeSt = "new";
             $("#addingDiv").show();
             $('#UserAdd').show();
             $("#classAdd").hide();
+             classPicked = classes[num];
+             $("#disbackg").css("visibility", "visible");
             classPicked = classes[num];
             $("#schoolList").val(classes[num].InSchool);
 
@@ -199,7 +231,7 @@
         }
 
         function newAClass(arg) {
-
+              $("#disbackg").css("visibility", "visible");
             valID = arg.firstElementChild.id;
             valNAME = arg.children[1].textContent
 
@@ -290,11 +322,11 @@
 
             uArr.push(User)
             if (modeSt == "new") {
-                modeSt = "";
+                
                 apiLink = "../api/Admin/postNewUser";
                 ajaxCall("POST", apiLink, JSON.stringify(uArr), postNewUserSuccess, postNewUserError)
             } else {
-                modeSt = "";
+               
                 apiLink = "../api/Admin/UpdateUser";
                 ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUserSuccess, UpdateUserError)
             }
@@ -302,7 +334,7 @@
         }
 
         function postNewUserSuccess(data) {
-
+             modeSt = "";
             console.log(data);
             closeDivUS();
             swal("✔משתמש נוסף בהצלחה")
@@ -327,6 +359,7 @@
         }
 
         function UpsateUserSuccess(data) {
+             modeSt = "";
             console.log(data)
             closeDivUS();
             swal("✔העדכון הסתיים בהצלחה")
@@ -407,7 +440,7 @@
             Class.Slist = [];
             Class.Name = Class.EdTeacher.Name + Class.Grade + "\`" + Class.GradeNumber;
             classes.push(Class);
-            getClassBySchoolSuccess(classes);
+            getClassBySchoolASuccess(classes);
             Class = "";
             closeDivUS();
             $("#NCgrade").val("");
@@ -415,6 +448,10 @@
             $("#TList").val("");
             $("#classForSchool").val("");
             swal("✔ כיתה נפתחה בהצלחה");
+            if (Class.SCode == activeSc) {
+                bringClasses();
+            }
+            
         }
         function schoolpicked() {
             $("#class_STdet>#Grade").prop('disabled', false);
@@ -516,7 +553,7 @@
         }
 
         function showSchool(arg) {
-
+            $("#disbackg").css("visibility", "visible");
             val = arg.firstElementChild.id;
             console.log(val);
             modeSc = "edit"
@@ -595,12 +632,14 @@
         }
 
         function closeDivUS() {
+            modeSc = "";
+            modeSt = "";
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
             $("#UserAdd input[type='text'],#addingDiv select,#schoolList").val('');
             $("#NCgrade,#NCnumber").val('')
-            $("#UserAdd input[type='text'],#addingDiv select").val('');
+            $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
             $("#disbackg").css("visibility", "hidden");
 
         }
@@ -684,10 +723,21 @@
 
             }
 
-            $("#NCnumber").text("");
-            $("#class_STdet>#classNum").text("")
+          
+            $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
+
+            if (searchedUser.ClassNumber) {
+
+                $('#classNum').val(searchedUser.ClassNumber);
+                searchedUser = "";
+
+            } else if(classPicked.GradeNumber) {
+
+                $('#classNum').val(classPicked.GradeNumber);
+                classPicked=""
+            }
         }
 
         function getnumbersError(err) {
@@ -721,7 +771,7 @@
                         <label>מספר מוסד לימוד: </label><input id="SCcode" class="form-control" type="text" />
                         <label>שם מוסד לימוד: </label><input id="SCName" class="form-control" type="text" />
                         <label>ישוב:</label>
-                        <input onchange="" required id="CitySCHOOLlist" class="form-control" list="citiesNU" name="brw" value="">
+                        <input onchange="" required id="CitySCHOOLlist" class="form-control" list="citiesNU" name="citiesNU" value="">
                         <datalist id="citiesNU">
                         </datalist>
 
@@ -761,7 +811,7 @@
                         <div id="school_uDetails">
 
                             <label>מוסד חינוכי:</label>
-                            <input onchange="schoolpicked()" required id="schoolList" class="form-control" list="schoolNU" name="SLA" value="">
+                            <input onchange="schoolpicked()" required id="schoolList" class="form-control" list="schoolNU" name="schoolNU" value="">
                             <datalist id="schoolNU">
                             </datalist>
                             
@@ -815,7 +865,7 @@
                         <option value="" > בחר מספר</option>
                     </select>
                     <label>מורה מחנך:</label>
-                    <input onchange="" required id="TList" class="form-control" list="TeacherNC" name="SLA">
+                    <input onchange="" required id="TList" class="form-control" list="TeacherNC" name="TeacherNC">
                     <datalist id="TeacherNC">
                     </datalist>
 
@@ -911,7 +961,7 @@
                 <div id="cityFilt" class="row">
                     <div class="form-group  col-lg-9">
                         <label for="cityFilter"><span>🏙</span>עיר בית ספר</label>
-                        <input onchange="bringSchools(this)" required id="filtList" class="form-control" list="cities" name="brw">
+                        <input onchange="bringSchools(this)" required id="filtList" class="form-control" list="cities" name="cities">
                         <datalist id="cities">
                         </datalist>
                     </div>

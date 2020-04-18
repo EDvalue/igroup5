@@ -263,7 +263,7 @@ place {
 #addingDiv {
     width: 600px;
     height: 415px;
-    position: absolute;
+    position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
     transform: translate(-50%, -50%);
@@ -350,7 +350,7 @@ place {
  }
  #nav_cnt > p:hover {
         background: linear-gradient(rgba(116, 116, 224, 0.69),#fff);
-        ;
+        
  }
 /*-------------------------------------------------------------------*/
 #disbackg {
@@ -360,7 +360,7 @@ place {
     background: #000;
     opacity: 0.8;
     z-index: 2 !important;
-    position: absolute;
+    position:fixed;
     top: 0;
     left: 0;
 }

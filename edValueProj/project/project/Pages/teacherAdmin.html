@@ -28,13 +28,14 @@
         var userOBJ;
         const maxClassnum = 30;
         var schoolTeacherSearch;//save the origin teacher scode
-        var moseSt;
+        var moseSt,modeSc;
         var classes,sortedClasses;
-        var User;//save data of new or update user
+        var User,Class;//save data of new or update user/class
         var st_mail_update;
 
         $(document).ready(function () {
 
+             $("#TList").focusout(validate)
 
             userOBJ = JSON.parse(localStorage["user"]);
             //localStorage.removeItem("user");
@@ -55,6 +56,8 @@
 
             $('#UserAdd').hide();
             $("#classAdd").hide();
+             
+             ajaxCall("GET", "../api/Admin/getTeacherByScode/" + userOBJ.SCode, "", getTeacherByScodeSuccess, getTeacherByScodeError)
         });
         //user Search//
         function showUser() {
@@ -82,13 +85,41 @@
 
         function postNewClassSuccess(data) {
             console.log(data);
-          
+        
             closeDivUS();
             $("#NCgrade").val("");
             $("#NCnumber").val("");
             $("#TList").val("");
             $("#classForSchool").val("");
             swal("✔ כיתה נפתחה בהצלחה");
+            bringSClasses()
+
+        }
+
+        function validate() {
+            optionValuesArr = [];
+            var val = $('#' + this.id).val();
+            var dl = $("#" + this.getAttribute('name'));
+            var options = $("#" + this.getAttribute('name'))[0].options
+            
+            for (var i = 0; i < options.length; i++) {
+
+                optionValuesArr.push(options[i].value);
+            }
+
+                
+
+            if (val == "") {
+                
+                this.val('')
+                return false;
+            } else if (optionValuesArr.indexOf(val) === -1) {
+                this.value=''
+                swal("item not in from list.!");
+                return false;
+                
+
+            }
         }
 
 
@@ -105,6 +136,7 @@
         }
 
         function getUserByMailSuccess(data) {
+            modeSt = "";
             console.log(data);
             searchedUser = data;
             
@@ -173,6 +205,8 @@
 
         //create object//
         function closeDivUS() {
+            modeSc = "";
+            modeSt = "";
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
@@ -202,12 +236,8 @@
         }
 
         function newClass() {
-
             valID = userOBJ.SCode;
-
-
-            ajaxCall("GET", "../api/Admin/getTeacherByScode/" + valID, "", getTeacherByScodeSuccess, getTeacherByScodeError)
-
+           
             $("#addingDiv").show();
             $('#UserAdd').hide();
             $("#classAdd").show();
@@ -216,8 +246,6 @@
         }
 
         function addUser() {
-
-
             modeSt = "new";
             $('#uType option[value=""]').prop('selected', true);
             $("#addingDiv").show();
@@ -303,7 +331,6 @@
                 } else { numstrExists += `<option value=${i}>${i}</option>` }
 
             }
-
 
 
             $("#NCnumber,#class_STdet>#classNum").text("")
@@ -522,6 +549,7 @@
             $("#addingDiv").show();
             $('#UserAdd').show();
             $("#classAdd").hide();
+            $("#disbackg").css("visibility", "visible");
             classPicked = sortedClasses[num];
             $("#schoolList").val(sortedClasses[num].InSchool);
            
@@ -639,7 +667,7 @@
                         <option value=""> בחר מספר</option>
                     </select>
                     <label>מורה מחנך:</label>
-                    <input onchange="" required id="TList" class="form-control" list="TeacherNC" name="SLA">
+                    <input placeholder="בחר מרשימה" required id="TList" class="form-control" list="TeacherNC" name="TeacherNC">
                     <datalist id="TeacherNC">
                     </datalist>
 
