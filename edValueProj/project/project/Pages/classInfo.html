@@ -34,6 +34,10 @@
 
         $(document).ready(function () {
 
+
+            $("#edTeacher,#schoolList").focusout(validate)
+
+
             $("#myClassForm").submit(function (e) {
                 updateClass();
                 return false;
@@ -65,6 +69,32 @@
              ajaxCall("GET", "../api/Admin/getAllschool", "", getSchoolSuccess, getSchoolError);
         });
 
+
+         function validate() {
+            optionValuesArr = [];
+            var val = $('#' + this.id).val();
+            var dl = $("#" + this.getAttribute('name'));
+            var options = $("#" + this.getAttribute('name'))[0].options
+            
+            for (var i = 0; i < options.length; i++) {
+
+                optionValuesArr.push(options[i].value);
+            }
+
+                
+
+            if (val == "") {
+                
+                this.val('')
+                return false;
+            } else if (optionValuesArr.indexOf(val) === -1) {
+                this.value=''
+                swal("item not in from list.!");
+                return false;
+                
+
+            }
+        }
         
         function getSchoolSuccess(data) {
 
@@ -342,7 +372,7 @@
                         <div id="school_uDetails">
 
                             <label>מוסד חינוכי:</label>
-                            <input onchange="" required id="schoolList" class="form-control" list="schoolNU" name="SLA" value="">
+                            <input onchange="" required id="schoolList" class="form-control" list="schoolNU" name="schoolNU" value="">
                             <datalist id="schoolNU">
                             </datalist>
                             <div id="class_STdet">
@@ -400,7 +430,7 @@
 
                     <div class="form-group col-sm-3">
                         <label><span class="red-star"> </span>מורה מחנכת</label>
-                        <input required id="edTeacher" list="teacherList" class="form-control" value="">
+                        <input required id="edTeacher" name="teacherList" list="teacherList" class="form-control" value="">
                         <datalist id="teacherList">
                         </datalist>
                     </div>
