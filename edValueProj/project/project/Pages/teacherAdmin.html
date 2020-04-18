@@ -305,7 +305,6 @@
             }
 
 
-
             $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
@@ -522,6 +521,7 @@
             $("#addingDiv").show();
             $('#UserAdd').show();
             $("#classAdd").hide();
+            $("#disbackg").css("visibility", "visible");
             classPicked = sortedClasses[num];
             $("#schoolList").val(sortedClasses[num].InSchool);
            

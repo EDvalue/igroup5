@@ -13,7 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Popper JS -->
-    <a href="SchoolAdmin.html">SchoolAdmin.html</a>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
@@ -25,7 +25,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script>
-        var searchedUser = {};
+        var searchedUser = {}, classPicked = {};
         var activeSc;
         var modeSc = "";//save mode of class (edit/new)
         var modeSt = "";//save mode of user (edit/new)
@@ -116,6 +116,8 @@
             $("#addingDiv").show();
             $('#UserAdd').show();
             $("#classAdd").hide();
+             classPicked = classes[num];
+             $("#disbackg").css("visibility", "visible");
             classPicked = classes[num];
             $("#schoolList").val(classes[num].InSchool);
 
@@ -684,10 +686,21 @@
 
             }
 
-            $("#NCnumber").text("");
-            $("#class_STdet>#classNum").text("")
+          
+            $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
+
+            if (searchedUser.ClassNumber) {
+
+                $('#classNum').val(searchedUser.ClassNumber);
+                searchedUser = "";
+
+            } else if(classPicked.GradeNumber) {
+
+                $('#classNum').val(classPicked.GradeNumber);
+                classPicked=""
+            }
         }
 
         function getnumbersError(err) {
