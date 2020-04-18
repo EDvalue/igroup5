@@ -24,7 +24,8 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script>
-        var searchedUser;
+        var searchedUser = {};
+        var activeSc;
         var modeSc = "";//save mode of class (edit/new)
         var modeSt = "";//save mode of user (edit/new)
         var val1;
@@ -76,6 +77,7 @@
         function bringClasses() {
             alert("")
             sc = $("input[name='s']:checked").attr('id');
+            activeSc = sc;
             apiLink = "../api/Admin/getClassBySchool/" + sc;
 
             ajaxCall("GET", apiLink, "", getClassBySchoolASuccess, getClassBySchoolAError);
@@ -88,7 +90,8 @@
           
             for (x in data) {
                   //data[x].Name = data[x].Name.replace("`", "'");
-                str1 += `<div class='col-lg-4 col-sm-4'>
+                str1 += `<div class='col-lg-4 col-md-6 col-sm-6'>
+                               <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="person-add-outline"></ion-icon></div>
                                 <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
                                     <div id='imgc'><img src='../images/cita.jpeg' /></div>
                                     <div id='className'> <label> ${data[x].Name} </label></div>
@@ -107,6 +110,20 @@
 
 
         }
+
+         function addShere(num) {
+            $("#addingDiv").show();
+            $('#UserAdd').show();
+            $("#classAdd").hide();
+             classPicked = classes[num];
+            $("#schoolList").val(classes[num].InSchool);
+           
+            $('#Grade').val(classes[num].Grade).trigger('change');
+            $('#classNum').val(classes[num].GradeNumber);
+            $('#uType').prop('disabled',true);
+            $('#uType option[value="s"]').prop('selected', 'selected').trigger('change')
+     
+         }
 
         function getClassBySchoolAError(err) {
             console.log(err)
@@ -543,22 +560,19 @@
                 st_mail_update = data.Email;
 
                 if (data.Type == 'Student') {
-                    $('#uType option[value="s"]').prop('selected', 'selected');
-                    $("#class_STdet").css("visibility", "visible");
-                    $('#Grade').val(data.Grade).trigger('change');
-                    
-                    $('#classNum').val(data.ClassNumber);                   
-                    $("#class_STdet").css("visibility", "visibale");
-                    $("#teacher_det").css("visibility", "hidden");
                     $('#uType').prop('disabled', true);
+                    $('#uType option[value="s"]').prop('selected', 'selected').trigger('change')
+                    $('#Grade').val(data.Grade).trigger('change');
+                    $('#classNum').val(data.ClassNumber);                   
+                  
+                    
                 } else if (data.Type == 'Teacher') {
                     $('#teacher_det>select option[value='+data.SchoolAdmin+']').prop('selected','selected');
-                    $('#uType option[value="t"]').prop('selected', 'selected');
+                    $('#uType option[value="t"]').prop('selected', 'selected').trigger('change');
                     $('#uType').prop('disabled', true);
-                    $("#teacher_det").css("visibility", "visibale");
-                    $("#class_STdet").css("visibility", "hidden");
 
                     schoolTeacherSearch=data.SCode;
+                    
                 }
 
             } else {
@@ -581,7 +595,7 @@
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
-            $("#UserAdd input[type='text'],#addingDiv select").val('');
+            $("#UserAdd input[type='text'],#addingDiv select,#schoolList").val('');
             $("#NCgrade,#NCnumber").val('')
              $("#UserAdd input[type='text'],#addingDiv select").val('');
             
@@ -617,7 +631,15 @@
                 val = getSelctedDataList('schoolNU', 'schoolList')
 
                 if (!val) {
-                    bc = searchedUser.SCode + "," + $("#class_STdet>#Grade").val();
+                    if (searchedUser.SCode) {
+
+                        bc = searchedUser.SCode + "," + $("#class_STdet>#Grade").val();
+                        searchedUser = {};
+                    } else {
+
+                         bc = activeSc + "," + $("#class_STdet>#Grade").val();
+                    }
+                    
                 } else {
                      bc = val + "," + $("#class_STdet>#Grade").val();
                 }
