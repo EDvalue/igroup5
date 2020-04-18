@@ -25,7 +25,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script>
-        var searchedUser = {}, classPicked = {};
+        var searchedUser = {}, classPicked = {}, User = {};
         var activeSc;
         var modeSc = "";//save mode of class (edit/new)
         var modeSt = "";//save mode of user (edit/new)
@@ -296,7 +296,7 @@
                 "orginal_mail": st_mail_update,
 
             }
-
+            searchedUser.orginal_mail = st_mail_update;
 
             var options = $('#schoolNU')[0].options;
             var val = $('#schoolList').val();
@@ -364,33 +364,60 @@
             closeDivUS();
             swal("✔העדכון הסתיים בהצלחה")
 
-            if (classes) {
+             if (classes) {
 
                 if (classes[0].InSchool == User.SCode) {
 
-                    for (c in classes) {
+                    if (searchedUser.Grade == User.Grade && searchedUser.GradeNumber == User.ClassNumber) {
 
-                        if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
-                            user1 = adjustUser(User)
-                            for (s in classes[c].Slist) {
+                        for (c in classes) {
 
-                                if (classes[c].Slist[s].Mail == user1.Mail) {
+                            if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
+                                user1 = adjustUser(User)
+                                for (s in classes[c].Slist) {
 
-                                    classes[c].Slist[s] = user1;
-                                    break;
+                                    if (classes[c].Slist[s].Mail == User.orginal_mail) {
+                                        flag = 1;
+                                        classes[c].Slist[s] = user1;
+                                        break;
+                                    }
                                 }
+
+
+
+                            }
+                        }
+                    } else {
+
+                        for (c in classes) {
+
+                            if (classes[c].Grade == searchedUser.Grade && classes[c].GradeNumber == searchedUser.ClassNumber) {
+                                
+                                for (s in classes[c].Slist) {
+
+                                    if (classes[c].Slist[s].Mail == searchedUser.orginal_mail) {
+                                        flag = 1;
+                                        classes[c].Slist.splice(s, 1)
+                                        break;
+                                      
+                                    }
+                                }
+
                             }
 
-
+                            if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
+                                user1 = adjustUser(User)
+                                 classes[c].Slist.push(user1);                  
+                            }
                         }
+
                     }
 
                 }
 
             }
 
-
-
+             getClassBySchoolASuccess(classes);
         }
 
         function adjustUser(user) {
@@ -677,7 +704,7 @@
                     if (searchedUser.SCode) {
 
                         bc = searchedUser.SCode + "," + $("#class_STdet>#Grade").val();
-                        searchedUser = {};
+                       
                     } else {
 
                         bc = activeSc + "," + $("#class_STdet>#Grade").val();
@@ -731,7 +758,7 @@
             if (searchedUser.ClassNumber) {
 
                 $('#classNum').val(searchedUser.ClassNumber);
-                searchedUser = "";
+               
 
             } else if(classPicked.GradeNumber) {
 

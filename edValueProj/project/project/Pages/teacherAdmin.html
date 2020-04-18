@@ -340,7 +340,7 @@
             if (searchedUser.ClassNumber) {
 
                 $('#classNum').val(searchedUser.ClassNumber);
-                searchedUser = "";
+               
 
             } else if(classPicked.GradeNumber) {
 
@@ -370,6 +370,7 @@
                 "SCode": $("#schoolList").val(),
             }
 
+            searchedUser.orginal_mail = st_mail_update;
 
             if (uType == "תלמיד") {
                 User.Grade = $("#Grade").val();
@@ -449,40 +450,64 @@
             closeDivUS();
 
             swal("✔העדכון הסתיים בהצלחה")
-            //$("#userId").val("");
-            //$("#userName").val("");
-            //$("#userLName").val("");
-            //$("#userMail").val("");
-            //$("#teacher_det>select").val("0")
-            //$('#Grade').val("");
-            //$('#classNum').val("");
-
+ 
+            flag = 0;
             if (classes) {
 
                 if (classes[0].InSchool == User.SCode) {
 
-                    for (c in classes) {
+                    if (searchedUser.Grade == User.Grade && searchedUser.GradeNumber == User.ClassNumber) {
 
-                        if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
-                            user1 = adjustUser(User)
-                            for (s in classes[c].Slist) {
+                        for (c in classes) {
 
-                                if (classes[c].Slist[s].Mail == user1.Mail) {
+                            if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
+                                user1 = adjustUser(User)
+                                for (s in classes[c].Slist) {
 
-                                    classes[c].Slist[s] = user1;
-                                    break;
+                                    if (classes[c].Slist[s].Mail == User.orginal_mail) {
+                                        flag = 1;
+                                        classes[c].Slist[s] = user1;
+                                        break;
+                                    }
                                 }
+
+
+
+                            }
+                        }
+                    } else {
+
+                        for (c in classes) {
+
+                            if (classes[c].Grade == searchedUser.Grade && classes[c].GradeNumber == searchedUser.ClassNumber) {
+                                
+                                for (s in classes[c].Slist) {
+
+                                    if (classes[c].Slist[s].Mail == searchedUser.orginal_mail) {
+                                        flag = 1;
+                                        classes[c].Slist.splice(s, 1)
+                                        break;
+                                      
+                                    }
+                                }
+
+
                             }
 
-
+                            if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
+                                user1 = adjustUser(User)
+                                 classes[c].Slist.push(user1);
+                                 
+                            }
                         }
+
                     }
 
                 }
 
             }
 
-
+            printClasses(sortedClasses);
         }
 
         function UpdateUserError(err) {

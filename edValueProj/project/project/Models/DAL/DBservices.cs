@@ -1667,6 +1667,7 @@ namespace project.Models
             int numEffected = 0;
             SqlConnection con;
             SqlCommand cmd;
+            SqlCommand cmd2;
 
             try
             {
@@ -1687,7 +1688,7 @@ namespace project.Models
                 // helper method to build the insert string
 
                 cmd = CreateCommand(cStr, con); // create the command
-
+                
                 try
                 {
                     numEffected += cmd.ExecuteNonQuery(); // execute the command
@@ -1703,7 +1704,30 @@ namespace project.Models
                     // write to log
                     throw (ex);
                 }
+                sb.Clear();
+                sb.AppendFormat("UPDATE[Student]  SET [GradeClass]={0},[ClassNumber]={1} where [StudentEmail]='{2}'", u["Grade"], u["ClassNumber"], u["Mail"]);
+                String cStr1 = sb.ToString();
+                cmd2 = CreateCommand(cStr1, con);
+
+                try
+                {
+                    numEffected += cmd2.ExecuteNonQuery(); // execute the command
+
+                }
+                catch (Exception ex)
+                {
+                    if (con != null)
+                    {
+                        // close the db connection
+                        con.Close();
+                    }
+                    // write to log
+                    throw (ex);
+                }
             }
+
+         
+
 
             if (con != null)
             {

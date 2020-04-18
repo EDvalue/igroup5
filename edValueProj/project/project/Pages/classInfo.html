@@ -30,6 +30,7 @@
         var myStudent,st_id;
         var tbl;
         var uType;//save the user type in page//
+        var User;
 
 
         $(document).ready(function () {
@@ -123,17 +124,20 @@
                 "LastName": $("#userLName").val().replace("'","`"),
                 "Mail": $("#userMail").val().replace("'","`"),
                 "Password": $("#userId").val(),
+                "SCode": $("#schoolList").val(),
+                "orginal_mail": myStudent.Mail,
+
+               
      
             }
            
-           myStudent = User;
-           st_id = User.Mail;
+                 myStudent = User;
+                 st_id = User.Mail;
                  User.Type = $('#uType').find(":selected").text();
                 User.Grade = $("#Grade").val();
                 User.ClassNumber = $("#classNum").val();
           
-                User.SCode = 460154;
-                //$('#schoolNU').val('s');
+              
            
             uArr.push(User)
  
@@ -156,13 +160,24 @@
         function UpsateUser1Success(data) {
             console.log(data)
             for (x in classPage.Slist) {
-                if(classPage.Slist[i].Mail == st_id) {
+                if (classPage.Slist[i].Mail == User.orginal_mail) {
 
-                   classPage.Slist[i]=myStudent
-                   
+                    if (classPage.Grade == User.Grade && classPage.GradeNumber == User.ClassNumber) {
 
+                        classPage.Slist[i] = myStudent
+                        break;
+                    } else {
+                        classPage.Slist.splice(i, 1)
+                        break
+                    }
+
+                  
+   
                 }
             }
+            swal("עדכון עבר בהצלחה✔")
+            closePOPdiv();
+            localStorage["class"] = classPage;
             renderTable(tbl,classPage.Slist)
         }
 
@@ -251,14 +266,15 @@
 
         function populateFields(SId) {
               st_id = SId;
-              myStudent = geStudent(SId);
+            myStudent = geStudent(SId);
+            $("#schoolList").prop("value", classPage.InSchool);
             $("#userId").val(myStudent.IdNumber);
             $("#userName").val(myStudent.Name);
             $("#userLName").val(myStudent.LastName);
             $("#userMail").val(myStudent.Mail);
-            $('#Grade option[value="'+classPage.Grade+'"]').prop('selected', true);
+            $('#Grade option[value="'+classPage.Grade+'"]').prop('selected', true).trigger('change');
             $("#classNum").val(classPage.GradeNumber);
-            $("#schoolList").prop("value", classPage.InSchool);
+            
          
 
 
@@ -335,6 +351,41 @@
             }
         }
 
+
+        
+        function bringNumbers() {
+            bc = "";
+            //bring classes numbers of school or grade//
+            $("#class_STdet>#classNum").prop('disabled', false);
+            val = $("#schoolList").val();
+             bc = val + "," + $("#class_STdet>#Grade").val();
+            ajaxCall("GET", "../api/Admin/getnumbers/" + bc, "", getnumbersSuccess, getnumbersError);
+
+        }
+
+        function getnumbersSuccess(data) {
+            console.log(data);
+            numstrExists = "";
+            for (n in data) {
+                numstrExists += `<option value=${data[n]}>${data[n]}</option>`
+            }
+            $("#class_STdet>#classNum").text("")
+            $("#class_STdet>#classNum").append(numstrExists);
+             $("#class_STdet>#classNum").val(classPage.GradeNumber)
+
+            //if (searchedUser.ClassNumber) {
+
+            //    $('#classNum').val(searchedUser.ClassNumber);
+            //    searchedUser = "";
+
+
+            //}
+        }
+
+        function getnumbersError(err) {
+            console.log(err);
+        }
+
     </script>
 </head>
 <body dir="rtl">
@@ -377,13 +428,16 @@
                             </datalist>
                             <div id="class_STdet">
                                 <label>שכבה: </label>
-                                <select required id="Grade" class="form-control">
+                                <select required onchange="bringNumbers()" id="Grade" class="form-control">
                                     <option value="">בחר שכבה</option>
                                     <option value="7">ז</option>
                                     <option value="8">ח</option>
                                     <option value="9">ט</option>
                                 </select>
-                                <label>מספר כיתה: </label><input required id="classNum" class="form-control" type="text" />
+                                <label>מספר כיתה: </label>
+                                <select required id="classNum" class="form-control" type="text">
+                                    <option value="">בחר מספר</option>
+                                </select>
                             </div>
                             <div id="sendBTN">
                                 <input type="submit" class="btn btn-primary btn-lg" />

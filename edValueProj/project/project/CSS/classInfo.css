@@ -73,15 +73,16 @@ td {
 #editUDiv {
     width: 600px;
     height: 400px;
-    position: absolute;
+    position: fixed;
     top: auto;
-    left: auto;
-    right: 30%;
     border: 1px solid white;
     z-index: 3;
-    background: linear-gradient(#fff,#1B4DDD);
+    background: #f1f1f1;
     display: flex;
     flex-direction: column;
+    top: 50%; /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
 }
 
 .selected {
