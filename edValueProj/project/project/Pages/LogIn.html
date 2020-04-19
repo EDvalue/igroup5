@@ -47,7 +47,7 @@
                     console.log(user.IsCompleteIquizz)
                     if (data.hasOwnProperty('IsEditor')) {
                         localStorage['userMode'] = "teacher";
-                        location.assign("teacherDahBoard.html");
+                        location.replace("teacherDahBoard.html");
                     } else if (user.IsCompleteIquizz) {
                         if (user.IsCompleteIquizz == true) {
                             localStorage['userMode'] = "student";
