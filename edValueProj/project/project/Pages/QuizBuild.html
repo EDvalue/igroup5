@@ -338,7 +338,11 @@
                     data1 = JSON.parse(result)
                     url3=data1["url"] 
                     url1 = url3.split("wwwRoot");
-                    link= "https://proj.ruppin.ac.il" + url1[1]
+                    link = "https://proj.ruppin.ac.il" + url1[1]
+                    if ($(`#Q${uploadnumq} #img_add>.link`)) {
+                        $(`#Q${uploadnumq} #img_add>.link`).remove();
+                    }
+                     
                     $(`#Q${uploadnumq} #img_add`).append(`<div class="link">${link}</div>`)
                     
                     
@@ -373,8 +377,8 @@
                     hold = $("#Q" + i);
 
                     content = CKEDITOR.instances['text' + i].getData();
-                    arrTextInput = $(hold).find('input[type=text]');
-                    arrCHKInput = $(hold).find('input[type=checkbox]');
+                    arrTextInput = $(hold).find('#op input[type=text]');
+                    arrCHKInput = $(hold).find('#op input[type=checkbox]');
                     Answer = [];
                     for (var x = 0; x < arrTextInput.length; x++) {
                         console.log(x)
@@ -386,6 +390,7 @@
 
                     }
                     //imgLink = $("#Q"+i+" #img_add .link").text() save("img_add");
+                    c = $("#Q" + i + " #video_add>input[type='text']").val();
                     //videoLink=save("video_add")
                     Question = {
                         "QuestionId": i + "|" + new Date().getTime() + "|",
@@ -397,15 +402,15 @@
                         "OrderNum": i,
 
                     }
-                        if ($("#Q" + i + " #img_add .link")) {
+                        if ($("#Q" + i + " #img_add .link").length) {
                             
-                        Question.ImgLink = $("#Q" + i + " #img_add .link").text()
+                           Question.ImgLink = $("#Q" + i + " #img_add .link").text()
 
                         }
-                        else if (perform_showQuiz_mode == "edit")
+                        else if ( QmetaData.quizMode == "edit")
                         {
-
-                            Question.ImgLink = QuestionnaireData.Question[i].ImgLink;    
+                            l = i - 1;
+                            Question.ImgLink = QuestionnaireData.Question[l].ImgLink;    
 
                         }
                         data.push(Question);

@@ -2,6 +2,13 @@
 
 .link {
     visibility: hidden;
+    width:0;
+}
+
+extraData{
+    width:80%;
+    display:flex;
+    align-items:center;
 }
 
 #controll {
