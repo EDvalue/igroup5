@@ -319,6 +319,33 @@
              }*/
 
         }
+        function func1() {
+
+            //  var statDiv = document.getElementById("statistics");
+            var FirstCharts = document.getElementById("FirstCharts");
+            var SecondCharts = document.getElementById("SecondCharts");
+
+            FirstCharts.style.display = "block";
+            SecondCharts.style.display = "none";
+        }
+        function func2() {
+
+            //  var statDiv = document.getElementById("statistics");
+            var FirstCharts = document.getElementById("FirstCharts");
+            var SecondCharts = document.getElementById("SecondCharts");
+
+            FirstCharts.style.display = "none";
+            SecondCharts.style.display = "block";
+        }
+        function func3() {
+
+            //  var statDiv = document.getElementById("statistics");
+            var FirstCharts = document.getElementById("FirstCharts");
+            var SecondCharts = document.getElementById("SecondCharts");
+
+            FirstCharts.style.display = "none";
+            SecondCharts.style.display = "none";
+        }
     </script>
 </head>
 <body dir="rtl">
@@ -344,7 +371,43 @@
 
         </div>
 
-        <div id="Tcontroll">
+
+        <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav navPadding">
+                    <li class="nav-item active">
+                        <button id="newClassBTN" class="btn btn-primary btnonSmall" onclick="CnewTeam()">צור קבוצה חדשה</button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-primary  dropdown-toggle btnonSmall" data-toggle="dropdown">
+                            הכיתות שלי
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown">
+
+                        <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                            <option value="" disabled selected hidden>בחר גרף</option>
+                            <option value="FirstCharts">כולם ביחד</option>
+                            <option value="SecondCharts">כולם לחוד</option>
+                            <option value="CloseAll">לסגור הכל</option>
+                        </select>
+                    </li>
+
+                </ul>
+                <form class="form-inline my-2 my-lg-0 mr-auto">
+                    <input class="myForm mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+
+        <!-- <div id="Tcontroll">
             <div id="TControlBtns">
                 <button id="newClassBTN" class="btn btn-primary " onclick="CnewTeam()">צור קבוצה חדשה</button>
 
@@ -372,23 +435,23 @@
                 </div>
             </div>
 
-        </div>
+        </div>-->
 
         <div id="statistics">
             <div class="row" id="FirstCharts" style="display:none">
 
-                <div class="col-12 " id="mixedChart">
+                <div class="col-12 col-lg-12" id="mixedChart">
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
             <div class="row" id="SecondCharts" style="display:none">
-                <div class="col-4 canvasDiv">
+                <div class="col-12 col-lg-4 canvasDiv">
                     <canvas id="BibleChart"></canvas>
                 </div>
-                <div class="col-4 canvasDiv">
+                <div class="col-12 col-lg-4 canvasDiv">
                     <canvas id="HistoryChart"></canvas>
                 </div>
-                <div class="col-4 canvasDiv">
+                <div class="col-12 col-lg-4 canvasDiv">
                     <canvas id="ScienceChart"></canvas>
                 </div>
             </div>
