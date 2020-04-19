@@ -36,6 +36,7 @@
         //var ans = [];
         var QmetaData, QuestionnaireData, userOBJ;
         var subjectHold;
+        var uploadnumq;
 
         $(document).ready(function () {
 
@@ -186,9 +187,11 @@
             var demoImage = mydiv.querySelector('img');
             var file = mydiv.querySelector('input[type=file]').files[0];
             var reader = new FileReader();
+             uploadnumq = num;
             reader.onload = function (event) {
 
                 demoImage.src = reader.result;
+                save()
             }
             reader.readAsDataURL(file);
             console.log(file)
@@ -296,20 +299,7 @@
             });
         }
 
-        // function save(divArg) {
-
-        //    const files = $("#"+divArg+'> input[type=file]')[0].files
-        //    const formData = new FormData()
-
-        //    for (let i = 0; i < files.length; i++) {
-        //        let file = files[i]
-
-        //        formData.append('files[]', file)
-        //    }
-        //    const url = '../api/upload';
-        //    fetch(url, {
-        //        method: 'POST',
-        //        body: formData,
+        function save() {
 
         //    }).then((response) => response.json())
         //        .then((result) => {
@@ -319,10 +309,36 @@
         //            url1 = url3.split("wwwRoot");
         //            link= "proj.ruppin.ac.il" + url1[1];
         //            return url3;
+            const files = document.querySelector('[type=file]').files
+            const formData = new FormData()
 
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i]
 
         //        })
         //}
+                formData.append('files[]', file)
+            }
+            const url = '../api/upload';
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+
+            }).then((response) => response.json())
+                .then((result) => {
+                    console.log('Success:', result);
+                    data1 = JSON.parse(result)
+                    url3=data1["url"] 
+
+                    $("#Q"+uploadnumq+" #img_add").append(`<div class="link">${url3}</div>`)
+                    //url1 = url3.split("wwwRoot");
+                    //link= "proj.ruppin.ac.il" + url1[1];
+                    //return "toot";
+                    
+                    
+
+                })
+        }
 
         function CreateJson(val) {
             page = {};
@@ -367,7 +383,7 @@
                         "Type": document.getElementById("Q" + i).classList[1][1],
                         "Content": content,
                         "Answer": Answer,
-                        "ImgLink": "" /*imgLink*/,
+                        "ImgLink": $("#Q"+i+" .link").text(), /*imgLink*/
                         "VideoLink": "" /*videoLink*/,
                         "OrderNum": i,
 
@@ -400,7 +416,7 @@
 
         function PostQuizSuccess(data) {
             console.log(data)
-            window.opener.location.reload();
+            //window.opener.location.reload();
             $('body').text ( "");
             swal({
                 
