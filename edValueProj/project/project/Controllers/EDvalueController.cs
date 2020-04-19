@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Http;
 using project.Models;
 using project.Models.DAL;
+using System.IO;
+using System.Web.Hosting;
 
 namespace project.Controllers
 {

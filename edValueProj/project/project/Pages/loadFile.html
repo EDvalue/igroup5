@@ -37,31 +37,31 @@
 
                 
                     var data = new FormData();  
-                    var file = $("input[type=file]").get(0).files[0];
+                    var file = $("#files").get(0).files[0];
                     data.append("UploadedFile", file);
 
                      $.ajax({
                         type: "POST",
-                        url: "../api/EDvalue",
+                        url: "../api/EDvalue/excelLoad",
                         contentType: false,
                         processData: false,
                         data: data,
-                        success: GETSuccess,
-                        error: GETError
+                        success: PostDocSuccess,
+                        error:  PostDocError
                     });
 
-                var filePath = $(this).val();
-                $("#fileRoute").val(filePath);
+                //var filePath = $(this).val();
+                //$("#fileRoute").val(filePath);
             });
 
         });
         var rep;
-        function uploadDocument() {
-            apiLink = "../api/EDvalue/excelLoad";
-            loc = $("#fileRoute").val();
+        //function uploadDocument() {
+        //    apiLink = "../api/EDvalue/excelLoad";
+        //    loc = $("#fileRoute").val();
 
-            ajaxCall("POST", apiLink, JSON.stringify(loc), PostDocSuccess, PostDocError);
-        }
+        //    ajaxCall("POST", apiLink, JSON.stringify(loc), PostDocSuccess, PostDocError);
+        //}
 
         function closeReport() {
             $("#report").hide()
@@ -210,8 +210,9 @@
                     <div class="form-group col-lg-4" id="file">
                         <label><span>📂</span>הכנס קובץ</label>
                         <input dir="rtl" type="text" class="form-control" id="fileRoute" placeholder="הכנס קובץ" required />
-
-                        <div id="sendBTN"> <button onclick="uploadDocument()" class="btn btn-primary btn-lg">שלח</button> </div>
+                        <a href="javascript:void(0)" class="btn1 btn-defult m-3"><i class="fa fa-paperclip"></i>          בחר קובץ</a>
+                        <input type="file" id="files" >
+                        <div id="sendBTN"> <button  class="btn btn-primary btn-lg">שלח</button> </div>
 
                     </div>
 
