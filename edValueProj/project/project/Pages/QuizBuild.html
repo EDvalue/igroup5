@@ -371,8 +371,9 @@
                 'Sub': subjectHold,
             };
 
-
+            qcounter = 0;
             for (var i = 1; i <= count; i++) {
+                qcounter++;
                 if (document.getElementById("Q" + i)) {
                     hold = $("#Q" + i);
 
@@ -399,7 +400,7 @@
                         "Answer": Answer,
                         "ImgLink": "", /*imgLink*/
                         "VideoLink": $("#Q"+i+" #video_add>input[type='text']").val(),
-                        "OrderNum": i,
+                        "OrderNum":  qcounter++;,
 
                     }
                         if ($("#Q" + i + " #img_add .link").length) {
@@ -420,7 +421,7 @@
             }
 
             Questionnaire['Question'] = data;
-
+            qcounter = 0;
             if (val == 'show') {
                 localStorage["quiz"] = JSON.stringify(Questionnaire);
                 window.open('showQuiz.html');

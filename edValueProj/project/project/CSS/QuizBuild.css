@@ -5,15 +5,7 @@
     width:0;
 }
 
-#extraData{
-    width:80%;
-    display:flex;
-    align-items:center;
-}
 
-  #extraData img{
-      display:block;
-  }
 
     #controll {
         background-color: rgba(65, 55, 55, 0.75);
