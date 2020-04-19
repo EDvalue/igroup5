@@ -38,7 +38,7 @@
                 
                     var data = new FormData();  
                     var file = $("input[type=file]").get(0).files[0];
-                data.append("UploadedFile", file);
+                    data.append("UploadedFile", file);
 
                      $.ajax({
                         type: "POST",
