@@ -56,15 +56,16 @@ th.sorting {
 #grade {
     display: flex;
 }
-#assigment 
-{
+#assigment {
     background-color: #f1f1f1;
-    position: absolute;
-    top: 25%;
-    left: 30%;
+    position: fixed;
+    top: 50%; /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
+    z-index:5;
     border: 1px solid black;
     border-radius: 4px;
-    text-align:center;
+    text-align: center;
 }
     #assigment a{
         text-align:left;

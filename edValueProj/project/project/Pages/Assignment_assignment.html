@@ -82,6 +82,17 @@
 
         function submitTaskAssigment() {
 
+            var currentDate = new Date();
+            var ClassDate = new Date($('#classDate').val());
+            var SubmitionDate = new Date($('#submitionDate').val());
+
+
+            if (ClassDate > SubmitionDate)
+                swal("התאריך הראשון מאוחר מהשני");
+            else if (ClassDate < currentDate)
+                swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
+            else {
+                
             assignment = {
                  classTime:$("#class_date>input[type='datetime-local']").val(),
                 submitionTime:$("#submition_date>input[type='datetime-local']").val(),
@@ -94,6 +105,9 @@
             ajaxCall('POST', '../api/Teacher/postAssigment', JSON.stringify(assignment),postAssigmentSuccess,postAssigmentError)
             
 
+            }
+
+
         }
 
         function postAssigmentSuccess(data) {
@@ -101,7 +115,10 @@
         }
 
         function postAssigmentError(err){
-            console.log(err)
+            console.log(err);
+            swal("המשימה כבר שוייכה");
+            closeDivUS();
+
         }
 
 
@@ -267,7 +284,8 @@
 
 
         function getTaskAssigmentError(err) {
-            console.log(err)
+            console.log(err);
+
         }
 
         function updateStar(num) {
@@ -374,8 +392,10 @@
         }
         function closeDivUS() {
             $("#assigment").hide();
-            
+            $("#classDate").val("");
+            $("#submitionDate").val("");
         }
+      
         //---------------------------//
 
         function postFBSuccess(data) {
@@ -543,11 +563,11 @@
             <a onclick="closeDivUS()"><span>Close x</span></a>
             <div id="class_date">
                 <span>עבור תאריך:</span>
-                <input type="datetime-local" />
+                <input type="datetime-local" id="classDate"/>
             </div>
             <div id="submition_date">
                 <span>תאריך הגשה אחרון:</span>
-                <input type="datetime-local" />
+                <input type="datetime-local" id="submitionDate"/>
 
             </div>
             <div id="assignmentFormBtn">
