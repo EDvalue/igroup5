@@ -5,21 +5,25 @@
     width:0;
 }
 
-extraData{
+#extraData{
     width:80%;
     display:flex;
     align-items:center;
 }
 
-#controll {
-    background-color: rgba(65, 55, 55, 0.75);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 1%;
-    color: white;
-    z-index: 3;
-}
+  #extraData img{
+      display:block;
+  }
+
+    #controll {
+        background-color: rgba(65, 55, 55, 0.75);
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 1%;
+        color: white;
+        z-index: 3;
+    }
 
 .Qclass {
     display:flex;

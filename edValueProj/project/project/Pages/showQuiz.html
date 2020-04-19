@@ -36,8 +36,9 @@
 
                 quizString += `<form id=quizForm><div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class='${el.Question[qu].Type}'>`
                 if (el.Question[qu].ImgLink != "" || el.Question[qu].VideoLink != "") {
+                    quizString += `<div id="extraData">`
                     if(el.Question[qu].ImgLink != "")
-                        quizString += `<div id="extraData"><img src="${el.Question[qu].ImgLink}" /></div>`
+                        quizString += `<img src="${el.Question[qu].ImgLink}" />`
                     if (el.Question[qu].VideoLink != "") {
 
                         const videoId = getId(`${el.Question[qu].VideoLink}`);
@@ -48,7 +49,7 @@
                         quizString += iframeMarkup;
                     }
                         
-
+                    quizString += `</div>`
                 }
                 quizString += `<div  id="Question_content"><p>${el.Question[qu].Content}</p></div>`
                 //quizString += `<div id="Question_answer">`

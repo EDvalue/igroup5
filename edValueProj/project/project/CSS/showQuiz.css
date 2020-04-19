@@ -12,6 +12,21 @@
     margin:25px 5px 25px 0;
 }
 
+#extraData {
+    display: flex;
+    align-items: center;
+    align-content: space-between;
+    justify-content: space-between;
+}
+
+
+
+
+    #extraData img {
+        display: block;
+        height: 280px;
+    }
+
 #submitDIV {
     display: flex;
     width: 100%;
