@@ -289,7 +289,7 @@
 
             localStorage["metaData-Questionnaire"] = JSON.stringify(meta);
 
-            window.open("QuizBuild.html");
+            location.assign("QuizBuild.html");
         }
 
         function getSelectedQ() {
@@ -478,8 +478,8 @@
             <div class="inte_img">
                 <img src="../images/Movemental.png" />
             </div>
-            <div id="movemental" class="inte_BTN">
-                <input type="button" name="תנועתית" class="btn btn-info" value="צור שאלון" />
+            <div id="movemental" name="תנועתית" class="inte_BTN">
+                <input type="button"  class="btn btn-info" value="צור שאלון" />
             </div>
         </div>
         <div id="inte_questionnaire" class="form-group col-xs-4">

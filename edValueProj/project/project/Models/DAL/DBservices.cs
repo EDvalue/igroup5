@@ -1683,12 +1683,12 @@ namespace project.Models
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.AppendFormat("UPDATE [User]  SET [IdNumber]='{0}',[Email]='{1}',[Fname]='{2}',[Lname]='{3}',[SchoolCode]={4} where [Email]='{5}'", u["IdNumber"],u["Mail"],u["Name"],u["LastName"],u["SCode"],u["orginal_mail"]);
+                sb.AppendFormat("UPDATE [User]  SET [IdNumber]='{0}',[Email]='{1}',[Fname]='{2}',[Lname]='{3}',[SchoolCode]={4} where [Email]='{5}'", u["IdNumber"], u["Mail"], u["Name"], u["LastName"], u["SCode"], u["orginal_mail"]);
                 String cStr = sb.ToString();
                 // helper method to build the insert string
 
                 cmd = CreateCommand(cStr, con); // create the command
-                
+
                 try
                 {
                     numEffected += cmd.ExecuteNonQuery(); // execute the command
@@ -1704,30 +1704,34 @@ namespace project.Models
                     // write to log
                     throw (ex);
                 }
-                sb.Clear();
-                sb.AppendFormat("UPDATE[Student]  SET [GradeClass]={0},[ClassNumber]={1} where [StudentEmail]='{2}'", u["Grade"], u["ClassNumber"], u["Mail"]);
-                String cStr1 = sb.ToString();
-                cmd2 = CreateCommand(cStr1, con);
-
-                try
+                if (u["Type"] == "מורה")
                 {
-                    numEffected += cmd2.ExecuteNonQuery(); // execute the command
 
-                }
-                catch (Exception ex)
-                {
-                    if (con != null)
+
+                    sb.Clear();
+                    sb.AppendFormat("UPDATE[Student]  SET [GradeClass]={0},[ClassNumber]={1} where [StudentEmail]='{2}'", u["Grade"], u["ClassNumber"], u["Mail"]);
+                    String cStr1 = sb.ToString();
+                    cmd2 = CreateCommand(cStr1, con);
+
+                    try
                     {
-                        // close the db connection
-                        con.Close();
+                        numEffected += cmd2.ExecuteNonQuery(); // execute the command
+
                     }
-                    // write to log
-                    throw (ex);
+                    catch (Exception ex)
+                    {
+                        if (con != null)
+                        {
+                            // close the db connection
+                            con.Close();
+                        }
+                        // write to log
+                        throw (ex);
+                    }
                 }
+
+
             }
-
-         
-
 
             if (con != null)
             {

@@ -149,7 +149,14 @@
              classPicked = classes[num];
              $("#disbackg").css("visibility", "visible");
             classPicked = classes[num];
-            $("#schoolList").val(classes[num].InSchool);
+
+              var options = $('#schoolNU')[0].options;
+                for (v in options) {
+                    if (options[v].id == classes[num].InSchool) {
+                        $("#schoolList").prop("value", options[v].value);
+                    }
+                }
+              
 
             $('#Grade').val(classes[num].Grade).trigger('change');
             $('#classNum').val(classes[num].GradeNumber);
@@ -560,7 +567,7 @@
 
 
             modeSt = "edit"
-
+            $('#schoolList').prop('disabled', true);
             bodymail = $(".search_input").val().split(".")[0];
             endmail = $(".search_input").val().split(".")[1];
             userEmail = bodymail + "," + endmail;
@@ -621,9 +628,15 @@
                 $("#userLName").val(data.LastName);
                 $("#userMail").val(data.Email);
 
-                val = data.SCode;
-                $("#schoolList").prop("value", data.SCode);
-                $('#schoolNU option[id=' + val + ']').prop('selected', 'selected');
+                
+                var options = $('#schoolNU')[0].options;
+                for (v in options) {
+                    if (options[v].id == data.SCode) {
+                        $("#schoolList").prop("value", options[v].value);
+                    }
+                }
+                
+                $('#schoolList option[id=' + data.SCode + ']').prop('selected', 'selected');
                 st_mail_update = data.Email;
 
                 if (data.Type == 'Student') {
@@ -664,6 +677,7 @@
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
+            $('#schoolList').prop('disabled', false);
             $("#UserAdd input[type='text'],#addingDiv select,#schoolList").val('');
             $("#NCgrade,#NCnumber").val('')
             $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
@@ -755,7 +769,7 @@
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
 
-            if (searchedUser.ClassNumber) {
+            if (searchedUser.ClassNumber && modeSt=="edit") {
 
                 $('#classNum').val(searchedUser.ClassNumber);
                
