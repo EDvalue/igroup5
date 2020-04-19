@@ -128,12 +128,11 @@ textarea {
 
 body {
     margin: 0;
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-color: rgba(0, 0, 0, 0.5);
+    
+    background-color: #f1f1f1;
     background-size: contain;
-    background-attachment: fixed;
-    background-image: url('../images/EDvalueSmall.png');
+    
+    
 }
 
 
