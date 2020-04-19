@@ -286,7 +286,55 @@
                 </div>
 
             </div>
-            <div class="dropdown" id="Smenue">
+
+            <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav navPadding">
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
+                        </li>
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
+                        </li>
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                                <option value="" disabled selected hidden>בחר אפשרות</option>
+                                <option value="FirstCharts">גרף 1</option>
+                                <option value="SecondCharts">גרף 2</option>
+                                <option value="ThirdCharts">גרף 3</option>
+                                <option value="CloseAll">לסגור הכל</option>
+                            </select>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <select class="btn btn-primary btnonSmall" id="Smenue">
+                                <option value="" disabled selected hidden>סנן לפי כיתה</option>
+                                <option href="#statistics" value="statistics">סטטיסטיקה</option>
+                                <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
+                                <option href="#quiz" value="quiz">משימות</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0 mr-auto">
+                        <input class="myForm mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+
+
+
+
+
+            <!--<div class="dropdown" id="Smenue">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     סנן לפי כיתה
                 </button>
@@ -297,42 +345,45 @@
                     <a class="dropdown-item" href="#kidsList">רשימת תלמידים</a>
                     <a class="dropdown-item" href="#quiz">משימות</a>
 
+
+
                 </div>
-            </div>
+
+            </div>-->
 
         </div>
 
-        <div id="Tcontroll">
-            <div id="TControlBtns">
+        <!-- <div id="Tcontroll">
+             <div id="TControlBtns">
 
-                <button class="btn btn-primary" onclick="addRemoveS()">ניהול קבוצה</button>
-                <button class="btn btn-primary" onclick="addQuiz()">הוסף מטלה</button>
-                <button class="btn btn-primary" onclick="">הכיתה שלי</button>
-                <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
-                    <option value="" disabled selected hidden>בחר אפשרות</option>
-                    <option value="FirstCharts">גרף 1</option>
-                    <option value="SecondCharts">גרף 2</option>
-                    <option value="ThirdCharts">גרף 3</option>
-                    <option value="CloseAll">לסגור הכל</option>
-                </select>
+                     <button class="btn btn-primary" onclick="addRemoveS()">ניהול קבוצה</button>
+                     <button class="btn btn-primary" onclick="addQuiz()">הוסף מטלה</button>
+                     <button class="btn btn-primary" onclick="">הכיתה שלי</button>
+                     <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
+                         <option value="" disabled selected hidden>בחר אפשרות</option>
+                         <option value="FirstCharts">גרף 1</option>
+                         <option value="SecondCharts">גרף 2</option>
+                         <option value="ThirdCharts">גרף 3</option>
+                         <option value="CloseAll">לסגור הכל</option>
+                     </select>
 
 
 
-            </div>
+             </div>
 
-            <div class="searchDiv">
-                <div class="justify-content-center ">
-                    <div class="searchbar">
-                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
-                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
-                    </div>
-                </div>
-            </div>
+             <div class="searchDiv">
+                 <div class="justify-content-center ">
+                     <div class="searchbar">
+                         <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
+                         <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                     </div>
+                 </div>
+             </div>
 
-        </div>
+         </div>-->
 
         <div class="row" id="main">
-            <div class="hide_list_teams change">
+            <div class="hide_list_teams change " onclick="myFunction(this)">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
@@ -375,8 +426,8 @@
 
                         </div>
                         <div class="row" id="ThirdCharts" style="display:none">
-                            <div class="col-6" style="float:left"><canvas id="chart2"></canvas></div>
-                            <div class="col-6"><canvas id="chart4"></canvas></div>
+                            <div class=" col-lg-6" style="float:left"><canvas id="chart2"></canvas></div>
+                            <div class=" col-lg-6" style="float:left"><canvas id="chart4"></canvas></div>
 
                         </div>
                         <table id="ThirdCharts" width="100%" style="display:none">
@@ -391,7 +442,7 @@
 
                 </div>
 
-                <div id="class_info" style="margin-top:10%">
+                <div id="class_info" style="margin-top:15%">
 
 
                     <div class="row" id="tasks">
@@ -560,7 +611,7 @@
             </div>
 
 
-            <div id="quiz" class="col-lg-2">
+            <div id="quiz" class="col-lg-2 d-none d-lg-block" style="margin-top:20px">
                 <div class="container">
                     <div class="d-flex justify-content-center ">
                         <div class="searchbar">

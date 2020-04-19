@@ -69,13 +69,13 @@ body, html {
 /*------------------------------*/
 .searchDiv {
     height: 22px;
-    margin-right: auto;
-    
+    margin-right: 59%;
+    width: 10%;
 }
 
 canvas {
     width: 90% !important;
-    height: inherit !important;
+    height: 500px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -91,8 +91,6 @@ canvas {
 
 #Smenue {
     visibility: hidden;
-    position: fixed;
-    z-index: 3;
 }
 
 #tList > ul > li, #sList > ul > li {
@@ -298,3 +296,14 @@ canvas {
 }
 
 /*-------------*/
+.btnonSmall {
+    float: right;
+}
+
+.navBar {
+    background-color: #007bff !important;
+}
+
+.navPadding {
+    padding: 0;
+}
