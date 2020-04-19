@@ -41,9 +41,10 @@ namespace project.Controllers
             var httpRequest = HttpContext.Current.Request;
             HttpPostedFile file1 = httpRequest.Files[0];
 
-            
+         
+          
             //To save file, use SaveAs method
-            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFiles\\" + file1.FileName);
+            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\" + file1.FileName);
             file1.SaveAs(filePath); //File will be saved in application root
 
             ExcelDocument ex = new ExcelDocument();
