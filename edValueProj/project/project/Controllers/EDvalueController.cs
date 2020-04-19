@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using project.Models;
 using project.Models.DAL;
@@ -32,11 +33,19 @@ namespace project.Controllers
 
         [HttpPost]
         [Route("api/EDvalue/excelLoad")]
-
-        public List<Dictionary<string, string>> excelLoad([FromBody]string path)
+        public List<Dictionary<string, string>> excelLoad()
         {
+            //HttpResponseMessage result = null;
+            var httpRequest = HttpContext.Current.Request;
+            HttpPostedFile file1 = httpRequest.Files[0];
+
+            
+            //To save file, use SaveAs method
+            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFiles\\" + file1.FileName);
+            file1.SaveAs(filePath); //File will be saved in application root
+
             ExcelDocument ex = new ExcelDocument();
-           return ex.getExcelFile(path);
+           return ex.getExcelFile(filePath);
         }
 
       

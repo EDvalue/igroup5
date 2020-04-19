@@ -33,7 +33,23 @@
 
             $("#report").hide()
 
-            $('input[type=file]').change(function () {
+            $('#sendBTN button').click(function () {
+
+                
+                    var data = new FormData();  
+                    var file = $("input[type=file]").get(0).files[0];
+                data.append("UploadedFile", file);
+
+                     $.ajax({
+                        type: "POST",
+                        url: "../api/EDvalue",
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: GETSuccess,
+                        error: GETError
+                    });
+
                 var filePath = $(this).val();
                 $("#fileRoute").val(filePath);
             });
