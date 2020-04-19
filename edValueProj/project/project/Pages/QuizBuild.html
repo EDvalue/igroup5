@@ -170,7 +170,7 @@
                        </div>
                         <div id="video_add">
                            <span>צרף קישור לסרטון</span>
-                          <input type="text" class="btn btn-info"/>
+                          <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="btn btn-info"/>
                            
                         </div>
                     </div>
@@ -413,7 +413,8 @@
                             l = i - 1;
                             Question.ImgLink = QuestionnaireData.Question[l].ImgLink;    
 
-                        }
+                    }
+
                         data.push(Question);
                 }
 
