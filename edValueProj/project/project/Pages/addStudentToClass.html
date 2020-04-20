@@ -122,7 +122,7 @@
         }
 
         function createTeam() {
-            alert();
+        
             inTeam = replacebottomTLine(inTeam);
             Team = {
 
@@ -156,8 +156,17 @@
         function postTeamSuccess(data) {
             inTeam = replacedott(inTeam);
             $("body").text("");
-            swal("שינויים בוצעו בהצלחה✔")
+            
             console.log(data);
+            swal({
+                
+                   title: "שינויים בוצעו בהצלחה✔",
+                   icon: "success",
+               })
+                    .then(function (confirm) {
+                        if (confirm)   window.history.back();
+                        else   window.history.back();
+                    })
         }
 
         function postTeamError(err) {
