@@ -1760,7 +1760,7 @@ namespace project.Models
                     // write to log
                     throw (ex);
                 }
-                if (u["Type"] == "מורה")
+                if (u["Type"] == "תלמיד")
                 {
 
 

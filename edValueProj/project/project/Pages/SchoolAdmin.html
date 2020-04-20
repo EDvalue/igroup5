@@ -232,7 +232,9 @@
                 
                    title: "בית הספר עודכן ",
                    icon: "success",
-               })
+            })
+            $("#disbackg").css("visibility", false);
+            closeDivUS();
         }
 
         function postSchoolError(err) {
@@ -623,9 +625,16 @@
 
             $("#SCcode").val(data.SchoolCode);
             $("#SCName").val(data.Name);
+               var options = $('#citiesNU')[0].options;
+                for (v in options) {
+                    if (options[v].id == data.CityCode) {
+                         $("#CitySCHOOLlist").prop('value',options[v].value);
+                    }
+                }
+           
 
             if (modeSc == "edit") {
-                $("#SCcode").prop( "disabled", true )
+                $("#SCcode").prop( "disabled",true)
             }
 
         }
@@ -671,6 +680,7 @@
                     $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
                     $('#uType option[value="t"]').prop('selected', 'selected').trigger('change');
                     $('#uType').prop('disabled', true);
+                     
 
                     schoolTeacherSearch = data.SCode;
 
@@ -698,9 +708,11 @@
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
+            $('#Grade').prop('disabled', false);
             $('#schoolList').prop('disabled', false);
             $("#UserAdd input[type='text'],#addingDiv select,#schoolList").val('');
             $("#NCgrade,#NCnumber").val('')
+            $("#SCcode,#SCName,#CitySCHOOList").val('')
             $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
             $("#disbackg").css("visibility", "hidden");
 
@@ -807,11 +819,12 @@
         }
 
         function showClassInfo(arg) {
+
             localStorage.clear();
             myClass = classes[arg.id];
             localStorage["class"] = JSON.stringify(myClass);
             localStorage["userInClassInfo"] = "admin";
-            window.open("classInfo.html");
+            location.assign("classInfo.html");
 
         }
 
