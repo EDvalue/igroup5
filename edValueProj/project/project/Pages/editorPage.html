@@ -193,7 +193,10 @@
                 })
                     .then(function (willDelete) {
                         if (willDelete) HideTask(myTask_id);
-                        else swal("Not Deleted!");
+                        else {
+                            swal("Not Deleted!")
+                            $("#container * ").prop('disabled', false)
+                        };
                     });
             });
         }
