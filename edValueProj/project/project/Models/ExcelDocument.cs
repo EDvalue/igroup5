@@ -6,16 +6,25 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Office.Interop.Excel;
 using Excel = Microsoft.Office.Interop.Excel;
+using NPOI.XSSF.UserModel;
+using NPOI.HSSF.UserModel;
+using System.IO;
+using NPOI.SS.UserModel;
 
 namespace project.Models
 {
 
 
-    public class ExcelDocument
+    public class ExcelDocument 
     {
        
 
         public ExcelDocument() { }
+
+        public object MessageBoxButton { get; private set; }
+        public object MessageBox { get; private set; }
+        public bool DialogResult { get; private set; }
+        public object MessageBoxImage { get; private set; }
 
         public List<Dictionary<string,string>> getExcelFile(string path)
         {
@@ -205,8 +214,59 @@ namespace project.Models
             return report;
         }
 
-       
-        
+
+        // Attemps to read workbook as XLSX, then XLS, then fails.
+        public string ReadWorkbook(string path)
+        {
+            IWorkbook book;
+            List<Dictionary<string, string>> report = new List<Dictionary<string, string>>();
+            User u = new User();
+            try
+            {
+                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                // Try to read workbook as XLSX:
+                try
+                {
+                    book = new XSSFWorkbook(fs);
+                    ISheet sheet = book.GetSheetAt(0);
+                    for (int row = 0; row <= sheet.LastRowNum; row++)
+                    {
+                        if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                        {
+
+                            u.IdNumber = sheet.GetRow(row).GetCell(1).ToString();
+
+                        }
+                    }
+
+
+
+                }
+                catch
+                {
+                    book = null;
+                }
+
+                // If reading fails, try to read workbook as XLS:
+                if (book == null)
+                {
+                    book = new HSSFWorkbook(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+               
+                this.Close();
+               
+            }
+            return u.IdNumber;
+        }
+
+        private void Close()
+        {
+            throw new NotImplementedException();
+        }
     }
 }  
 

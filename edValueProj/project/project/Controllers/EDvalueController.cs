@@ -48,7 +48,10 @@ namespace project.Controllers
             file1.SaveAs(filePath); //File will be saved in application root
 
             ExcelDocument ex = new ExcelDocument();
-           return ex.getExcelFile(filePath);
+           return ex.ReadWorkbook(filePath);
+
+
+
         }
 
       
