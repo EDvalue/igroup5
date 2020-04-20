@@ -419,93 +419,132 @@
             </div>
 
         </div>
-        <form id="teamForm">
-            <div class="row" id="main">
 
-                <div id="metaData" class="row">
+       <!-- <nav class="navbar navbar-expand-lg navbar-light navBar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav navPadding">
 
-                    <div class="form-group col-sm-3 col-lg-3">
-                        <!--<label for="GroupName"><span> ✍ </span>שם קבוצה</label>-->
+                    <li class="nav-item active">
                         <input type="text" class="form-control" id="mytitle" placeholder="הכנס שם קבוצה" required>
-                    </div>
-                    <div class="form-group col-sm-3 col-lg-3">
-                        <!--<label for="grade"><span>👨🏽‍🤝‍👨🏻 </span>שכבת גיל</label>-->
-                        <select id="grade" class="form-control" required>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <select id="grade" class="btn btn-primary btnonSmall" required>
                             <option value="">בחר שכבת גיל</option>
                             <option value="7">כיתה-ז</option>
                             <option value="8">כיתה-ח</option>
                             <option value="9">כיתה-ט</option>
 
                         </select>
-                    </div>
-                    <div class="form-group col-sm-3 col-lg-3">
-                        <!--<label for="subject"><span>📚</span>מקצוע</label>-->
-                        <select id="subject" class="form-control" required>
+
+                    </li>
+                    <li class="nav-item dropdown">
+                        <select id="subject" class="btn btn-primary btnonSmall" required>
                             <option value="">בחר מקצוע</option>
                             <option value="מדעים">מדעים</option>
                             <option value="היסטוריה">היסטוריה</option>
                             <option value="תנך">תנך</option>
 
                         </select>
-                    </div>
-                </div>
-                <div id="sAdd" class="row">
-                    <div class="col-lg-3">
-                        <div class="list_title">
-                            <h3>הקבוצה שלי</h3>
-                        </div>
-                        <div id="SlistR">
+                    </li>
+                    
+                </ul>
+                
+            </div>
 
-                            <div id="holder">
-                                <p>בחר תלמידים מרשימת תלמידים</p>
+         </nav>-->
+
+
+            <form id="teamForm">
+                <div class="row" id="main">
+
+
+
+
+
+                    <div id="metaData" class="row">
+
+                        <div class="form-group col-sm-3 col-lg-3">
+                            <!--<label for="GroupName"><span> ✍ </span>שם קבוצה</label>-->
+                            <input type="text" class="form-control" id="mytitle" placeholder="הכנס שם קבוצה" required>
+                        </div>
+                        <div class="form-group col-sm-3 col-lg-3">
+                            <!--<label for="grade"><span>👨🏽‍🤝‍👨🏻 </span>שכבת גיל</label>-->
+                            <select id="grade" class="form-control" required>
+                                <option value="">בחר שכבת גיל</option>
+                                <option value="7">כיתה-ז</option>
+                                <option value="8">כיתה-ח</option>
+                                <option value="9">כיתה-ט</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-3 col-lg-3">
+                            <!--<label for="subject"><span>📚</span>מקצוע</label>-->
+                            <select id="subject" class="form-control" required>
+                                <option value="">בחר מקצוע</option>
+                                <option value="מדעים">מדעים</option>
+                                <option value="היסטוריה">היסטוריה</option>
+                                <option value="תנך">תנך</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div id="sAdd" class="row">
+                        <div class="col-lg-3">
+                            <div class="list_title">
+                                <h3>הקבוצה שלי</h3>
                             </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group  col-lg-5" id="controll">
-                        <div id="searchDeatails">
-                            <label for="SbyId"><span> 🔎 </span>חפש לפי ת"ז</label>
-                            <input type="text" class="form-control" id="sById" placeholder="הכנס תז">
-                        </div>
-                        <div id="btnControll">
-                            <button type="button" onclick="addToClass()" class="btn btn-primary ">הוסף לקבוצה</button>
-                            <button type="button" onclick="removeFromClass()" class="btn btn-warning ">  הסר מקבוצה  </button>
-                        </div>
-                        <div id="submitter">
-                            <input type="submit" value="שמור שינויים" class="btn btn-danger "/>
-                        </div>
-
-                    </div>
-
-
-                    <div class="col-lg-3">
-
-                        <div class="list_title">
-                            <h3>רשימת תלמידים</h3>
-                        </div>
-                        <div id="sl_block">
-                            <div id="select_all">
-                                
-
-                            </div>
-
-                            <div id="SlistA">
+                            <div id="SlistR">
 
                                 <div id="holder">
-
-                                    <p>בחר שכבת גיל מרשימה</p>
+                                    <p>בחר תלמידים מרשימת תלמידים</p>
                                 </div>
                             </div>
 
                         </div>
+                        <div class="form-group  col-lg-5" id="controll">
+                            <div id="searchDeatails">
+                                <label for="SbyId"><span> 🔎 </span>חפש לפי ת"ז</label>
+                                <input type="text" class="form-control" id="sById" placeholder="הכנס תז">
+                            </div>
+                            <div id="btnControll">
+                                <button type="button" onclick="addToClass()" class="btn btn-primary ">הוסף לקבוצה</button>
+                                <button type="button" onclick="removeFromClass()" class="btn btn-warning ">  הסר מקבוצה  </button>
+                            </div>
+                            <div id="submitter">
+                                <input type="submit" value="שמור שינויים" class="btn btn-danger " />
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-3">
+
+                            <div class="list_title">
+                                <h3>רשימת תלמידים</h3>
+                            </div>
+                            <div id="sl_block">
+                                <div id="select_all">
+
+
+                                </div>
+
+                                <div id="SlistA">
+
+                                    <div id="holder">
+
+                                        <p>בחר שכבת גיל מרשימה</p>
+                                    </div>
+                                </div>
+
+                            </div>
 
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
-       </form>
- </div>
+            </form>
+</div>
    
    
 </body>

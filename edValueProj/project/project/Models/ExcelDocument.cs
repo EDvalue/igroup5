@@ -28,7 +28,7 @@ namespace project.Models
 
         public List<Dictionary<string,string>> getExcelFile(string path)
         {
-            Teacher t;
+            
             //Student s;
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
@@ -40,8 +40,8 @@ namespace project.Models
             int colCount = xlRange.Columns.Count;
 
             int numEffected = 0;
-           
 
+            Teacher t;
             List<Teacher> nEd = new List<Teacher>();
             List<Classroom> newC = new List<Classroom>();
             List<string> firstRow = new List<string>();
@@ -216,11 +216,12 @@ namespace project.Models
 
 
         // Attemps to read workbook as XLSX, then XLS, then fails.
-        public string ReadWorkbook(string path)
+        public List<Dictionary<string,string>> ReadWorkbook(string path)
         {
-            IWorkbook book;
+
             List<Dictionary<string, string>> report = new List<Dictionary<string, string>>();
-            User u = new User();
+            IWorkbook book;
+
             try
             {
                 FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -230,19 +231,11 @@ namespace project.Models
                 {
                     book = new XSSFWorkbook(fs);
                     ISheet sheet = book.GetSheetAt(0);
-                    for (int row = 0; row <= sheet.LastRowNum; row++)
-                    {
-                        if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
-                        {
 
-                            u.IdNumber = sheet.GetRow(row).GetCell(1).ToString();
+                    report=readFile(sheet);
 
-                        }
-                    }
-
-
-
-                }
+                    
+                }   
                 catch
                 {
                     book = null;
@@ -252,6 +245,11 @@ namespace project.Models
                 if (book == null)
                 {
                     book = new HSSFWorkbook(fs);
+                    ISheet sheet = book.GetSheetAt(0);
+
+                    report = readFile(sheet);
+
+
                 }
             }
             catch (Exception ex)
@@ -260,12 +258,182 @@ namespace project.Models
                 this.Close();
                
             }
-            return u.IdNumber;
+            return report;
         }
 
         private void Close()
         {
             throw new NotImplementedException();
+        }
+
+
+        public List<Dictionary<string, string>> readFile(ISheet sheet)
+        {
+            
+            Teacher t;
+            List<Teacher> nEd = new List<Teacher>();
+            List<Classroom> newC = new List<Classroom>();
+            Dictionary<string, int> firstRow = new Dictionary<string, int>();
+            List<Dictionary<string, string>> report = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> slist = new List<Dictionary<string, string>>();
+            Dictionary<int, Dictionary<int, Dictionary<int, Classroom>>> schoolDict = new Dictionary<int, Dictionary<int, Dictionary<int, Classroom>>>();
+
+            int colRange = 0;
+            User u = new User();
+
+
+
+            while (sheet.GetRow(0).GetCell(colRange) != null)
+            {
+                firstRow[sheet.GetRow(0).GetCell(colRange).ToString()] = colRange;
+                colRange++;
+            }
+
+            for (int row = 1; row <= sheet.LastRowNum - 1; row++)
+            {
+                u = new User();
+                Classroom c1 = new Classroom();
+                string type = sheet.GetRow(row).GetCell(firstRow["Type"]).ToString();           /* xlRange.Cells[i, 6].Value2;*/
+
+                foreach (var j in firstRow)
+                {
+
+                    switch (j.Key)
+                    {
+
+                        case "id":
+
+                            u.IdNumber = sheet.GetRow(row).GetCell(j.Value).ToString();
+
+                            break;
+
+                        case "Email":
+                            u.Mail = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            break;
+
+                        case "lastName":
+                            u.LastName = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            break;
+
+                        case "name":
+                            u.Name = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            break;
+
+                        case "school":
+
+                            c1.InSchool = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            break;
+
+                        case "Grade":
+                            if (sheet.GetRow(row).GetCell(j.Value) == null)
+                            {
+                                c1.Grade = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value));
+                            }
+                            else
+                            {
+                                c1.Grade = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            }
+                            break;
+                        case "ClassNumber":
+                            if (sheet.GetRow(row).GetCell(j.Value) == null)
+                            {
+                                c1.GradeNumber = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value));
+                            }
+                            else
+                            {
+                                c1.GradeNumber = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            }
+
+                            break;
+
+
+                    }
+
+                }
+
+                if (type == "מורה")
+                {
+
+                    t = new Teacher(u.IdNumber, u.Name, u.LastName, u.IdNumber, u.Mail, c1.InSchool, false, false);
+
+                    if (c1.GradeNumber > 0)
+                    {
+                        c1.Name = u.Name + "-" + c1.Grade + "`" + c1.GradeNumber;
+                        c1.EdTeacher = t;
+
+
+
+                        if (!schoolDict.ContainsKey(c1.InSchool))
+                        {
+                            schoolDict.Add(c1.InSchool, new Dictionary<int, Dictionary<int, Classroom>>());
+                        }
+                        if (!schoolDict[c1.InSchool].ContainsKey(c1.Grade))
+                        {
+                            schoolDict[c1.InSchool].Add(c1.Grade, new Dictionary<int, Classroom>());
+                        }
+                        if (!schoolDict[c1.InSchool][c1.Grade].ContainsKey(c1.GradeNumber))
+                        {
+                            schoolDict[c1.InSchool][c1.Grade].Add(c1.GradeNumber, new Classroom());
+                        }
+                        schoolDict[c1.InSchool][c1.Grade][c1.GradeNumber] = c1;
+
+
+                    }
+                    else
+                    {
+                        nEd.Add(t);
+                    }
+
+                }
+                else if (type == "תלמיד")
+                {
+
+                    Dictionary<string, string> sdict = new Dictionary<string, string>();
+
+                    sdict.Add("IdNumber", u.IdNumber);
+                    sdict.Add("Mail", u.Mail);
+                    sdict.Add("Name", u.Name);
+                    sdict.Add("LastName", u.LastName);
+                    sdict.Add("Password", u.IdNumber);
+                    sdict.Add("SCode", c1.InSchool.ToString());
+                    sdict.Add("Grade", c1.Grade.ToString());
+                    sdict.Add("ClassNumber", c1.GradeNumber.ToString());
+
+                    slist.Add(sdict);
+                }
+
+
+            }
+
+
+            DBservices dbs = new DBservices();
+            foreach (var item in schoolDict)
+            {
+                List<Dictionary<string, string>> r = new List<Dictionary<string, string>>();
+                r = dbs.postNewClasses(item.Value);
+                foreach (var row in r)
+                    report.Add(row);
+
+            }
+
+            if (nEd.Count > 0)
+            {
+                List<Dictionary<string, string>> r = new List<Dictionary<string, string>>();
+                r = dbs.postnEdlFile(nEd);
+                foreach (var row in r)
+                    report.Add(row);
+
+            }
+
+            if (slist.Count > 0)
+            {
+                List<Dictionary<string, string>> r = new List<Dictionary<string, string>>();
+                r = dbs.postStudentFile(slist);
+                foreach (var row in r)
+                    report.Add(row);
+            }
+
+            return report;
         }
     }
 }  
