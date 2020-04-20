@@ -650,6 +650,7 @@
                     $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
                     $('#uType option[value="t"]').prop('selected', 'selected').trigger('change');
                     $('#uType').prop('disabled', true);
+                     
 
                     schoolTeacherSearch = data.SCode;
 
@@ -677,6 +678,7 @@
             $("#addingDiv").hide();
             $('#SchoolAdd').hide();
             $('#UserAdd').hide();
+            $('#Grade').prop('disabled', false);
             $('#schoolList').prop('disabled', false);
             $("#UserAdd input[type='text'],#addingDiv select,#schoolList").val('');
             $("#NCgrade,#NCnumber").val('')
@@ -786,11 +788,12 @@
         }
 
         function showClassInfo(arg) {
+
             localStorage.clear();
             myClass = classes[arg.id];
             localStorage["class"] = JSON.stringify(myClass);
             localStorage["userInClassInfo"] = "admin";
-            window.open("classInfo.html");
+            location.assign("classInfo.html");
 
         }
 
