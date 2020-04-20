@@ -107,13 +107,13 @@
 
                 }
 
-
-
-                quizString += '</div>'
-
                 if (perform_showQuiz_mode == "student") {
                     quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
                 }
+
+                quizString += '</div>'
+
+                
             }
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;

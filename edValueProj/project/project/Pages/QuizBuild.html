@@ -72,6 +72,11 @@
 
                 printQuestions();
             }
+            if (QmetaData.quizMode == "new" && localStorage["edit-Questionnaire"]) {
+                QuestionnaireData = JSON.parse(localStorage["edit-Questionnaire"]);
+
+                printQuestions();
+            }
 
             $("#inteligence").val(QmetaData.HInteligence);
             $("#forClass").val(QmetaData.Grade);
@@ -163,19 +168,41 @@
                     <div id="add_VI">
                         <div id="img_add">
                           <input type="file" class="btn btn-info" onchange="showFile(${count})" accept="image/*" />
-                          <div id="img_holder">
-                             <img src="${QuestionnaireData.Question[quest].ImgLink}" width="150" alt="תצוגה מקדימה">
-                            </div>
+                          <div id="img_holder">`
+            if (QuestionnaireData) {
 
-                       </div>
-                        <div id="video_add">
+                NewQestionString += `<img src="${QuestionnaireData.Question[quest].ImgLink}" width="150" alt="תצוגה מקדימה">
+                            </div>
+                                </div>`
+            }
+            else {
+                NewQestionString += `<img src="" width="150" alt="תצוגה מקדימה">
+                            </div>
+                                </div>`
+            }
+            if (QuestionnaireData) {
+
+                NewQestionString += `<div id="video_add">
                            <span>צרף קישור לסרטון</span>
                           <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="btn btn-info"/>
                            
                         </div>
                     </div>
                    </div>
-                 </div>`;
+                 </div>`
+            }
+            else {
+                NewQestionString += `<div id="video_add">
+                           <span>צרף קישור לסרטון</span>
+                          <input value="" type="text" class="btn btn-info"/>
+                           
+                        </div>
+                    </div>
+                   </div>
+                 </div>`
+            }
+                       
+                       
             $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             $('#main').append(NewQestionString);
             CKEDITOR.replace(`text${count}`);
@@ -391,7 +418,8 @@
 
                     }
                     //imgLink = $("#Q"+i+" #img_add .link").text() save("img_add");
-                    c = $("#Q" + i + " #video_add>input[type='text']").val();
+                    
+                    Type= document.getElementById("Q" + i).classList[1][1],
                     //videoLink=save("video_add")
                     Question = {
                         "QuestionId": i + "|" + new Date().getTime() + "|",
@@ -411,7 +439,12 @@
                         else if ( QmetaData.quizMode == "edit")
                         {
                             l = i - 1;
-                            Question.ImgLink = QuestionnaireData.Question[l].ImgLink;    
+                            if (l >= QuestionnaireData.Question.length) {
+                                QuestionnaireData.Question.push(Question)
+                            }
+                            else {
+                                Question.ImgLink = QuestionnaireData.Question[l].ImgLink;
+                                }
 
                     }
 
