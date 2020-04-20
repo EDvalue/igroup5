@@ -230,7 +230,7 @@ namespace project.Models
                 {
                     book = new XSSFWorkbook(fs);
                     ISheet sheet = book.GetSheetAt(0);
-                    for (int row = 0; row <= sheet.LastRowNum; row++)
+                    for (int row = 0; row <= sheet.LastRowNum-1; row++)
                     {
                         if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                         {
