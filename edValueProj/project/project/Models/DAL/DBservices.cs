@@ -234,7 +234,7 @@ namespace project.Models
         {
             String command;
 
-
+            
             StringBuilder sb = new StringBuilder();
 
             // use a string builder to create the dynamic string
@@ -301,7 +301,63 @@ namespace project.Models
 
 
         //--------------------------------------------------------------//
+        
 
+
+        public int updateSchool(School s)
+        {
+
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("UPDATE School SET  [CityCode]='{1}', [Name]='{2}' where [SchoolCode]={0}", s.SchoolCode, s.CityCode, s.Name);
+            String cStr = sb.ToString();
+
+            
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+
+
+            }
+            return numEffected;
+        }
         //------------------------users create--------------------------------------//
 
         //------------------post------------------------------//

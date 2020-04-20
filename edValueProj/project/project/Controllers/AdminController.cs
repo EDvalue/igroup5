@@ -64,6 +64,14 @@ namespace project.Controllers
         }
 
         [HttpPost]
+        [Route("api/Admin/updateSchool")]
+
+        public int updateSchool([FromBody]School sc)
+        {
+            return sc.updateSchool();
+        }
+
+        [HttpPost]
         [Route("api/Admin/postNewUser")]
 
         public int postNewUser([FromBody]List<Dictionary<string, string>> userDict)
