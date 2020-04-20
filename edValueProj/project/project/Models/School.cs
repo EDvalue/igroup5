@@ -48,7 +48,11 @@ namespace project.Models
             DBservices dbs = new DBservices();
             return dbs.postSchool(this);
         }
-
+        public int updateSchool()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.updateSchool(this);
+        }
         public School getSchoolByID(int id)
         {
             DBservices dbs = new DBservices();
