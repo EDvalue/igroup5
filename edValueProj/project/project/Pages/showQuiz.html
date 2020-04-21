@@ -78,7 +78,7 @@
                     quizString += `</div>`;
                 } else if (el.Question[qu].Type == 'O') {
 
-                    quizString += `<div id="OpenAnswerBlock"><textarea id="textarea" rows='7' cols='100'></textarea></div>`
+                    quizString += `<div id="OpenAnswerBlock"><textarea class="ckeditor"  name="editor" rows='7' cols='100' ></textarea></div>`
                 } else if (el.Question[qu].Type == 'U') {
 
                     quizString += `<div id='OpenUploadBlock'><input type='file' /></div>`
@@ -117,9 +117,18 @@
             }
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
-            CKEDITOR.replace('textarea');
-
+            //CKEDITOR.replace('#textarea');
+             ckReplace()
             connectCHK();
+        }
+
+        function ckReplace() {
+            var areas = $(".ckeditor");
+           $.each(areas, function (i, area) {
+                 CKEDITOR.replace(area, {
+                     customConfig: '/Scripts/ckeditor/config.mini.js'
+                 });
+          });
         }
 
 

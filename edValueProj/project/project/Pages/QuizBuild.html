@@ -234,11 +234,11 @@
 
         function BuildAnswer(arg) {
             console.log(arg)
-            holder = arg.parentNode.parentNode.classList
+            holder = arg.parentNode.parentNode.parentNode.classList
             choose = $("#" + arg.id + " :selected").val(); // The text content of the selected option
             console.log(holder)
             if (holder.length > 1) {
-                $(arg.parentNode.parentNode).removeClass();
+                $(arg.parentNode.parentNode.parentNode).removeClass();
             }
             $("#Q" + arg.id).addClass("Qclass");
             $("#Q" + arg.id).addClass("C" + choose);
@@ -347,13 +347,13 @@
             const files = document.querySelector('[type=file]').files
             const formData = new FormData()
 
-            for (let i = 0; i < files.length; i++) {
-                let file = files[i]
+            //for (let i = 0; i < files.length; i++) {
+                let file = files[0]
 
         //        })
         //}
                 formData.append('files[]', file)
-            }
+            //}
             const url = '../api/upload';
             fetch(url, {
                 method: 'POST',
