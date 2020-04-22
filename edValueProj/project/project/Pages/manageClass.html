@@ -21,6 +21,43 @@
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
+        
+        var myTeams;
+          $(document).ready(function () {
+              createSList();
+              createTList();
+              console.log("inside")
+                   });
+        function createSList() {
+            listdata = JSON.parse(localStorage["active_teacher_team"]);
+            listdata1 = listdata.StudentList;
+            console.log(listdata1)
+           var cstr="<ul>"
+            for (a in listdata1) {
+            cstr+="<li><a href='studentInClassInfo.html'>"+ listdata1[a].Mail + "<br />"+listdata1[a].Name+" "+listdata1[a].LastName+"</a></li>"
+
+            }
+            
+
+            cstr += "</ul>"
+            console.log(cstr)
+                $("#sList").html(cstr);
+            }
+
+            function createTList() {
+            myTeams = JSON.parse(localStorage["myTeams"]);
+            console.log(myTeams)
+           var cstr="<ul>"
+            for (a in myTeams) {
+            cstr+="<li><a href='manageclass.html'>"+ myTeams[a].Title + "</a></li>"
+                
+            }
+            
+
+            cstr += "</ul>"
+            console.log(cstr)
+                $("#tList").html(cstr);
+            } 
 
         function addRemoveS() {
             localStorage["TeamMode"] = "edit";
@@ -261,10 +298,15 @@
             }
 
         }
+        function init() {
+            console.log("IN")
+
+
+        }
 
     </script>
 </head>
-<body dir="rtl">
+<body onload="init()" dir="rtl">
     <div id="container">
         <div id="header">
             <div class="row">

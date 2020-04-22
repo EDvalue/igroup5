@@ -302,8 +302,13 @@ canvas {
 
 .navBar {
     background-color: #007bff !important;
+    box-shadow: 0 5px 6px -3px rgba(0, 0, 0, .4);
 }
 
 .navPadding {
     padding: 0;
+}
+#teamList{
+    background-color:white;
+    border-radius:5px;
 }

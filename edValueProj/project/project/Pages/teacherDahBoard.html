@@ -67,6 +67,7 @@
             myTeams = data;
              $("#teams").text("");
             imgId = '';
+            localStorage["myTeams"] = JSON.stringify(myTeams);
             for (t in data) {
 
                 teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
@@ -96,6 +97,20 @@
         }
 
         function openTeam(val) {
+
+            tId = val.getAttribute("team_id");
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                       var href =$(val).children("a").attr('href');
+                        location.assign(href);
+           
+                    
+                }
+            }
+        }
+        function openClass(val) {
 
             tId = val.getAttribute("team_id");
             for (team in myTeams) {
