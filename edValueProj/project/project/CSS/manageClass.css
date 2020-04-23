@@ -176,7 +176,18 @@ canvas {
     text-align: center;
 }
 /*------------------------------*/
-
+#tasks > div {
+    border: 2px solid #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 120px;
+    width: 200px;
+    margin-bottom: 3%;
+    margin-top: 2%;
+    background-color: white;
+    border-radius: 5px;
+}
 
 #task {
     border: 2px solid #f1f1f1;
@@ -188,7 +199,7 @@ canvas {
     margin-bottom: 3%;
     margin-top: 2%;
     background-color: white;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
     #task:hover {
