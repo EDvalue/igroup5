@@ -5,6 +5,7 @@
     <title></title>
     <link href="../CSS/manageClass.css" rel="stylesheet" />
 
+    <script src="../Scripts/ajaxCalls.js"></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -22,9 +23,118 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
 
+        var myTeams;
+        var listdata;
+        var taskList;
+        $(document).ready(function () {
+            createSList();
+            createTList();
+            className();
+            getTasks();
+            console.log("inside")
+        });
+        function createSList() {
+            listdata = JSON.parse(localStorage["active_teacher_team"]);
+            listdata1 = listdata.StudentList;
+            console.log(listdata1)
+            var cstr = "<ul>"
+            for (a in listdata1) {
+                cstr += "<li><a href='studentInClassInfo.html'><br />" + listdata1[a].Name + " " + listdata1[a].LastName + "</a></li>"
+
+            }
+
+
+            cstr += "</ul>"
+            console.log(cstr)
+            $("#sList").html(cstr);
+        }
+
+        function createTList() {
+            myTeams = JSON.parse(localStorage["myTeams"]);
+            console.log(myTeams)
+            var cstr = "<ul>"
+            for (a in myTeams) {
+                if (myTeams[a].Title != listdata.Title)
+                    cstr += "<li id=plink onclick='openTeam(this)' team_id=" + myTeams[a].Id + "><a  href='manageClass.html'>" + myTeams[a].Title + "</a></li>"
+
+            }
+
+
+            cstr += "</ul>"
+            console.log(cstr)
+            $("#tList").html(cstr);
+        }
+
+        function className() {
+
+            title = listdata.Title;
+            $("#title>h3").html(title);
+        }
+        function openTeam(val) {
+
+            tId = val.getAttribute("team_id");
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                    var href = $(val).children("a").attr('href');
+                    location.assign(href);
+
+
+                }
+            }
+        }
+        function getTasks() {
+            var getTask;
+            getTask = "794491584802217252jj";
+            ajaxCall("GET", "../api/Teacher/getTTasks/" + getTask, "", getTTasksSuccess, getTTasksError)
+        }
+        function getTTasksSuccess(data) {
+            console.log(data)
+            taskList = data;
+            console.log(taskList)
+            var cstr = "";
+            for (a in taskList) {
+                cstr+=`<div class="col-sm-4" id="${taskList[a]["Task"].TaskId}">
+
+                                <div class="fr">
+                                <div class="name">
+                                    <p>${taskList[a]["Task"].Title}</p>
+                                </div>
+                                <div class="time">
+                                    <p>${taskList[a].AssigmentDate}</p>
+                                </div>
+                            </div>
+
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                                </div>
+                                <div class="c_time">
+                                    <span>${taskList[a].TillDate}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
+
+
+                        </div>`
+            }
+            $("#tasks").html(cstr);
+        }
+        function getTTasksError(ex) {
+            console.log(ex)
+
+        }
         function addRemoveS() {
             localStorage["TeamMode"] = "edit";
-           location.assign('addStudentToClass.html')
+            location.assign('addStudentToClass.html')
         }
 
         function addQuiz() {
@@ -231,6 +341,7 @@
         }
 
         function ChartChange() {
+            $("#statistics").height("400px")
             var x = document.getElementById("mySelect").value;
             var FirstCharts = document.getElementById("FirstCharts");
             var SecondCharts = document.getElementById("SecondCharts");
@@ -255,16 +366,19 @@
                 ChartFour();
             }
             else {
+                $("#statistics").height("0")
                 FirstCharts.style.display = "none";
                 SecondCharts.style.display = "none";
                 ThirdCharts.style.display = "none";
+
             }
 
         }
 
+
     </script>
 </head>
-<body dir="rtl">
+<body  dir="rtl">
     <div id="container">
         <div id="header">
             <div class="row">
@@ -276,7 +390,7 @@
                 </div>
 
                 <div id="title" class="col-lg-6">
-                    <h1>שם הקבוצה...</h1>
+                    <h3>שם הקבוצה...</h3>
 
                 </div>
 
@@ -443,7 +557,7 @@
 
                 </div>
 
-                <div id="class_info" style="margin-top:15%">
+                <div id="class_info" >
 
 
                     <div class="row" id="tasks">
@@ -612,9 +726,11 @@
             </div>
 
 
-            <div id="quiz" class="col-lg-2 d-none d-lg-block" style="margin-top:20px">
+            <div id="quiz" class="col-lg-2 d-none d-lg-block" ">
                 
-
+                <div id="slTitle">
+                    <h4>תלמידים</h4>
+                     </div>
                 <div id="sList">
 
 

@@ -132,7 +132,7 @@ textarea {
 body {
     margin: 0;
     
-    background-color: #f1f1f1;
+    
     background-size: contain;
     
     
@@ -141,7 +141,7 @@ body {
 
 #main {
     width: 100%;
-   
+    background-color: #f1f1f1;
 }
 /*#bg {
    
