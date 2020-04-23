@@ -23,9 +23,11 @@
     <script>
         
         var myTeams;
+        var listdata;
           $(document).ready(function () {
               createSList();
               createTList();
+              className()
               console.log("inside")
                    });
         function createSList() {
@@ -48,8 +50,9 @@
             myTeams = JSON.parse(localStorage["myTeams"]);
             console.log(myTeams)
            var cstr="<ul>"
-            for (a in myTeams) {
-            cstr+="<li><a href='manageclass.html'>"+ myTeams[a].Title + "</a></li>"
+                for (a in myTeams) {
+                if(myTeams[a].Title!=listdata.Title)
+            cstr+="<li id=plink onclick='openTeam(this)' team_id="+myTeams[a].Id+"><a  href='manageClass.html'>"+ myTeams[a].Title + "</a></li>"
                 
             }
             
@@ -57,7 +60,27 @@
             cstr += "</ul>"
             console.log(cstr)
                 $("#tList").html(cstr);
-            } 
+        } 
+
+        function className() {
+            
+            title = listdata.Title;
+            $("#title>h1").html(title);
+        }
+        function openTeam(val) {
+
+            tId = val.getAttribute("team_id");
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                       var href =$(val).children("a").attr('href');
+                        location.assign(href);
+           
+                    
+                }
+            }
+        }
 
         function addRemoveS() {
             localStorage["TeamMode"] = "edit";
@@ -457,8 +480,8 @@
             </div>
 
             <div id="info" class="col">
-                <div id="statistics">
-                    <div class="content">
+                <!--<div id="statistics">-->
+                    <!--<div class="content">
                         <div class="row" id="FirstCharts" style="display:none">
                             <div class="wrapper col-12"><canvas id="chart1"></canvas></div>
 
@@ -483,7 +506,7 @@
                         </table>
                     </div>
 
-                </div>
+                </div>-->
 
                 <div id="class_info" style="margin-top:15%">
 
@@ -654,9 +677,11 @@
             </div>
 
 
-            <div id="quiz" class="col-lg-2 d-none d-lg-block" style="margin-top:20px">
+            <div id="quiz" class="col-lg-2 d-none d-lg-block" ">
                 
-
+                <div id="slTitle">
+                    <h4>תלמידים</h4>
+                     </div>
                 <div id="sList">
 
 
