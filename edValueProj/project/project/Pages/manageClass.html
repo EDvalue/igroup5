@@ -85,9 +85,11 @@
             }
         }
         function getTasks() {
-            var getTask;
-            getTask = "794491584802217252jj";
-            ajaxCall("GET", "../api/Teacher/getTTasks/" + getTask, "", getTTasksSuccess, getTTasksError)
+            var getTeam;
+            getTeam = JSON.parse(localStorage["active_teacher_team"]);
+            
+            console.log(getTeam)
+            ajaxCall("GET", "../api/Teacher/getTTasks/" + getTeam.Id, "", getTTasksSuccess, getTTasksError)
         }
         function getTTasksSuccess(data) {
             console.log(data)
@@ -95,6 +97,7 @@
             console.log(taskList)
             var cstr = "";
             for (a in taskList) {
+                if(taskList[a]["Task"].TaskId)
                 cstr+=`<div class="col-sm-4" id="${taskList[a]["Task"].TaskId}">
 
                                 <div class="fr">
