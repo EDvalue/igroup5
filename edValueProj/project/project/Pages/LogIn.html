@@ -25,9 +25,7 @@
         $(document).ready(function () {
 
 
-           
-
-            $("#conect").click(function () {
+            $("#connect").click(function () {
 
                 Connection = {
                     "Email": $("#userName").val(),
@@ -58,7 +56,10 @@
                             location.replace ("intelligencequiz.html");
                         }
 
-                    } else { location.replace("systemManager.html")}
+                    } else {
+                        localStorage['userMode'] = "Admin";
+                        location.replace("systemManager.html")
+                    }
                 } else {
                     swal("wrong user name or password❌")
                 }
@@ -82,28 +83,30 @@
             <!--<h1>ברוכים הבאים</h1>-->
             <img src="../images/EDvalueBig.png" />
         </div>
-        <div id="login">
+       
+         <div id="main">
+            <div id="details" class="col-9 col-sm-7 col-md-6 col-lg-4">
+                <div id="conect_deatails">
+                    <div id="user">
+                        <p>שם משתמש:</p><input class="form-control form-control-sm" type="text" id="userName"/>
+                    </div>
+                    <div id="passDIV">
+                        <p>סיסמא:</p><input class="form-control form-control-sm" type="password" id="password"/>
+                    </div>
+                    <a  id="passForget" onclick="">forget password</a>
+                </div>
+                <div id="button_deatails">
 
-            <div id="details">
-                <div class="row" id="insertRow">
-                    <span class="col-lg-4"> שם משתמש</span><input id="userName" class="form-control col-lg-8" type="text" />
+                    <img src="../images/in-person.png" />
+                    <button id="connect">Connect</button>
+
                 </div>
 
-                <div class="row" id="insertRow">
-                    <span class="col-lg-4"> סיסמא</span> <input id="password" class="col-lg-8 form-control" type="password" />
-                </div>
-                <div class="row">
-                    <button id="conect">התחבר</button>
-                </div>
 
             </div>
-            <br />
-
-            <a href="studentDashboard.html">  Student</a>
-            <a href="teacherDahBoard.html">  Teacher</a>
-            <a href="systemManager.html">  Admin</a>
-
         </div>
+            
+
     </div>
 </body>
 </html>

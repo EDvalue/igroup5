@@ -861,7 +861,6 @@ namespace project.Models
                         
                         report.Add(reportRow);
 
-
                     }
                     catch (SqlException ex)
                     {
@@ -1900,7 +1899,7 @@ namespace project.Models
             return numList;
         }
 
-        public DBservices readFlightID(string mail)
+        public DBservices readClass(string mail)
         {
             SqlConnection con = null;
             try

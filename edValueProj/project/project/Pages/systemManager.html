@@ -6,7 +6,7 @@
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
-
+    <script src="../js/js.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -20,10 +20,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <link href="../CSS/systemManager.css" rel="stylesheet" />
-
+    <script>
+        $(document).ready(function () {
+            if (localStorage["user"]) {
+                userarg = JSON.parse(localStorage["user"]);
+                $("#user_manage>button").append(userarg.Name);
+            }
+        });
+    </script>
 </head>
 <body dir="rtl">
-
+    <div id="disbackg"></div>
     <div id="container">
 
         <div id="header" class="row">
@@ -36,36 +43,48 @@
 
             <div id="title" class="col-lg-6">
                 <h3 dir="ltr">ברוכים השבים</h3>
-                
-            </div>
 
+            </div>
             <div id="mindcetImg" class="col-lg-3">
-
-                
-
             </div>
+        </div>
+        <div id="bar">
+
+            <div id="sub_title">
+                <h5>בחר פעילות</h5>
+            </div>
+
+            <div id="user_manage">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="disconnect" onclick="disconnect()">התנתק</p>
+                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                </div>
+            </div>
+
+
 
         </div>
-        <div id="bar"><h5>בחר פעילות</h5></div>
         <div id="subjects" class="row">
 
             <div id="subject" class="col-lg-4">
-              
 
-                    <img src="../images/editor.jpg" />
-                
+
+                <img src="../images/editor.jpg" />
+
                 <a href="addTohenManager.html"> <p>עורכי תוכן</p></a>
 
             </div>
             <div id="subject" class="col-lg-4">
 
                 <img src="../images/school.jpg" />
-                
+
                 <a href="SchoolAdmin.html"> <p>בתי ספר</p></a>
             </div>
             <div id="subject" class="col-lg-4">
                 <img src="../images/file.jpg" />
-                
+
                 <a href="loadFile.html"><p>טעינת קבצים</p></a>
             </div>
 

@@ -54,7 +54,13 @@ namespace project.Controllers
 
         }
 
-      
+      [HttpPut]
+      [Route("api/EDvalue/updatePass")]
+      public int updatePass([FromBody]Dictionary<string, string> dict)
+      {
+            User u = new User();
+            return u.updatePass(dict);
+      }
 
     }
 }
