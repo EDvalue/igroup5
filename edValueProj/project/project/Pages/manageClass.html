@@ -36,7 +36,7 @@
             console.log(listdata1)
            var cstr="<ul>"
             for (a in listdata1) {
-            cstr+="<li><a href='studentInClassInfo.html'>"+ listdata1[a].Mail + "<br />"+listdata1[a].Name+" "+listdata1[a].LastName+"</a></li>"
+            cstr+="<li><a href='studentInClassInfo.html'><br />"+listdata1[a].Name+" "+listdata1[a].LastName+"</a></li>"
 
             }
             
@@ -65,7 +65,7 @@
         function className() {
             
             title = listdata.Title;
-            $("#title>h1").html(title);
+            $("#title>h3").html(title);
         }
         function openTeam(val) {
 
@@ -291,6 +291,7 @@
         }
 
         function ChartChange() {
+            $("#statistics").height("400px")
             var x = document.getElementById("mySelect").value;
             var FirstCharts = document.getElementById("FirstCharts");
             var SecondCharts = document.getElementById("SecondCharts");
@@ -315,21 +316,19 @@
                 ChartFour();
             }
             else {
+                $("#statistics").height("0")
                 FirstCharts.style.display = "none";
                 SecondCharts.style.display = "none";
                 ThirdCharts.style.display = "none";
+
             }
 
         }
-        function init() {
-            console.log("IN")
-
-
-        }
+        
 
     </script>
 </head>
-<body onload="init()" dir="rtl">
+<body  dir="rtl">
     <div id="container">
         <div id="header">
             <div class="row">
@@ -341,7 +340,7 @@
                 </div>
 
                 <div id="title" class="col-lg-6">
-                    <h1>שם הקבוצה...</h1>
+                    <h3>שם הקבוצה...</h3>
 
                 </div>
 
@@ -480,8 +479,8 @@
             </div>
 
             <div id="info" class="col">
-                <!--<div id="statistics">-->
-                    <!--<div class="content">
+                <div id="statistics">
+                    <div class="content">
                         <div class="row" id="FirstCharts" style="display:none">
                             <div class="wrapper col-12"><canvas id="chart1"></canvas></div>
 
@@ -506,9 +505,9 @@
                         </table>
                     </div>
 
-                </div>-->
+                </div>
 
-                <div id="class_info" style="margin-top:15%">
+                <div id="class_info" >
 
 
                     <div class="row" id="tasks">
