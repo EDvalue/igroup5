@@ -143,6 +143,10 @@ namespace project.Models
             
         }
 
-        
+        public string fp(Dictionary<string, string> conection)
+        {
+            SystemDBservices dbs = new SystemDBservices();
+            return dbs.fp(conection);
+        }
     }
 }

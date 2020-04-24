@@ -62,6 +62,14 @@ namespace project.Controllers
             return u.updatePass(dict);
       }
 
+        [HttpPut]
+        [Route("api/EDvalue/FP")]
+        public string fp(Dictionary<string, string> conection)
+        {
+            User u = new User();
+            return u.fp(conection);
+        }
+
     }
 }
 
