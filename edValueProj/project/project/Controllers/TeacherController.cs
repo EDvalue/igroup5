@@ -143,5 +143,12 @@ namespace project.Controllers
         //    return rt.getTTasks(data);
         //}
 
+        [HttpPut]
+        [Route("api/Teacher/openSI")]
+        public int openSI([FromBody] Dictionary<string, string> dict)
+        {
+            Classroom c = new Classroom();
+            return c.openSI(dict);
+        }
     }
 }

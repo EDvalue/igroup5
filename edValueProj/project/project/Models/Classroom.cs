@@ -58,6 +58,12 @@ namespace project.Models
             DBservices dbs = new DBservices();
             return dbs.updateclass(this);
         }
+
+        public int openSI(Dictionary<string, string> dict)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.openSI(dict);
+        }
     }
 }
             

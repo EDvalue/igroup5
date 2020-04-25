@@ -7,6 +7,11 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using project.Models;
+using System.Net;
+using System.Net.Mail;
+using System.Drawing;
+using System.Configuration;
+
 namespace project.Models.DAL
 {
     public class TeacherDBservices
@@ -1020,6 +1025,86 @@ namespace project.Models.DAL
             }
 
             return numEffected;
+        }
+
+        public int openSI(Dictionary<string, string> dict)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            var datetime = Convert.ToDateTime(dict["Time"]) + ":00";
+            var date = datetime.Split(' ')[0];
+            var time = datetime.Split(' ')[1];
+            var fixDate = date.Split('/');
+            var finTime = fixDate[2] + "-" + fixDate[1] + "-" + fixDate[0] + " " + time;
+
+
+
+
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            String cStr = "UPDATE Class SET SignIn_Code ='"+dict["Code"]+ "',SignIn_Time='"+ finTime + "' WHERE Grade=" +dict["Grade"]+ " and GradeNumber="+dict["GradeNumber"]+ " and SchoolCode="+dict["School"];
+
+
+
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+            sendCodeMail(dict);
+            return numEffected;
+
+        }
+
+        public void sendCodeMail(Dictionary<string,string> d)
+        {
+            MailMessage mm = new MailMessage("morptao@gmail.com", d["Mail"]);
+            mm.Subject = "Code for registration";
+            mm.Body = string.Format("Hi,<br /><br />Your code is {0} for class {1}.<br /><br />Thank You.", d["Code"], d["Title"]);
+            mm.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.EnableSsl = true;
+            NetworkCredential NetworkCred = new NetworkCredential();
+            NetworkCred.UserName = "morptao@gmail.com";
+            NetworkCred.Password = "MorPinto123";
+            smtp.UseDefaultCredentials = true;
+            smtp.Credentials = NetworkCred;
+            smtp.Port = 587;
+            smtp.Send(mm);
+
+
         }
 
         public void update()

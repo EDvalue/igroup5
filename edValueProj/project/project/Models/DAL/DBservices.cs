@@ -519,21 +519,21 @@ namespace project.Models
                         reportRow = new Dictionary<string, string>();
                         reportRow.Add("type", "user");
                         reportRow.Add("id", t.Mail);
-                        reportRow.Add("message", "already in DB");
+                        reportRow.Add("message", "failed");
                         reportRow.Add("details", "user of teacher is in DB");
                         report.Add(reportRow);
                         continue;
                     }
                     else
                     {
-                        if (con != null)
-                        {
-                            // close the db connection
-                            con.Close();
-                        }
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "user");
+                        reportRow.Add("id", t.Mail);
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "user of teacher created failed");
+                        report.Add(reportRow);
+                        continue;
 
-                        // write to log
-                        throw (ex);
                     }
              
                 }
@@ -561,23 +561,30 @@ namespace project.Models
                         reportRow = new Dictionary<string, string>();
                         reportRow.Add("type", "teacher");
                         reportRow.Add("id", t.Mail);
-                        reportRow.Add("message", "already in DB");
-                        reportRow.Add("details", "student  is already in DB(user does open");
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "teacher  is already in DB");
                         report.Add(reportRow);
+
                         continue;
                     }
-                    if (con != null)
+                    else
                     {
-                        // close the db connection
-                        con.Close();
+                        deleteUser(t.Mail);
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "teacher");
+                        reportRow.Add("id", t.Mail);
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "teacher created failed(his user deleted)");
+                        report.Add(reportRow);
+
+                        continue;
+
                     }
-
-                    // write to log
-                    throw (ex);
                 }
+                    
 
 
-            }
+                }
           
             if (con != null)
             {
@@ -586,9 +593,7 @@ namespace project.Models
             }
             
                 return report;
-            
-           
-            
+   
         }
 
         public int postNewStudent(List<Dictionary<string, string>> slist)
@@ -739,20 +744,26 @@ namespace project.Models
                         reportRow = new Dictionary<string, string>();
                         reportRow.Add("type", "user");
                         reportRow.Add("id", u.Mail);
-                        reportRow.Add("message", "invalid row data");
+                        reportRow.Add("message", "failed");
                         reportRow.Add("details", "one of the row data is not valid");
 
                         report.Add(reportRow);
                         continue;
                     }
-                    if (con != null)
+                    else
                     {
-                        // close the db connection
-                        con.Close();
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "user");
+                        reportRow.Add("id", u.Mail);
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "user of student created failed");
+
+                        report.Add(reportRow);
+                        continue;
+
                     }
 
-                    // write to log
-                    throw (ex);
+
                 }
 
 
@@ -789,22 +800,24 @@ namespace project.Models
                         reportRow = new Dictionary<string, string>();
                         reportRow.Add("type", "student");
                         reportRow.Add("id", u.Mail);
-                        reportRow.Add("message", "invalid row data");
-                        reportRow.Add("details", "probably class or classNumber incorrect");
-
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "probably class or classNumber incorrect(his user deleted)");
+                        deleteUser(u.Mail);
                         report.Add(reportRow);
                         continue;
                     }
                     else
                     {
-                        if (con != null)
-                        {
-                            // close the db connection
-                            con.Close();
-                        }
 
-                        // write to log
-                        throw (ex);
+                        reportRow = new Dictionary<string, string>();
+                        reportRow.Add("type", "student");
+                        reportRow.Add("id", u.Mail);
+                        reportRow.Add("message", "failed");
+                        reportRow.Add("details", "failed created student his user deleted");
+                        deleteUser(u.Mail);
+                        report.Add(reportRow);
+                        continue;
+
                     }
                
                 }
@@ -815,10 +828,61 @@ namespace project.Models
                     con.Close();
                 }
 
-
             }
 
             return report;
+        }
+
+        public void deleteUser(string mail)
+        {
+            int numEffected=0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.AppendFormat("DELETE from [User] WHERE [User].[Email]={0}",mail);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
         }
 
         public List<Dictionary<string, string>> postNewClasses(Dictionary<int, Dictionary<int,Classroom>> c)
@@ -852,13 +916,13 @@ namespace project.Models
                     cmd = CreateCommand(cStr, con);
                     try
                     {
-                         reportRow = new Dictionary<string, string>();
+                        reportRow = new Dictionary<string, string>();
                         numEffected += cmd.ExecuteNonQuery(); // execute the command
                         reportRow.Add("type", "user");
-                        reportRow.Add("id",arg.Value.EdTeacher.Mail);
-                        reportRow.Add("message","success");
+                        reportRow.Add("id", arg.Value.EdTeacher.Mail);
+                        reportRow.Add("message", "success");
                         reportRow.Add("details", "user of teacher succeed");
-                        
+
                         report.Add(reportRow);
 
                     }
@@ -870,26 +934,29 @@ namespace project.Models
                             reportRow = new Dictionary<string, string>();
                             reportRow.Add("type", "user");
                             reportRow.Add("id", arg.Value.EdTeacher.Mail);
-                            reportRow.Add("message", "already in DB");
-                            reportRow.Add("details", "user of teacher failed(his class does not open also)");
+                            reportRow.Add("message", "failed");
+                            reportRow.Add("details", "user of teacher with this mail already in DB");
 
                             report.Add(reportRow);
-                            continue;
+
                         }
 
+                        else
+                        {
 
-                        else {
-                            if (con != null)
-                            {
-                                // close the db connection
-                                con.Close();
-                            }
-                            throw (ex); }
-                        // write to log
+                            reportRow = new Dictionary<string, string>();
+                            reportRow.Add("type", "user");
+                            reportRow.Add("id", arg.Value.EdTeacher.Mail);
+                            reportRow.Add("message", "failed");
+                            reportRow.Add("details", "user of teacher failed");
 
+                            report.Add(reportRow);
+
+
+                        }
                     }
 
-                    String cStr1 = BuildTeacherInsertCommand(arg.Value.EdTeacher);
+                        String cStr1 = BuildTeacherInsertCommand(arg.Value.EdTeacher);
                     cmd1 = CreateCommand(cStr1, con);
 
                     try
@@ -898,10 +965,9 @@ namespace project.Models
                         numEffected += cmd1.ExecuteNonQuery(); // execute the command
                         reportRow.Add("type", "teacher");
                         reportRow.Add("id", arg.Value.EdTeacher.Mail);
-                        reportRow.Add("message", "Succes");
+                        reportRow.Add("message", "Success");
                         reportRow.Add("details", "teacher succeed");
                         report.Add(reportRow);
-
 
                     }
                     catch (SqlException ex)
@@ -911,21 +977,24 @@ namespace project.Models
                             reportRow = new Dictionary<string, string>();
                             reportRow.Add("type", "teacher");
                             reportRow.Add("id", arg.Value.EdTeacher.Mail);
-                            reportRow.Add("message", "already in DB");
-                            reportRow.Add("details", "teacher email is in DB(his user was created");
+                            reportRow.Add("message", "failed");
+                            reportRow.Add("details", "teacher email is in DB");
 
                             report.Add(reportRow);
-                            continue;
+                           
                         }
 
                         else
                         {
-                            if (con != null)
-                            {
-                                // close the db connection
-                                con.Close();
-                            }
-                            throw (ex);
+                           
+                            //delete from user
+                            deleteUser(arg.Value.EdTeacher.Mail);
+                            reportRow.Add("type", "teacher");
+                            reportRow.Add("id", arg.Value.EdTeacher.Mail);
+                            reportRow.Add("message", "failed");
+                            reportRow.Add("details", "teacher created failed(his user deleted),class does not open");
+                            report.Add(reportRow);
+                            continue;
                         }
                     }
 
@@ -942,31 +1011,26 @@ namespace project.Models
                         reportRow.Add("details", "class succeed");
                         report.Add(reportRow);
 
-
                     }
                     catch (SqlException ex)
                     {
 
                         if (ex.Number == 2627)
                         {
-                            reportRow.Add("type", "teacher");
+                            reportRow.Add("type", "Class");
                             reportRow.Add("id", arg.Value.Grade + "`" + arg.Value.GradeNumber);
-                            reportRow.Add("message", "allready in DB");
+                            reportRow.Add("message", "failed");
                             reportRow.Add("details", "class for this school is in DB");
 
                             report.Add(reportRow);
                             continue;
                         }
                         else {
-                            if (con != null)
-                            {
-                                // close the db connection
-                                con.Close();
-                            }
-
-
-                            // write to log
-                            throw (ex);
+                            reportRow.Add("type", "Class");
+                            reportRow.Add("id", arg.Value.Grade + "`" + arg.Value.GradeNumber);
+                            reportRow.Add("message", "failed");
+                            reportRow.Add("details", "class created failed");
+                            continue;
                         }
 
                     }

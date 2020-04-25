@@ -70,9 +70,14 @@
         function PostDocSuccess(data) {
             rep = data;
             console.log(data)
-            $("#report").show();
-            createSTtable();
-            createExportTBL();
+            if (data[0].msg===undefined) {
+                $("#report").show();
+                createSTtable();
+                createExportTBL();
+            } else {
+                swal(data[0].msg);
+            }
+        
         }
         function PostDocError(err) {
             console.log(err)

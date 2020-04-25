@@ -10,6 +10,8 @@ using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
 using System.IO;
 using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
+using System.Net.Mail;
 
 namespace project.Models
 {
@@ -73,9 +75,9 @@ namespace project.Models
 
                                 case "id":
                                 
-                                    u.IdNumber = xlRange.Cells[i, j].Value2.ToString();
-
-                                    break;
+                                u.IdNumber = xlRange.Cells[i, j].Value2.ToString();
+                                
+                                break;
 
                                 case "Email":
                                     u.Mail = xlRange.Cells[i, j].Value2;
@@ -277,7 +279,7 @@ namespace project.Models
             List<Dictionary<string, string>> report = new List<Dictionary<string, string>>();
             List<Dictionary<string, string>> slist = new List<Dictionary<string, string>>();
             Dictionary<int, Dictionary<int, Dictionary<int, Classroom>>> schoolDict = new Dictionary<int, Dictionary<int, Dictionary<int, Classroom>>>();
-
+            int flg = 0;
             int colRange = 0;
             User u = new User();
 
@@ -297,31 +299,76 @@ namespace project.Models
 
                 foreach (var j in firstRow)
                 {
-
+                    if (flg == 1)
+                    {
+                        return report;
+                    }
                     switch (j.Key)
                     {
 
                         case "id":
 
                             u.IdNumber = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            if(!(IsAllDigits(u.IdNumber) && u.IdNumber.Length == 9))
+                            {
+                                Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                                reportRow.Add("msg", "in line"+row+"column"+j.Key+" content is invalid,must be 9 digits ID");
+                                report.Add(reportRow);
+                                flg = 1;
 
+                            }
                             break;
 
                         case "Email":
                             u.Mail = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            if (!IsValid(u.Mail))
+                            {
+                                Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                                reportRow.Add("msg", "in line" + row + "column" + j.Key + " content is invalid,email is incorrect");
+                                report.Add(reportRow);
+                                flg = 1;
+                            }
                             break;
 
                         case "lastName":
                             u.LastName = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            
+                            if(!Regex.IsMatch(u.LastName, "[א-ת]{2,15}")){
+                                Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                                reportRow.Add("msg", "in line" + row + "column" + j.Key + " content is invalid,must be only hebrew letters");
+                                report.Add(reportRow);
+                                flg = 1;
+                            }
+          
                             break;
 
                         case "name":
                             u.Name = sheet.GetRow(row).GetCell(j.Value).ToString();
+                            if (!Regex.IsMatch(u.Name, "[א-ת]{2,15}"))
+                            {
+                                Dictionary<string,string> reportRow = new Dictionary<string, string>();
+                                reportRow.Add("msg", "in line " + row + "column " + j.Key + " content is invalid,must be only hebrew letters");
+                                report.Add(reportRow);
+                                flg = 1;
+                            }
                             break;
 
                         case "school":
-
-                            c1.InSchool = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            try
+                            {
+                                c1.InSchool = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            }
+                            catch
+                            {
+                                Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                                reportRow.Add("msg", "in line " + row + "column" + j.Key + " content is invalid,must be only digits");
+                                report.Add(reportRow);
+                                flg = 1;
+                                continue;
+                                
+                            }
+                            
+                           
                             break;
 
                         case "Grade":
@@ -333,6 +380,16 @@ namespace project.Models
                             {
                                 c1.Grade = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
                             }
+                            if(type=="תלמיד" )
+                            {
+                                if (c1.Grade<7 || c1.Grade > 9)
+                                {
+                                    Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                                    reportRow.Add("msg", "in line " + row + "column" + j.Key + " content is invalid,must be only digits");
+                                    report.Add(reportRow);
+                                    flg = 1;
+                                } 
+                            }
                             break;
                         case "ClassNumber":
                             if (sheet.GetRow(row).GetCell(j.Value) == null)
@@ -342,6 +399,11 @@ namespace project.Models
                             else
                             {
                                 c1.GradeNumber = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
+                            }
+                            if (type == "תלמיד" && c1.GradeNumber==0)
+                            {
+                                
+                                flg = 1;
                             }
 
                             break;
@@ -434,6 +496,21 @@ namespace project.Models
             }
 
             return report;
+        }
+
+        bool IsAllDigits(string s) => s.All(char.IsDigit);
+        public bool IsValid(string emailaddress)
+        {
+            try
+            {
+                MailAddress m = new MailAddress(emailaddress);
+
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }  

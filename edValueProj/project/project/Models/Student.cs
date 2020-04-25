@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using project.Models.DAL;
 
+
 namespace project.Models
 {
     public class Student :User
@@ -52,6 +53,23 @@ namespace project.Models
         {
             StudentDBServices dbs = new StudentDBServices();
             return dbs.getStudentIntelli(mail);
+        }
+
+        public Classroom SignRequest(string code)
+        {
+            Classroom C = new Classroom();
+            SystemDBservices dbs = new SystemDBservices();
+            dbs = dbs.SignRequest(code);
+
+            if (dbs.dt.Rows.Count > 0)
+            {
+                C.InSchool = Convert.ToInt32(dbs.dt.Rows[0]["SchoolCode"]);
+                C.Grade = Convert.ToInt32(dbs.dt.Rows[0]["Grade"]);
+                C.GradeNumber = Convert.ToInt32(dbs.dt.Rows[0]["GradeNumber"]);
+                C.Name = dbs.dt.Rows[0]["Title"].ToString();
+                C.EdTeacher.Mail= dbs.dt.Rows[0]["TeacherEmail"].ToString();
+            }           
+                return C;
         }
 
     }

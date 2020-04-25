@@ -16,7 +16,6 @@ namespace project.Controllers
     {
         [HttpPost]
         [Route("api/EDvalue/postCity")]
-
         public int postCity()
         {
             City c = new City();
@@ -25,13 +24,11 @@ namespace project.Controllers
 
         [HttpPut]
         [Route("api/EDvalue/Conect")]
-
         public User conect([FromBody] Dictionary<string,string> con)
         {
             SystemDBservices dbs = new SystemDBservices();
             return dbs.conect(con);
         }
-
 
         [HttpPost]
         [Route("api/EDvalue/excelLoad")]
@@ -68,6 +65,14 @@ namespace project.Controllers
         {
             User u = new User();
             return u.fp(conection);
+        }
+
+        [HttpPut]
+        [Route("api/EDvalue/SignRequest")]
+        public Classroom SignRequest([FromBody]string code)
+        {
+            Student s = new Student();
+            return s.SignRequest(code);
         }
 
     }

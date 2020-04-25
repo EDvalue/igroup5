@@ -2,6 +2,8 @@
 <html>
 <head>
 
+    <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
+
     <link href="../CSS/LogIn.css" rel="stylesheet" />
     <meta charset="utf-8" />
     <title></title>
@@ -23,12 +25,19 @@
     <script>
 
         $(document).ready(function () {
-            
+
             $("#fpForm").submit(function () {
                 forgotPass();
                 return false;
 
             });
+
+            $("#myUserForm").submit(function (e) {
+                creatUser();
+                return false;
+            });
+
+            $("#addingDiv").toggle();
             $("#fpForm").toggle();
             $("#closeFP,#passForget").click(displayPass)
             $("#connect").click(function () {
@@ -45,9 +54,9 @@
             function forgotPass() {
                 Conection = {
                     "userName": $("#fp_user").val(),
-                    "lastName":$("#fp_Lname").val()
+                    "lastName": $("#fp_Lname").val()
                 }
-                
+
                 ajaxCall("PUT", "../api/EDvalue/FP", JSON.stringify(Conection), FPSuccess, FPError)
             }
 
@@ -55,7 +64,7 @@
                 $("#fpForm").toggle();
             }
 
-            function FPError(err){
+            function FPError(err) {
                 console.log(err);
             }
 
@@ -74,14 +83,14 @@
                     if (data.hasOwnProperty('IsEditor')) {
                         localStorage['userMode'] = "teacher";
                         location.replace("teacherDahBoard.html");
-                    } else if (user.IsCompleteIquizz) {
-                        if (user.IsCompleteIquizz == true) {
+                    } else if (user.hasOwnProperty('IsCompleteIquizz')) {
+                        if(user.IsCompleteIquizz == true) {
                             localStorage['userMode'] = "student";
                             location.replace("studentDashboard.html");
                         }
                         else {
                             localStorage['userMode'] = "student";
-                            location.replace ("intelligencequiz.html");
+                            location.replace("intelligencequiz.html");
                         }
 
                     } else {
@@ -99,60 +108,194 @@
             }
 
         });
+        function sendSignRequest() {
+
+            code = $("#code_input input[type='text']").val();
+            ajaxCall("PUT", "../api/EDvalue/SignRequest", code, SignRequestSuccess, SignRequestError)
+        }
+
+        function SignRequestError(err) {
+            console.log(err);
+        }
+
+        function SignRequestSuccess(data) {
+            console.log(data);
+            if (data.Grade !== 0) {
+                $("#schoolList").val(data.InSchool)
+                $("#Grade").val(data.Grade);
+                $("#classNum").val(data.GradeNumber)
+              $("#disbackg").css("visibility", "visible");
+                $("#addingDiv").toggle();
+            }
+            else {
+
+                swal("קוד לא תקין או שזמן ההרשמה חלף אנא פנה למורה המחנך שלך.","❌")
+            }
+        }
+
+        function creatUser() {
+            User = {
+
+
+                "IdNumber": $("#userId").val(),
+                "Name": $("#user_Name").val().replace("'", "`"),
+                "LastName": $("#userLName").val().replace("'", "`"),
+                "Mail": $("#userMail").val().replace("'", "`"),
+                "Password": $("#userId").val(),
+                "Type": "תלמיד",
+                "orginal_mail": $("#userMail").val().replace("'", "`"),
+                "SCode": $("#schoolList").val(),
+                "Grade": $("#Grade").val(),
+                "ClassNumber": $("#classNum").val(),
+            }
+            uArr = [];
+            uArr.push(User)
+
+            apiLink = "../api/Admin/postNewUser";
+            ajaxCall("POST", apiLink, JSON.stringify(uArr), postNewUserSuccess, postNewUserError)
+        }
+        function postNewUserSuccess(data) {
+
+            console.log(data);
+            closeDivUS();
+
+            swal("✔משתמש נוסף בהצלחה")
+        }
+          function postNewUserError(err) {
+
+            console.log(err);
+          }
+
+         function closeDivUS() {
+
+            $("#addingDiv").toggle();
+           $("#disbackg").css("visibility", "hidden");
+            $("#disbackg").css("visibility", "hidden");
+            $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
+            $("#NCgrade,#NCnumber").val('')
+            
+        }
 
     </script>
 
 
 </head>
 <body dir="rtl">
-    <form id="fpForm">
-        <div id="forgotPassDiv">
-            <div id="closeFP">X</div>
-            <div id="fpTags">
-                <label> שם משתמש</label>
-                <label> שם משפחה</label>
-            </div>
-            <div id="fpInputs">
-                <input type="text" id="fp_user" />
-                <input type="text" id="fp_Lname" />
-            </div>
-            <div id="fp_btn">
-                <input type="submit" class="btn btn-info" value="שלח סיסמא למייל" />
-            </div>
-        </div>
- </form>
+    <div id="disbackg"></div>
+    <div id="addingDiv">
 
+        <a onclick="closeDivUS()"><span>Close x</span></a>
+        <div id="UserAdd">
+            <div id="addContent">
+                <form id="myUserForm">
+                    <div dir="rtl" id="Title"><h4>צור משתמש חדש</h4></div>
 
-    <div id="container">
+                    <div id="utDIV">
+                        <label> תלמיד חדש</label>
 
-        <div id="header">
-            <!--<h1>ברוכים הבאים</h1>-->
-            <img src="../images/EDvalueBig.png" />
-        </div>
-
-        <div id="main">
-            <div id="details" class="col-9 col-sm-7 col-md-6 col-lg-4">
-                <div id="conect_deatails">
-                    <div id="user">
-                        <p>שם משתמש:</p><input class="form-control form-control-sm" type="text" id="userName" />
                     </div>
-                    <div id="passDIV">
-                        <p>סיסמא:</p><input class="form-control form-control-sm" type="password" id="password" />
-                    </div>
-                    <p id="passForget">forget password</p>
-                </div>
-                <div id="button_deatails">
 
-                    <img src="../images/in-person.png" />
-                    <button id="connect">Connect</button>
+                    <div class="det_Uadding">
+
+                        <div id="personal_uDetails">
+                            <label>ת"ז: </label><input pattern="^[0-9]{9}$" maxlength="9" id="userId" required class="form-control" type="text" />
+                            <label>שם פרטי: </label><input pattern="[א-ת]{2,15}" id="user_Name" required class="form-control" type="text" />
+                            <label>שם משפחה: </label><input pattern="[א-ת]{2,15}" id="userLName" required class="form-control" type="text" />
+                            <label>מייל: </label><input id="userMail" required class="form-control" type="email" />
+                        </div>
+                        <div id="school_uDetails">
+
+                            <label>מוסד חינוכי:</label>
+                            <input type="text" disabled="disabled" required id="schoolList" disabled class="form-control" />
+
+
+                            <div id="class_STdet">
+                                <label>שכבה: </label>
+                                <select onchange="bringNumbers('studentMode')" id="Grade" disabled required class="form-control">
+                                    <option value="">בחר שכבה    </option>
+                                    <option value="7">ז</option>
+                                    <option value="8">ח</option>
+                                    <option value="9">ט</option>
+
+                                </select>
+                                <label>מספר כיתה: </label>
+                                <input required id="classNum" disabled class="form-control" type="text">
+
+
+                            </div>
+
+
+                            <div id="sendBTN">
+
+                                <input type="submit" class="btn btn-primary btn-lg" />
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+   </div>
+        <form id="fpForm">
+            <div id="forgotPassDiv">
+                <div id="closeFP">X</div>
+                <div id="fpTags">
+                    <label> שם משתמש</label>
+                    <label> שם משפחה</label>
+                </div>
+                <div id="fpInputs">
+                    <input type="text" id="fp_user" />
+                    <input type="text" id="fp_Lname" />
+                </div>
+                <div id="fp_btn">
+                    <input type="submit" class="btn btn-info" value="שלח סיסמא למייל" />
+                </div>
+            </div>
+        </form>
+
+
+        <div id="container">
+
+            <div id="header">
+                <!--<h1>ברוכים הבאים</h1>-->
+                <img src="../images/EDvalueBig.png" />
+            </div>
+
+            <div id="main" class="row">
+
+                <div id="signInCode" class="col-8 col-md-4 col-lg-3">
+                    <div id="code_input">
+                        <label>קוד כיתה</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <button onclick="sendSignRequest()">שלח</button>
+                </div>
+
+                <div id="details" class="col-10 col-sm-7 col-md-6 col-lg-4">
+                    <div id="conect_deatails">
+                        <div id="user">
+                            <p>שם משתמש:</p><input class="form-control form-control-sm" type="text" id="userName" />
+                        </div>
+                        <div id="passDIV">
+                            <p>סיסמא:</p><input class="form-control form-control-sm" type="password" id="password" />
+                        </div>
+                        <p id="passForget">forget password</p>
+                    </div>
+                    <div id="button_deatails">
+
+                        <img src="../images/in-person.png" />
+                        <button id="connect">Connect</button>
+
+                    </div>
 
                 </div>
 
 
             </div>
+
+
         </div>
-
-
-    </div>
 </body>
 </html>

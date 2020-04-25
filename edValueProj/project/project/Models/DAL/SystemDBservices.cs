@@ -317,6 +317,38 @@ namespace project.Models.DAL
             return msg;
         }
 
+        public SystemDBservices SignRequest(string code)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from Class where SignIn_Code='" + code + "' and DATEDIFF(minute,SignIn_Time,GETDATE())<=15", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
         public void update()
         {
             da.Update(dt);
