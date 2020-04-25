@@ -135,13 +135,13 @@ namespace project.Controllers
             Task t = new Task();
             return t.postAssigment(assigment);
         }
-        //[HttpGet]
-        //[Route("api/Teacher/getTTasks/{data}")]
-        //public List<RealetedTask> getTTasks(string data)
-        //{
-        //    RealetedTask rt = new RealetedTask();
-        //    return rt.getTTasks(data);
-        //}
+        [HttpGet]
+        [Route("api/Teacher/getTTasks/{data}")]
+        public List<RealetedTask> getTTasks(string data)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.getTTasks(data);
+        }
 
     }
 }
