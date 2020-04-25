@@ -5,7 +5,7 @@
     <title></title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-
+    <script src="../js/js.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -55,8 +55,12 @@
                 createNewAClass();
                 return false;
             });
-
-
+            if (localStorage["user"]) {
+               userarg = JSON.parse(localStorage["user"]);
+                $("#user_manage>button").append(userarg.Name);
+            }
+               
+           
             //----getALLcities----------//
             ajaxCall("GET", "../api/Admin/getAllcities", "", getCitiesSuccess, getCitiesError);
             //--------------------------//
@@ -69,13 +73,21 @@
             $('#UserAdd').hide();
             $("#classAdd").hide();
 
-
+           
 
         });
 
         //----------------------------------------------------------------------//
 
-        
+        function activatePage() {
+            if (localStorage['activeSc_Admin']) {
+
+                activeSc = localStorage['activeSc_Admin'];
+                $("#filtList").trigger("change");
+                
+
+            }
+        }
         function validate() {
             optionValuesArr = [];
             var val = $('#' + this.id).val();
@@ -95,7 +107,7 @@
                 return false;
             } else if (optionValuesArr.indexOf(val) === -1) {
                 this.value=''
-                swal("item not in from list.!");
+                swal("item not in list.!");
                 return false;
                 
 
@@ -108,6 +120,9 @@
             //alert("")
             sc = $("input[name='s']:checked").attr('id');
             activeSc = sc;
+           
+            localStorage['activeSc_Admin'] =activeSc;
+            
             apiLink = "../api/Admin/getClassBySchool/" + sc;
 
             ajaxCall("GET", apiLink, "", getClassBySchoolASuccess, getClassBySchoolAError);
@@ -573,6 +588,12 @@
             }
             $("#SchoolList").text(" ");
             $("#SchoolList").append(str);
+            if (activeSc && localStorage['activeSc_Admin']) {
+               
+                 $("#school>#" + activeSc).attr('checked', true).trigger('click');
+            }
+
+           
 
             $("#newClass svg title").text("פתח משתמש")
         }
@@ -584,7 +605,6 @@
         }
 
         function showUser() {
-
 
             modeSt = "edit"
             $('#schoolList').prop('disabled', true);
@@ -729,6 +749,8 @@
 
             document.getElementById('cities').innerHTML += str;
             document.getElementById('citiesNU').innerHTML += str;
+
+             activatePage();
         }
 
         function getCitiesError(err) {
@@ -820,10 +842,12 @@
 
         function showClassInfo(arg) {
 
-            localStorage.clear();
             myClass = classes[arg.id];
             localStorage["class"] = JSON.stringify(myClass);
             localStorage["userInClassInfo"] = "admin";
+            if (activeSc) {
+                 localStorage['activeSc_Admin'] = activeSc;
+            }
             location.assign("classInfo.html");
 
         }
@@ -994,38 +1018,28 @@
 
 
                 <div class="container">
-                    <!--<div id="rb">
-                    <div id="teacher">
-                        <span>מורה</span> <input type="radio" name="su" checked />
-                    </div>
-                    <div id="student">
-                        <span>תלמיד</span> <input type="radio" name="su" />
-                    </div>
-                </div>-->
-
                     <div id="search">
-
-
                         <div class="container">
-
-
                             <div class="d-flex justify-content-center ">
                                 <div class="searchbar">
                                     <input class="search_input" type="text" placeholder=" חיפוש תלמיד/מורה">
                                     <a class="search_icon"><i onclick="showUser()" class="fas fa-search"></i></a>
-
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
+
                 </div>
 
-
             </div>
-
-
+            <div id="user_manage">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="disconnect" onclick="disconnect()">התנתק</p>
+                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                </div>
+            </div>
 
         </div>
         <div id="choose" class="row">

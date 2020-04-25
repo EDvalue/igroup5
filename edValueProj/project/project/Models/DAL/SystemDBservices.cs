@@ -6,6 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Configuration;
+using System.Net;
+using System.Net.Mail;
+using System.Drawing;
+using System.Configuration;
+
 
 namespace project.Models.DAL
 {
@@ -174,6 +179,149 @@ namespace project.Models.DAL
 
         }
 
+
+        public SystemDBservices updateAPass(string userName,string pass)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from Admin where UserName='" + userName + "' and Password='"+pass+"'", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
+        public SystemDBservices updateUPass(string userName, string pass)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from [User] where Email='" + userName + "' and Password='" + pass + "'", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
+
+        public string fp(Dictionary<string, string> conection)
+        {
+            string msg="";
+            SqlConnection con = null;
+            string password = "";
+            string userName = "";
+            string name = "";
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+
+                String selectSTR = "select * from [User] where [User].Email='"+conection["userName"] + "' and [User].Lname='" + conection["lastName"]+"'";
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                if (!dr.HasRows)
+                {
+                    msg = "שם המשתמש או המשפחה שגויים,אם הינך משתמש אדמין פנה אל מנהלי המערכת";
+                }
+                else
+                {
+                    while (dr.Read())
+                    {
+
+                        userName = dr["Email"].ToString();
+                        password = dr["Password"].ToString();
+                        name= dr["name"].ToString();
+
+
+                    }
+
+                    MailMessage mm = new MailMessage("morptao@gmail.com", userName);
+                    mm.Subject = "Password Recovery";
+                    mm.Body = string.Format("Hi {0},<br /><br />Your password is {1}.<br /><br />Thank You.", name, password);
+                    mm.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential NetworkCred = new NetworkCredential();
+                    NetworkCred.UserName = "morptao@gmail.com";
+                    NetworkCred.Password = "MorPinto123";
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = NetworkCred;
+                    smtp.Port = 587;
+                    smtp.Send(mm);
+
+                    msg = "הסיסמא שלך מחכה לך בחשבון המייל";
+                }
+             
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+          
+            return msg;
+        }
+
+        public void update()
+        {
+            da.Update(dt);
+
+        }
 
     }
 }

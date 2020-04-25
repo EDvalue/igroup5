@@ -5,9 +5,10 @@
     <title></title>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="../js/js.js"></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -21,31 +22,31 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    
+
     <script>
 
         var myClasses;
         var myTeams;
-        var  userOBJ ;
+        var userOBJ;
 
         $(document).ready(function () {
 
             userOBJ = JSON.parse(localStorage["user"])
-            //localStorage.removeItem("user");
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
 
             if (!userOBJ.SchoolAdmin) {
-            $("#saBTN").hide()
-            
+                $("#saBTN").hide()
+
             }
             if (!userOBJ.IsEditor) {
                 $("#EditorBTN").hide();
             }
-            repMail=userOBJ.Mail.replace('@','~').replace('.',',')
-            ajaxCall("GET", "../api/Teacher/getClassesbyEmail/"+repMail,"",getClassesbyMailSuccess,getClassesbyMailError)
-            ajaxCall("GET","../api/Teacher/getTeamsbyMail/"+repMail,"",getTeamsbyMailSuccess,getTeamsbyMailError)
+            repMail = userOBJ.Mail.replace('@', '~').replace('.', ',')
+            ajaxCall("GET", "../api/Teacher/getClassesbyEmail/" + repMail, "", getClassesbyMailSuccess, getClassesbyMailError)
+            ajaxCall("GET", "../api/Teacher/getTeamsbyMail/" + repMail, "", getTeamsbyMailSuccess, getTeamsbyMailError)
         });
 
-        
+
 
         function getClassesbyMailSuccess(data) {
             console.log(data)
@@ -65,32 +66,32 @@
         function getTeamsbyMailSuccess(data) {
             console.log(data)
             myTeams = data;
-             $("#teams").text("");
+            $("#teams").text("");
             imgId = '';
             localStorage["myTeams"] = JSON.stringify(myTeams);
             for (t in data) {
 
                 teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
-                <div id="team_bar">
-                    <div id="addTaskBTN">
-                        <button name="${data[t].Id}" onclick="openAddTaskPage(this.getAttribute('name'))">הוספת משימה</button>
-                 
-                    </div>
-                    <div id="name">
-                        <p>${data[t].Title}</p>
-                    </div>
-                    <div id="numOfS">
-                        <p dir="ltr">${data[t].StudentList.length} S</p>
-                    </div>
-                </div>
+                        <div id="team_bar">
+                            <div id="addTaskBTN">
+                                <button name="${data[t].Id}" onclick="openAddTaskPage(this.getAttribute('name'))">הוספת משימה</button>
 
-                <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
-                   <a  href="manageClass.html"></a>
-                        <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
-                    
-                </div>
+                            </div>
+                            <div id="name">
+                                <p>${data[t].Title}</p>
+                            </div>
+                            <div id="numOfS">
+                                <p dir="ltr">${data[t].StudentList.length} S</p>
+                            </div>
+                        </div>
 
-              </div>`;
+                        <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
+                           <a  href="manageClass.html"></a>
+                                <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
+
+                        </div>
+
+                      </div>`;
 
                 $("#teams").append(teamStr);
             }
@@ -103,10 +104,10 @@
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                       var href =$(val).children("a").attr('href');
-                        location.assign(href);
-           
-                    
+                    var href = $(val).children("a").attr('href');
+                    location.assign(href);
+
+
                 }
             }
         }
@@ -117,10 +118,10 @@
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                       var href =$(val).children("a").attr('href');
-                        location.assign(href);
-           
-                    
+                    var href = $(val).children("a").attr('href');
+                    location.assign(href);
+
+
                 }
             }
         }
@@ -131,7 +132,7 @@
         function CnewTeam() {
 
             localStorage['user'] = JSON.stringify(userOBJ);
-            localStorage['TeamMode']="new"
+            localStorage['TeamMode'] = "new"
             location.assign('addStudentToClass.html')
         }
 
@@ -139,17 +140,17 @@
             location.assign('newQuiz.html')
         }
 
-        
+
 
         function openAddTaskPage(tId) {
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    $("#"+myTeams[team].TeamId).trigger('click')
+                    $("#" + myTeams[team].TeamId).trigger('click')
                 }
             }
-          location.assign("Assignment_assignment.html")
+            location.assign("Assignment_assignment.html")
         }
         function openTApage() {
             localStorage["user"] = JSON.stringify(userOBJ);
@@ -160,7 +161,7 @@
 
 </head>
 <body dir="rtl">
-    
+    <div id="disbackg"></div>
     <div id="container">
 
         <div id="header" class="row">
@@ -199,7 +200,7 @@
 
                 <button disable id="saBTN" class="btn btn-primary " onclick="openTApage()">ניהול מערכת</button>
             </div>
-            
+
             <div class="searchDiv">
                 <div class="d-flex justify-content-center ">
                     <div class="searchbar">
@@ -208,7 +209,14 @@
                     </div>
                 </div>
             </div>
-
+            <div id="user_manage">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="disconnect" onclick="disconnect()">התנתק</p>
+                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                </div>
+            </div>
         </div>
 
         <div id="choose"class="row">

@@ -89,7 +89,7 @@ namespace project.Models
         public int isEd(string idNum)
         {
             DBservices dbs = new DBservices();
-            dbs = dbs.readFlightID( idNum);
+            dbs = dbs.readClass( idNum);
             dbs.dt = insertOrUpdate(dbs.dt);
             dbs.update();
 
@@ -116,5 +116,37 @@ namespace project.Models
             return dbs.getUserByMail(mail);
         }
 
+        public int updatePass(Dictionary<string, string> dict)
+        {
+            SystemDBservices dbs = new SystemDBservices();
+            if (dict["type"] == "Admin")
+            {
+                dbs = dbs.updateAPass(dict["userName"],dict["prevPass"]);
+            }
+            else
+            {
+                dbs = dbs.updateUPass(dict["userName"],dict["prevPass"]);
+            }
+
+            if (dbs.dt.Rows.Count == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                dbs.dt.Rows[0]["Password"] = dict["newPass"];
+            }
+
+            dbs.update();
+
+            return 1;
+            
+        }
+
+        public string fp(Dictionary<string, string> conection)
+        {
+            SystemDBservices dbs = new SystemDBservices();
+            return dbs.fp(conection);
+        }
     }
 }

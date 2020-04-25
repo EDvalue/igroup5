@@ -23,11 +23,15 @@
     <script>
 
         $(document).ready(function () {
+            
+            $("#fpForm").submit(function () {
+                forgotPass();
+                return false;
 
-
-           
-
-            $("#conect").click(function () {
+            });
+            $("#fpForm").toggle();
+            $("#closeFP,#passForget").click(displayPass)
+            $("#connect").click(function () {
 
                 Connection = {
                     "Email": $("#userName").val(),
@@ -37,6 +41,28 @@
                 ajaxCall("PUT", "../api/EDvalue/Conect", JSON.stringify(Connection), ConectSuccess, ConectError)
 
             });
+
+            function forgotPass() {
+                Conection = {
+                    "userName": $("#fp_user").val(),
+                    "lastName":$("#fp_Lname").val()
+                }
+                
+                ajaxCall("PUT", "../api/EDvalue/FP", JSON.stringify(Conection), FPSuccess, FPError)
+            }
+
+            function displayPass() {
+                $("#fpForm").toggle();
+            }
+
+            function FPError(err){
+                console.log(err);
+            }
+
+            function FPSuccess(data) {
+                console.log(data);
+                swal(data)
+            }
 
             function ConectSuccess(data) {
                 console.log(data);
@@ -58,7 +84,10 @@
                             location.replace ("intelligencequiz.html");
                         }
 
-                    } else { location.replace("systemManager.html")}
+                    } else {
+                        localStorage['userMode'] = "Admin";
+                        location.replace("systemManager.html")
+                    }
                 } else {
                     swal("wrong user name or password❌")
                 }
@@ -76,34 +105,54 @@
 
 </head>
 <body dir="rtl">
+    <form id="fpForm">
+        <div id="forgotPassDiv">
+            <div id="closeFP">X</div>
+            <div id="fpTags">
+                <label> שם משתמש</label>
+                <label> שם משפחה</label>
+            </div>
+            <div id="fpInputs">
+                <input type="text" id="fp_user" />
+                <input type="text" id="fp_Lname" />
+            </div>
+            <div id="fp_btn">
+                <input type="submit" class="btn btn-info" value="שלח סיסמא למייל" />
+            </div>
+        </div>
+ </form>
+
+
     <div id="container">
 
         <div id="header">
             <!--<h1>ברוכים הבאים</h1>-->
             <img src="../images/EDvalueBig.png" />
         </div>
-        <div id="login">
 
-            <div id="details">
-                <div class="row" id="insertRow">
-                    <span class="col-lg-4"> שם משתמש</span><input id="userName" class="form-control col-lg-8" type="text" />
+        <div id="main">
+            <div id="details" class="col-9 col-sm-7 col-md-6 col-lg-4">
+                <div id="conect_deatails">
+                    <div id="user">
+                        <p>שם משתמש:</p><input class="form-control form-control-sm" type="text" id="userName" />
+                    </div>
+                    <div id="passDIV">
+                        <p>סיסמא:</p><input class="form-control form-control-sm" type="password" id="password" />
+                    </div>
+                    <p id="passForget">forget password</p>
+                </div>
+                <div id="button_deatails">
+
+                    <img src="../images/in-person.png" />
+                    <button id="connect">Connect</button>
+
                 </div>
 
-                <div class="row" id="insertRow">
-                    <span class="col-lg-4"> סיסמא</span> <input id="password" class="col-lg-8 form-control" type="password" />
-                </div>
-                <div class="row">
-                    <button id="conect">התחבר</button>
-                </div>
 
             </div>
-            <br />
-
-            <a href="studentDashboard.html">  Student</a>
-            <a href="teacherDahBoard.html">  Teacher</a>
-            <a href="systemManager.html">  Admin</a>
-
         </div>
+
+
     </div>
 </body>
 </html>
