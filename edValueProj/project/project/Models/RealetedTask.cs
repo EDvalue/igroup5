@@ -46,7 +46,7 @@ namespace project.Models
         }
         public List<RealetedTask> getTTasks(string data)
         {
-            TeamDBServices dbs = new TeamDBServices();
+            TeacherDBservices dbs = new TeacherDBservices();
 
             string teamId = data;
 
