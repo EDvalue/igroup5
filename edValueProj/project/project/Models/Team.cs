@@ -127,8 +127,16 @@ namespace project.Models
                     workRow["StudentEmail"] = s.Mail;
                     workRow["TeamId"] = t.Id;
                     workRow["SchoolCode"] = t.Scode;
+                    if (dt.Rows.Count > 0)
+                    {
+                        dt.Rows.InsertAt(workRow, dt.Rows.Count - 1);
+                    }
+                    else if(dt.Rows.Count==0)
+                    {
+                        dt.Rows.InsertAt(workRow, dt.Rows.Count);
 
-                    dt.Rows.InsertAt(workRow, dt.Rows.Count-1);
+                    }
+                    
                 }
      
             }
@@ -146,6 +154,12 @@ namespace project.Models
                 }
              
             return dt;
+        }
+
+        public List<Team> getSTeams(string mail)
+        {
+            StudentDBServices dbs = new StudentDBServices();
+            return dbs.getSTeams(mail);
         }
 
     }

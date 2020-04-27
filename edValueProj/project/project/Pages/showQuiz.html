@@ -3,6 +3,7 @@
 <head>
 
     <meta charset="utf-8" />
+    <script src="../Scripts/ajaxCalls.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
@@ -18,7 +19,8 @@
         var str;
         var el
         var perform_showQuiz_mode;
-
+        var LufDiv;
+        var userOBJ;
 
         function init() {
 
@@ -26,29 +28,29 @@
 
                 perform_showQuiz_mode = localStorage["userMode"];
             }
-
+            userOBJ = JSON.parse(localStorage['user']);
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
             el = JSON.parse(localStorage['quiz']);
             quizString += `<div id='QuizTitle'><h1>${el.Title}</h1> </div>
-                                <div id='main' dir="rtl">`
+                                    <div id='main' dir="rtl"><form id=quizForm>`
             for (qu in el.Question) {
 
-                quizString += `<form id=quizForm><div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class='${el.Question[qu].Type}'>`
+                quizString += `<div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class="qu" Qtype='${el.Question[qu].Type}'>`
                 if (el.Question[qu].ImgLink != "" || el.Question[qu].VideoLink != "") {
                     quizString += `<div id="extraData">`
-                    if(el.Question[qu].ImgLink != "")
+                    if (el.Question[qu].ImgLink != "")
                         quizString += `<img src="${el.Question[qu].ImgLink}" />`
                     if (el.Question[qu].VideoLink != "") {
 
                         const videoId = getId(`${el.Question[qu].VideoLink}`);
-                        const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+                        const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/'
                             + videoId + '" frameborder="0" allowfullscreen></iframe>';
 
 
                         quizString += iframeMarkup;
                     }
-                        
+
                     quizString += `</div>`
                 }
                 quizString += `<div  id="Question_content"><p>${el.Question[qu].Content}</p></div>`
@@ -60,17 +62,17 @@
                             quizString += `<div id="AmericanAmswerBlock">`
                             if (perform_showQuiz_mode == 'teacher') {
 
-                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox" checked name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" checked name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
 
-                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>`
                             }
 
                             quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                         <span>${parseInt(y) + 1}</span><input type="checkbox"  name="chk"${qu}/> <p>${el.Question[qu].Answer[y].Content}</p>
-                                         </div>`
+                                             <span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>
+                                             </div>`
                         }
 
                     }
@@ -78,10 +80,18 @@
                     quizString += `</div>`;
                 } else if (el.Question[qu].Type == 'O') {
 
-                    quizString += `<div id="OpenAnswerBlock"><textarea class="ckeditor"  name="editor" rows='7' cols='100' ></textarea></div>`
+                    quizString += `<div id="OpenAnswerBlock"><textarea class="ckeditor" id="ck"  name="editor" rows='7' cols='100' ></textarea></div>`
                 } else if (el.Question[qu].Type == 'U') {
 
-                    quizString += `<div id='OpenUploadBlock'><input type='file' /></div>`
+                    quizString += `<div id='OpenUploadBlock'>
+                                            <input type='file' id='file${qu}' />
+                                            <div id='upload-BTN'>
+                                               <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
+                                               <input type='button' toSave='file${qu}' class='btn btn-info sf' value='שמור' />
+                                             </div>
+                                        </div>`;
+
+
 
                 } else if (el.Question[qu].Type == 'M') {
 
@@ -90,16 +100,16 @@
                         if (el.Question[qu].Answer[y].IsRight) {
                             quizString += `<div id="AmericanAmswerBlock">`
                             if (perform_showQuiz_mode == "teacher") {
-                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox" checked /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" checked /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
-                                quizString += `<span>${parseInt(y) + 1}</span><input type="checkbox"  /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             }
 
                             quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                         <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
-                                         </div>`
+                                             <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
+                                             </div>`
                         }
 
                     }
@@ -107,31 +117,143 @@
 
                 }
 
-                if (perform_showQuiz_mode == "student") {
-                    quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
-                }
-
                 quizString += '</div>'
 
-                
             }
+            if (perform_showQuiz_mode == "student") {
+                quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
+            }
+
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
             //CKEDITOR.replace('#textarea');
-             ckReplace()
+            ckReplace()
             connectCHK();
+            connectForm();
         }
+
+        function connectForm() {
+
+            $('.upl').click(function () {
+
+                $('#' + $(this).attr('myFile')).trigger('click');
+
+            });
+
+            $('.sf').click(function () {
+
+                var data = new FormData();
+                LufDiv = this.parentNode;
+                var file = $('#' + $(this).attr('toSave')).get(0).files[0];
+                data.append("UploadedFile", file);
+
+                $.ajax({
+                    type: "POST",
+                    url: "../api/upload/uploadFile",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: PostDocSuccess,
+                    error: PostDocError
+                });
+
+            });
+
+            function PostDocSuccess(data) {
+                console.log(data);
+                $(LufDiv).append(`<div class='link'>${data}</div>`);
+            }
+
+            function PostDocError(err) {
+                console.log(err);
+            }
+
+            $("#quizForm").submit(function () {
+
+                uploadeForm();
+                return false;
+            });
+        }
+
 
         function ckReplace() {
             var areas = $(".ckeditor");
-           $.each(areas, function (i, area) {
-                 CKEDITOR.replace(area, {
-                     customConfig: '/Scripts/ckeditor/config.mini.js'
-                 });
-          });
+            $.each(areas, function (i, area) {
+                CKEDITOR.replace(area, {
+                    customConfig: '/Scripts/ckeditor/config.mini.js'
+                });
+            });
         }
 
 
+
+
+        function uploadeForm() {
+            mode = localStorage['quiz_mode'];
+            let obj;
+
+
+            questionsHolder = $(".qu");
+
+            for (q in el.Question) {
+
+                if ($(questionsHolder[q]).attr('Qtype') == 'O') {
+
+                    el.Question[q].AnsContent = CKEDITOR.instances[$(questionsHolder[q]).find("#ck").attr("id")].getData();
+
+                } else if ($(questionsHolder[q]).attr('Qtype') == 'A' || $(questionsHolder[q]).attr('Qtype') == 'M') {
+                    ansId = []
+                    ans=[]
+                     $("#"+q+' input:checked').each(function () {
+                        ans.push($(this));
+                    });
+
+                    for (i = 0; i < ans.length; i++) {
+                        ansId.push(parseInt($(ans[i]).attr("ansID")));
+                    }
+                    for (a in el.Question[q].Answer) {
+                        if (ansId.indexOf(el.Question[q].Answer[a].AnsId) != -1) {
+                            el.Question[q].Answer[a].IsPicked = true;
+                        } else {
+                            el.Question[q].Answer[a].IsPicked = false;
+                        }
+
+                    }
+                } else if ($(questionsHolder[q]).attr('Qtype') == 'U') {
+
+                    el.Question[q].Content = $($(questionsHolder[q])).find('.link').text();
+
+                }
+            }
+
+            if (mode == 'new') {
+                console.log(el)
+                el.Title = userOBJ.Mail;
+                ajaxCall('POST', '../api/Student/postQ', JSON.stringify(el), postQSuccess, postQError);
+            }
+
+
+
+        }
+
+        function postQSuccess(data) {
+            console.log(data);
+
+             swal({
+                
+                   title: "מטלה נשמרה במערכת",
+                   icon: "success",
+               })
+                    .then(function (confirm) {
+                        if (confirm)   window.history.back();
+                        else   window.history.back();
+                    })
+
+        }
+
+        function postQError(err) {
+            console.log(err);
+        }
 
         function getId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;

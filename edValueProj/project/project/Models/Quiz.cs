@@ -49,5 +49,11 @@ namespace project.Models
            TeacherDBservices dbs = new TeacherDBservices();
             return dbs.PostQuiz(this);
         }
+
+        public int postQ()
+        {
+            StudentDBServices dbs = new StudentDBServices();
+            return dbs.postQ(this);
+        }
     }
 }

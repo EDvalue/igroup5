@@ -31,9 +31,10 @@
         $(document).ready(function () {
 
             userOBJ = JSON.parse(localStorage["user"]);
+            teamOBJ = JSON.parse(localStorage["active_student_team"]);
            
-            userEmail = "zz@gmail.com".replace(".",",");
-            getTask = userEmail + "_794491584802217252jj";
+            userEmail = userOBJ.Mail.replace(".", ",");
+            getTask = userEmail + "_" + teamOBJ.Id;
 
 
 

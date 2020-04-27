@@ -46,5 +46,23 @@ namespace project.Controllers
 
         }
 
+
+        [HttpPost]
+        [Route("api/upload/uploadFile")]
+        public string uploadFile()
+        {
+            //HttpResponseMessage result = null;
+            var httpRequest = HttpContext.Current.Request;
+            HttpPostedFile file1 = httpRequest.Files[0];
+
+
+            //To save file, use SaveAs method
+            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\" + file1.FileName);
+            file1.SaveAs(filePath); //File will be saved in application root
+
+
+            return filePath;
+
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace project.Controllers
 
         [HttpPost]
         [Route("api/EDvalue/excelLoad")]
-        public List<Dictionary<string, string>> excelLoad()
+        public List<Dictionary<string,string>> excelLoad()
         {
             //HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;

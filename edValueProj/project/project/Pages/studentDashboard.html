@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-
-
+    <script src="../js/js.js"></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -17,13 +16,75 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
 
-
+    <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <link href="../CSS/studentDashboard.css" rel="stylesheet" />
+
+
+    <script>
+        var myTeams;
+        var userOBJ;
+        
+        $(document).ready(function () {
+
+            userOBJ = JSON.parse(localStorage["user"])
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            
+            ajaxCall("PUT","../api/Student/getSTeams",JSON.stringify(userOBJ),getSTeamsSuccess,getSTeamsError)
+        });
+
+        function getSTeamsSuccess(data) {
+            console.log(data);
+            myTeams = data;
+            for (t in data) {
+
+                teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
+                        <div id="team_bar">
+                           
+                            <div id="name">
+                                <p>${data[t].Title}</p>
+                            </div>
+                            <div id="numOfNT">
+                                <p dir="ltr">${data[t].Scode} מ.ח</p>
+                            </div>
+                        </div>
+
+                        <div id="sub_img" onclick="openTeam(this,'new')" team_id="${data[t].Id}">
+                           
+                                <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
+
+                        </div>
+
+                      </div>`;
+
+                $("#teams").append(teamStr);
+            }
+        }
+
+        function getSTeamsError(err) {
+            console.log(err);
+        }
+        function openTeam(val,mode) {
+
+            tId = val.getAttribute("team_id");
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_student_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                    localStorage['quiz_mode'] = mode;
+                    location.assign("SquizList.html");
+
+                }
+            }
+        }
+    </script>
+
 </head>
 <body dir="rtl">
-    
+    <div id="disbackg"></div>
     <div id="container">
 
         <div id="header" class="row">
@@ -45,27 +106,22 @@
                 
             </div>
 
+            <div id="sNav">
+                <div id="user_manage">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    </button>
+                    <div id="nav_cnt" class="dropdown-menu">
+                        <p id="disconnect" onclick="disconnect()">התנתק</p>
+                        <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div id="subjects" class="row">
+        <div id="teams" class="row">
 
-            <div id="subject" class="col-lg-4">
-                <a href="SquizList.html">
-                    <img onclick="" id="Himg" src="../images/History.jpg" />
-                </a>
-                    <p>היסטוריה</p>
-
-            </div>
-            <div id="subject" class="col-lg-4">
-
-
-                <img onclick="" id="Bimg" src="../images/bible.jpg" />
-                <p>תנ"ך</p>
-            </div>
-            <div id="subject" class="col-lg-4">
-
-                <img onclick="" id="Simg" src="../images/science.png" />
-                <p>מדעים</p>
-            </div>
+           
+            
 
 
         </div>

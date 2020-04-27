@@ -55,15 +55,8 @@ namespace project.Models.DAL
                     numEffected += cmd1.ExecuteNonQuery();
                 }
                 
-            
-                
-               
-        
-
-
-
+           
             }
-
 
             catch (Exception ex)
             {
@@ -164,12 +157,12 @@ namespace project.Models.DAL
 
                 String part1 = " select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy,tbl.IntelligenceName,tbl.[Name],tbl.creationTime,tbl.QuestionnaireId";
                 String part2 = " ,pio.points,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],";
-                String part3 = " case when pq.[StudentId]='zz@gmail.com' then 1 else 0 END as IsChoose ";
+                String part3 = " case when pq.[StudentId]='"+userEmail+"' then 1 else 0 END as IsChoose ";
                 String part4 = "  from (select t.taskId,t.Title,t.SubjectName,rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy,q.IntelligenceName,i.[Name],max(q.creationTime)as creationTime,max(q.QuestionnaireId) as QuestionnaireId ";
-                String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='794491584802217252jj' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
+                String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='"+teamId+"' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
                 String part6 = "  inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] group by t.taskId,t.Title,t.SubjectName,q.IntelligenceName,i.[Name],rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy)as tbl  ";
-                String part7 = "  inner join Question as quest on quest.QuestionnaireId=tbl.QuestionnaireId inner join PointsInIntelligence as pio on pio.IntelligenceName=tbl.IntelligenceName and pio.StudentEmail='zz@gmail.com' ";
-                String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='zz@gmail.com' ";
+                String part7 = "  inner join Question as quest on quest.QuestionnaireId=tbl.QuestionnaireId inner join PointsInIntelligence as pio on pio.IntelligenceName=tbl.IntelligenceName and pio.StudentEmail='"+userEmail+"' ";
+                String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='" + userEmail + "' ";
                 String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId]  order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
                 String selectSTR = part1+part2+part3+part4+part5+part6+part7+part8+part9;
 
@@ -193,6 +186,7 @@ namespace project.Models.DAL
                             rtList.Add(rt);
                         }
                         rt = new RealetedTask();
+                        q = new Quiz();
                         rt.Task = new Task();
                         rt.Task.QuizList = new List<Quiz>();
                         rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
@@ -209,7 +203,7 @@ namespace project.Models.DAL
                     }
                     if (dr["QuestionnaireId"].ToString() != q.QuizID)
                     {
-                        if (q.QuizID != null)
+                        if (q.QuizID != null )
                         {
                             rt.Task.QuizList.Add(q);
                         }
@@ -261,11 +255,13 @@ namespace project.Models.DAL
                     }
                         
 
-
-                   
                 }
-                rt.Task.QuizList.Add(q);
-                rtList.Add(rt);
+                if (rt.Task.TaskId != null)
+                {
+                    rt.Task.QuizList.Add(q);
+                    rtList.Add(rt);
+                }
+            
 
             }
             catch (Exception ex)
@@ -303,7 +299,265 @@ namespace project.Models.DAL
 
             return cmd;
         }
-        
+
+        public List<Team> getSTeams(string mail)
+        {
+            List<Team> tList = new List<Team>();
+            SqlConnection con = null;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                String sl1 = " select t.TeamId,t.Title,t.SubjectName,s.ImgLink,t.TeacherEmail,rt.TaskId,case when rt.TaskId IS NULL then 0 else 1 end as isPerform ";
+                String sl2 = " from [dbo].[StudentInTeam] as sit inner join Team as t on t.TeamId=sit.TeamId and sit.SchoolCode=t.SchoolCode and  sit.StudentEmail='"+mail+ "' inner join Subject as s on s.[Name]=t.SubjectName left  join [dbo].[RealatedTo] as rt ";
+                String sl3 = " on rt.TeamId=t.TeamId left join [dbo].[PerformQuestionnaire] as pq on pq.TaskId=rt.TaskId and pq.StudentId='"+mail+"'";
+                String selectSTR = sl1+sl2+sl3;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                Team t = new Team();
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    if(t.Id != dr["TeamId"].ToString())
+                    {
+                        if (t.Id != null)
+                        {
+                            tList.Add(t);
+                        }
+                        t = new Team();
+                        t.Subject = new Subject();
+                        t.Teacher = new Teacher();
+                        t.Id = dr["TeamId"].ToString();
+                        t.Title = dr["Title"].ToString();
+                        t.Subject.Name = dr["SubjectName"].ToString();
+                        t.Subject.ImgLink = dr["ImgLink"].ToString();
+                        t.Teacher.Mail = dr["TeacherEmail"].ToString();
+                        t.Scode = 0;
+
+                    }
+                  
+
+                    t.Scode += Convert.ToInt32(dr["isPerform"]);
+
+
+                }
+                tList.Add(t);
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+
+
+            return tList;
+        }
+
+        public int postQ(Quiz q)
+        {
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr="";
+            numEffected+=insertperformQuestionnaire(q);
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            foreach(var item in q.Question)
+            {
+                if (item.Type == "A" || item.Type == "M")
+                {
+                    foreach(var a in item.Answer)
+                    {
+                        if (a.IsPicked)
+                        {
+                            cStr = BuildAnsCInsertCommand(q, item,a);
+
+                            // helper method to build the insert string
+
+                            cmd = CreateCommand(cStr, con);             // create the command
+
+                            try
+                            {
+                                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+                            }
+                            catch (Exception ex)
+                            {
+                                if (con != null)
+                                {
+                                    // close the db connection
+                                    con.Close();
+                                }
+                                // write to log
+                                throw (ex);
+                            }
+                       
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    cStr = BuildAnsOInsertCommand(q,item);
+
+                    // helper method to build the insert string
+
+                    cmd = CreateCommand(cStr, con);             // create the command
+
+                    try
+                    {
+                        numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+                    }
+                    catch (Exception ex)
+                    {
+                        if (con != null)
+                        {
+                            // close the db connection
+                            con.Close();
+                        }
+                        // write to log
+                        throw (ex);
+                    }
+                    
+                }
+
+                
+              
+            }
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+
+
+            return numEffected;
+            
+        }
+
+        public int insertperformQuestionnaire(Quiz q)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr = "";
+            
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cStr = BuildPQInsertCommand(q);
+            cmd = CreateCommand(cStr, con);    // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+
+
+            }
+            return numEffected;
+        }
+        private String BuildPQInsertCommand(Quiz q)
+        {
+            String command;
+
+
+            StringBuilder sb = new StringBuilder();
+
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4})", q.Title, q.TaskId, q.QuizID,"GetDate()",0);
+
+            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+        private String BuildAnsCInsertCommand(Quiz q,Question qu,Answer a)
+        {
+            String command;
+
+
+            StringBuilder sb = new StringBuilder();
+
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}',{4})",q.Title,q.TaskId,q.QuizID,qu.QuestionId,a.AnsId);
+
+            String prefix = "INSERT INTO AnsClose" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,AnswerId)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+        private String BuildAnsOInsertCommand(Quiz q,Question qu)
+        {
+            String command;
+
+
+            StringBuilder sb = new StringBuilder();
+            String prefix = "";
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}')",q.Title,q.TaskId,q.QuizID,qu.QuestionId,qu.Content);
+            if (qu.Type == "O")
+            {
+                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer)";
+            }
+            else
+            {
+                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer)";
+            }
+            
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
     }
 }
 

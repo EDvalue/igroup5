@@ -223,7 +223,7 @@ datalist {
 place {
     color: red;
     opacity: 1; /* Firefox */
-}
+/*}*/
 
 .search_icon {
     height: 20px;

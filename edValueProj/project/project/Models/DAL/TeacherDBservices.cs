@@ -330,7 +330,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 String part1 = "select t.TeamId,t.Title,t.Grade,t.SubjectName,t.[status],s.ImgLink,sit.StudentEmail,IdNumber,Fname,Lname ";
-                String part2 = "from Team as t inner join [Subject] as s on s.[Name]=t.SubjectName  inner join StudentInTeam as sit on sit.TeamId=t.TeamId inner join[User] on [User].Email=sit.StudentEmail where TeacherEmail='"+mail+ "' order by TeamId";
+                String part2 = "from Team as t inner join [Subject] as s on s.[Name]=t.SubjectName  left join StudentInTeam as sit on sit.TeamId=t.TeamId left join [User] on [User].Email=sit.StudentEmail where TeacherEmail='"+mail+ "' order by TeamId";
                 String selectSTR = part1 + part2;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -359,12 +359,16 @@ namespace project.Models.DAL
 
                     }
 
-                    Student s = new Student();
-                    s.Name = dr["Fname"].ToString();
-                    s.LastName = dr["Lname"].ToString();
-                    s.IdNumber = dr["IdNumber"].ToString();
-                    s.Mail = dr["StudentEmail"].ToString();
-                    t.StudentList.Add(s);
+                    if (!(dr["StudentEmail"] == DBNull.Value))
+                    {
+                        Student s = new Student();
+                        s.Name = dr["Fname"].ToString();
+                        s.LastName = dr["Lname"].ToString();
+                        s.IdNumber = dr["IdNumber"].ToString();
+                        s.Mail = dr["StudentEmail"].ToString();
+                        t.StudentList.Add(s);
+                    }
+                  
 
                     
 
@@ -1034,7 +1038,7 @@ namespace project.Models.DAL
             SqlConnection con;
             SqlCommand cmd;
 
-            var datetime = Convert.ToDateTime(dict["Time"]) + ":00";
+            var datetime = Convert.ToDateTime(dict["Time"])+":00";
             var date = datetime.Split(' ')[0];
             var time = datetime.Split(' ')[1];
             var fixDate = date.Split('/');

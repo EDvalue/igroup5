@@ -104,8 +104,8 @@
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    var href = $(val).children("a").attr('href');
-                    location.assign(href);
+                    
+                    location.assign("manageClass.html");
 
 
                 }

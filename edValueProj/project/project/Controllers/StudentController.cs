@@ -11,7 +11,12 @@ namespace project.Controllers
 {
     public class StudentController : ApiController
     {
-
+        [HttpPost]
+        [Route("api/Student/postQ")]
+        public int postQ([FromBody] Quiz q)
+        {
+            return q.postQ();
+        }
 
 
 
@@ -48,8 +53,13 @@ namespace project.Controllers
             return rt.getSTasks(data);
         }
 
-
+        [HttpPut]
+        [Route("api/Student/getSTeams")]
+        public List<Team> getSTeams([FromBody]User u)
+        {
+            Team t = new Team();
+            return t.getSTeams(u.Mail);
+        }
     }
-
 
 }

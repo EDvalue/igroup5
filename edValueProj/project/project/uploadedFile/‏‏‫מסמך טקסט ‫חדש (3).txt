@@ -1,0 +1,21 @@
+select t.TaskId,t.Title,t.Grade,t.SubjectName,rt.TeamId,Max(q.[creationTime]),rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,
+  q.[QuestionnaireId],q.[IntelligenceName],i.[Name],quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,
+  ac.[Note] as noteClose,ac.[AnswerId] as picked,ao.[Note] as noteOpen,ao.[FileLink],ao.[Answer],
+  case when pq.[StudentId]='zz@gmail.com' then 1 else 0 END as IsChoose 
+
+
+
+  from Task AS t inner join [dbo].[RealatedTo] AS rt on rt.TaskId=t.TaskId and  rt.TeamId='794491584812899283jj'
+  inner join [dbo].[Questionnaire] as q on q.TaskId=rt.TaskId and rt.Date_Assignment>=q.creationTime 
+
+
+
+ inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] inner join Question as quest on quest.QuestionnaireId=q.QuestionnaireId left join Answer as a on a.QuestionId=quest.QuestionId 
+ left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=q.[QuestionnaireId] and pq.[StudentId]='zz@gmail.com'
+left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId]
+left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId]
+
+group by t.TaskId,q.IntelligenceName,rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,rt.TeamId,rt.Date_Assignment,rt.YearOfStudy,rt.ForDate,rt.OpenTill,rt.TeamSchoolCode,
+ i.[Name],quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content,a.IsRight,q.[QuestionnaireId],
+ ac.[Note],ac.[AnswerId],ao.[Note],ao.[FileLink],ao.[Answer],pq.StudentId,t.Title,t.Grade,t.SubjectName
+

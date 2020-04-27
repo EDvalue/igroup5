@@ -1,6 +1,9 @@
 ﻿body {
     margin:0;
 }
+input[type=file] {
+    display: none;
+}
 #main {
    margin-left:5%;
    margin-right:5%;
