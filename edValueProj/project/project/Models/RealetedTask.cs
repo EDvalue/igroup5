@@ -44,9 +44,15 @@ namespace project.Models
 
             return dbs.getSTasks(userEmail,teamId);
         }
+<<<<<<< HEAD
         //public List<RealetedTask> getTTasks(string data)
         //{
         //    TeamDBServices dbs = new TeamDBServices();
+=======
+        public List<RealetedTask> getTTasks(string data)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+>>>>>>> 1d55949e670a7aa537ecb1edceb558c601f4bf5c
 
         //    string teamId = data;
 
