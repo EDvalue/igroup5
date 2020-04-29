@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using project.Models.DAL;
+using System.Data;
 
 namespace project.Models
 {
@@ -54,6 +55,113 @@ namespace project.Models
         {
             StudentDBServices dbs = new StudentDBServices();
             return dbs.postQ(this);
+        }
+        public int updateQ()
+        {
+            StudentDBServices dbs1 = new StudentDBServices();
+            StudentDBServices dbs2 = new StudentDBServices();
+            dbs1 = dbs1.updateQansC(this);
+            dbs2 = dbs2.updateQansO(this);
+            dbs1.dt = closeQ(this, dbs1.dt);
+            dbs2.dt = openQ(this, dbs2.dt);
+
+            dbs1.update();
+            dbs2.update();
+            return 1;
+        }
+
+
+        private DataTable closeQ(Quiz q, DataTable dt)
+        {
+            int flag = 0;
+            foreach (var item in q.Question)
+            {
+                if (item.Type == "A" || item.Type == "M")
+                {
+                    foreach (var ans in item.Answer)
+                    {
+                        flag = 0;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+
+                            if (dr.RowState != DataRowState.Deleted && dr.RowState != DataRowState.Added)
+                            {
+                                string quId = dr["QuestionId"].ToString();
+                                int ansId = Convert.ToInt32(dr["AnswerId"]);
+
+
+                                if (quId == item.QuestionId && ansId == ans.AnsId)
+                                {
+                                    if (ans.IsPicked == false)
+                                    {
+                                        flag = 1;
+                                        dr.Delete();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        flag = 1;
+                                        break;
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        if (flag!=1)
+                        {
+                            if (ans.IsPicked == true)
+                            {
+                                DataRow workRow = dt.NewRow();
+
+                                workRow["StudentEmail"] = q.Title;
+                                workRow["QuestionnaireId"] = q.QuizID;
+                                workRow["TaskId"] = q.taskId;
+                                workRow["AnswerId"] = ans.AnsId;
+                                workRow["QuestionId"] = item.QuestionId;
+
+                                dt.Rows.Add(workRow);
+                            }
+
+                        }
+
+
+                    }
+                }
+     
+            }
+            return dt;
+        }
+
+        private DataTable openQ(Quiz q, DataTable dt)
+        {
+            foreach (var item in q.Question)
+            {
+                if (item.Type == "O" || item.Type == "U")
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (dr.RowState != DataRowState.Modified)
+                        {
+                            string quId = dr["QuestionId"].ToString();
+                            if (quId == item.QuestionId)
+                            {
+                                if (item.Type == "O")
+                                {
+                                    dr["Answer"] = item.AnsContent;
+                                }
+                                else if (item.Type == "U")
+                                {
+                                    dr["FileLink"] = item.Content;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return dt;
         }
     }
 }

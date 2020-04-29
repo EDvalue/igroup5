@@ -44,17 +44,18 @@ input[type=file] {
  }
 
 
-    .displayFile {
-        border-radius: 20px;
-        border: 1px solid blue;
-        width: 50%;
-        display: flex;
-        align-content: center;
-        justify-content: center;
-        margin-right: 25%;
-        height: 150px;
-        margin-top: 2%;
-    }
+.displayFile {
+    border-radius: 20px;
+    border: 1px groove #007bff;
+    box-shadow: 2px 2px #007bff;
+    width: 50%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin-right: 25%;
+    height: 150px;
+    margin-top: 2%;
+}
 
 #main {
     margin-left: 5%;
@@ -98,7 +99,7 @@ input[type=file] {
         margin: 0;
     }
 #Question_content{
-    font-size:30px;
+    
 }
 #AmericanAmswerBlock p {
     font-size: 25px;
@@ -116,10 +117,9 @@ input[type=file] {
 }
 
 #QuizTitle {
-    width: 30%;
-    margin-right: 35%;
+    width: 100%;
     text-align: center;
-    border-bottom: 2px double rgba(117, 136, 245, 0.90);
+    border-bottom: 48px solid #007bff;
     padding-bottom: 0.5%;
 }
 #bg {

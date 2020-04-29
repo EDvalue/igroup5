@@ -109,27 +109,38 @@
         }
 
         function printActiveOpen(data) {
-                        str = "";
+            str = "";
             for (x in data) {
-                str += str = createSmallTask(data[x],'O');
-                
-                
+                var num=getQnum(data.Task)
+                str += str = createSmallTask(data[x],'O',num);
+               
             }
             $("#activeO #tasks").text("")
              $("#activeO #tasks").append(str)
         }
+        function getQnum(arg) {
+            console.log(arg)
+            for (a in arg.QuizList) {
+                if (arg.QuizList[a].TaskId == 1) {
 
+                    return a;
+                }
+            }
+        }
         function printActiveClose(data) {
-             str = "";
+            str = "";
+            
             for (x in data) {
-                str = createSmallTask(data[x],'C');
+
+                var num=getQnum(data[x].Task)
+                str += createSmallTask(data[x],'C',num);
                
             }
             $("#activeC #tasks").text("")
              $("#activeC #tasks").append(str)
         }
 
-        function createSmallTask(data,arg) {
+        function createSmallTask(data,arg,num) {
 
             
             str =`<div id="SmallTask" class="col-lg-4">
@@ -159,12 +170,11 @@
                             </div>
                             <div class="imgQuestionnire">`;
             if (arg == 'O') {
-                str += ` <img onclick="chooseQuestionnaire(this,activeOpenArr,'edit')" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[i].QuizID}" src="../images/${data.Task.QuizList[i].Inteligence.Ename}.png" />`
+                str += ` <img onclick="chooseQuestionnaire(this,activeOpenArr,'edit')" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             } else {
-                str+=`<img task="${data.Task.TaskId}" quiz="${data.Task.QuizList[i].QuizID}" onclick="chooseQuestionnaire(this,activeCloseArr,'edit')" src="../images/${data.Task.QuizList[i].Inteligence.Ename}.png" />`
+                str+=`<img task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" onclick="chooseQuestionnaire(this,activeCloseArr,'edit')" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             }
-                                
-
+             
                            str+=` </div>
                                 
                         </div>
@@ -186,7 +196,7 @@
                             arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
                             localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
                             localStorage['quiz_mode'] = mode;
-                            window.open("showQuiz.html");
+                            location.assign("showQuiz.html");
                             break;
                         }
                     }
