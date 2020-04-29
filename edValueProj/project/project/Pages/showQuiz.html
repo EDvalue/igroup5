@@ -54,7 +54,7 @@
                     quizString += `</div>`
                 }
                 quizString += `<div  id="Question_content"><p>${el.Question[qu].Content}</p></div>`
-                //quizString += `<div id="Question_answer">`
+               
                 if (el.Question[qu].Type == 'A') {
                     quizString += `<div id="Question_answer">`
                     for (y in el.Question[qu].Answer) {
@@ -80,18 +80,19 @@
                     quizString += `</div>`;
                 } else if (el.Question[qu].Type == 'O') {
 
-                    quizString += `<div id="OpenAnswerBlock"><textarea class="ckeditor" id="ck"  name="editor" rows='7' cols='100' ></textarea></div>`
+                    quizString += `<div id="OpenAnswerBlock"><textarea class="ckeditor" id="ck${qu}"  name="editor" rows='7' cols='100' ></textarea></div>`
+
+                   
                 } else if (el.Question[qu].Type == 'U') {
 
                     quizString += `<div id='OpenUploadBlock'>
-                                            <input type='file' id='file${qu}' />
+                                    <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div></div> 
+                                            <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip"  id='file${qu}' />
                                             <div id='upload-BTN'>
                                                <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
                                                <input type='button' toSave='file${qu}' class='btn btn-info sf' value='שמור' />
                                              </div>
                                         </div>`;
-
-
 
                 } else if (el.Question[qu].Type == 'M') {
 
@@ -130,10 +131,92 @@
             ckReplace()
             connectCHK();
             connectForm();
+            if (perform_showQuiz_mode == "student") {
+
+                fillANS();
+            }
+
         }
+
+        function fileperform() {
+            file = this;
+            if (file.files[0].size > 2097152) {
+                swal("File is too big!");
+                this.value = "";
+            } else {
+
+
+                $("#" + this.parentNode.id + " .dl").remove();
+                if (file.value.split('.')[1] == "xlsx" || file.value.split('.')[1] == "xls") {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/excel-icon.png" />`)
+                } else if (file.value.split('.')[1] == "pdf") {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/pdf-icon.jpg" />`)
+                } else if (file.value.split('.')[1] == "docx") {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/word-icon.png" />`)
+                } else if (file.value.split('.')[1] == "jpeg" || file.value.split('.')[1] == "jpg" || file.value.split('.')[1] == "png") {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="" />`)
+
+                    var demoImage = document.getElementById(this.parentNode.parentNode.id).querySelector('.filedrag').querySelector('img')
+
+
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        demoImage.src = reader.result;
+                    }
+                    reader.readAsDataURL(file.files[0]);
+
+                }
+                else if (file.value.split('.')[1] == 'rar' || file.value.split('.')[1] == 'zip') {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/rar-icon.png" />`)
+
+                }
+            }
+        }
+
+
+        function fillANS() {
+
+            for (q in el.Question) {
+
+                if (el.Question[q].Type == 'O') {
+                    if (el.Question[qu].Content !== null) {
+                        CKEDITOR.instances[`ck${q}`].setData(el.Question[q].AnsContent)
+                    }
+
+                } else if (el.Question[q].Type == 'A' || el.Question[q].Type == 'M') {
+                    chkArr = $(`#${q} input[type='checkbox']`);
+                    for (a in el.Question[q].Answer) {
+                        if (el.Question[q].Answer[a].IsPicked) {
+
+                            $(chkArr[a]).prop("checked", true);
+                        }
+                    }
+                } else if (el.Question[q].Type == 'U') {
+                    if (el.Question[q].AnsContent) {
+                      $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
+                      $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>הורד קובץ</a>`);
+
+                        ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
+                        if (ext == "xlsx"||ext== "xls") {
+                            $(`#${q} .filedrag`).html(`<img src="../images/excel-icon.png" />`);
+                        } else if (ext == "docx") {
+                              $(`#${q} .filedrag`).html(`<img src="../images/word-icon.png" />`);
+                        } else if (ext == "pdf") {
+                              $(`#${q} .filedrag`).html(`<img src="../images/pdf-icon.jpg" />`);
+                        }
+                    }
+                   
+                }
+            }
+
+        }
+
 
         function connectForm() {
 
+          
+            $("input[type='file']").change(fileperform)
+    
             $('.upl').click(function () {
 
                 $('#' + $(this).attr('myFile')).trigger('click');
@@ -159,22 +242,51 @@
 
             });
 
-            function PostDocSuccess(data) {
-                console.log(data);
-                $(LufDiv).append(`<div class='link'>${data}</div>`);
-            }
-
-            function PostDocError(err) {
-                console.log(err);
-            }
-
+          
             $("#quizForm").submit(function () {
 
                 uploadeForm();
                 return false;
             });
+
+            //drag files
+            daArr = $(".filedrag");
+            for (d = 0; d <= daArr.length; d++) {
+
+                $(daArr[d]).on('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer = e.originalEvent.dataTransfer
+                    let fileInput =document.querySelector("#"+e.target.parentNode.getAttribute('name'));
+
+                    for (const f of e.dataTransfer.files) {
+                        console.log('File(s) you dragged here: ', f.path)
+                        fileInput.files = e.dataTransfer.files;
+                        $("#"+fileInput.id).trigger('change');
+                    }
+                });
+                document.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+
+            }
+           
         }
 
+        function PostDocSuccess(data) {
+            console.log(data);
+
+            $(LufDiv).children('.link').remove();
+            $(LufDiv).children('.dl').remove();
+
+            $(LufDiv).append(`<div class='link'>${data}</div>`);
+            $(LufDiv).append(`<a class='dl' href="${data}" download>הורד קובץ</a>`)
+        }
+
+        function PostDocError(err) {
+            console.log(err);
+        }
 
         function ckReplace() {
             var areas = $(".ckeditor");
@@ -185,13 +297,9 @@
             });
         }
 
-
-
-
         function uploadeForm() {
             mode = localStorage['quiz_mode'];
             let obj;
-
 
             questionsHolder = $(".qu");
 
@@ -199,7 +307,7 @@
 
                 if ($(questionsHolder[q]).attr('Qtype') == 'O') {
 
-                    el.Question[q].AnsContent = CKEDITOR.instances[$(questionsHolder[q]).find("#ck").attr("id")].getData();
+                    el.Question[q].AnsContent = CKEDITOR.instances[$(questionsHolder[q]).find(`#ck${q}`).attr("id")].getData();
 
                 } else if ($(questionsHolder[q]).attr('Qtype') == 'A' || $(questionsHolder[q]).attr('Qtype') == 'M') {
                     ansId = []

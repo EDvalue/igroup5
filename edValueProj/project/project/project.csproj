@@ -296,6 +296,7 @@
     <Content Include="images\editor.jpg" />
     <Content Include="images\EDvalueBig.png" />
     <Content Include="images\EDvalueSmall.png" />
+    <Content Include="images\excel-icon.png" />
     <Content Include="images\file.jpg" />
     <Content Include="images\History.jpg" />
     <Content Include="images\in-person.png" />
@@ -304,7 +305,9 @@
     <Content Include="images\Movemental.png" />
     <Content Include="images\musically.png" />
     <Content Include="images\NewM.png" />
+    <Content Include="images\pdf-icon.jpg" />
     <Content Include="images\personal.png" />
+    <Content Include="images\rar-icon.png" />
     <Content Include="images\school.jpg" />
     <Content Include="images\Science.png" />
     <Content Include="images\spatial.png" />
@@ -314,6 +317,7 @@
     <Content Include="images\logicallyN.jpg" />
     <Content Include="images\PersonalN.jpg" />
     <Content Include="images\musicallyN.jpg" />
+    <Content Include="images\word-icon.png" />
     <Content Include="js\js.js" />
     <Content Include="Pages\Assignment_assignment.html" />
     <Content Include="Pages\classInfo.html" />

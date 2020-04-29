@@ -4,12 +4,64 @@
 input[type=file] {
     display: none;
 }
+
+.filedrag {
+    border: 2px dashed #ccc;
+    border-radius: 20px;
+    width: 90%;
+    height: 80%;
+    margin: auto auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding-top: 3%;
+}
+.link{
+    display:none;
+    width:0;
+}
+
+.qu {
+    margin-bottom: 30px;
+    border-bottom: 2px dashed #007bff;
+    padding: 50px;
+}
+
+
+#upload-BTN {
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    width: 30%;
+    margin-right: 35%;
+    padding: 3%;
+}
+ .filedrag img{
+     
+     width:120px;
+     height:inherit;
+
+ }
+
+
+    .displayFile {
+        border-radius: 20px;
+        border: 1px solid blue;
+        width: 50%;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        margin-right: 25%;
+        height: 150px;
+        margin-top: 2%;
+    }
+
 #main {
-   margin-left:5%;
-   margin-right:5%;
-    margin-top:5%;
-    width:90%;
-    text-align:right;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    width: 90%;
+    text-align: right;
 }
 #main>div{
     margin:25px 5px 25px 0;
