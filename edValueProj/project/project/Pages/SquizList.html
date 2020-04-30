@@ -65,7 +65,7 @@
                 } else { activeCloseArr.push(data[x])}
             }
 
-            printNacrive(NactiveArr);
+            printNactive(NactiveArr);
             printActiveOpen(activeOpenArr);
             printActiveClose(activeCloseArr);
 
@@ -73,7 +73,7 @@
             
         }
 
-        function printNacrive(data) {
+        function printNactive(data) {
             str = "";
             for (x in data) {
                 str += `
@@ -109,11 +109,62 @@
         }
 
         function printActiveOpen(data) {
-
+                        str = "";
+            for (x in data) {
+                str += str = createSmallTask(data[x]);
+                
+                
+            }
+            $("#activeO #tasks").text("")
+             $("#activeO #tasks").append(str)
         }
 
-        function printActiveClose() {
+        function printActiveClose(data) {
+             str = "";
+            for (x in data) {
+                str = createSmallTask(data[x]);
+               
+            }
+            $("#activeC #tasks").text("")
+             $("#activeC #tasks").append(str)
+        }
 
+        function createSmallTask(data) {
+
+            return `<div id="subject" class="col-lg-4">
+
+                    <div class="content_active">
+                        <div class="right">
+                            <div class="Name">
+                                <p>${data.Task.Title}</p>
+                            </div>
+                            <div class="Time">
+                                <p>${data.TillDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                            </div>
+                            <div class="opt">
+                                <div class="fb">
+                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
+                                    <p>צפה במשוב</p>
+                                </div>
+                                <div class="cq">
+                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
+                                    <p>החלף שאלון</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="left">
+                            <div class="classDate">
+                                <p>${data.ForDate}</p>
+                            </div>
+                            <div class="imgQuestionnire">
+
+                                <img src="../images/${data.Task.QuizList[i].Inteligence.Ename}.png" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            
         }
 
         function chooseQuestionnaire(val) {
@@ -238,7 +289,7 @@
         </div>
 
 
-        <div id="active">
+        <div id="activeO">
 
             <div id="acTitle">
                 <h3>משימות פעילות</h3>
@@ -286,7 +337,7 @@
 
         </div>
 
-        <div id="active">
+        <div id="activeC">
 
             <div id="acTitle">
                 <h3>משימות שעברו</h3>
