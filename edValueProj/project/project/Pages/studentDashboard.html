@@ -52,7 +52,7 @@
                             </div>
                         </div>
 
-                        <div id="sub_img" onclick="openTeam(this,'new')" team_id="${data[t].Id}">
+                        <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
                            
                                 <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
 
@@ -67,14 +67,13 @@
         function getSTeamsError(err) {
             console.log(err);
         }
-        function openTeam(val,mode) {
+        function openTeam(val) {
 
             tId = val.getAttribute("team_id");
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_student_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    localStorage['quiz_mode'] = mode;
                     location.assign("SquizList.html");
 
                 }

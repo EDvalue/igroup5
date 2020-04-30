@@ -60,6 +60,13 @@ namespace project.Controllers
             Team t = new Team();
             return t.getSTeams(u.Mail);
         }
+
+        [HttpPut]
+        [Route("api/Student/updateQ")]
+        public int updateQ([FromBody] Quiz q)
+        {
+            return q.updateQ();
+        }
     }
 
 }

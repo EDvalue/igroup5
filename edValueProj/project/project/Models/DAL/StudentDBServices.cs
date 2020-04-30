@@ -558,6 +558,74 @@ namespace project.Models.DAL
             return command;
         }
 
+        public StudentDBServices updateQansO(Quiz q)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from AnsOpen AS ac  where ac.TaskId='"+q.TaskId+"' and ac.StudentEmail='"+q.Title+"' and ac.QuestionnaireId='"+q.QuizID+"'", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
+        public StudentDBServices updateQansC(Quiz q)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from AnsClose AS ac  where ac.TaskId='" + q.TaskId + "' and ac.StudentEmail='" + q.Title + "' and ac.QuestionnaireId='" + q.QuizID + "'", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
+        public void update()
+        {
+            da.Update(dt);
+        }
     }
 }
 

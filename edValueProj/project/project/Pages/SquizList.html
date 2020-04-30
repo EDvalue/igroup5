@@ -77,7 +77,7 @@
             str = "";
             for (x in data) {
                 str += `
-                 <div id="subject" class="col-lg-4">
+                 <div id="Task" class="col-lg-4">
 
                     <div class="content_new">
                         <div class="name_date">
@@ -88,7 +88,7 @@
 
                         <div id="intelliO" class="imgQuiz">`
                 for (i in data[x].Task.QuizList) {
-                    str += `<img onclick="chooseQuestionnaire(this)" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    str += `<img onclick="chooseQuestionnaire(this,NactiveArr,'new')" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
                 }
 
                 str += ` </div>
@@ -109,29 +109,41 @@
         }
 
         function printActiveOpen(data) {
-                        str = "";
+            str = "";
             for (x in data) {
-                str += str = createSmallTask(data[x]);
-                
-                
+                var num=getQnum(data.Task)
+                str += str = createSmallTask(data[x],'O',num);
+               
             }
             $("#activeO #tasks").text("")
              $("#activeO #tasks").append(str)
         }
+        function getQnum(arg) {
+            console.log(arg)
+            for (a in arg.QuizList) {
+                if (arg.QuizList[a].TaskId == 1) {
 
+                    return a;
+                }
+            }
+        }
         function printActiveClose(data) {
-             str = "";
+            str = "";
+            
             for (x in data) {
-                str = createSmallTask(data[x]);
+
+                var num=getQnum(data[x].Task)
+                str += createSmallTask(data[x],'C',num);
                
             }
             $("#activeC #tasks").text("")
              $("#activeC #tasks").append(str)
         }
 
-        function createSmallTask(data) {
+        function createSmallTask(data,arg,num) {
 
-            return `<div id="subject" class="col-lg-4">
+            
+            str =`<div id="SmallTask" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
@@ -146,7 +158,7 @@
                                     <ion-icon name="checkmark-outline" size="large"></ion-icon>
                                     <p>צפה במשוב</p>
                                 </div>
-                                <div class="cq">
+                               <div class="cq">
                                     <ion-icon name="repeat-outline" size="large"></ion-icon>
                                     <p>החלף שאלון</p>
                                 </div>
@@ -156,31 +168,35 @@
                             <div class="classDate">
                                 <p>${data.ForDate}</p>
                             </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/${data.Task.QuizList[i].Inteligence.Ename}.png" />
-
-                            </div>
+                            <div class="imgQuestionnire">`;
+            if (arg == 'O') {
+                str += ` <img onclick="chooseQuestionnaire(this,activeOpenArr,'edit')" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+            } else {
+                str+=`<img task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" onclick="chooseQuestionnaire(this,activeCloseArr,'edit')" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+            }
+             
+                           str+=` </div>
+                                
                         </div>
                     </div>
                 </div>`
+            return str;
             
         }
 
-        function chooseQuestionnaire(val) {
-            alert(val.getAttribute('quiz'))
-
+        function chooseQuestionnaire(val,arr,mode) {
+            
             localStorage["perform_showQuiz_mode"] = "student";
-            for (t in NactiveArr) {
-                if (NactiveArr[t].Task.TaskId == val.getAttribute('task')) {
+            for (t in arr) {
+                if (arr[t].Task.TaskId == val.getAttribute('task')) {
 
-                    for (q in NactiveArr[t].Task.QuizList) {
-                        if ( NactiveArr[t].Task.QuizList[q].QuizID == val.getAttribute('quiz')) {
-                            NactiveArr[t].Task.QuizList[q].Title = NactiveArr[t].Task.Title;
-                            NactiveArr[t].Task.QuizList[q].TaskId = NactiveArr[t].Task.TaskId;
-                            localStorage["quiz"] = JSON.stringify(NactiveArr[t].Task.QuizList[q]);
-
-                            window.open("showQuiz.html");
+                    for (q in arr[t].Task.QuizList) {
+                        if ( arr[t].Task.QuizList[q].QuizID == val.getAttribute('quiz')) {
+                            arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
+                            arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
+                            localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
+                            localStorage['quiz_mode'] = mode;
+                            location.assign("showQuiz.html");
                             break;
                         }
                     }
@@ -253,7 +269,7 @@
 
             <div id="tasks" class="row">
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_new">
                         <div class="name_date">
@@ -297,7 +313,7 @@
 
             <div id="tasks" class="row">
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
@@ -345,7 +361,7 @@
 
             <div id="tasks" class="row">
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
@@ -379,7 +395,7 @@
                     </div>
                 </div>
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
@@ -413,7 +429,7 @@
                     </div>
                 </div>
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
@@ -447,7 +463,7 @@
                     </div>
                 </div>
 
-                <div id="subject" class="col-lg-4">
+                <div id="Task" class="col-lg-4">
 
                     <div class="content_active">
                         <div class="right">
