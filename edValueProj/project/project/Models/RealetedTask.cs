@@ -48,6 +48,7 @@ namespace project.Models
             return dbs.getSTasks(userEmail,teamId);
         }
 
+<<<<<<< HEAD
          public int changeQ()
          {
             
@@ -95,6 +96,13 @@ namespace project.Models
             return dbs.validateTime(this);
         }
 
+=======
+<<<<<<< HEAD
+        public List<RealetedTask> getTTasks(string data)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+=======
+>>>>>>> 46340d533ddb019545e92675b591cf6eaf874559
         //public List<RealetedTask> getTTasks(string data)
         //{
         //   TeamDBServices dbs = new TeamDBServices();
@@ -103,10 +111,11 @@ namespace project.Models
         //{
         //    TeacherDBservices dbs = new TeacherDBservices();
 
+>>>>>>> 05ec3d2113ac997caa86252ad564d14091767f7a
 
-        //    string teamId = data;
+            string teamId = data;
 
-        //    return dbs.getTTasks(teamId);
-        //}
+            return dbs.getTTasks(teamId);
+        }
     }
 }
