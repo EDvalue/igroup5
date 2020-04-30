@@ -298,6 +298,7 @@
     <Content Include="images\EDvalueSmall.png" />
     <Content Include="images\excel-icon.png" />
     <Content Include="images\file.jpg" />
+    <Content Include="images\fileUpload.png" />
     <Content Include="images\History.jpg" />
     <Content Include="images\in-person.png" />
     <Content Include="images\lock.jpg" />

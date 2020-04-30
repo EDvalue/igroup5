@@ -616,10 +616,118 @@ namespace project.Models.DAL
                     con.Close();
                 }
             }
-
-
             return this;
+        }
 
+        public int validateTime(RealetedTask rt)
+        {
+            SqlConnection con = null;
+            List<Inteligence> list = new List<Inteligence>();
+            int num = 0;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                int qnum = getNum(rt);
+                String selectSTR = "select* from [dbo].[PerformQuestionnaire] as pq inner join RealatedTo as rt on pq.TaskId=rt.TaskId and rt.TaskId='"+rt.Task.TaskId+"' and pq.StudentId='"+rt.Task.Title+"' and pq.[QuestionnaireId]='"+rt.Task.QuizList[qnum].QuizID+"' where (getDate()>=rt.ForDate) and (getDate()<rt.[OpenTill] or getDate()<pq.Ptime)";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    num = 1;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return num;
+        }
+
+        private int getNum(RealetedTask arg)
+        {
+            int i= -1;
+            int num=0;
+            foreach(var a in arg.Task.QuizList)
+            {
+                i++;
+                if (a.TaskId == "1")
+                {
+
+                    num=i;
+                    break;
+                }
+            }
+
+            return num;
+        }
+
+        public void deletePQ(Quiz del,string taskId)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Delete from PerformQuestionnaire where  [QuestionnaireId]='{0}' and [TaskId]='{1}'  and [StudentId]='{2}'",del.QuizID,taskId,del.Title); ;
+            String cStr = sb.ToString();
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+
+
+            }
         }
 
         public void update()

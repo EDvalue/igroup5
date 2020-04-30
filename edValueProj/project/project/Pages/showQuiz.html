@@ -216,76 +216,82 @@
 
         function connectForm() {
 
+            mode = localStorage['quiz_mode'];
+            if (mode != "watch") {
+                $("input[type='file']").change(fileperform)
 
-            $("input[type='file']").change(fileperform)
+                $('.upl').click(function () {
 
-            $('.upl').click(function () {
+                    $('#' + $(this).attr('myFile')).trigger('click');
 
-                $('#' + $(this).attr('myFile')).trigger('click');
-
-            });
-
-            $('.sf').click(function () {
-
-                var data = new FormData();
-                LufDiv = this.parentNode;
-                var file = $('#' + $(this).attr('toSave')).get(0).files[0];
-                data.append("UploadedFile", file);
-
-                $.ajax({
-                    type: "POST",
-                    url: "../api/upload/uploadFile",
-                    contentType: false,
-                    processData: false,
-                    data: data,
-                    success: PostDocSuccess,
-                    error: PostDocError
                 });
 
-            });
+                $('.sf').click(function () {
+
+                    var data = new FormData();
+                    LufDiv = this.parentNode;
+                    var file = $('#' + $(this).attr('toSave')).get(0).files[0];
+                    data.append("UploadedFile", file);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "../api/upload/uploadFile",
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: PostDocSuccess,
+                        error: PostDocError
+                    });
+
+                });
 
 
-            $("#quizForm").submit(function () {
+                $("#quizForm").submit(function () {
 
-                uploadeForm();
-                return false;
-            });
+                    uploadeForm();
+                    return false;
+                });
 
-            //drag files
-            document.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
-            daArr = $(".filedrag");
-            for (d = 0; d <= daArr.length; d++) {
-
-                $(daArr[d]).on('drop', (e) => {
+                //drag files
+                document.addEventListener('drop', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    e.dataTransfer = e.originalEvent.dataTransfer
-                    let fileInput = document.querySelector("#" + e.target.parentNode.getAttribute('name'));
-
-                    for (const f of e.dataTransfer.files) {
-                        console.log('File(s) you dragged here: ', f.path)
-                        fileInput.files = e.dataTransfer.files;
-                        $("#" + fileInput.id).trigger('change');
-                    }
                 });
-                $(daArr[d]).on('dragover', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(".filedrag").css("borderColor", "#007bff")
+                daArr = $(".filedrag");
+                for (d = 0; d <= daArr.length; d++) {
 
-                });
-                $(daArr[d]).on('dragleave', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(".filedrag").css("borderColor", "#ccc")
+                    $(daArr[d]).on('drop', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.dataTransfer = e.originalEvent.dataTransfer
+                        let fileInput = document.querySelector("#" + e.target.parentNode.getAttribute('name'));
 
-                });
+                        for (const f of e.dataTransfer.files) {
+                            console.log('File(s) you dragged here: ', f.path)
+                            fileInput.files = e.dataTransfer.files;
+                            $("#" + fileInput.id).trigger('change');
+                        }
+                    });
+                    $(daArr[d]).on('dragover', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(".filedrag").css("borderColor", "#007bff")
+
+                    });
+                    $(daArr[d]).on('dragleave', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(".filedrag").css("borderColor", "#ccc")
+
+                    });
+
+                }
+            }
+            else {
+
+               $("#main *").prop('disabled', 'disabled')
 
             }
-
         }
 
         function PostDocSuccess(data) {
@@ -357,8 +363,6 @@
                 ajaxCall('PUT', '../api/Student/updateQ', JSON.stringify(el), postQSuccess, postQError);
 
             }
-
-
 
         }
 
