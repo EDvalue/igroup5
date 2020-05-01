@@ -25,7 +25,7 @@
         var userOBJ;
 
         function init() {
-
+            
             if (localStorage["userMode"]) {
 
                 perform_showQuiz_mode = localStorage["userMode"];
@@ -88,7 +88,7 @@
                 } else if (el.Question[qu].Type == 'U') {
 
                     quizString += `<div id='OpenUploadBlock'>
-                                        <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div></div>
+                                        <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div><div class="loader"></div></div>
                                                 <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip"  id='file${qu}' />
                                                 <div id='upload-BTN'>
                                                    <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
@@ -130,6 +130,7 @@
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
             //CKEDITOR.replace('#textarea');
+            $(".loader").hide();
             ckReplace()
             connectCHK();
             connectForm();
@@ -147,8 +148,7 @@
                 this.value = "";
             } else {
 
-
-                $("#" + this.parentNode.id + " .dl").remove();
+                //$("#" + this.parentNode.id + " .dl").remove();
                 if (file.value.split('.')[1] == "xlsx" || file.value.split('.')[1] == "xls") {
                     $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/excel-icon.png" />`)
                 } else if (file.value.split('.')[1] == "pdf") {
@@ -178,6 +178,7 @@
 
         function fillANS() {
 
+            
             for (q in el.Question) {
 
                 if (el.Question[q].Type == 'O') {
@@ -205,12 +206,18 @@
                             $(`#${q} .filedrag`).html(`<img src="../images/word-icon.png" />`);
                         } else if (ext == "pdf") {
                             $(`#${q} .filedrag`).html(`<img src="../images/pdf-icon.jpg" />`);
+                        } else if (ext == "jpeg" || ext == "jpg" || ext == "png") {
+                            $(`#${q} .filedrag`).html(`<img src="${el.Question[q].AnsContent}" />`);
+                        } else if (ext == 'rar' || ext == 'zip') {
+                            $(`#${q} .filedrag`).html(`<img src="../images/rar-icon.png" />`)
+
                         }
                     }
 
                 }
             }
 
+            
         }
 
 
@@ -227,7 +234,7 @@
                 });
 
                 $('.sf').click(function () {
-
+                      $('.loader').show();
                     var data = new FormData();
                     LufDiv = this.parentNode;
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
@@ -296,7 +303,7 @@
 
         function PostDocSuccess(data) {
             console.log(data);
-
+              
             $(LufDiv).children('.link').remove();
             $(LufDiv).children('.dl').remove();
 
@@ -306,8 +313,10 @@
 
         function PostDocError(err) {
             console.log(err);
+            $('.loader').hide();
+            swal('העלאת קובץ נכשלה')
         }
-
+        
         function ckReplace() {
             var areas = $(".ckeditor");
             $.each(areas, function (i, area) {

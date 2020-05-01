@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-    <link href="../CSS/newQuiz.css" rel="stylesheet" />
-    <script src="../Scripts/ajaxCalls.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="../js/js.js"></script>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/SquizList.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
-
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -31,8 +31,10 @@
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];
 
         $(document).ready(function () {
+
             $("#Nactive,#activeO,#activeC,#ch_q_div").hide();
             userOBJ = JSON.parse(localStorage["user"]);
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             teamOBJ = JSON.parse(localStorage["active_student_team"]);
 
             userEmail = userOBJ.Mail.replace(".", ",");
@@ -40,20 +42,11 @@
 
 
 
-            // user = JSON.parse(localStorage["user"]);
-            //bodymail = user.Mail.split(".")[0];
-            //endmail = user.Mail.split(".")[1];
-            //userEmail = bodymail + "," + endmail;
-
-
-
-
-            //ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
-            //console.log(IPoints)
-
             ajaxCall("GET", "../api/Student/getSTasks/" + getTask, "", getSTasksSuccess, getSTasksError)
 
         });
+
+
 
         function getSTasksSuccess(data) {
             console.log(data);
@@ -62,7 +55,7 @@
                 if (data[x].Task.Grade == 0) {
 
                     NactiveArr.push(data[x])
-                } else if (new Date(data[x].TillDate) < new Date()) {
+                } else if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
 
                     activeOpenArr.push(data[x])
                 } else { activeCloseArr.push(data[x]) }
@@ -73,11 +66,29 @@
             printActiveClose(activeCloseArr);
 
             $("#Nactive,#activeO,#activeC").show();
-            $("#activeC .cq").hide();
+            $("#activeC .cq,.fb_content").hide();
             $("#activeO .cq").click(changeQ);
+            $(".fb").click(showNote)
+            $("#activeC .imgQuestionnire").click(function () {
+                chooseQuestionnaire(this, activeCloseArr, 'watch')
+            });
 
+            $("#activeO .imgQuestionnire").click(function () {
+                chooseQuestionnaire(this, activeOpenArr, 'edit')
+            })
+
+            $("#Nactive img").click(function () {
+
+                if (this.getAttribute('title') == "פתח לביצוע")
+                    chooseQuestionnaire(this, NactiveArr, 'new')
+                else {
+
+                }
+            });
         }
-
+        function showNote() {
+            $(this).children('.fb_content').slideToggle()
+        }
         function changeQ() {
 
             taskId = this.getAttribute('task');
@@ -88,8 +99,8 @@
                     cq_activeTask = activeOpenArr[rt];
                     for (q in activeOpenArr[rt].Task.QuizList) {
                         str += `<div class="cq_questionnaire">
-                                  <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
-                                </div>`
+                                          <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
+                                        </div>`
                     }
 
                     $("#ch_q_div").html(str);
@@ -101,33 +112,33 @@
         }
 
         function confirmChange() {
-              val = this;
-                swal({
+            val = this;
+            swal({
 
-                 title: " ?האם אתה בטוח",
-                 text:"העבודה שביצעת בשאלון הנוכחי תמחק!",
-                  icon: "warning",
-                    buttons: true,
-                    dangerMode: true
+                title: " ?האם אתה בטוח",
+                text: "העבודה שביצעת בשאלון הנוכחי תמחק!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (confirm) {
+                    if (confirm) {
+                        cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].TaskId = 2;
+                        title = cq_activeTask.Task.Title;
+                        cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].Title = userOBJ.Mail;
+                        ajaxCall("PUT", "../api/Student/changeQ", JSON.stringify(cq_activeTask), changeQSuccess, changeQError)
+                        cq_activeTask.Task.Title = title;
+
+                    }
+                    else {
+
+                        swal({
+
+                            title: "לא בוצעו שינויים",
+                            icon: "info",
+                        })
+                    }
                 })
-                 .then(function (confirm) {
-                     if (confirm) {
-                         cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].TaskId = 2;
-                         title = cq_activeTask.Task.Title;
-                         cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].Title = userOBJ.Mail;
-                         ajaxCall("PUT","../api/Student/changeQ",JSON.stringify(cq_activeTask),changeQSuccess,changeQError)
-                         cq_activeTask.Task.Title = title;
-
-                     }
-                     else {
-
-                         swal({
-
-                             title: "לא בוצעו שינויים",
-                             icon: "info",
-                         })
-                     }
-                 })
         }
 
 
@@ -140,7 +151,7 @@
                 } else if (cq_activeTask.Task.QuizList[k].TaskId == 2) {
                     cq_activeTask.Task.QuizList[k].TaskId = 1;
                     cq_activeTask.Task.QuizList[k].Title = cq_activeTask.Task.Title;
-                    quizC=cq_activeTask.Task.QuizList[k];
+                    quizC = cq_activeTask.Task.QuizList[k];
                 }
             }
 
@@ -156,34 +167,43 @@
 
         function printNactive(data) {
             str = "";
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour:'numeric',minute:'numeric' };
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (x in data) {
                 str += `
-                     <div id="Task" class="col-lg-4">
+                             <div id="Task" class="col-md-6 col-12">
 
-                        <div class="content_new">
-                            <div class="name_date">
-                                <p>${data[x].Task.Title}</p>
+                                <div class="content_new">
+                                    <div class="name_date">
+                                        <p>${data[x].Task.Title}</p>`
+                if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
+                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorO" name="caret-back-outline"></ion-icon>`
+                } else {
+                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorC" name="caret-back-outline"></ion-icon>`
+                }
 
-                                <p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
+                str += `</div>
 
-                            <div id="intelliO" class="imgQuiz">`
+                                    <div id="intelliO" class="imgQuiz">`
                 for (i in data[x].Task.QuizList) {
-                    str += `<img title="פתח לביצוע" onclick="chooseQuestionnaire(this,NactiveArr,'new')" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
+                        str += `<img title="פתח לביצוע"   task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    } else {
+                        str += `<img title="מטלה טרם נפתחה" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    }
+
                 }
 
                 str += ` </div>
-                            <div id="ladder">
-                                <p>מומלץ מאוד</p>
-                                <ion-icon name="analytics-outline" size="large"></ion-icon>
-                                <p>פחות מומלץ</p>
+                                    <div id="ladder">
+                                        <p>מומלץ מאוד</p>
+                                        <ion-icon name="analytics-outline" size="large"></ion-icon>
+                                        <p>פחות מומלץ</p>
 
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
 
 
-                    </div>`;
+                            </div>`;
 
             }
             $("#Nactive #tasks").text("")
@@ -223,45 +243,46 @@
         }
 
         function createSmallTask(data, arg, num) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour:'numeric',minute:'numeric' };
-            str = `<div id="SmallTask" class="col-lg-4">
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            str = `<div id="SmallTask" class="col-lg-4 col-md-6 col-12">
 
-                        <div class="content_active">
-                            <div class="right">
-                                <div class="Name">
-                                    <p>${data.Task.Title}</p>
-                                </div>
-                                <div class="Time">
-                                    <p>${new Date(data.TillDate).toLocaleDateString(undefined, options)}</p><ion-icon class='color${arg}' name="caret-back"></ion-icon>
-                                </div>
-                                <div class="opt">
-                                    <div class="fb">
-                                        <ion-icon name="checkmark" class='color${arg}' size="large"></ion-icon>
-                                        <p>צפה במשוב</p>
-                                    </div>
-                                   <div task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" class="cq">
-                                        <ion-icon name="repeat" class='color${arg}' size="large"></ion-icon>
+                                <div class="content_active">
+                                    <div class="right">
+                                        <div class="Name">
+                                            <p>${data.Task.Title}</p>
+                                        </div>
+                                        <div class="Time">
+                                            <p>${new Date(data.TillDate).toLocaleDateString(undefined, options)}</p><ion-icon class='color${arg}' name="caret-back"></ion-icon>
+                                        </div>
+                                        <div class="opt">
+                                            <div class="fb">
+                                                <ion-icon name="checkmark" class='color${arg}' size="large"></ion-icon>
+                                                <p>צפה במשוב</p>
+                                                 <div class='fb_content'><div class="note">${data.Note ? data.Note : "מטלה טרם קיבלה משוב"}</div><div class='score'>${data.Score ? data.Score : "none"}</div></div>
+                                            </div>
+                                           <div task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" class="cq">
+                                                <ion-icon name="repeat" class='color${arg}' size="large"></ion-icon>
 
-                                        <p>החלף שאלון</p>
+                                                <p>החלף שאלון</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div id="left">
-                                <div class="classDate">
-                                    <p>${new Date(data.ForDate).toLocaleDateString(undefined, options)}</p>
-                                </div>
-                                <div class="imgQuestionnire">`;
+                                    <div id="left">
+                                        <div class="classDate">
+                                            <p>${new Date(data.ForDate).toLocaleDateString(undefined, options)}</p>
+                                        </div>
+                                        <div class="imgQuestionnire">`;
             if (arg == 'O') {
-                str += ` <img title="פתח לביצוע" onclick="chooseQuestionnaire(this,activeOpenArr,'edit')" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+                str += ` <img title="פתח לביצוע"  task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             } else {
-                str += `<img title="צפייה" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" onclick="chooseQuestionnaire(this,activeCloseArr,'watch')" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+                str += `<img title="צפייה" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}"  src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             }
 
             str += ` </div>
 
-                            </div>
-                        </div>
-                    </div>`
+                                    </div>
+                                </div>
+                            </div>`
             return str;
 
         }
@@ -304,9 +325,6 @@
                 }
 
             }
-
-
-
 
 
         }
@@ -382,6 +400,7 @@
 
 </head>
 <body dir="rtl">
+    <div id="disbackg"></div>
     <div id="ch_q_div"></div>
     <div id="container">
 
@@ -402,6 +421,17 @@
                 <!--<img src="../images/MindCet.png" />-->
             </div>
 
+            <div id="sNav">
+                <div id="user_manage">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    </button>
+                    <div id="nav_cnt" class="dropdown-menu">
+                        <p id="disconnect" onclick="disconnect()">התנתק</p>
+                        <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -412,36 +442,6 @@
             </div>
 
             <div id="tasks" class="row">
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_new">
-                        <div class="name_date">
-                            <p>שם משימה</p>
-
-                            <p>עבור:</p><span>22/05/2020</span> <ion-icon name="caret-back-outline"></ion-icon>
-                        </div>
-
-                        <div id="intelliO" class="imgQuiz">
-
-                            <img src="../images/MovementalN.jpg" />
-                            <img src="../images/SpatialN.jpg" />
-                            <img src="../images/tongueN.jpg" />
-                            <img src="../images/musicallyN.jpg" />
-                            <img src="../images/PersonalN.jpg" />
-                            <img src="../images/logicallyN.jpg" />
-                        </div>
-                        <div id="ladder">
-                            <p>מומלץ מאוד</p>
-                            <ion-icon name="analytics-outline" size="large"></ion-icon>
-                            <p>פחות מומלץ</p>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
 
 
             </div>
@@ -457,40 +457,6 @@
 
             <div id="tasks" class="row">
 
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
             </div>
 
@@ -504,145 +470,6 @@
             </div>
 
             <div id="tasks" class="row">
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
 
 
             </div>
