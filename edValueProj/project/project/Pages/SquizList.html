@@ -23,34 +23,35 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script>
-        var userOBJ;
+        var userOBJ;//save the user that active in the page;
         var pArr = [];
-        var IPoints;
-        var selectedTask;
-        var cq_activeTask;
-        var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];
+        var selectedTask;//save the selected open task;
+        var cq_activeTask;//save the realated task for change quiz;
+        var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];//arrs of related tasks
 
         $(document).ready(function () {
 
-            $("#Nactive,#activeO,#activeC,#ch_q_div").hide();
-            userOBJ = JSON.parse(localStorage["user"]);
-            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
-            teamOBJ = JSON.parse(localStorage["active_student_team"]);
+            $("#Nactive,#activeO,#activeC,#ch_q_div").hide();//hiding tasks till div will be ready
+            if(localStorage["user"])
+                userOBJ = JSON.parse(localStorage["user"]);
 
-            userEmail = userOBJ.Mail.replace(".", ",");
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);//print the user name in manage user div
+
+            if(localStorage["active_student_team"])
+              teamOBJ = JSON.parse(localStorage["active_student_team"]);
+
+            userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;
-
-
 
             ajaxCall("GET", "../api/Student/getSTasks/" + getTask, "", getSTasksSuccess, getSTasksError)
 
         });
 
 
-
         function getSTasksSuccess(data) {
-            console.log(data);
+            //task of student in team 
             allTask = data;
+            //sort tasks
             for (x in data) {
                 if (data[x].Task.Grade == 0) {
 
@@ -61,19 +62,21 @@
                 } else { activeCloseArr.push(data[x]) }
             }
 
+            //print task
             printNactive(NactiveArr);
             printActiveOpen(activeOpenArr);
             printActiveClose(activeCloseArr);
 
+            //connect page
             $("#Nactive,#activeO,#activeC").show();
             $("#activeC .cq,.fb_content").hide();
             $("#activeO .cq").click(changeQ);
             $(".fb").click(showNote)
-            $("#activeC .imgQuestionnire").click(function () {
+            $("#activeC img").click(function () {
                 chooseQuestionnaire(this, activeCloseArr, 'watch')
             });
 
-            $("#activeO .imgQuestionnire").click(function () {
+            $("#activeO img").click(function () {
                 chooseQuestionnaire(this, activeOpenArr, 'edit')
             })
 
@@ -86,11 +89,14 @@
                 }
             });
         }
+
         function showNote() {
+            //toggle teache fb for task quiz performance
             $(this).children('.fb_content').slideToggle()
         }
-        function changeQ() {
 
+        function changeQ() {
+            //open replace quiz
             taskId = this.getAttribute('task');
             qId = this.getAttribute('quiz');
             str = "";
@@ -98,23 +104,31 @@
                 if (activeOpenArr[rt].Task.TaskId == taskId) {
                     cq_activeTask = activeOpenArr[rt];
                     for (q in activeOpenArr[rt].Task.QuizList) {
-                        str += `<div class="cq_questionnaire">
+                        if (activeOpenArr[rt].Task.QuizList[q].QuestionnairId != qId) {
+                            str += `<div class="cq_questionnaire">
                                           <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
                                         </div>`
+                        } 
+                       
                     }
-
-                    $("#ch_q_div").html(str);
-                    $("#ch_q_div").slideDown("slow");
-                    $(".cq_questionnaire>img").click(confirmChange)
+                    if (str != "") {
+                        $("#ch_q_div").html(str);
+                        $("#ch_q_div").slideDown("slow");
+                        $(".cq_questionnaire>img").click(confirmChange);
+                    } else {
+                        swal('אין שאלון זמינה להחלפה');
+                    }
+                   
                 }
             }
 
         }
 
         function confirmChange() {
+            //cinfirm replace quiz
+            //if confirm all work in task will be deleted
             val = this;
             swal({
-
                 title: " ?האם אתה בטוח",
                 text: "העבודה שביצעת בשאלון הנוכחי תמחק!",
                 icon: "warning",
@@ -128,10 +142,8 @@
                         cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].Title = userOBJ.Mail;
                         ajaxCall("PUT", "../api/Student/changeQ", JSON.stringify(cq_activeTask), changeQSuccess, changeQError)
                         cq_activeTask.Task.Title = title;
-
                     }
                     else {
-
                         swal({
 
                             title: "לא בוצעו שינויים",
@@ -143,7 +155,8 @@
 
 
         function changeQSuccess(data) {
-            console.log(data)
+            //quiz chanhe success;
+            //open the asked quiz as new;
             var quizC;
             for (k in cq_activeTask.Task.QuizList) {
                 if (cq_activeTask.Task.QuizList[k].TaskId == 1) {
@@ -152,6 +165,7 @@
                     cq_activeTask.Task.QuizList[k].TaskId = 1;
                     cq_activeTask.Task.QuizList[k].Title = cq_activeTask.Task.Title;
                     quizC = cq_activeTask.Task.QuizList[k];
+                    
                 }
             }
 
@@ -162,10 +176,13 @@
         }
 
         function changeQError(err) {
+            //change quiz failed;
+            swal('משהו השתבש בניסיון להחליף שאלון')
             console.log(err)
         }
 
         function printNactive(data) {
+            //print tasks that non quiz was selected in them;
             str = "";
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (x in data) {
@@ -211,6 +228,7 @@
         }
 
         function printActiveOpen(data) {
+            //print task selected and open;
             str = "";
             for (x in data) {
                 var num = getQnum(data[x].Task)
@@ -220,8 +238,9 @@
             $("#activeO #tasks").text("")
             $("#activeO #tasks").append(str)
         }
-        function getQnum(arg) {
 
+        function getQnum(arg) {
+            //return the index of quiz in arr of task;
             for (a in arg.QuizList) {
                 if (arg.QuizList[a].TaskId == 1) {
 
@@ -229,9 +248,11 @@
                 }
             }
         }
-        function printActiveClose(data) {
-            str = "";
 
+        function printActiveClose(data) {
+            //print task selected and close;
+            //able to watch;
+            str = "";
             for (x in data) {
 
                 var num = getQnum(data[x].Task)
@@ -243,6 +264,7 @@
         }
 
         function createSmallTask(data, arg, num) {
+            //create close/open active task div;
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             str = `<div id="SmallTask" class="col-lg-4 col-md-6 col-12">
 
@@ -330,8 +352,9 @@
         }
 
         function validateTimeSuccess(data) {
+            //validate of real time aviability of task success
             arr = allTask;
-            if (!data) {
+            if (data) {
 
                 for (t in arr) {
                     if (arr[t].Task.TaskId == selectedTask.getAttribute('task')) {
@@ -366,7 +389,7 @@
         }
 
         function validateTimeError(err) {
-
+            swal('משהו השתבש נסה לרענן את הדף')
         }
 
         function getSTasksError(err) {

@@ -18,26 +18,35 @@
     <title></title>
 
     <script>
+
         var str;
-        var el
-        var perform_showQuiz_mode;
-        var LufDiv;
-        var userOBJ;
+        var el; //save the quiz object;
+        var modeQuiz;//save the reason to open this page;
+        var perform_showQuiz_mode;//save who is in the page;
+        var LufDiv;//save the last element upload active;
+        var userOBJ;//save the user that active in the page;
 
         function init() {
             
-            if (localStorage["userMode"]) {
-
+            if (localStorage["userMode"]) 
                 perform_showQuiz_mode = localStorage["userMode"];
-            }
-            userOBJ = JSON.parse(localStorage['user']);
+            
+            if(localStorage['user'])
+                userOBJ = JSON.parse(localStorage['user']);
+
+            if(localStorage['quiz_mode'])
+                modeQuiz = localStorage['quiz_mode'];
+
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
-            el = JSON.parse(localStorage['quiz']);
+
+            if(localStorage['quiz'])
+                el = JSON.parse(localStorage['quiz']);//read the quiz
+
             quizString += `<div id='QuizTitle'><h1>${el.Title}</h1> </div>
                                         <div id='main' dir="rtl"><form id=quizForm>`
             for (qu in el.Question) {
-
+                //loop over the question in the quiz for print them;
                 quizString += `<div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class="qu" Qtype='${el.Question[qu].Type}'>`
                 if (el.Question[qu].ImgLink != "" || el.Question[qu].VideoLink != "") {
                     quizString += `<div id="extraData">`
@@ -123,19 +132,21 @@
                 quizString += '</div>'
 
             }
+
             if (perform_showQuiz_mode == "student") {
                 quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
+            } else {
+                //teacher note and grade
             }
 
             quizString += '</div></form>'
             document.getElementsByTagName('body')[0].innerHTML += quizString;
-            //CKEDITOR.replace('#textarea');
             $(".loader").hide();
             ckReplace()
             connectCHK();
             connectForm();
-            if (perform_showQuiz_mode == "student") {
-
+            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode="teacher"&&modeQuiz=="check")) {
+                //fill answer of quiz
                 fillANS();
             }
 
@@ -175,10 +186,8 @@
             }
         }
 
-
         function fillANS() {
-
-            
+            //this function fill the ans of student; 
             for (q in el.Question) {
 
                 if (el.Question[q].Type == 'O') {
@@ -216,25 +225,30 @@
 
                 }
             }
-
-            
         }
-
 
         function connectForm() {
 
-            mode = localStorage['quiz_mode'];
-            if (mode != "watch") {
+            if (modeQuiz != "watch") {
+
+                window.onbeforeunload = function () {
+                    return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";
+                  
+                };
+
+                $("#quizForm").submit(function () {
+                    uploadeForm();
+                    return false;
+                });
+
                 $("input[type='file']").change(fileperform)
 
                 $('.upl').click(function () {
-
                     $('#' + $(this).attr('myFile')).trigger('click');
-
                 });
 
                 $('.sf').click(function () {
-                      $('.loader').show();
+                    $('.loader').show();
                     var data = new FormData();
                     LufDiv = this.parentNode;
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
@@ -249,29 +263,23 @@
                         success: PostDocSuccess,
                         error: PostDocError
                     });
-
-                });
-
-
-                $("#quizForm").submit(function () {
-
-                    uploadeForm();
-                    return false;
                 });
 
                 //drag files
+
                 document.addEventListener('drop', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                 });
-                daArr = $(".filedrag");
-                for (d = 0; d <= daArr.length; d++) {
+                daArr = $(".filedrag");//read all upload div in page;
 
+                for (d = 0; d <= daArr.length; d++) {
+                    //connect the file drag
                     $(daArr[d]).on('drop', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         e.dataTransfer = e.originalEvent.dataTransfer
-                        let fileInput = document.querySelector("#" + e.target.parentNode.getAttribute('name'));
+                        let fileInput = document.querySelector("#file" + e.target.parentNode.parentNode.parentNode.id);
 
                         for (const f of e.dataTransfer.files) {
                             console.log('File(s) you dragged here: ', f.path)
@@ -279,12 +287,14 @@
                             $("#" + fileInput.id).trigger('change');
                         }
                     });
+
                     $(daArr[d]).on('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         $(".filedrag").css("borderColor", "#007bff")
 
                     });
+
                     $(daArr[d]).on('dragleave', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -293,17 +303,14 @@
                     });
 
                 }
-            }
-            else {
-
-               $("#main *").prop('disabled', 'disabled')
-
-            }
+                //else disabled page if the user dont should create any change
+                //in the quiz performing
+            } else {$("#main *").prop('disabled', 'disabled')}
         }
 
         function PostDocSuccess(data) {
-            console.log(data);
-              
+            //upload doc of student success
+              $('.loader').hide();
             $(LufDiv).children('.link').remove();
             $(LufDiv).children('.dl').remove();
 
@@ -312,12 +319,13 @@
         }
 
         function PostDocError(err) {
-            console.log(err);
+            //faild of uploaf file of student;
             $('.loader').hide();
             swal('העלאת קובץ נכשלה')
         }
         
         function ckReplace() {
+            //connect all text area to CKeditor;
             var areas = $(".ckeditor");
             $.each(areas, function (i, area) {
                 CKEDITOR.replace(area, {
@@ -327,9 +335,9 @@
         }
 
         function uploadeForm() {
-            mode = localStorage['quiz_mode'];
-            let obj;
+            //submit quiz of student
 
+            let obj;
             questionsHolder = $(".qu");
 
             for (q in el.Question) {
@@ -363,20 +371,22 @@
                 }
             }
 
-            if (mode == 'new') {
-                console.log(el)
+            if (modeQuiz == 'new') {
+                tit = el.Title;
                 el.Title = userOBJ.Mail;
                 ajaxCall('POST', '../api/Student/postQ', JSON.stringify(el), postQSuccess, postQError);
+                el.Title=tit;
             } else if (mode == 'edit') {
-                el.Title = userOBJ.Mail;
+                tit = el.Title;
+                el.Title = userOBJ.Mail;//save the mail of user submitter
                 ajaxCall('PUT', '../api/Student/updateQ', JSON.stringify(el), postQSuccess, postQError);
-
+                el.Title=tit;//return the original title
             }
 
         }
 
         function postQSuccess(data) {
-            console.log(data);
+            //the quiz saved succesfully;
 
             swal({
 
@@ -391,10 +401,12 @@
         }
 
         function postQError(err) {
-            console.log(err);
+            //failed save quiz
+            swal("משהו השתבש בניסיון לשמור את המשימה")
         }
 
         function getId(url) {
+            //you tube link creator;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
 
@@ -404,6 +416,7 @@
         }
 
         function connectCHK() {
+            //connect all checkboxs
             $("input:checkbox").on('click', function () {
                 // in the handler, 'this' refers to the box clicked on
                 var $box = $(this);

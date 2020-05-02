@@ -10,8 +10,6 @@ namespace project.Models
         string name;
         string imgLink;
 
-
-
         public string Name { get => name; set => name = value; }
         public string ImgLink { get => imgLink; set => imgLink = value; }
 

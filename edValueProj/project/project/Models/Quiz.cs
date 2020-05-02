@@ -47,12 +47,14 @@ namespace project.Models
 
         public int PostQuiz()
         {
+            
            TeacherDBservices dbs = new TeacherDBservices();
             return dbs.PostQuiz(this);
         }
 
         public int postQ()
         {
+
             StudentDBServices dbs = new StudentDBServices();
             return dbs.postQ(this);
         }
@@ -69,7 +71,6 @@ namespace project.Models
             dbs2.update();
             return 1;
         }
-
 
         private DataTable closeQ(Quiz q, DataTable dt)
         {

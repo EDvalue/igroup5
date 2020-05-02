@@ -641,9 +641,33 @@ namespace project.Models.DAL
                 // get a reader
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
-                while (dr.Read())
-                {   // Read till the end of the data into a row
-                    num = 1;
+                if (dr.HasRows)
+                {
+                    if (con != null)
+                    {
+                        con.Close();
+                    }
+                    return 1;
+                }
+                else
+                {
+                    con.Close();
+                    dr = null;
+                    cmd.Connection = null;
+                    con = connect("DBConnectionString");
+
+                    String selectSTR2 = "select* from  RealatedTo as rt where (getDate()>=rt.ForDate) and (getDate()<rt.[OpenTill]) and rt.TaskId='" + rt.Task.TaskId + "' ";
+                    SqlCommand cmd2 = new SqlCommand(selectSTR2, con);
+                    SqlDataReader dr2 = cmd2.ExecuteReader();
+
+                    if (dr2.HasRows)
+                    {
+                        if (con != null)
+                        {
+                            con.Close();
+                        }
+                        return 1;
+                    }
                 }
 
 
