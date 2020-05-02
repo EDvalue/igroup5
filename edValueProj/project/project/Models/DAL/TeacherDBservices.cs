@@ -94,7 +94,7 @@ namespace project.Models.DAL
                         q.FbList = new List<FeedBack>();
                         q.Question = new List<Question>();
                         q.QuizID = dr["QuestionnaireId"].ToString();
-                        q.Inteligence = new Inteligence(0, dr["IntelligenceName"].ToString(), dr["QEnglishName"].ToString());
+                        q.Inteligence = new Inteligence(0, dr["IntelligenceName"].ToString(), dr["QEnglishName"].ToString(),0);
                         q.FbList = getFBbyId(q.QuizID);
                     }
                    

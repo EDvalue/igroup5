@@ -27,7 +27,10 @@ namespace project.Controllers
         public User conect([FromBody] Dictionary<string,string> con)
         {
             SystemDBservices dbs = new SystemDBservices();
-            return dbs.conect(con);
+            User u= dbs.conect(con);
+            if(u is Student)
+              ((Student)u).updateINT();
+            return u;
         }
 
         [HttpPost]

@@ -156,7 +156,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 String part1 = " select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy,tbl.IntelligenceName,tbl.[Name],tbl.creationTime,tbl.QuestionnaireId";
-                String part2 = " ,pio.points,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],pq.Ptime,pq.Grade, ";
+                String part2 = " ,pio.points,pio.Spoints,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],pq.Ptime,pq.Grade, ";
                 String part3 = " case when pq.[StudentId]='"+userEmail+"' then 1 else 0 END as IsChoose ";
                 String part4 = "  from (select t.taskId,t.Title,t.SubjectName,rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy,q.IntelligenceName,i.[Name],max(q.creationTime)as creationTime,max(q.QuestionnaireId) as QuestionnaireId ";
                 String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='"+teamId+"' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
@@ -219,7 +219,7 @@ namespace project.Models.DAL
                         if (q.TaskId == "1") {
                             rt.Task.Grade =1;
                         }
-                        q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(), dr["IntelligenceName"].ToString());
+                        q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(),dr["IntelligenceName"].ToString(),Convert.ToInt32(dr["Spoints"]));
           
                     }
                         
@@ -754,8 +754,68 @@ namespace project.Models.DAL
                     con.Close();
                 }
 
-
             }
+        }
+
+        public StudentDBServices getQ(string mail)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select pq.StudentId,q.IntelligenceName,pq.Grade from [dbo].[PerformQuestionnaire] as pq inner join  Questionnaire as q on q.QuestionnaireId=pq.QuestionnaireId where pq.StudentId='"+mail+"' and datediff(MONTH,GETDate(),pq.SubmissionDate)<=3", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+        }
+        public StudentDBServices getPIN(string mail)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select* from PointsInIntelligence as pi  where pi.StudentEmail='"+mail+"'", con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
         }
 
         public void update()

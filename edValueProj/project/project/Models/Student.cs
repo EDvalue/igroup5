@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using project.Models.DAL;
+using System.Data;
 
 
 namespace project.Models
@@ -71,6 +72,45 @@ namespace project.Models
             }           
                 return C;
         }
+        public void updateINT()
+        {
+            StudentDBServices dbs1 = new StudentDBServices();
+            StudentDBServices dbs2 = new StudentDBServices();
 
+            dbs1 = dbs1.getQ(this.Mail);
+            dbs2 = dbs2.getPIN(this.Mail);
+            calINT(dbs1.dt, dbs2.dt);
+
+            dbs2.update();
+
+        }
+
+        private DataTable calINT(DataTable q, DataTable i)
+        {
+
+            Dictionary<string,List<int>> dict = new Dictionary<string, List<int>>();
+            foreach (DataRow dr in q.Rows)
+            {
+                string intl = dr["IntelligenceName"].ToString();
+                int score = Convert.ToInt32(dr["Grade"]);
+                if (!dict.ContainsKey(intl))
+                {
+                    dict.Add(intl, new List<int>());
+                    
+                }
+                dict[intl].Add(score);
+            }
+
+            foreach(DataRow dr in i.Rows)
+            {
+                if (dict.ContainsKey(dr["IntelligenceName"].ToString()))
+                {
+                    int len = dict[dr["IntelligenceName"].ToString()].Count;
+                    dr["Spoints"] = (int)(dict[dr["IntelligenceName"].ToString()].Take(len).Average());
+                }
+
+            }
+                return i;
+        }
     }
 }
