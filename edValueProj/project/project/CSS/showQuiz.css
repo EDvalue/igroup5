@@ -8,6 +8,11 @@ input[type=file] {
 .filedrag {
     border: 2px dashed #ccc;
     border-radius: 20px;
+    box-shadow: 1px 1px #ccc;
+    background-image: url('../images/fileUpload.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:60px;
     width: 90%;
     height: 80%;
     margin: auto auto;
@@ -46,6 +51,7 @@ input[type=file] {
 
 .displayFile {
     border-radius: 20px;
+    position:relative;
     border: 1px groove #007bff;
     box-shadow: 2px 2px #007bff;
     width: 50%;
@@ -156,4 +162,37 @@ textarea {
     border: 1px solid rgba(117, 136, 245, 0.90);
     border-radius:50% 50%;
     padding:0.6%;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    position: absolute;
+    top: 27%;
+    width: 70px;
+    height: 70px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

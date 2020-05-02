@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
-
+    <script src="../js/js.js"></script>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/SquizList.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
-
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -23,103 +23,224 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script>
-        var userOBJ;
+        var userOBJ;//save the user that active in the page;
         var pArr = [];
-        var IPoints;
-        var NactiveArr = [], activeOpenArr = [], activeCloseArr = [];
+        var selectedTask;//save the selected open task;
+        var cq_activeTask;//save the realated task for change quiz;
+        var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];//arrs of related tasks
 
         $(document).ready(function () {
 
-            userOBJ = JSON.parse(localStorage["user"]);
-            teamOBJ = JSON.parse(localStorage["active_student_team"]);
-           
-            userEmail = userOBJ.Mail.replace(".", ",");
+            $("#Nactive,#activeO,#activeC,#ch_q_div").hide();//hiding tasks till div will be ready
+            if(localStorage["user"])
+                userOBJ = JSON.parse(localStorage["user"]);
+
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);//print the user name in manage user div
+
+            if(localStorage["active_student_team"])
+              teamOBJ = JSON.parse(localStorage["active_student_team"]);
+
+            userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;
 
+            ajaxCall("GET", "../api/Student/getSTasks/" + getTask, "", getSTasksSuccess, getSTasksError)
 
-
-           // user = JSON.parse(localStorage["user"]);
-            //bodymail = user.Mail.split(".")[0];
-            //endmail = user.Mail.split(".")[1];
-            //userEmail = bodymail + "," + endmail;
-           
-
-            
-
-            //ajaxCall("GET", "../api/Student/getIntelliByMail/" + userEmail, "", ConectSuccess, ConectError)
-            //console.log(IPoints)
-
-            ajaxCall("GET","../api/Student/getSTasks/"+ getTask,"",getSTasksSuccess,getSTasksError)
-            
         });
 
+
         function getSTasksSuccess(data) {
-            console.log(data);
+            //task of student in team 
+            allTask = data;
+            //sort tasks
             for (x in data) {
                 if (data[x].Task.Grade == 0) {
 
                     NactiveArr.push(data[x])
-                } else if (data[x].TillDate < new Date()) {
+                } else if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
 
                     activeOpenArr.push(data[x])
-                } else { activeCloseArr.push(data[x])}
+                } else { activeCloseArr.push(data[x]) }
             }
 
+            //print task
             printNactive(NactiveArr);
             printActiveOpen(activeOpenArr);
             printActiveClose(activeCloseArr);
 
+            //connect page
+            $("#Nactive,#activeO,#activeC").show();
+            $("#activeC .cq,.fb_content").hide();
+            $("#activeO .cq").click(changeQ);
+            $(".fb").click(showNote)
+            $("#activeC img").click(function () {
+                chooseQuestionnaire(this, activeCloseArr, 'watch')
+            });
 
-            
+            $("#activeO img").click(function () {
+                chooseQuestionnaire(this, activeOpenArr, 'edit')
+            })
+
+            $("#Nactive img").click(function () {
+
+                if (this.getAttribute('title') == "פתח לביצוע")
+                    chooseQuestionnaire(this, NactiveArr, 'new')
+                else {
+
+                }
+            });
+        }
+
+        function showNote() {
+            //toggle teache fb for task quiz performance
+            $(this).children('.fb_content').slideToggle()
+        }
+
+        function changeQ() {
+            //open replace quiz
+            taskId = this.getAttribute('task');
+            qId = this.getAttribute('quiz');
+            str = "";
+            for (rt in activeOpenArr) {
+                if (activeOpenArr[rt].Task.TaskId == taskId) {
+                    cq_activeTask = activeOpenArr[rt];
+                    for (q in activeOpenArr[rt].Task.QuizList) {
+                        if (activeOpenArr[rt].Task.QuizList[q].QuestionnairId != qId) {
+                            str += `<div class="cq_questionnaire">
+                                          <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
+                                        </div>`
+                        } 
+                       
+                    }
+                    if (str != "") {
+                        $("#ch_q_div").html(str);
+                        $("#ch_q_div").slideDown("slow");
+                        $(".cq_questionnaire>img").click(confirmChange);
+                    } else {
+                        swal('אין שאלון זמינה להחלפה');
+                    }
+                   
+                }
+            }
+
+        }
+
+        function confirmChange() {
+            //cinfirm replace quiz
+            //if confirm all work in task will be deleted
+            val = this;
+            swal({
+                title: " ?האם אתה בטוח",
+                text: "העבודה שביצעת בשאלון הנוכחי תמחק!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (confirm) {
+                    if (confirm) {
+                        cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].TaskId = 2;
+                        title = cq_activeTask.Task.Title;
+                        cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].Title = userOBJ.Mail;
+                        ajaxCall("PUT", "../api/Student/changeQ", JSON.stringify(cq_activeTask), changeQSuccess, changeQError)
+                        cq_activeTask.Task.Title = title;
+                    }
+                    else {
+                        swal({
+
+                            title: "לא בוצעו שינויים",
+                            icon: "info",
+                        })
+                    }
+                })
+        }
+
+
+        function changeQSuccess(data) {
+            //quiz chanhe success;
+            //open the asked quiz as new;
+            var quizC;
+            for (k in cq_activeTask.Task.QuizList) {
+                if (cq_activeTask.Task.QuizList[k].TaskId == 1) {
+                    cq_activeTask.Task.QuizList[k].TaskId = cq_activeTask.Task.TaskId;
+                } else if (cq_activeTask.Task.QuizList[k].TaskId == 2) {
+                    cq_activeTask.Task.QuizList[k].TaskId = 1;
+                    cq_activeTask.Task.QuizList[k].Title = cq_activeTask.Task.Title;
+                    quizC = cq_activeTask.Task.QuizList[k];
+                    
+                }
+            }
+
+            localStorage["quiz"] = JSON.stringify(quizC);
+            localStorage["perform_showQuiz_mode"] = "student";
+            localStorage['quiz_mode'] = "new";
+            location.assign("showQuiz.html");
+        }
+
+        function changeQError(err) {
+            //change quiz failed;
+            swal('משהו השתבש בניסיון להחליף שאלון')
+            console.log(err)
         }
 
         function printNactive(data) {
+            //print tasks that non quiz was selected in them;
             str = "";
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (x in data) {
                 str += `
-                 <div id="Task" class="col-lg-4">
+                             <div id="Task" class="col-md-6 col-12">
 
-                    <div class="content_new">
-                        <div class="name_date">
-                            <p>${data[x].Task.Title}</p>
+                                <div class="content_new">
+                                    <div class="name_date">
+                                        <p>${data[x].Task.Title}</p>`
+                if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
+                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorO" name="caret-back-outline"></ion-icon>`
+                } else {
+                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorC" name="caret-back-outline"></ion-icon>`
+                }
 
-                            <p>עבור:</p><span>${data[x].ForDate}</span> <ion-icon name="caret-back-outline"></ion-icon>
-                        </div>
+                str += `</div>
 
-                        <div id="intelliO" class="imgQuiz">`
+                                    <div id="intelliO" class="imgQuiz">`
                 for (i in data[x].Task.QuizList) {
-                    str += `<img onclick="chooseQuestionnaire(this,NactiveArr,'new')" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
+                        str += `<img title="פתח לביצוע"   task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    } else {
+                        str += `<img title="מטלה טרם נפתחה" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                    }
+
                 }
 
                 str += ` </div>
-                        <div id="ladder">
-                            <p>מומלץ מאוד</p>
-                            <ion-icon name="analytics-outline" size="large"></ion-icon>
-                            <p>פחות מומלץ</p>
+                                    <div id="ladder">
+                                        <p>מומלץ מאוד</p>
+                                        <ion-icon name="analytics-outline" size="large"></ion-icon>
+                                        <p>פחות מומלץ</p>
 
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
 
 
-                </div>`;
-                
+                            </div>`;
+
             }
             $("#Nactive #tasks").text("")
-             $("#Nactive #tasks").append(str)
+            $("#Nactive #tasks").append(str)
         }
 
         function printActiveOpen(data) {
+            //print task selected and open;
             str = "";
             for (x in data) {
-                var num=getQnum(data.Task)
-                str += str = createSmallTask(data[x],'O',num);
-               
+                var num = getQnum(data[x].Task)
+                str += str = createSmallTask(data[x], 'O', num);
+
             }
             $("#activeO #tasks").text("")
-             $("#activeO #tasks").append(str)
+            $("#activeO #tasks").append(str)
         }
+
         function getQnum(arg) {
-            console.log(arg)
+            //return the index of quiz in arr of task;
             for (a in arg.QuizList) {
                 if (arg.QuizList[a].TaskId == 1) {
 
@@ -127,84 +248,149 @@
                 }
             }
         }
+
         function printActiveClose(data) {
+            //print task selected and close;
+            //able to watch;
             str = "";
-            
             for (x in data) {
 
-                var num=getQnum(data[x].Task)
-                str += createSmallTask(data[x],'C',num);
-               
+                var num = getQnum(data[x].Task)
+                str += createSmallTask(data[x], 'C', num);
+
             }
             $("#activeC #tasks").text("")
-             $("#activeC #tasks").append(str)
+            $("#activeC #tasks").append(str)
         }
 
-        function createSmallTask(data,arg,num) {
+        function createSmallTask(data, arg, num) {
+            //create close/open active task div;
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            str = `<div id="SmallTask" class="col-lg-4 col-md-6 col-12">
 
-            
-            str =`<div id="SmallTask" class="col-lg-4">
+                                <div class="content_active">
+                                    <div class="right">
+                                        <div class="Name">
+                                            <p>${data.Task.Title}</p>
+                                        </div>
+                                        <div class="Time">
+                                            <p>${new Date(data.TillDate).toLocaleDateString(undefined, options)}</p><ion-icon class='color${arg}' name="caret-back"></ion-icon>
+                                        </div>
+                                        <div class="opt">
+                                            <div class="fb">
+                                                <ion-icon name="checkmark" class='color${arg}' size="large"></ion-icon>
+                                                <p>צפה במשוב</p>
+                                                 <div class='fb_content'><div class="note">${data.Note ? data.Note : "מטלה טרם קיבלה משוב"}</div><div class='score'>${data.Score ? data.Score : "none"}</div></div>
+                                            </div>
+                                           <div task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" class="cq">
+                                                <ion-icon name="repeat" class='color${arg}' size="large"></ion-icon>
 
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>${data.Task.Title}</p>
-                            </div>
-                            <div class="Time">
-                                <p>${data.TillDate}</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                               <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>${data.ForDate}</p>
-                            </div>
-                            <div class="imgQuestionnire">`;
+                                                <p>החלף שאלון</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="left">
+                                        <div class="classDate">
+                                            <p>${new Date(data.ForDate).toLocaleDateString(undefined, options)}</p>
+                                        </div>
+                                        <div class="imgQuestionnire">`;
             if (arg == 'O') {
-                str += ` <img onclick="chooseQuestionnaire(this,activeOpenArr,'edit')" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+                str += ` <img title="פתח לביצוע"  task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             } else {
-                str+=`<img task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" onclick="chooseQuestionnaire(this,activeCloseArr,'edit')" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
+                str += `<img title="צפייה" task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}"  src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             }
-             
-                           str+=` </div>
-                                
-                        </div>
-                    </div>
-                </div>`
+
+            str += ` </div>
+
+                                    </div>
+                                </div>
+                            </div>`
             return str;
-            
+
         }
 
-        function chooseQuestionnaire(val,arr,mode) {
-            
+        function chooseQuestionnaire(val, arr, mode) {
             localStorage["perform_showQuiz_mode"] = "student";
-            for (t in arr) {
-                if (arr[t].Task.TaskId == val.getAttribute('task')) {
+            localStorage['quiz_mode'] = mode;
+            selectedTask = val;
+            title = "";
+            if (mode != "watch") {
 
-                    for (q in arr[t].Task.QuizList) {
-                        if ( arr[t].Task.QuizList[q].QuizID == val.getAttribute('quiz')) {
-                            arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
-                            arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
-                            localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
-                            localStorage['quiz_mode'] = mode;
-                            location.assign("showQuiz.html");
-                            break;
+                for (rt in allTask) {
+
+                    if (allTask[rt].Task.TaskId == selectedTask.getAttribute('task')) {
+                        title = allTask[rt].Task.Title;
+                        validate = allTask[rt];
+                        validate.Task.Title = userOBJ.Mail;
+
+                        ajaxCall("PUT", "../api/Student/validateTime", JSON.stringify(validate), validateTimeSuccess, validateTimeError)
+                        allTask[rt].Task.Title = title;
+                        break;
+                    }
+                }
+            } else {
+
+                for (t in arr) {
+                    if (arr[t].Task.TaskId == selectedTask.getAttribute('task')) {
+
+                        for (q in arr[t].Task.QuizList) {
+                            if (arr[t].Task.QuizList[q].QuizID == selectedTask.getAttribute('quiz')) {
+                                arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
+                                arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
+                                localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
+
+                                location.assign("showQuiz.html");
+                                break;
+                            }
                         }
                     }
                 }
+
+            }
+
+
+        }
+
+        function validateTimeSuccess(data) {
+            //validate of real time aviability of task success
+            arr = allTask;
+            if (data) {
+
+                for (t in arr) {
+                    if (arr[t].Task.TaskId == selectedTask.getAttribute('task')) {
+
+                        for (q in arr[t].Task.QuizList) {
+                            if (arr[t].Task.QuizList[q].QuizID == selectedTask.getAttribute('quiz')) {
+                                arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
+                                arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
+                                localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
+
+                                location.assign("showQuiz.html");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+            } else {
+
+                swal({
+
+                    title: "המשימה סגורה לביצוע",
+                    icon: "warning",
+                })
+                    .then(function (confirm) {
+                        if (confirm) location.reload();
+                        else location.reload();;
+                    })
             }
 
         }
 
+        function validateTimeError(err) {
+            swal('משהו השתבש נסה לרענן את הדף')
+        }
 
         function getSTasksError(err) {
             console.log(err);
@@ -218,14 +404,13 @@
                 return a.Points - b.Points
             })
             console.log(IPoints);
-            var str="";
-            for (var i = 5; i > -1; i--)
-            {
-                str+="<img src='../images/"+IPoints[i].Name+"N.jpg'/>"
+            var str = "";
+            for (var i = 5; i > -1; i--) {
+                str += "<img src='../images/" + IPoints[i].Name + "N.jpg'/>"
             }
-              console.log(str);
-              document.getElementById("intelliO").innerHTML = str;
-          
+            console.log(str);
+            document.getElementById("intelliO").innerHTML = str;
+
         }
 
         function ConectError(err) {
@@ -238,7 +423,8 @@
 
 </head>
 <body dir="rtl">
-
+    <div id="disbackg"></div>
+    <div id="ch_q_div"></div>
     <div id="container">
 
         <div id="header" class="row">
@@ -258,6 +444,17 @@
                 <!--<img src="../images/MindCet.png" />-->
             </div>
 
+            <div id="sNav">
+                <div id="user_manage">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    </button>
+                    <div id="nav_cnt" class="dropdown-menu">
+                        <p id="disconnect" onclick="disconnect()">התנתק</p>
+                        <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -268,36 +465,6 @@
             </div>
 
             <div id="tasks" class="row">
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_new">
-                        <div class="name_date">
-                            <p>שם משימה</p>
-
-                            <p>עבור:</p><span>22/05/2020</span> <ion-icon name="caret-back-outline"></ion-icon>
-                        </div>
-
-                        <div id="intelliO" class="imgQuiz">
-
-                            <img src="../images/MovementalN.jpg" />
-                            <img src="../images/SpatialN.jpg" />
-                            <img src="../images/tongueN.jpg" />
-                            <img src="../images/musicallyN.jpg" />
-                            <img src="../images/PersonalN.jpg" />
-                            <img src="../images/logicallyN.jpg" />
-                        </div>
-                        <div id="ladder">
-                            <p>מומלץ מאוד</p>
-                            <ion-icon name="analytics-outline" size="large"></ion-icon>
-                            <p>פחות מומלץ</p>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
 
 
             </div>
@@ -313,40 +480,6 @@
 
             <div id="tasks" class="row">
 
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
             </div>
 
@@ -360,145 +493,6 @@
             </div>
 
             <div id="tasks" class="row">
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Task" class="col-lg-4">
-
-                    <div class="content_active">
-                        <div class="right">
-                            <div class="Name">
-                                <p>שם משימה....</p>
-                            </div>
-                            <div class="Time">
-                                <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                            </div>
-                            <div class="opt">
-                                <div class="fb">
-                                    <ion-icon name="checkmark-outline" size="large"></ion-icon>
-                                    <p>צפה במשוב</p>
-                                </div>
-                                <div class="cq">
-                                    <ion-icon name="repeat-outline" size="large"></ion-icon>
-                                    <p>החלף שאלון</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="left">
-                            <div class="classDate">
-                                <p>22.22.2222</p>
-                            </div>
-                            <div class="imgQuestionnire">
-
-                                <img src="../images/תנועתית ללא שם.jpg" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
 
 
             </div>

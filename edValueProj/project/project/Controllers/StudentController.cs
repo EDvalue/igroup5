@@ -67,6 +67,21 @@ namespace project.Controllers
         {
             return q.updateQ();
         }
+
+        [HttpPut]
+        [Route("api/Student/validateTime")]
+        public int validateTime(RealetedTask rt)
+        {
+            
+            return rt.validateTime();
+        }
+
+        [HttpPut]
+        [Route("api/Student/changeQ")]
+        public int changeQ([FromBody] RealetedTask rt)
+        {
+            return rt.changeQ();
+        }
     }
 
 }

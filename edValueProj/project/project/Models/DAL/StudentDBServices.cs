@@ -156,7 +156,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 String part1 = " select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy,tbl.IntelligenceName,tbl.[Name],tbl.creationTime,tbl.QuestionnaireId";
-                String part2 = " ,pio.points,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],";
+                String part2 = " ,pio.points,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink,a.Content AS ans_content,a.IsRight,a.AnswerId  ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],pq.Ptime,pq.Grade, ";
                 String part3 = " case when pq.[StudentId]='"+userEmail+"' then 1 else 0 END as IsChoose ";
                 String part4 = "  from (select t.taskId,t.Title,t.SubjectName,rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy,q.IntelligenceName,i.[Name],max(q.creationTime)as creationTime,max(q.QuestionnaireId) as QuestionnaireId ";
                 String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='"+teamId+"' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
@@ -191,6 +191,10 @@ namespace project.Models.DAL
                         rt.Task.QuizList = new List<Quiz>();
                         rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
                         rt.Task.TaskId = dr["TaskId"].ToString();
+                        if(dr["Ptime"] != DBNull.Value)
+                        rt.STime= Convert.ToDateTime(dr["Ptime"]);
+                        if (dr["Grade"] != DBNull.Value)
+                            rt.Score= Convert.ToInt32(dr["Grade"]);
                         rt.Task.Title = dr["Title"].ToString();
                         rt.Task.Grade =0;
                         if(dr["Note"]!=DBNull.Value)
@@ -308,7 +312,7 @@ namespace project.Models.DAL
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
-                String sl1 = " select t.TeamId,t.Title,t.SubjectName,s.ImgLink,t.TeacherEmail,rt.TaskId,case when rt.TaskId IS NULL then 0 else 1 end as isPerform ";
+                String sl1 = " select t.TeamId,t.Title,t.SubjectName,s.ImgLink,t.TeacherEmail,rt.TaskId, case when pq.StudentId IS NULL and rt.TaskId is not NULL then 1 else 0 end as isPerform  ";
                 String sl2 = " from [dbo].[StudentInTeam] as sit inner join Team as t on t.TeamId=sit.TeamId and sit.SchoolCode=t.SchoolCode and  sit.StudentEmail='"+mail+ "' inner join Subject as s on s.[Name]=t.SubjectName left  join [dbo].[RealatedTo] as rt ";
                 String sl3 = " on rt.TeamId=t.TeamId left join [dbo].[PerformQuestionnaire] as pq on pq.TaskId=rt.TaskId and pq.StudentId='"+mail+"'";
                 String selectSTR = sl1+sl2+sl3;
@@ -337,7 +341,7 @@ namespace project.Models.DAL
                         t.Scode = 0;
 
                     }
-                  
+                   
 
                     t.Scode += Convert.ToInt32(dr["isPerform"]);
 
@@ -616,10 +620,142 @@ namespace project.Models.DAL
                     con.Close();
                 }
             }
-
-
             return this;
+        }
 
+        public int validateTime(RealetedTask rt)
+        {
+            SqlConnection con = null;
+            List<Inteligence> list = new List<Inteligence>();
+            int num = 0;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                int qnum = getNum(rt);
+                String selectSTR = "select* from [dbo].[PerformQuestionnaire] as pq inner join RealatedTo as rt on pq.TaskId=rt.TaskId and rt.TaskId='"+rt.Task.TaskId+"' and pq.StudentId='"+rt.Task.Title+"' and pq.[QuestionnaireId]='"+rt.Task.QuizList[qnum].QuizID+"' where (getDate()>=rt.ForDate) and (getDate()<rt.[OpenTill] or getDate()<pq.Ptime)";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                if (dr.HasRows)
+                {
+                    if (con != null)
+                    {
+                        con.Close();
+                    }
+                    return 1;
+                }
+                else
+                {
+                    con.Close();
+                    dr = null;
+                    cmd.Connection = null;
+                    con = connect("DBConnectionString");
+
+                    String selectSTR2 = "select* from  RealatedTo as rt where (getDate()>=rt.ForDate) and (getDate()<rt.[OpenTill]) and rt.TaskId='" + rt.Task.TaskId + "' ";
+                    SqlCommand cmd2 = new SqlCommand(selectSTR2, con);
+                    SqlDataReader dr2 = cmd2.ExecuteReader();
+
+                    if (dr2.HasRows)
+                    {
+                        if (con != null)
+                        {
+                            con.Close();
+                        }
+                        return 1;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return num;
+        }
+
+        private int getNum(RealetedTask arg)
+        {
+            int i= -1;
+            int num=0;
+            foreach(var a in arg.Task.QuizList)
+            {
+                i++;
+                if (a.TaskId == "1")
+                {
+
+                    num=i;
+                    break;
+                }
+            }
+
+            return num;
+        }
+
+        public void deletePQ(Quiz del,string taskId)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Delete from PerformQuestionnaire where  [QuestionnaireId]='{0}' and [TaskId]='{1}'  and [StudentId]='{2}'",del.QuizID,taskId,del.Title); ;
+            String cStr = sb.ToString();
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+
+
+            }
         }
 
         public void update()

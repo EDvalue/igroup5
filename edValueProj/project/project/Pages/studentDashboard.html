@@ -36,6 +36,7 @@
             ajaxCall("PUT","../api/Student/getSTeams",JSON.stringify(userOBJ),getSTeamsSuccess,getSTeamsError)
         });
 
+
         function getSTeamsSuccess(data) {
             console.log(data);
             myTeams = data;
