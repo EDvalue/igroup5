@@ -21,5 +21,12 @@ namespace project.Controllers
             StudentInClass s = new StudentInClass();
             return s.getStudentByEmail(email);
         }
+        [HttpGet]
+        [Route("api/StudentInClass/getSQuest/{data}")]
+        public List<StudentInClass> getSQuest(string data)
+        {
+            StudentInClass rt = new StudentInClass();
+            return rt.getSQuest(data);
+        }
     }
 }

@@ -137,11 +137,11 @@ namespace project.Controllers
         }
         [HttpGet]
         [Route("api/Teacher/getTTasks/{data}")]
-        //public List<RealetedTask> getTTasks(string data)
-        //{
-        //    RealetedTask rt = new RealetedTask();
-        //    return rt.getTTasks(data);
-        //}
+        public List<RealetedTask> getTTasks(string data)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.getTTasks(data);
+        }
 
         [HttpPut]
         [Route("api/Teacher/openSI")]
@@ -150,5 +150,6 @@ namespace project.Controllers
             Classroom c = new Classroom();
             return c.openSI(dict);
         }
+        
     }
 }
