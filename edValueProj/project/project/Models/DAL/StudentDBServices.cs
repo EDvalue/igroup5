@@ -312,7 +312,7 @@ namespace project.Models.DAL
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
-                String sl1 = " select t.TeamId,t.Title,t.SubjectName,s.ImgLink,t.TeacherEmail,rt.TaskId,case when rt.TaskId IS NULL then 0 else 1 end as isPerform ";
+                String sl1 = " select t.TeamId,t.Title,t.SubjectName,s.ImgLink,t.TeacherEmail,rt.TaskId, case when pq.StudentId IS NULL and rt.TaskId is not NULL then 1 else 0 end as isPerform  ";
                 String sl2 = " from [dbo].[StudentInTeam] as sit inner join Team as t on t.TeamId=sit.TeamId and sit.SchoolCode=t.SchoolCode and  sit.StudentEmail='"+mail+ "' inner join Subject as s on s.[Name]=t.SubjectName left  join [dbo].[RealatedTo] as rt ";
                 String sl3 = " on rt.TeamId=t.TeamId left join [dbo].[PerformQuestionnaire] as pq on pq.TaskId=rt.TaskId and pq.StudentId='"+mail+"'";
                 String selectSTR = sl1+sl2+sl3;
@@ -341,7 +341,7 @@ namespace project.Models.DAL
                         t.Scode = 0;
 
                     }
-                  
+                   
 
                     t.Scode += Convert.ToInt32(dr["isPerform"]);
 
