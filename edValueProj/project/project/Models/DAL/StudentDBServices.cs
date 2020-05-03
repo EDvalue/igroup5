@@ -194,7 +194,7 @@ namespace project.Models.DAL
                         if(dr["Ptime"] != DBNull.Value)
                         rt.STime= Convert.ToDateTime(dr["Ptime"]);
                         if (dr["Grade"] != DBNull.Value)
-                            rt.Score= Convert.ToInt32(dr["Grade"]);
+                        rt.Score= Convert.ToInt32(dr["Grade"]);
                         rt.Task.Title = dr["Title"].ToString();
                         rt.Task.Grade =0;
                         if(dr["Note"]!=DBNull.Value)

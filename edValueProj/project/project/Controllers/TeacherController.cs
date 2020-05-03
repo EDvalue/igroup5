@@ -150,6 +150,12 @@ namespace project.Controllers
             Classroom c = new Classroom();
             return c.openSI(dict);
         }
-        
+        [HttpPut]
+        [Route("api/Teacher/getQ")]
+        public Quiz getQ([FromBody]Dictionary<string,string> d)
+        {
+            Quiz q = new Quiz();
+            return q.getQ(d);
+        }
     }
 }

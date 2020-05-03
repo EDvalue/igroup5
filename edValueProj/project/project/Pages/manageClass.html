@@ -6,18 +6,19 @@
     <link href="../CSS/manageClass.css" rel="stylesheet" />
 
     <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -26,6 +27,9 @@
         var myTeams;
         var listdata;
         var taskList;
+        var selectedTsakId;
+        var taskData;
+
         $(document).ready(function () {
             createSList();
             createTList();
@@ -33,7 +37,42 @@
             getTasks();
             $("#ShowQuestionnaire").hide();
             console.log("inside")
+
         });
+
+
+        function openQ(val) {
+
+            arg = getPdata(val.getAttribute('data_loc'));
+
+            Oquiz = {
+                QuizID:arg.QuizID,
+                Mail:arg.Mail,
+                TaskId:selectedTaskId,
+            }
+
+            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+        }
+
+        function getPdata(id) {
+
+            for (x in taskData) {
+                if (taskData[x].Mail == id) {
+                    return taskData[x];
+                }
+            }
+
+        }
+
+        function getQsuccess(data) {
+
+        }
+
+        function getQerror(err) {
+
+            swal("הניסיון לפתוח את המשימה נכשל")
+        }
+
         function createSList() {
             listdata = JSON.parse(localStorage["active_teacher_team"]);
             listdata1 = listdata.StudentList;
@@ -44,47 +83,102 @@
 
             }
 
-
             cstr += "</ul>"
             console.log(cstr)
             $("#sList").html(cstr);
         }
+
         function ShowSubmitted(val) {
-            $("#ShowQuestionnaire").show()
-            $("#utDIV").html = `<p>${val}</p>`
-            
+
+            $("#utDIV").html = `<p>${val}</p>`;
+
             data = val + "," + listdata.Id;
-                 
-            
-            
+            selectedTaskId = val;
+
             ajaxCall("GET", "../api/StudentInClass/getSQuest/" + data, "", getSQuestSuccess, getSQuestError)
-
-
 
         }
         function getSQuestSuccess(data) {
             console.log(data)
-            var cstr = "<ul>"
-            for (a in data) {
-                if(data[a].isperform=1)
-                    cstr += "<li><a href='studentInClassInfo.html'><br />" + data[a].StudentEmail + " " + data[a].QuestionnaireId + "</a></li>"
-                    
-                }
-            cstr += "</ul>"
-            console.log(cstr)
-            $("#utDIV").html(cstr)
+            taskData = data;
+
+            try {
+                tbl = $('#sp_table').DataTable({
+
+                    data: taskData,
+                    pageLength: 5,
+                    columns: [
+
+                        { data: "Mail" },
+                        { data: "IdNumber" },
+                        { render: function (data, type, row, meta) { return `${row.Fname} ${row.Lname}` } },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                
+                                let loc = "data_loc='" + row.Mail + "'";
+                                str = "";
+                                str += "<div id='tbl_int'>";
+                                if (row.QuizID != "") {
+                                    str += `<img ${loc} onclick='openQ(this)'  src='../images/${row.IntelligenceName}.png'/>`
+                                } else {
+
+                                    return "לא נבחר שאלון"
+                                }
+
+                                str += "</div>";
+
+                                return str;
+                            }
+
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.Grade > 0) {
+                                    return row.Grade
+                                } else {
+                                    return "לא ניתן ציון"
+                                }
+
+                            }
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.Note != "") {
+                                    return row.Note
+                                } else {
+                                    return "none"
+                                }
+
+                            }
+                        },
+
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+            $("#ShowQuestionnaire").show();
+
         }
+
         function getSQuestError(data) {
             console.log(data)
         }
-        
+
 
 
         function closeDivUS() {
-            
+
             $("#ShowQuestionnaire").hide();
-            
-            
+
         }
 
         function createTList() {
@@ -125,47 +219,46 @@
         function getTasks() {
             var getTeam;
             getTeam = JSON.parse(localStorage["active_teacher_team"]);
-            
+
             console.log(getTeam)
             ajaxCall("GET", "../api/Teacher/getTTasks/" + getTeam.Id, "", getTTasksSuccess, getTTasksError)
         }
         function getTTasksSuccess(data) {
             console.log(data)
             taskList = data;
-            console.log(taskList)
             var cstr = "";
             for (a in taskList) {
-                if(taskList[a]["Task"].TaskId)
-                cstr+=`<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a]["Task"].TaskId}">
+                if (taskList[a]["Task"].TaskId)
+                    cstr += `<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a]["Task"].TaskId}">
 
-                                <div class="fr">
-                                <div class="name">
-                                    <p>${taskList[a]["Task"].Title}</p>
-                                </div>
-                                <div class="time">
-                                    <p>${taskList[a].AssigmentDate}</p>
-                                </div>
-                            </div>
+                                                        <div class="fr">
+                                                        <div class="name">
+                                                            <p>${taskList[a]["Task"].Title}</p>
+                                                        </div>
+                                                        <div class="time">
+                                                            <p>${taskList[a].AssigmentDate}</p>
+                                                        </div>
+                                                    </div>
 
-                            <div class="sr">
-                                <div class="isActive">
-                                    <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
-                                </div>
-                                <div class="c_time">
-                                    <span>${taskList[a].TillDate}  </span><ion-icon name="pencil-outline"></ion-icon>
-                                </div>
-                            </div>
-                            <div class="tr">
-                                <div class="notification">
-                                    <p>15</p>
-                                </div>
-                                <div class="cancel">
-                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                </div>
-                            </div>
+                                                    <div class="sr">
+                                                        <div class="isActive">
+                                                            <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                                                        </div>
+                                                        <div class="c_time">
+                                                            <span>${taskList[a].TillDate}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tr">
+                                                        <div class="notification">
+                                                            <p>15</p>
+                                                        </div>
+                                                        <div class="cancel">
+                                                            <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                        </div>
+                                                    </div>
 
 
-                        </div>`
+                                                </div>`
             }
             $("#tasks").html(cstr);
         }
@@ -265,6 +358,7 @@
             });
 
         }
+
         function ChartTwo() {
 
             var ctx = document.getElementById('chart2').getContext('2d');
@@ -292,6 +386,7 @@
             });
 
         }
+
         function ChartThree() {
 
             var ctx = document.getElementById('chart3').getContext('2d');
@@ -318,6 +413,7 @@
             });
 
         }
+
         function ChartFour() {
 
             var ctx = document.getElementById('chart4').getContext('2d');
@@ -345,6 +441,7 @@
             });
 
         }
+
         function UpdateTaskDoughnut() {
             var ctx2 = document.getElementById('chart3').getContext('2d');
 
@@ -405,12 +502,13 @@
                 ThirdCharts.style.display = "block";
                 ChartTwo();
                 ChartFour();
-            }
-            else {
+            } else {
+
                 $("#statistics").height("0")
                 FirstCharts.style.display = "none";
                 SecondCharts.style.display = "none";
                 ThirdCharts.style.display = "none";
+
 
             }
 
@@ -421,407 +519,391 @@
 </head>
 <body dir="rtl">
     <div id="ShowQuestionnaire">
-
         <a onclick="closeDivUS()"><span>Close x</span></a>
-
         <div id="TaskView">
             <div id="addContent">
-                
-                    <div dir="rtl" id="Title"><h4>שאלונים שהוגשו</h4></div>
 
-                    <div id="utDIV">
-                        <ul>
+                <table id="sp_table" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                           
+                            <th>מייל תלמיד</th>
+                            <th>ת.ז</th>
+                            <th>שם מלא</th>
+                            <th>שאלון</th>
+                            <th>ציון</th>
+                            <th>הערה</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-                            <li><a href="manageClass.html">שאלון של יוסי</a></li>
-
-
-                        </ul>
-
-                    </div>
             </div>
         </div>
     </div>
-                    <div id="container">
-                        <div id="header">
-                            <div class="row">
 
-                                <div id="imgLogo" class="col-lg-3">
+    <div id="container">
+        <div id="header">
+            <div class="row">
 
-                                    <img src="../images/EDvalueSmall.png" />
+                <div id="imgLogo" class="col-lg-3">
 
+                    <img src="../images/EDvalueSmall.png" />
+
+                </div>
+
+                <div id="title" class="col-lg-6">
+                    <h3>שם הקבוצה...</h3>
+
+                </div>
+
+                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                    <!--<img src="../images/MindCet.png" />-->
+
+                </div>
+
+            </div>
+
+            <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav navPadding">
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
+                        </li>
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
+                        </li>
+                        <li class="nav-item active">
+                            <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                                <option value="" disabled selected hidden>בחר אפשרות</option>
+                                <option value="FirstCharts">גרף 1</option>
+                                <option value="SecondCharts">גרף 2</option>
+                                <option value="ThirdCharts">גרף 3</option>
+                                <option value="CloseAll">לסגור הכל</option>
+                            </select>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <select class="btn btn-primary btnonSmall" id="Smenue">
+                                <option value="" disabled selected hidden>סנן לפי כיתה</option>
+                                <option href="#statistics" value="statistics">סטטיסטיקה</option>
+                                <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
+                                <option href="#quiz" value="quiz">משימות</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0 mr-auto">
+                        <input class="myForm mr-sm-2" type="search" placeholder="חפש תלמיד/מורה" aria-label="Search">
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+
+            <!--<div class="dropdown" id="Smenue">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                סנן לפי כיתה
+            </button>
+
+            <div class="dropdown-menu">
+
+                <a class="dropdown-item" href="#statistics">סטטיסטיקה</a>
+                <a class="dropdown-item" href="#kidsList">רשימת תלמידים</a>
+                <a class="dropdown-item" href="#quiz">משימות</a>
+
+
+
+            </div>
+
+        </div>-->
+
+        </div>
+
+        <!-- <div id="Tcontroll">
+         <div id="TControlBtns">
+
+                 <button class="btn btn-primary" onclick="addRemoveS()">ניהול קבוצה</button>
+                 <button class="btn btn-primary" onclick="addQuiz()">הוסף מטלה</button>
+                 <button class="btn btn-primary" onclick="">הכיתה שלי</button>
+                 <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
+                     <option value="" disabled selected hidden>בחר אפשרות</option>
+                     <option value="FirstCharts">גרף 1</option>
+                     <option value="SecondCharts">גרף 2</option>
+                     <option value="ThirdCharts">גרף 3</option>
+                     <option value="CloseAll">לסגור הכל</option>
+                 </select>
+
+
+
+         </div>
+
+         <div class="searchDiv">
+             <div class="justify-content-center ">
+                 <div class="searchbar">
+                     <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
+                     <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                 </div>
+             </div>
+         </div>
+
+     </div>-->
+
+        <div class="row" id="main">
+            <div class="hide_list_teams change" onclick="myFunction(this)">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div id="teamList" class="col-sm-2">
+
+                <div id="slTitle">
+                    <h4>הקבוצות שלי</h4>
+                </div>
+                <div dir="ltr" id="tList">
+                    <ul>
+
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+
+
+                    </ul>
+                </div>
+
+
+
+            </div>
+
+            <div id="info" class="col">
+                <div id="statistics">
+                    <div class="content">
+                        <div class="row" id="FirstCharts" style="display:none">
+                            <div class="wrapper col-12"><canvas id="chart1"></canvas></div>
+
+                        </div>
+                        <div class="row" id="SecondCharts" style="display:none">
+                            <div class="wrapper col-12"><canvas id="chart3"></canvas></div>
+
+
+                        </div>
+                        <div class="row" id="ThirdCharts" style="display:none">
+                            <div class=" col-lg-6" style="float:left"><canvas id="chart2"></canvas></div>
+                            <div class=" col-lg-6" style="float:left"><canvas id="chart4"></canvas></div>
+
+                        </div>
+                        <table id="ThirdCharts" width="100%" style="display:none">
+                            <tr width="100%">
+                                <td width="50%">
+                                    <canvas id="chart2"></canvas>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div id="class_info">
+
+
+                    <div class="row" id="tasks">
+                        <div class="col-sm-4" id="task">
+
+                            <div class="fr">
+                                <div class="name">
+                                    <p>שם משימה....</p>
                                 </div>
-
-                                <div id="title" class="col-lg-6">
-                                    <h3>שם הקבוצה...</h3>
-
+                                <div class="time">
+                                    <p>22/22/2222</p>
                                 </div>
-
-                                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
-
-                                    <!--<img src="../images/MindCet.png" />-->
-
-                                </div>
-
                             </div>
 
-                            <nav class="navbar navbar-expand-lg navbar-light navBar">
-
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-
-                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                    <ul class="navbar-nav navPadding">
-                                        <li class="nav-item active">
-                                            <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
-                                        </li>
-
-                                        <li class="nav-item dropdown">
-                                            <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                                                <option value="" disabled selected hidden>בחר אפשרות</option>
-                                                <option value="FirstCharts">גרף 1</option>
-                                                <option value="SecondCharts">גרף 2</option>
-                                                <option value="ThirdCharts">גרף 3</option>
-                                                <option value="CloseAll">לסגור הכל</option>
-                                            </select>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <select class="btn btn-primary btnonSmall" id="Smenue">
-                                                <option value="" disabled selected hidden>סנן לפי כיתה</option>
-                                                <option href="#statistics" value="statistics">סטטיסטיקה</option>
-                                                <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
-                                                <option href="#quiz" value="quiz">משימות</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                    <form class="form-inline my-2 my-lg-0 mr-auto">
-                                        <input class="myForm mr-sm-2" type="search" placeholder="חפש תלמיד/מורה" aria-label="Search">
-                                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-                                    </form>
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
                                 </div>
-                            </nav>
-
-
-
-
-
-                            <!--<div class="dropdown" id="Smenue">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                    סנן לפי כיתה
-                                </button>
-
-                                <div class="dropdown-menu">
-
-                                    <a class="dropdown-item" href="#statistics">סטטיסטיקה</a>
-                                    <a class="dropdown-item" href="#kidsList">רשימת תלמידים</a>
-                                    <a class="dropdown-item" href="#quiz">משימות</a>
-
-
-
+                                <div class="c_time">
+                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
                                 </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
 
-                            </div>-->
+
+                        </div>
+                        <div class="col-sm-4" id="task">
+
+                            <div class="fr">
+                                <div class="name">
+                                    <p>שם משימה....</p>
+                                </div>
+                                <div class="time">
+                                    <p>22/22/2222</p>
+                                </div>
+                            </div>
+
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                                </div>
+                                <div class="c_time">
+                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-4" id="task">
+
+                            <div class="fr">
+                                <div class="name">
+                                    <p>שם משימה....</p>
+                                </div>
+                                <div class="time">
+                                    <p>22/22/2222</p>
+                                </div>
+                            </div>
+
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                                </div>
+                                <div class="c_time">
+                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-4" id="task">
+
+                            <div class="fr">
+                                <div class="name">
+                                    <p>שם משימה....</p>
+                                </div>
+                                <div class="time">
+                                    <p>22/22/2222</p>
+                                </div>
+                            </div>
+
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                                </div>
+                                <div class="c_time">
+                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-4" id="task">
+
+                            <div class="fr">
+                                <div class="name">
+                                    <p>שם משימה....</p>
+                                </div>
+                                <div class="time">
+                                    <p>22/22/2222</p>
+                                </div>
+                            </div>
+
+                            <div class="sr">
+                                <div class="isActive">
+                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
+                                </div>
+                                <div class="c_time">
+                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="tr">
+                                <div class="notification">
+                                    <p>15</p>
+                                </div>
+                                <div class="cancel">
+                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                </div>
+                            </div>
+
 
                         </div>
 
-                        <!-- <div id="Tcontroll">
-                             <div id="TControlBtns">
-
-                                     <button class="btn btn-primary" onclick="addRemoveS()">ניהול קבוצה</button>
-                                     <button class="btn btn-primary" onclick="addQuiz()">הוסף מטלה</button>
-                                     <button class="btn btn-primary" onclick="">הכיתה שלי</button>
-                                     <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
-                                         <option value="" disabled selected hidden>בחר אפשרות</option>
-                                         <option value="FirstCharts">גרף 1</option>
-                                         <option value="SecondCharts">גרף 2</option>
-                                         <option value="ThirdCharts">גרף 3</option>
-                                         <option value="CloseAll">לסגור הכל</option>
-                                     </select>
-
-
-
-                             </div>
-
-                             <div class="searchDiv">
-                                 <div class="justify-content-center ">
-                                     <div class="searchbar">
-                                         <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
-                                         <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
-                                     </div>
-                                 </div>
-                             </div>
-
-                         </div>-->
-
-                        <div class="row" id="main">
-                            <div class="hide_list_teams change " onclick="myFunction(this)">
-                                <div class="bar1"></div>
-                                <div class="bar2"></div>
-                                <div class="bar3"></div>
-                            </div>
-                            <div id="teamList" class="col-sm-2">
-
-                                <div id="slTitle">
-                                    <h4>הקבוצות שלי</h4>
-                                </div>
-                                <div dir="ltr" id="tList">
-                                    <ul>
-
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-
-
-                                    </ul>
-                                </div>
-
-
-
-                            </div>
-
-                            <div id="info" class="col">
-                                <div id="statistics">
-                                    <div class="content">
-                                        <div class="row" id="FirstCharts" style="display:none">
-                                            <div class="wrapper col-12"><canvas id="chart1"></canvas></div>
-
-                                        </div>
-                                        <div class="row" id="SecondCharts" style="display:none">
-                                            <div class="wrapper col-12"><canvas id="chart3"></canvas></div>
-
-
-                                        </div>
-                                        <div class="row" id="ThirdCharts" style="display:none">
-                                            <div class=" col-lg-6" style="float:left"><canvas id="chart2"></canvas></div>
-                                            <div class=" col-lg-6" style="float:left"><canvas id="chart4"></canvas></div>
-
-                                        </div>
-                                        <table id="ThirdCharts" width="100%" style="display:none">
-                                            <tr width="100%">
-                                                <td width="50%">
-                                                    <canvas id="chart2"></canvas>
-                                                </td>
-
-                                            </tr>
-                                        </table>
-                                    </div>
-
-                                </div>
-
-                                <div id="class_info">
-
-
-                                    <div class="row" id="tasks">
-                                        <div class="col-sm-4" id="task">
-
-                                            <div class="fr">
-                                                <div class="name">
-                                                    <p>שם משימה....</p>
-                                                </div>
-                                                <div class="time">
-                                                    <p>22/22/2222</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="sr">
-                                                <div class="isActive">
-                                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                </div>
-                                                <div class="c_time">
-                                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
-                                                </div>
-                                            </div>
-                                            <div class="tr">
-                                                <div class="notification">
-                                                    <p>15</p>
-                                                </div>
-                                                <div class="cancel">
-                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-4" id="task">
-
-                                            <div class="fr">
-                                                <div class="name">
-                                                    <p>שם משימה....</p>
-                                                </div>
-                                                <div class="time">
-                                                    <p>22/22/2222</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="sr">
-                                                <div class="isActive">
-                                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                </div>
-                                                <div class="c_time">
-                                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
-                                                </div>
-                                            </div>
-                                            <div class="tr">
-                                                <div class="notification">
-                                                    <p>15</p>
-                                                </div>
-                                                <div class="cancel">
-                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-4" id="task">
-
-                                            <div class="fr">
-                                                <div class="name">
-                                                    <p>שם משימה....</p>
-                                                </div>
-                                                <div class="time">
-                                                    <p>22/22/2222</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="sr">
-                                                <div class="isActive">
-                                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                </div>
-                                                <div class="c_time">
-                                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
-                                                </div>
-                                            </div>
-                                            <div class="tr">
-                                                <div class="notification">
-                                                    <p>15</p>
-                                                </div>
-                                                <div class="cancel">
-                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-4" id="task">
-
-                                            <div class="fr">
-                                                <div class="name">
-                                                    <p>שם משימה....</p>
-                                                </div>
-                                                <div class="time">
-                                                    <p>22/22/2222</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="sr">
-                                                <div class="isActive">
-                                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                </div>
-                                                <div class="c_time">
-                                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
-                                                </div>
-                                            </div>
-                                            <div class="tr">
-                                                <div class="notification">
-                                                    <p>15</p>
-                                                </div>
-                                                <div class="cancel">
-                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-4" id="task">
-
-                                            <div class="fr">
-                                                <div class="name">
-                                                    <p>שם משימה....</p>
-                                                </div>
-                                                <div class="time">
-                                                    <p>22/22/2222</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="sr">
-                                                <div class="isActive">
-                                                    <p>לתאריך:22.22.2222</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                </div>
-                                                <div class="c_time">
-                                                    <span>שנה  </span><ion-icon name="pencil-outline"></ion-icon>
-                                                </div>
-                                            </div>
-                                            <div class="tr">
-                                                <div class="notification">
-                                                    <p>15</p>
-                                                </div>
-                                                <div class="cancel">
-                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-
-
-
-                                    </div>
-
-                                </div>
-
-
-
-
-
-                            </div>
-
-
-                            <div id="quiz" class="col-lg-2 d-none d-lg-block" ">
-
-                                <div id="slTitle">
-                                    <h4>תלמידים</h4>
-                                </div>
-                                <div id="sList">
-
-
-
-                                    <ul>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-
-
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                        </div>
 
                     </div>
+
+                </div>
+
+            </div>
+
+            <div id="quiz" class="col-lg-2 d-none d-lg-block" >
+
+                <div id="slTitle">
+                    <h4>תלמידים</h4>
+                </div>
+                <div id="sList">
+
+                    <ul>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 
 </body>
 </html>

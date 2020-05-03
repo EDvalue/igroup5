@@ -164,5 +164,11 @@ namespace project.Models
 
             return dt;
         }
+
+        public Quiz getQ(Dictionary<string,string>d)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.getQ(d);
+        }
     }
 }

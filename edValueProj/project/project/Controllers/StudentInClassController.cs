@@ -11,11 +11,11 @@ namespace project.Controllers
     public class StudentInClassController : ApiController
     {
         // GET api/<controller>
-        public List<StudentInClass> getStudents()
-        {
-            StudentInClass s = new StudentInClass();
-            return s.getStudents();
-        }
+        //public List<StudentInClass> getStudents()
+        //{
+        //    StudentInClass s = new StudentInClass();
+        //    return s.getStudents();
+        //}
         public List<StudentInClass> getStudentByEmail(string email)
         {
             StudentInClass s = new StudentInClass();
@@ -23,9 +23,9 @@ namespace project.Controllers
         }
         [HttpGet]
         [Route("api/StudentInClass/getSQuest/{data}")]
-        public List<StudentInClass> getSQuest(string data)
+        public List<Dictionary<string, string>> getSQuest(string data)
         {
-            StudentInClass rt = new StudentInClass();
+            RealetedTask rt = new RealetedTask();
             return rt.getSQuest(data);
         }
     }

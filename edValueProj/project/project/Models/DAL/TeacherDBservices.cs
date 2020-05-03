@@ -1247,7 +1247,154 @@ namespace project.Models.DAL
             return rtList;
         }
 
+        public List<Dictionary<string,string>> getSQuest(string data)
+        {
+            SqlConnection con = null;
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+            string[] data1;
+            data1 = data.Split(',');
+            string taskId = data1[0];
+            string teamId = data1[1];
 
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+
+
+                string select1 = "select st.StudentEmail,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
+                string select2 = "pq.SubmissionDate,pq.Ptime,Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform";
+                string from = " from(";
+                string select3 = "select * ";
+                string from1 = " from StudentInTeam sit ";
+                string from2 = "where sit.TeamId='" + teamId + "')as st left join [dbo].[PerformQuestionnaire] as pq";
+                string from3 = " on pq.[StudentId] = st.StudentEmail and pq.TaskId = '" + taskId + "' ";
+                string from4 = "left join[User] as u on u.Email = st.StudentEmail";
+                string from5 = " left join Questionnaire as q on q.QuestionnaireId = pq.QuestionnaireId";
+                string from6 = " left join[dbo].[Intelligence] as i on i.[EnglishName]=q.IntelligenceName";
+
+                String selectSTR = select1 + select2 + from + select3 + from1 + from2 + from3 + from4 + from5 + from6;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Dictionary<string,string> srt = new Dictionary<string,string>();
+                    srt.Add("Mail",Convert.ToString(dr["StudentEmail"]));
+                    srt.Add("IdNumber", Convert.ToString(dr["IdNumber"]));
+                    srt.Add("QuizID",Convert.ToString(dr["QuestionnaireId"]));
+                    srt.Add("Fname", Convert.ToString(dr["Fname"]));
+                    srt.Add("Lname",Convert.ToString(dr["Lname"]));
+                    srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
+                    srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    if (dr["Grade"] != DBNull.Value)
+                    {
+                        srt.Add("Grade",Convert.ToString(dr["Grade"]));
+                    }
+                    if (dr["Note"] != DBNull.Value)
+                    {
+                        srt.Add("Note", Convert.ToString(dr["Note"]));
+                    }
+                    else
+                    {
+                        srt.Add("Note","");
+                    }
+
+                    list.Add(srt);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+        }
+
+        public Quiz getQ(Dictionary<string, string> d)
+        {
+            SqlConnection con = null;
+            Quiz q = new Quiz();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                String select1 = "  select * from Task as t inner join Questionnaire as q on q.TaskId=t.TaskId";
+                String select2 = " inner join Question as qu on qu.QuestionnaireId=q.QuestionnaireId left join Answer AS a on a.QuestionId=qu.QuestionId ";
+                String select3 = " left join AnsOpen as ao on ao.[StudentEmail]='" + d["Mail"] + "' and qu.QuestionId=ao.QuestionnaireId ";
+                String select4 = "left join AnsClose as ac on ac.StudentEmail='"+d["Mail"]+"' and a.AnswerId=ac.AnswerId";
+                String select5 = "  where t.TaskId='" + d["TaskId"] + "' and q.QuestionnaireId='" + d["QuizID"] + "' ";
+                String selectSTR = select1 + select2 + select3 + select4 + select5;
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+               
+                Question que = new Question();
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    if (q.QuizID == null)
+                    {
+                        q = new Quiz();
+                        q.FbList = new List<FeedBack>();
+                        q.Question = new List<Question>();
+                        q.QuizID = dr["QuestionnaireId"].ToString();
+                        q.Inteligence = new Inteligence(0,"", dr["IntelligenceName"].ToString(), 0);
+                        q.FbList = getFBbyId(q.QuizID);
+                    }
+                  
+
+
+                    if (dr["QuestionId"].ToString() != que.QuestionId)
+                    {
+
+                        que = new Question(dr["Type"].ToString(), dr["Content"].ToString(), new List<Answer>(), dr["ImgLink"].ToString(), dr["VideoLink"].ToString(), Convert.ToInt32(dr["OrderNum"]), dr["QuestionId"].ToString());
+                        q.Question.Add(que);
+                    }
+
+                    if (dr["Answer"] != DBNull.Value)
+                        que.Answer.Add(new Answer(dr["ans_content"].ToString(), Convert.ToBoolean(dr["IsRight"]), Convert.ToInt32(dr["AnswerId"])));
+
+
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+
+            return q;
+        }
 
     }
 }

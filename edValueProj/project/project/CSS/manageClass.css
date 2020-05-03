@@ -3,6 +3,22 @@
     margin-top: 1%;
 }
 
+#tbl_int {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+}
+
+    #tbl_int img:hover{
+        transform:scale(1.05);
+    }
+
+    #tbl_int img {
+        width: 50px;
+        height: 50px;
+    }
+
 #tList {
     float: left;
     width: 100%;
@@ -330,9 +346,14 @@ canvas {
     background-color:white;
     border-radius:5px;
 }
+#TaskView {
+    margin: auto;
+    width: 90%;
+    margin-right: 5%;
+}
 #ShowQuestionnaire {
-    width: 600px;
-    height: 415px;
+    width: 60%;
+    height: 80%;
     position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
@@ -343,5 +364,5 @@ canvas {
     display: flex;
     flex-direction: column;
     border-radius: 5px;
-    text-align:center;
+    text-align: center;
 }
