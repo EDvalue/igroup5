@@ -25,11 +25,15 @@
         var perform_showQuiz_mode;//save who is in the page;
         var LufDiv;//save the last element upload active;
         var userOBJ;//save the user that active in the page;
+        var performers;//save all performers list in teacher check mode;
+        var performer;//the last selected performer mail
+        var fb;//save the last fb;
+         var activeStTeam
 
         function init() {
             
             if (localStorage["userMode"]) 
-                perform_showQuiz_mode = localStorage["userMode"];
+                  perform_showQuiz_mode = localStorage["userMode"];
             
             if(localStorage['user'])
                 userOBJ = JSON.parse(localStorage['user']);
@@ -37,14 +41,41 @@
             if(localStorage['quiz_mode'])
                 modeQuiz = localStorage['quiz_mode'];
 
+            if (localStorage["active_student_team"])
+                activeStTeam=JSON.parse(localStorage["active_student_team"])
+
+            if (localStorage["performers"])
+                performers = JSON.parse(localStorage["performers"])
+            if (localStorage["performer"])
+                  performer = localStorage["performer"];
+
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
 
             if(localStorage['quiz'])
                 el = JSON.parse(localStorage['quiz']);//read the quiz
 
+            printPage();
+            $(".loader").hide();
+            ckReplace()
+            connectCHK();
+            connectForm();
+            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode="teacher"&&modeQuiz=="check")) {
+                //fill answer of quiz
+                fillANS();
+            }
+
+        }
+
+
+        function printPage() {
+             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+
+                quizString +=`<div quizOf=${performer}>`
+            }
+
             quizString += `<div id='QuizTitle'><h1>${el.Title}</h1> </div>
-                                        <div id='main' dir="rtl"><form id=quizForm>`
+              <div id='main' dir="rtl"><form id=quizForm>`
             for (qu in el.Question) {
                 //loop over the question in the quiz for print them;
                 quizString += `<div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class="qu" Qtype='${el.Question[qu].Type}'>`
@@ -73,7 +104,7 @@
                             quizString += `<div id="AmericanAmswerBlock">`
                             if (perform_showQuiz_mode == 'teacher') {
 
-                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" checked name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span class="markAns" >${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" name="chk${qu}"/> <p class="markAns">${el.Question[qu].Answer[y].Content}</p>`
                             } else {
 
                                 quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>`
@@ -112,9 +143,9 @@
                         if (el.Question[qu].Answer[y].IsRight) {
                             quizString += `<div id="AmericanAmswerBlock">`
                             if (perform_showQuiz_mode == "teacher") {
-                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" checked /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span class="markAns">${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
-                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p>${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p class="markAns">${el.Question[qu].Answer[y].Content}</p>`
                             }
 
                             quizString += `</div>`
@@ -133,23 +164,36 @@
 
             }
 
+     
+
             if (perform_showQuiz_mode == "student") {
-                quizString += `<div id=submitDIV><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
+                quizString += `<div id="submitDIV"><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
             } else {
                 //teacher note and grade
+                quizString += `
+              <div id="t_fb">
+             <div class="fb_content">
+              <div class="note_fb">
+                <div clsss="p_note"><p>משוב לשאלון</p></div>
+                <div class="fb_txt"><textarea rows="5" cols="40"></textarea></div>
+              </div>
+               <div class="grade_fb">
+                <div clsss="p_grade"><p>ציון</p></div>
+                <div class="fb_grade"><input type="number" value="80" min="30" max="100"/></div>
+               </div>
+               </div>
+               <div id="submitDIV"><button type="submit" class="btn btn-primary">שלח משוב</button></div>
+
+              </div>`;
             }
 
-            quizString += '</div></form>'
+            quizString += '</form></div>'
+
+             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+
+                quizString +=`</div>`
+             }
             document.getElementsByTagName('body')[0].innerHTML += quizString;
-            $(".loader").hide();
-            ckReplace()
-            connectCHK();
-            connectForm();
-            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode="teacher"&&modeQuiz=="check")) {
-                //fill answer of quiz
-                fillANS();
-            }
-
         }
 
         function fileperform() {
@@ -227,9 +271,120 @@
             }
         }
 
+        function updateFB() {
+
+            
+            fb = {
+                grade: $(".fb_grade input[type='number']").val(),
+                text: $(".fb_txt textarea").val(),
+                mail: performer,
+                qid:el.QuizID,
+            }
+
+            ajaxCall("PUT", "../api/Teacher/updateFB", JSON.stringify(fb),updateFBsuccess,updateFBerror)
+        }
+
+        function updateFBsuccess(data) {
+
+            updatePreformers();
+
+               swal({
+                
+                   title: "משוב עודכן",
+                   icon: "success",
+               })
+                    .then(function (confirm) {
+                        if (confirm) popupDiv() ;
+                        
+                    })
+
+        }
+
+        function popupDiv() {
+            popup = '';
+            cStr = "";
+            ncStr = "";
+            popup += `<div id="nextSt_pop">
+           <div id="nextSt_title"><h3>בחר  תלמיד או המשך</h3></div>
+          <div id="per_sel">
+            <select><option>בחר מרשימה </option>`;
+            for (s in performers) {
+                
+                if (!performers[s].QuizID=="") {
+
+                    if ((performers[s].Grade != undefined && performers[s].Grade != 0) || (performers[s].Note != "" && performers[s].Note != undefined)) {
+
+                        cStr += `<option of="${performers[s].Mail}" class=c_opt>${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName}-${performers[s].Grade})</option>`;
+
+                    } else {
+
+                        ncStr += `<option of="${performers[s].Mail}" class=Nc_opt>${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName})</option>`;
+                    }
+                }
+               
+            }
+            popup +=ncStr+cStr;
+             popup +=`</select>
+          </div>
+          <input type="button" class="btn btn-info" value='המשך'/>
+         </div>`;
+
+            $('#main').html(popup);
+            $("#per_sel select").change(reOpenQuiz)
+        }
+
+          function getPdata(id) {
+
+            for (x in performers) {
+                if (performers[x].Mail == id) {
+                    return performers[x];
+                }
+            }
+
+          }
+
+        function reOpenQuiz() {
+            performer = $(this).find(":selected").attr('of');
+            arg=getPdata(performer)
+            Oquiz = {
+                QuizID:arg.QuizID,
+                Mail: performer,
+                TaskId: el.TaskId,
+            }
+
+            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+        }
+
+        function getQsuccess(data) {
+           
+            localStorage["quiz"] = JSON.stringify(data);
+            localStorage["performer"] = performer;
+            location.assign("showQuiz.html");
+           
+        }
+
+        function getQerror(err) {
+
+            swal("הניסיון לפתוח את המשימה נכשל")
+        }
+
+        function updateFBerror(err) {
+            console.log(err)
+        }
+
+        function updatePreformers() {
+            for (p in performers) {
+                if (performers[p].Mail == performer) {
+
+                    performers[p].Grade = fb.grade;
+                    performers[p].Note = fb.text;
+                }
+            }
+        }
+
         function connectForm() {
 
-            if (modeQuiz != "watch") {
+            if (modeQuiz != "watch" && modeQuiz != "check") {
 
                 window.onbeforeunload = function () {
                     return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";
@@ -237,7 +392,9 @@
                 };
 
                 $("#quizForm").submit(function () {
-                    uploadeForm();
+                   
+                    perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
+                    
                     return false;
                 });
 
@@ -305,7 +462,17 @@
                 }
                 //else disabled page if the user dont should create any change
                 //in the quiz performing
-            } else {$("#main *").prop('disabled', 'disabled')}
+            } else {
+                $("#main *").prop('disabled', 'disabled')
+                $("#t_fb *,textarea").prop('disabled', false)
+
+                 $("#quizForm").submit(function () {
+                   console.log()
+                    perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
+                    
+                    return false;
+                });
+            }
         }
 
         function PostDocSuccess(data) {
@@ -371,16 +538,25 @@
                 }
             }
 
+            rt = {
+                Task: {
+
+                    QuizList: [el],
+                },
+                StPerformer: userOBJ,
+                yearOfStudy: activeStTeam.Id,
+
+            }
+
             if (modeQuiz == 'new') {
-                tit = el.Title;
-                el.Title = userOBJ.Mail;
-                ajaxCall('POST', '../api/Student/postQ', JSON.stringify(el), postQSuccess, postQError);
-                el.Title=tit;
-            } else if (mode == 'edit') {
-                tit = el.Title;
-                el.Title = userOBJ.Mail;//save the mail of user submitter
-                ajaxCall('PUT', '../api/Student/updateQ', JSON.stringify(el), postQSuccess, postQError);
-                el.Title=tit;//return the original title
+      
+                ajaxCall('POST', '../api/Student/postQ', JSON.stringify(rt), postQSuccess, postQError);
+                
+            } else if (modeQuiz == 'edit') {
+               
+               
+                ajaxCall('PUT', '../api/Student/updateQ', JSON.stringify(rt), postQSuccess, postQError);
+                
             }
 
         }

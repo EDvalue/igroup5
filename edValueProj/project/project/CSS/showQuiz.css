@@ -5,14 +5,67 @@ input[type=file] {
     display: none;
 }
 
+.markAns {
+    display: inline-flex;
+    cursor: pointer;
+    position: relative;
+}
+
+
+
+span.markAns,p.markAns {
+    color:#007bff;
+}
+
+
+#t_fb {
+    display: flex;
+    justify-items: center;
+    flex-direction:column;
+    width: max-content;
+    margin: 0 auto;
+}
+.fb_content{
+
+    display:flex;
+    text-align:right;
+}
+#nextSt_pop {
+    width: 600px;
+    height: 415px;
+    position: fixed;
+    top: 50%; /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
+    border: 1px groove #808080;
+    z-index: 3;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+}
+#nextSt_pop {
+    display: flex;
+    flex-direction: column;
+}
+.grade_fb {
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.note_fb {
+    display: flex;
+    flex-direction: column;
+}
+
 .filedrag {
     border: 2px dashed #ccc;
     border-radius: 20px;
     box-shadow: 1px 1px #ccc;
     background-image: url('../images/fileUpload.png');
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:60px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px;
     width: 90%;
     height: 80%;
     margin: auto auto;

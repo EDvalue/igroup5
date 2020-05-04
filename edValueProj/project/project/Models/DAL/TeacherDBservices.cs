@@ -1268,7 +1268,7 @@ namespace project.Models.DAL
                 string select3 = "select * ";
                 string from1 = " from StudentInTeam sit ";
                 string from2 = "where sit.TeamId='" + teamId + "')as st left join [dbo].[PerformQuestionnaire] as pq";
-                string from3 = " on pq.[StudentId] = st.StudentEmail and pq.TaskId = '" + taskId + "' ";
+                string from3 = " on pq.[StudentId] = st.StudentEmail and pq.TaskId = '" + taskId + "' and pq.TeamId='" + teamId + "'";
                 string from4 = "left join[User] as u on u.Email = st.StudentEmail";
                 string from5 = " left join Questionnaire as q on q.QuestionnaireId = pq.QuestionnaireId";
                 string from6 = " left join[dbo].[Intelligence] as i on i.[EnglishName]=q.IntelligenceName";
@@ -1293,6 +1293,10 @@ namespace project.Models.DAL
                     if (dr["Grade"] != DBNull.Value)
                     {
                         srt.Add("Grade",Convert.ToString(dr["Grade"]));
+                    }
+                    else
+                    {
+                        srt.Add("Grade","0");
                     }
                     if (dr["Note"] != DBNull.Value)
                     {
@@ -1334,12 +1338,13 @@ namespace project.Models.DAL
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
-                String select1 = "  select * from Task as t inner join Questionnaire as q on q.TaskId=t.TaskId";
-                String select2 = " inner join Question as qu on qu.QuestionnaireId=q.QuestionnaireId left join Answer AS a on a.QuestionId=qu.QuestionId ";
-                String select3 = " left join AnsOpen as ao on ao.[StudentEmail]='" + d["Mail"] + "' and qu.QuestionId=ao.QuestionnaireId ";
-                String select4 = "left join AnsClose as ac on ac.StudentEmail='"+d["Mail"]+"' and a.AnswerId=ac.AnswerId";
-                String select5 = "  where t.TaskId='" + d["TaskId"] + "' and q.QuestionnaireId='" + d["QuizID"] + "' ";
-                String selectSTR = select1 + select2 + select3 + select4 + select5;
+                String select1 = "   select t.Title,t.TaskId,t.SubjectName,q.IntelligenceName,q.QuestionnaireId ,quest.QuestionId,quest.Content,quest.[Type],quest.OrderNum,quest.ImgLink,quest.VideoLink, ";
+                String select2 = "    a.Content AS ans_content,a.IsRight,a.AnswerId ,ac.[AnswerId] as picked,ao.[FileLink],ao.[Answer],pq.[Note],pq.Ptime,pq.Grade ";
+                String select3 = "  from PerformQuestionnaire as pq INNER JOIN Questionnaire as q on q.TaskId=pq.TaskId inner join Question as quest on quest.QuestionnaireId=q.QuestionnaireId  ";
+                String select4 = " left join Answer AS a on a.QuestionId=quest.QuestionId left join AnsOpen as ao on  quest.QuestionId=ao.QuestionId and ao.StudentEmail='" + d["Mail"] + "'";
+                String select5 = "  left join AnsClose as ac on ac.StudentEmail='" + d["Mail"] + "' and a.AnswerId=ac.AnswerId inner join Task as t on t.TaskId=pq.TaskId ";
+                String select6 = " where pq.TaskId='" + d["TaskId"] + "' and q.QuestionnaireId='" + d["QuizID"] + "' and pq.StudentId='" + d["Mail"]+"' and pq.TeamId='"+d["TeamId"]+"'";
+                String selectSTR = select1 + select2 + select3 + select4 + select5 + select6;
 
 
 
@@ -1351,32 +1356,58 @@ namespace project.Models.DAL
                 Question que = new Question();
                 while (dr.Read())
                 {   // Read till the end of the data into a row
-                    if (q.QuizID == null)
+
+
+                    
+                    if (dr["QuestionnaireId"].ToString() != q.QuizID)
                     {
+  
                         q = new Quiz();
-                        q.FbList = new List<FeedBack>();
                         q.Question = new List<Question>();
                         q.QuizID = dr["QuestionnaireId"].ToString();
-                        q.Inteligence = new Inteligence(0,"", dr["IntelligenceName"].ToString(), 0);
-                        q.FbList = getFBbyId(q.QuizID);
-                    }
-                  
+                        q.TaskId = dr["TaskId"].ToString();
+                        q.Title = dr["Title"].ToString();
+                        q.Inteligence = new Inteligence(0, dr["IntelligenceName"].ToString(), dr["IntelligenceName"].ToString(),0);
 
+                    }
 
                     if (dr["QuestionId"].ToString() != que.QuestionId)
                     {
 
                         que = new Question(dr["Type"].ToString(), dr["Content"].ToString(), new List<Answer>(), dr["ImgLink"].ToString(), dr["VideoLink"].ToString(), Convert.ToInt32(dr["OrderNum"]), dr["QuestionId"].ToString());
+                        que.Answer = new List<Answer>();
                         q.Question.Add(que);
                     }
 
-                    if (dr["Answer"] != DBNull.Value)
+                    if (dr["ans_content"] != DBNull.Value)
+                    {
                         que.Answer.Add(new Answer(dr["ans_content"].ToString(), Convert.ToBoolean(dr["IsRight"]), Convert.ToInt32(dr["AnswerId"])));
+
+                        if (dr["picked"] != DBNull.Value)
+                        {
+                            que.Answer[que.Answer.Count - 1].IsPicked = true;
+                        }
+                        else
+                        {
+                            que.Answer[que.Answer.Count - 1].IsPicked = false;
+                        }
+                    }
+                    else if (dr["Answer"] != DBNull.Value || dr["FileLink"] != DBNull.Value)
+                    {
+                        if (dr["FileLink"] != DBNull.Value)
+                        {
+                            que.AnsContent = dr["FileLink"].ToString();
+                        }
+                        else
+                        {
+                            que.AnsContent = dr["Answer"].ToString();
+                        }
+
+                    }
 
 
                 }
 
-                
             }
             catch (Exception ex)
             {
@@ -1394,6 +1425,59 @@ namespace project.Models.DAL
 
 
             return q;
+        }
+
+        public int updateQFB(Dictionary<string,string> qfb)
+        {
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("UPDATE [dbo].[PerformQuestionnaire] SET  [Grade]='{0}', [Note]='{1}' where [StudentId]='{2}' and [QuestionnaireId]='{3}'", qfb["grade"],qfb["text"],qfb["mail"],qfb["qid"]);
+            String cStr = sb.ToString();
+
+
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+
+
+            }
+            return numEffected;
         }
 
     }

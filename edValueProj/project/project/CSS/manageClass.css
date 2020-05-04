@@ -197,7 +197,6 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 120px;
     width: 200px;
     margin-bottom: 3%;
     margin-top: 2%;
@@ -305,6 +304,8 @@ canvas {
 .hide_list_teams {
     display: inline-block;
     cursor: pointer;
+    position: absolute;
+    z-index: 3;
 }
 
 .bar1, .bar2, .bar3 {
@@ -349,10 +350,10 @@ canvas {
 #TaskView {
     margin: auto;
     width: 90%;
-    margin-right: 5%;
+    margin-right: 15%;
 }
 #ShowQuestionnaire {
-    width: 60%;
+    width: 80%;
     height: 80%;
     position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */

@@ -26,11 +26,18 @@
 
         var myTeams;
         var listdata;
+        var chosenSt;
         var taskList;
         var selectedTsakId;
         var taskData;
+        var activeTteam;
+        var tbl;//data table
 
         $(document).ready(function () {
+
+            if (localStorage["active_teacher_team"])
+                activeTteam = JSON.parse(localStorage["active_teacher_team"]);
+
             createSList();
             createTList();
             className();
@@ -39,20 +46,6 @@
             console.log("inside")
 
         });
-
-
-        function openQ(val) {
-
-            arg = getPdata(val.getAttribute('data_loc'));
-
-            Oquiz = {
-                QuizID:arg.QuizID,
-                Mail:arg.Mail,
-                TaskId:selectedTaskId,
-            }
-
-            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
-        }
 
         function getPdata(id) {
 
@@ -64,8 +57,31 @@
 
         }
 
-        function getQsuccess(data) {
 
+        function openQ(val) {
+
+            chosenSt= getPdata(val.getAttribute('data_loc'));
+
+            Oquiz = {
+                QuizID:chosenSt.QuizID,
+                Mail:chosenSt.Mail,
+                TaskId: selectedTaskId,
+                TeamId: activeTteam.Id,
+            }
+
+            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+        }
+
+     
+
+        function getQsuccess(data) {
+            localStorage["performers"] = JSON.stringify(taskData);
+            localStorage["userMode"] = "teacher";
+            localStorage["quiz_mode"] = "check";
+            localStorage["performer"] = chosenSt.Mail;
+            localStorage["quiz"] = JSON.stringify(data);
+
+            location.assign("showQuiz.html");
         }
 
         function getQerror(err) {
@@ -79,13 +95,21 @@
             console.log(listdata1)
             var cstr = "<ul>"
             for (a in listdata1) {
-                cstr += "<li><a href='studentInClassInfo.html'><br />" + listdata1[a].Name + " " + listdata1[a].LastName + "</a></li>"
+                cstr += "<li st='"+listdata1[a].Mail+"'>" + listdata1[a].Name + " " + listdata1[a].LastName + "</li>"
 
             }
 
             cstr += "</ul>"
             console.log(cstr)
             $("#sList").html(cstr);
+            $("#sList li").click(openSt)
+        }
+
+        function openSt() {
+
+            localStorage["performer"] = this.getAttribute('of');
+            location.assign("studentInClassInfo.html");
+            
         }
 
         function ShowSubmitted(val) {
@@ -147,7 +171,12 @@
                             render: function (data, type, row, meta) {
 
                                 if (row.Note != "") {
-                                    return row.Note
+                                    if (row.Note.length > 15) {
+                                        return `<p  title="${row.Note}">${row.Note.substr(0, 15)}...</p>`
+                                    } else {
+                                         return `<p  title="${row.Note}">${row.Note}</p>`
+                                    }
+                                    
                                 } else {
                                     return "none"
                                 }
@@ -178,7 +207,9 @@
         function closeDivUS() {
 
             $("#ShowQuestionnaire").hide();
-
+            tbl.destroy();
+            
+   
         }
 
         function createTList() {
@@ -669,14 +700,7 @@
                 <div dir="ltr" id="tList">
                     <ul>
 
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
-                        <li><a href="manageClass.html">קבוצה של מורה</a></li>
+               
 
 
                     </ul>
@@ -885,16 +909,7 @@
                 <div id="sList">
 
                     <ul>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-                        <li><a href="studentInClassInfo.html"> 305779449  <br />שם תלמיד</a></li>
-
+                 
 
                     </ul>
 

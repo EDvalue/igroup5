@@ -45,6 +45,13 @@ namespace project.Models
             this.stPerformer = stPerformer;
         }
 
+        public int postQ()
+        {
+
+            StudentDBServices dbs = new StudentDBServices();
+            return dbs.postQ(this);
+        }
+
         public List<RealetedTask> getSTasks(string data)
         {
             StudentDBServices dbs = new StudentDBServices();
@@ -85,17 +92,29 @@ namespace project.Models
                 }
             }
 
-            del.Title = add.Title;
+            
             del.TaskId = this.Task.TaskId;
+            add.TaskId= this.Task.TaskId;
+            RealetedTask rt= new RealetedTask();
             StudentDBServices dbs1 = new StudentDBServices();
             StudentDBServices dbs2 = new StudentDBServices();
-            dbs1 = dbs1.updateQansC(del);
+            rt.Task = new Task();
+            rt.stPerformer = new Student();
+            rt.stPerformer = this.stPerformer;
+            rt.Task.QuizList = new List<Quiz>();
+            rt.Task.QuizList.Add(del);
+            rt.YearOfStudy = this.YearOfStudy;
+            
+            dbs1 = dbs1.updateQansC(rt);
             dbs1.dt = deleteRows(dbs1.dt);
-            dbs2 = dbs2.updateQansO(del);
+            dbs2 = dbs2.updateQansO(rt);
             dbs2.dt = deleteRows(dbs2.dt);
             dbs1.update();
             dbs2.update();
-            dbs2.deletePQ(del, this.Task.TaskId);
+            dbs2.deletePQ(del, this);
+            rt.Task.QuizList.Clear();
+            rt.Task.QuizList.Add(add);
+            dbs2.postQ(rt);
             return num;
 
 
@@ -125,6 +144,12 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.getSQuest(data);
 
+        }
+
+        public int updateQFB(Dictionary<string, string> qfb)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.updateQFB(qfb);
         }
     }
 }

@@ -52,27 +52,22 @@ namespace project.Models
             return dbs.PostQuiz(this);
         }
 
-        public int postQ()
-        {
 
-            StudentDBServices dbs = new StudentDBServices();
-            return dbs.postQ(this);
-        }
-        public int updateQ()
+        public int updateQ(RealetedTask rt)
         {
             StudentDBServices dbs1 = new StudentDBServices();
             StudentDBServices dbs2 = new StudentDBServices();
-            dbs1 = dbs1.updateQansC(this);
-            dbs2 = dbs2.updateQansO(this);
-            dbs1.dt = closeQ(this, dbs1.dt);
-            dbs2.dt = openQ(this, dbs2.dt);
+            dbs1 = dbs1.updateQansC(rt);
+            dbs2 = dbs2.updateQansO(rt);
+            dbs1.dt = closeQ(rt.Task.QuizList[0], dbs1.dt,rt.YearOfStudy);
+            dbs2.dt = openQ(rt.Task.QuizList[0], dbs2.dt, rt.YearOfStudy);
 
             dbs1.update();
             dbs2.update();
             return 1;
         }
 
-        private DataTable closeQ(Quiz q, DataTable dt)
+        private DataTable closeQ(Quiz q, DataTable dt,string tId)
         {
             int flag = 0;
             foreach (var item in q.Question)
@@ -121,6 +116,7 @@ namespace project.Models
                                 workRow["TaskId"] = q.taskId;
                                 workRow["AnswerId"] = ans.AnsId;
                                 workRow["QuestionId"] = item.QuestionId;
+                                workRow["TeamId"] = tId;
 
                                 dt.Rows.Add(workRow);
                             }
@@ -135,7 +131,7 @@ namespace project.Models
             return dt;
         }
 
-        private DataTable openQ(Quiz q, DataTable dt)
+        private DataTable openQ(Quiz q, DataTable dt,string tId)
         {
             foreach (var item in q.Question)
             {

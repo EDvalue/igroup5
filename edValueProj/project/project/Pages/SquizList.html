@@ -25,6 +25,7 @@
     <script>
         var userOBJ;//save the user that active in the page;
         var pArr = [];
+        var activeStTeam;
         var selectedTask;//save the selected open task;
         var cq_activeTask;//save the realated task for change quiz;
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];//arrs of related tasks
@@ -38,7 +39,10 @@
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);//print the user name in manage user div
 
             if(localStorage["active_student_team"])
-              teamOBJ = JSON.parse(localStorage["active_student_team"]);
+                teamOBJ = JSON.parse(localStorage["active_student_team"]);
+
+            if (localStorage["active_student_team"])
+                activeStTeam=JSON.parse(localStorage["active_student_team"])
 
             userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;
@@ -138,10 +142,10 @@
                 .then(function (confirm) {
                     if (confirm) {
                         cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].TaskId = 2;
-                        title = cq_activeTask.Task.Title;
-                        cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].Title = userOBJ.Mail;
+                        cq_activeTask.yearOfStudy=activeStTeam.Id;
+                        cq_activeTask.StPerformer = userOBJ;
                         ajaxCall("PUT", "../api/Student/changeQ", JSON.stringify(cq_activeTask), changeQSuccess, changeQError)
-                        cq_activeTask.Task.Title = title;
+                        
                     }
                     else {
                         swal({
@@ -171,7 +175,7 @@
 
             localStorage["quiz"] = JSON.stringify(quizC);
             localStorage["perform_showQuiz_mode"] = "student";
-            localStorage['quiz_mode'] = "new";
+            localStorage['quiz_mode'] = "edit";
             location.assign("showQuiz.html");
         }
 

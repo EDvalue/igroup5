@@ -162,8 +162,8 @@ namespace project.Models.DAL
                 String part5 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId='"+teamId+"' inner join Questionnaire as q on q.TaskId=rt.TaskId and rt.Date_Assignment>q.creationTime ";
                 String part6 = "  inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] group by t.taskId,t.Title,t.SubjectName,q.IntelligenceName,i.[Name],rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy)as tbl  ";
                 String part7 = "  inner join Question as quest on quest.QuestionnaireId=tbl.QuestionnaireId inner join PointsInIntelligence as pio on pio.IntelligenceName=tbl.IntelligenceName and pio.StudentEmail='"+userEmail+"' ";
-                String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='" + userEmail + "' ";
-                String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId]  order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
+                String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='" + userEmail + "' and  pq.TeamId='"+teamId+"' ";
+                String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId] order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
                 String selectSTR = part1+part2+part3+part4+part5+part6+part7+part8+part9;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -222,9 +222,7 @@ namespace project.Models.DAL
                         q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(),dr["IntelligenceName"].ToString(),Convert.ToInt32(dr["Spoints"]));
           
                     }
-                        
-                    
-
+   
                     if (dr["QuestionId"].ToString() != que.QuestionId)
                     {
 
@@ -369,13 +367,13 @@ namespace project.Models.DAL
             return tList;
         }
 
-        public int postQ(Quiz q)
+        public int postQ(RealetedTask rt)
         {
             int numEffected = 0;
             SqlConnection con;
             SqlCommand cmd;
             String cStr="";
-            numEffected+=insertperformQuestionnaire(q);
+            numEffected+=insertperformQuestionnaire(rt);
             try
             {
                 con = connect("DBConnectionString"); // create the connection
@@ -386,7 +384,7 @@ namespace project.Models.DAL
                 throw (ex);
             }
 
-            foreach(var item in q.Question)
+            foreach(var item in rt.Task.QuizList[0].Question)
             {
                 if (item.Type == "A" || item.Type == "M")
                 {
@@ -394,7 +392,7 @@ namespace project.Models.DAL
                     {
                         if (a.IsPicked)
                         {
-                            cStr = BuildAnsCInsertCommand(q, item,a);
+                            cStr = BuildAnsCInsertCommand(rt.Task.QuizList[0],item,a,rt.YearOfStudy,rt.StPerformer);
 
                             // helper method to build the insert string
 
@@ -422,7 +420,7 @@ namespace project.Models.DAL
                 }
                 else
                 {
-                    cStr = BuildAnsOInsertCommand(q,item);
+                    cStr = BuildAnsOInsertCommand(rt.Task.QuizList[0],item, rt.YearOfStudy,rt.StPerformer);
 
                     // helper method to build the insert string
 
@@ -460,7 +458,7 @@ namespace project.Models.DAL
             
         }
 
-        public int insertperformQuestionnaire(Quiz q)
+        public int insertperformQuestionnaire(RealetedTask rt)
         {
 
             int numEffected = 0;
@@ -479,7 +477,7 @@ namespace project.Models.DAL
             }
 
 
-            cStr = BuildPQInsertCommand(q);
+            cStr = BuildPQInsertCommand(rt.Task.QuizList[0],rt.StPerformer,rt.YearOfStudy);
             cmd = CreateCommand(cStr, con);    // create the command
 
             try
@@ -509,7 +507,7 @@ namespace project.Models.DAL
             }
             return numEffected;
         }
-        private String BuildPQInsertCommand(Quiz q)
+        private String BuildPQInsertCommand(Quiz q,Student t,string tId)
         {
             String command;
 
@@ -517,14 +515,14 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4})", q.Title, q.TaskId, q.QuizID,"GetDate()",0);
+            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}')", t.Mail, q.TaskId, q.QuizID,"GetDate()",0,t.SCode,tId);
 
-            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade)";
+            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade,TeamSchoolCode,TeamId)";
             command = prefix + sb.ToString();
 
             return command;
         }
-        private String BuildAnsCInsertCommand(Quiz q,Question qu,Answer a)
+        private String BuildAnsCInsertCommand(Quiz q,Question qu,Answer a,string tId,Student s)
         {
             String command;
 
@@ -532,14 +530,14 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}','{3}',{4})",q.Title,q.TaskId,q.QuizID,qu.QuestionId,a.AnsId);
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}',{4},'{5}')",s.Mail,q.TaskId,q.QuizID,qu.QuestionId,a.AnsId,tId);
 
-            String prefix = "INSERT INTO AnsClose" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,AnswerId)";
+            String prefix = "INSERT INTO AnsClose" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,AnswerId,TeamId)";
             command = prefix + sb.ToString();
 
             return command;
         }
-        private String BuildAnsOInsertCommand(Quiz q,Question qu)
+        private String BuildAnsOInsertCommand(Quiz q,Question qu,string tId,Student s)
         {
             String command;
 
@@ -547,14 +545,14 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
             String prefix = "";
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}')",q.Title,q.TaskId,q.QuizID,qu.QuestionId,qu.Content);
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}','{5}')", s.Mail,q.TaskId,q.QuizID,qu.QuestionId,qu.Content,tId);
             if (qu.Type == "O")
             {
-                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer)";
+                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer,TeamId)";
             }
             else
             {
-                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer)";
+                prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer,TeamId)";
             }
             
             command = prefix + sb.ToString();
@@ -562,13 +560,13 @@ namespace project.Models.DAL
             return command;
         }
 
-        public StudentDBServices updateQansO(Quiz q)
+        public StudentDBServices updateQansO(RealetedTask rt)
         {
             SqlConnection con = null;
             try
             {
                 con = connect("DBConnectionString");
-                da = new SqlDataAdapter("select * from AnsOpen AS ac  where ac.TaskId='"+q.TaskId+"' and ac.StudentEmail='"+q.Title+"' and ac.QuestionnaireId='"+q.QuizID+"'", con);
+                da = new SqlDataAdapter("select * from AnsOpen AS ac  where ac.TaskId='"+ rt.Task.QuizList[0].TaskId+"' and ac.StudentEmail='"+ rt.StPerformer.Mail+"' and ac.QuestionnaireId='"+ rt.Task.QuizList[0].QuizID+"' and ac.TeamId='"+rt.YearOfStudy+"'", con);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -594,13 +592,13 @@ namespace project.Models.DAL
 
         }
 
-        public StudentDBServices updateQansC(Quiz q)
+        public StudentDBServices updateQansC(RealetedTask rt)
         {
             SqlConnection con = null;
             try
             {
                 con = connect("DBConnectionString");
-                da = new SqlDataAdapter("select * from AnsClose AS ac  where ac.TaskId='" + q.TaskId + "' and ac.StudentEmail='" + q.Title + "' and ac.QuestionnaireId='" + q.QuizID + "'", con);
+                da = new SqlDataAdapter("select * from AnsClose AS ac  where ac.TaskId='" + rt.Task.QuizList[0].TaskId + "' and ac.StudentEmail='" + rt.StPerformer.Mail + "' and ac.QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and ac.TeamId='"+ rt.YearOfStudy + "'", con);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -707,7 +705,7 @@ namespace project.Models.DAL
             return num;
         }
 
-        public void deletePQ(Quiz del,string taskId)
+        public void deletePQ(Quiz del,RealetedTask rt)
         {
 
             int numEffected = 0;
@@ -726,7 +724,7 @@ namespace project.Models.DAL
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Delete from PerformQuestionnaire where  [QuestionnaireId]='{0}' and [TaskId]='{1}'  and [StudentId]='{2}'",del.QuizID,taskId,del.Title); ;
+            sb.AppendFormat("Delete from PerformQuestionnaire where  [QuestionnaireId]='{0}' and [TaskId]='{1}'  and [StudentId]='{2}' and [TeamId]='{3}'",del.QuizID,rt.Task.TaskId,rt.StPerformer.Mail,rt.YearOfStudy); ;
             String cStr = sb.ToString();
 
             cmd = CreateCommand(cStr, con);             // create the command

@@ -13,9 +13,9 @@ namespace project.Controllers
     {
         [HttpPost]
         [Route("api/Student/postQ")]
-        public int postQ([FromBody] Quiz q)
+        public int postQ([FromBody] RealetedTask rt)
         {
-            return q.postQ();
+            return rt.postQ();
         }
 
 
@@ -63,9 +63,10 @@ namespace project.Controllers
 
         [HttpPut]
         [Route("api/Student/updateQ")]
-        public int updateQ([FromBody] Quiz q)
+        public int updateQ([FromBody] RealetedTask rt)
         {
-            return q.updateQ();
+            Quiz q = new Quiz();
+            return q.updateQ(rt);
         }
 
         [HttpPut]

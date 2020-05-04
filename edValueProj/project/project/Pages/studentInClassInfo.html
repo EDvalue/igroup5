@@ -73,16 +73,32 @@
         var bibleChart;
         var historyChart;
         var scienceChart;
+        var performer;
+        var activeTteam;
 
         $(document).ready(function () {
-            // userOBJ = JSON.parse(localStorage["user"])
+             if(localStorage["user"])
+                userOBJ = JSON.parse(localStorage["user"])
+            if (localStorage["performer"])
+                performer = JSON.parse(localStorage["performer"])
+             if (localStorage["active_teacher_team"])
+                activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
             ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
-            //ajaxCall("GET", "../api/Student/getStudentByEmail/" + userOBJ.StudentEmail, "", getByEmailSuccess, getByEmailError)
-            //getDataIntelligence();
+            
+            bringStTasks();
+
             UpdateTaskDoughnut();
-            //ChartIt();
+            
         });
+
+        function bringStTasks() {
+
+            info = {
+                Mail: performer,
+                TeamId:activeTteam.Id,
+            }
+        }
 
         function getSuccess(data) {
             studentsArr = data;

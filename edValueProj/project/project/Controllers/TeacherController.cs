@@ -157,5 +157,12 @@ namespace project.Controllers
             Quiz q = new Quiz();
             return q.getQ(d);
         }
+        [HttpPut]
+        [Route("api/Teacher/updateFB")]
+        public int updateQFB([FromBody] Dictionary<string,string> qfb)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.updateQFB(qfb);
+        }
     }
 }
