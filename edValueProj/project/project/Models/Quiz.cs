@@ -64,6 +64,8 @@ namespace project.Models
 
             dbs1.update();
             dbs2.update();
+
+            dbs1.updateisWaitingPQ(rt);
             return 1;
         }
 

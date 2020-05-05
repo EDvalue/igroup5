@@ -28,7 +28,8 @@
         var performers;//save all performers list in teacher check mode;
         var performer;//the last selected performer mail
         var fb;//save the last fb;
-         var activeStTeam
+        var activeStTeam
+        var activeTteam;
 
         function init() {
             
@@ -42,7 +43,9 @@
                 modeQuiz = localStorage['quiz_mode'];
 
             if (localStorage["active_student_team"])
-                activeStTeam=JSON.parse(localStorage["active_student_team"])
+                activeStTeam = JSON.parse(localStorage["active_student_team"])
+            if (localStorage["active_teacher_team"])
+                activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
             if (localStorage["performers"])
                 performers = JSON.parse(localStorage["performers"])
@@ -350,6 +353,7 @@
                 QuizID:arg.QuizID,
                 Mail: performer,
                 TaskId: el.TaskId,
+                TeamId:activeTteam.Id,
             }
 
             ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)

@@ -72,7 +72,7 @@ namespace project.Models.DAL
 
             }
 
-            return numEffected; ;
+            return numEffected; 
 
 
         }
@@ -515,9 +515,9 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}')", t.Mail, q.TaskId, q.QuizID,"GetDate()",0,t.SCode,tId, sqlFormattedDate);
+            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}',{8})", t.Mail, q.TaskId, q.QuizID,"GetDate()",0,t.SCode,tId, sqlFormattedDate,1);
 
-            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade,TeamSchoolCode,TeamId,Ptime)";
+            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade,TeamSchoolCode,TeamId,Ptime,isWaiting)";
             command = prefix + sb.ToString();
 
             return command;
@@ -814,6 +814,45 @@ namespace project.Models.DAL
 
 
             return this;
+        }
+
+        public int updateisWaitingPQ(RealetedTask rt) {
+
+           
+            int numEffected = 0;
+           
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+
+                String UpdateSIquiz = "UPDATE PerformQuestionnaire  Set isWaiting=1  where ac.TaskId='" + rt.Task.QuizList[0].TaskId + "' and ac.StudentEmail='" + rt.StPerformer.Mail + "' and ac.QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and ac.TeamId='" + rt.YearOfStudy + "'";
+
+
+
+                SqlCommand cmd = new SqlCommand(UpdateSIquiz, con);
+                numEffected += cmd.ExecuteNonQuery();
+
+   
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return numEffected; ;
+
+
         }
 
         public void update()

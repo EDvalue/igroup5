@@ -1445,7 +1445,7 @@ namespace project.Models.DAL
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("UPDATE [dbo].[PerformQuestionnaire] SET  [Grade]='{0}', [Note]='{1}' where [StudentId]='{2}' and [QuestionnaireId]='{3}'", qfb["grade"],qfb["text"],qfb["mail"],qfb["qid"]);
+            sb.AppendFormat("UPDATE [dbo].[PerformQuestionnaire] SET  [Grade]='{0}', [Note]='{1}',[isWaiting]={4} where [StudentId]='{2}' and [QuestionnaireId]='{3}'", qfb["grade"],qfb["text"],qfb["mail"],qfb["qid"],0);
             String cStr = sb.ToString();
 
 
