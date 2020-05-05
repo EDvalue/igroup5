@@ -5,6 +5,23 @@
     height: 100%;
     background-color: #f1f1f1 !important;
 }
+/*img in dt*/
+#tbl_int {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+}
+
+    #tbl_int img:hover {
+        transform: scale(1.05);
+    }
+
+    #tbl_int img {
+        width: 50px;
+        height: 50px;
+    }
+
 
 #container {
     /*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
@@ -12,7 +29,7 @@
 }
 
 #statistics {
-    height: 500px;
+    height: 0;
     width: 90%;
     margin-top: 5%;
     margin-left: auto;

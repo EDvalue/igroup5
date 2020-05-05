@@ -21,6 +21,18 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+
 
     <script>
         var studentsArr = [];
@@ -77,33 +89,101 @@
         var activeTteam;
 
         $(document).ready(function () {
-             if(localStorage["user"])
+            if (localStorage["user"])
                 userOBJ = JSON.parse(localStorage["user"])
             if (localStorage["performer"])
                 performer = localStorage["performer"];
-             if (localStorage["active_teacher_team"])
+            if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
             ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
-            
+
             bringStTasks();
 
             UpdateTaskDoughnut();
-            
+
         });
 
         function bringStTasks() {
 
             info = {
                 Mail: performer,
-                TeamId:activeTteam.Id,
+                TeamId: activeTteam.Id,
             }
 
-            ajaxCall("PUT", "../api/Teacher/getStTasksInTeam", JSON.stringify(info),getStTasksInTeamSuccess,getStTasksInTeamError)
+            ajaxCall("PUT", "../api/Teacher/getStTasksInTeam", JSON.stringify(info), getStTasksInTeamSuccess, getStTasksInTeamError)
         }
 
         function getStTasksInTeamSuccess(data) {
             console.log(data);
+            taskData = data;
+            try {
+                tbl = $('#sp_table').DataTable({
+
+                    data: taskData,
+                    pageLength: 5,
+                    columns: [
+
+
+
+                        { data: "title" },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                let loc = "data_loc='" + row.Mail + "'";
+                                str = "";
+                                str += "<div id='tbl_int'>";
+                                if (row.QuizID != "") {
+                                    str += `<img ${loc} onclick='openQ(this)'  src='../images/${row.IntelligenceName}.png'/>`
+                                } else {
+
+                                    return "לא נבחר שאלון"
+                                }
+
+                                str += "</div>";
+
+                                return str;
+                            }
+
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.Grade > 0) {
+                                    return row.Grade
+                                } else {
+                                    return "לא ניתן ציון"
+                                }
+
+                            }
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.Note != "") {
+                                    if (row.Note.length > 15) {
+                                        return `<p  title="${row.Note}">${row.Note.substr(0, 15)}...</p>`
+                                    } else {
+                                        return `<p  title="${row.Note}">${row.Note}</p>`
+                                    }
+
+                                } else {
+                                    return "none"
+                                }
+
+                            }
+                        },
+
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
 
 
         }
@@ -485,70 +565,30 @@
         </div>
         <div id="quizes">
 
-            <h3>כאן יופיעו משימות שניתן לצפות או לבדוק אותן</h3>
+            <h3>משימות התלמיד</h3>
 
-            <div id="quizList" class="row">
+            
 
-                <div id="quizInfo" class="col-lg-4">
-                    <div class="imgQuiz">
-                        <img src="../images/מרחבית.png" />
+                <div id="TaskView">
+                    <div id="addContent">
 
-                    </div>
-                    <div class="content">
-                        <p>שם משימה</p>
-                    </div>
+                        <table id="sp_table" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
 
-                </div>
-
-
-                <div id="quizInfo" class="col-lg-4">
-                    <div class="imgQuiz">
-                        <img src="../images/מרחבית.png" />
-
-                    </div>
-                    <div class="content">
-                        <p>שם משימה</p>
-                    </div>
-
-                </div>
-
-
-                <div id="quizInfo" class="col-lg-4">
-                    <div class="imgQuiz">
-                        <img src="../images/מרחבית.png" />
+                                    <th>משימה</th>
+                                    <th>שאלון</th>
+                                    <th>אינטילגנציה</th>
+                                    <th>ציון</th>
+                                    <th>הערה</th>
+                                </tr>
+                            </thead>
+                        </table>
 
                     </div>
-                    <div class="content">
-                        <p>שם משימה</p>
-                    </div>
-
-                </div>
-
-
-                <div id="quizInfo" class="col-lg-4">
-                    <div class="imgQuiz">
-                        <img src="../images/מרחבית.png" />
-
-                    </div>
-                    <div class="content">
-                        <p>שם משימה</p>
-                    </div>
-
-                </div>
-
-
-                <div id="quizInfo" class="col-lg-4">
-                    <div class="imgQuiz">
-                        <img src="../images/מרחבית.png" />
-
-                    </div>
-                    <div class="content">
-                        <p>שם משימה</p>
-                    </div>
-
-                </div>
+                </div>            
             </div>
         </div>
-    </div>
+    
 </body>
 </html>

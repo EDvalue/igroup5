@@ -1489,7 +1489,7 @@ namespace project.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],";
+                string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],t.title,";
                 string select2 = "u.Email,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
                 string from = "i.[ImgLink],Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform ";
                 string select3 = "from(";
@@ -1497,7 +1497,7 @@ namespace project.Models.DAL
                 string from2 = " from [dbo].[RealatedTo] as rt where rt.TeamId='"+info["TeamId"]+"')as rt left join ";
                 string from3 = " [dbo].[PerformQuestionnaire] as pq on pq.[StudentId]='" + info["Mail"] + "' and rt.TaskId=pq.TaskId and pq.TeamId='" + info["TeamId"] + "' ";
                 string from4 = " left join [User] as u on u.Email='" + info["Mail"] + "' left join Questionnaire as q on q.QuestionnaireId=pq.QuestionnaireId ";
-                string from5 = " left join [dbo].[Intelligence] as i on i.[EnglishName]=q.IntelligenceName ";
+                string from5 = " left join [dbo].[Intelligence] as i on i.[EnglishName]=q.IntelligenceName inner join Task as t on t.TaskId=rt.TaskId";
               
 
                 String selectSTR = select1 + select2 + from + select3 + from1 + from2 + from3 + from4 + from5;
@@ -1517,6 +1517,7 @@ namespace project.Models.DAL
                     srt.Add("Lname", Convert.ToString(dr["Lname"]));
                     srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
                     srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    srt.Add("title", Convert.ToString(dr["title"]));
                     if (dr["Grade"] != DBNull.Value)
                     {
                         srt.Add("Grade", Convert.ToString(dr["Grade"]));
