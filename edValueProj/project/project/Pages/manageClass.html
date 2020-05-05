@@ -31,6 +31,7 @@
         var selectedTsakId;
         var taskData;
         var activeTteam;
+        var numwaiting
         var tbl;//data table
 
         $(document).ready(function () {
@@ -43,7 +44,7 @@
             className();
             getTasks();
             $("#ShowQuestionnaire").hide();
-
+            
            
 
             ajaxCall("GET",'../api/Teacher/getGraphTeamData/'+activeTteam.Id,"",getGraphTeamDataSuccess,getGraphTeamDataError)
@@ -266,21 +267,22 @@
 
             console.log(getTeam)
             ajaxCall("GET", "../api/Teacher/getTTasks/" + getTeam.Id, "", getTTasksSuccess, getTTasksError)
+          
         }
         function getTTasksSuccess(data) {
             console.log(data)
             taskList = data;
             var cstr = "";
             for (a in taskList) {
-                if (taskList[a]["Task"].TaskId)
-                    cstr += `<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a]["Task"].TaskId}">
+                
+                    cstr += `<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a].taskId}">
 
                                                         <div class="fr">
                                                         <div class="name">
-                                                            <p>${taskList[a]["Task"].Title}</p>
+                                                            <p>${taskList[a].Title}</p>
                                                         </div>
                                                         <div class="time">
-                                                            <p>${taskList[a].AssigmentDate}</p>
+                                                            <p>${taskList[a].Date_Assignment}</p>
                                                         </div>
                                                     </div>
 
@@ -289,12 +291,12 @@
                                                             <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
                                                         </div>
                                                         <div class="c_time">
-                                                            <span>${taskList[a].TillDate}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                                            <span>${taskList[a].OpenTill}  </span><ion-icon name="pencil-outline"></ion-icon>
                                                         </div>
                                                     </div>
                                                     <div class="tr">
                                                         <div class="notification">
-                                                            <p>15</p>
+                                                            <p>${taskList[a].numWaiting}</p >
                                                         </div>
                                                         <div class="cancel">
                                                             <ion-icon name="close-circle-outline" size="large"></ion-icon>
@@ -306,6 +308,7 @@
             }
             $("#tasks").html(cstr);
         }
+        
         function getTTasksError(ex) {
             console.log(ex)
 

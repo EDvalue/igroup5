@@ -64,7 +64,7 @@ namespace project.Models
         }
 
 
-        public List<RealetedTask> getTTasks(string data)
+        public List<Dictionary<string, string>> getTTasks(string data)
         {
             TeacherDBservices dbs = new TeacherDBservices();
 
@@ -72,6 +72,8 @@ namespace project.Models
 
             return dbs.getTTasks(teamId);
         }
+        
+        
 
         public int changeQ()
         {

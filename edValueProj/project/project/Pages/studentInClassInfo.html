@@ -87,6 +87,8 @@
         var scienceChart;
         var performer;
         var activeTteam;
+        var taskData
+        var selectedTaskId
 
         $(document).ready(function () {
             if (localStorage["user"])
@@ -104,6 +106,50 @@
 
         });
 
+        //-----------------Opening a Questionnaire----------------------------
+
+        function getPdata(id) {
+
+            for (x in taskData) {
+                if (taskData[x].QuizID == id) {
+                    return taskData[x];
+                }
+            }
+
+        }
+        function openQ(val) {
+
+            chosenSt= getPdata(val.getAttribute('data_loc'));
+
+            Oquiz = {
+                QuizID:chosenSt.QuizID,
+                Mail: chosenSt.Mail,
+                TaskId: chosenSt.TaskId,
+                TeamId: activeTteam.Id,
+            }
+
+            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+        }
+
+     
+
+        function getQsuccess(data) {
+            localStorage["performers"] = JSON.stringify(taskData);
+            localStorage["userMode"] = "teacher";
+            localStorage["quiz_mode"] = "check";
+            localStorage["performer"] = chosenSt.Mail;
+            localStorage["quiz"] = JSON.stringify(data);
+
+            location.assign("showQuiz.html");
+        }
+
+        function getQerror(err) {
+
+            swal("הניסיון לפתוח את המשימה נכשל")
+        }
+
+        //-----------------------------------------------------------
+
         function bringStTasks() {
 
             info = {
@@ -117,6 +163,7 @@
         function getStTasksInTeamSuccess(data) {
             console.log(data);
             taskData = data;
+
             try {
                 tbl = $('#sp_table').DataTable({
 
@@ -130,7 +177,7 @@
                         {
                             render: function (data, type, row, meta) {
 
-                                let loc = "data_loc='" + row.Mail + "'";
+                                let loc = "data_loc='" + row.QuizID + "'";
                                 str = "";
                                 str += "<div id='tbl_int'>";
                                 if (row.QuizID != "") {
@@ -578,7 +625,6 @@
 
                                     <th>משימה</th>
                                     <th>שאלון</th>
-                                    <th>אינטילגנציה</th>
                                     <th>ציון</th>
                                     <th>הערה</th>
                                 </tr>
