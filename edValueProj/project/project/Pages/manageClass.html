@@ -43,9 +43,22 @@
             className();
             getTasks();
             $("#ShowQuestionnaire").hide();
-            console.log("inside")
+
+           
+
+            ajaxCall("GET",'../api/Teacher/getGraphTeamData/'+activeTteam.Id,"",getGraphTeamDataSuccess,getGraphTeamDataError)
 
         });
+
+        function getGraphTeamDataSuccess(data) {
+            console.log(data);
+        }
+
+        function getGraphTeamDataError(err) {
+            cinsole.log(err);
+        }
+
+
 
         function getPdata(id) {
 
@@ -107,7 +120,7 @@
 
         function openSt() {
 
-            localStorage["performer"] = this.getAttribute('of');
+            localStorage["performer"] = this.getAttribute('st');
             location.assign("studentInClassInfo.html");
             
         }

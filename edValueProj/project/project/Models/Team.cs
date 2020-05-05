@@ -162,5 +162,10 @@ namespace project.Models
             return dbs.getSTeams(mail);
         }
 
+        public List<Dictionary<string, string>> graphDataTeam(string teamId)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.graphDataTeam(teamId);
+        }
     }
 }

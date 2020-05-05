@@ -164,5 +164,29 @@ namespace project.Controllers
             RealetedTask rt = new RealetedTask();
             return rt.updateQFB(qfb);
         }
+
+        [HttpPut]
+        [Route("api/Teacher/getStTasksInTeam")]
+        public List<Dictionary<string, string>> getStTasksInTeam(Dictionary<string,string> info)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.getStTasksInTeam(info);
+        }
+
+        [HttpGet]
+        [Route("api/Teacher/getGraphTeamData/{teamId}")]
+        public List<Dictionary<string,string>> graphDataTeam(string teamId)
+        {
+            Team t = new Team();
+            return t.graphDataTeam(teamId);
+        }
+        [HttpPut]
+        [Route("api/Teacher/getGraphClassData")]
+        public List<Dictionary<string, string>> getGraphClassData(Dictionary<string, string> info)
+        {
+            Classroom c= new Classroom();
+            return c.getGraphClassData(info);
+        }
+
     }
 }

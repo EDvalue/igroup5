@@ -69,6 +69,7 @@ ion-icon.colorC {
 .imgQuiz {
     flex-direction: row-reverse;
     color: white;
+    width:100%;
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -77,54 +78,13 @@ ion-icon.colorC {
     margin: auto;
     align-items: stretch;
 }
-.imgQuiz>img:nth-child(1){
-   box-shadow:4px 4px rgba(254, 100, 54, 0.74)
-}
 
-    .imgQuiz > img:nth-child(1):hover {
-        box-shadow: 4px 4px rgba(254, 100, 54, 0.74)
-    }
-    .imgQuiz > img:nth-child(2) {
-        box-shadow: 4px 4px rgba(93, 254, 54, 0.74)
-    }
 
-        .imgQuiz > img:nth-child(2):hover {
-            box-shadow: 4px 4px rgba(93, 254, 54, 0.74)
-        }
-
-        .imgQuiz > img:nth-child(3):hover {
-            box-shadow: 4px 4px rgba(172, 54, 254, 0.74)
-        }
-    .imgQuiz > img:nth-child(3) {
-        box-shadow: 4px 4px rgba(172, 54, 254, 0.74)
-    }
-    .imgQuiz > img:nth-child(4):hover {
-        box-shadow: 4px 4px rgba(11, 11, 251, 0.74)
-    }
-
-    .imgQuiz > img:nth-child(4) {
-        box-shadow: 4px 4px rgba(11, 11, 251, 0.74)
-    }
-    .imgQuiz > img:nth-child(5):hover {
-        box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
-    }
-
-    .imgQuiz > img:nth-child(5) {
-        box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
-    }
-        .imgQuiz > img:nth-child(6):hover {
-            box-shadow: 4px 4px rgba(251, 84, 11, 0.74)
-        }
-
-    .imgQuiz > img:nth-child(6) {
-        box-shadow: 4px 4px rgba(251, 217, 11, 0.74)
-    }
-
-    .imgQuiz > img {
+ .imgQuiz > img {
         display: block;
         width: 16.6667%;
         height: 60%;
-    }
+ }
 .imgQuestionnire{
     text-align:center;
 }
@@ -159,11 +119,12 @@ h3 {
     background: linear-gradient(to bottom right,rgba(77, 77, 255, 0.67),#fff);
 }
 .imgQuiz > img:hover {
-    background: #ff6e42;
-    color: #fffcfb;
-    transform: translate(.5em, .3em);
+   
+    transform: scale(1.1);
+    box-shadow:2px 2px 2px #fff;
+    background-color:#fff;
     transition: all .25s linear;
-    box-shadow: -0.3em 0.3em 0 #e1e1e1;
+    z-index:2;
 }
 .name_date{
     display:flex;
@@ -252,15 +213,18 @@ h3 {
     top: 50%; /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
     transform: translate(-50%, -50%);
+    padding-top: 1.5%;
+    background-color:#262626;
     border: 1px groove #808080;
     z-index: 3;
-    background: #f1f1f1;
-    display:flex;
-    justify-content:center;
-    
+    background: rgba(255, 255, 255, 0.87);
+    display: flex;
+    box-shadow: 2px 2px #fff;
+    justify-content: center;
 }
 .cq_questionnaire{
-    width:16.667%;
+    width:20%;
+    padding:2%;
     margin-top:auto;
 }
     .cq_questionnaire > img {

@@ -104,6 +104,14 @@ namespace project.Models
             rt.Task.QuizList = new List<Quiz>();
             rt.Task.QuizList.Add(del);
             rt.YearOfStudy = this.YearOfStudy;
+            if(this.sTime>=new DateTime())
+            {
+                rt.STime = this.sTime;
+            }
+            else
+            {
+                rt.STime = new DateTime();
+            }
             
             dbs1 = dbs1.updateQansC(rt);
             dbs1.dt = deleteRows(dbs1.dt);
@@ -150,6 +158,12 @@ namespace project.Models
         {
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.updateQFB(qfb);
+        }
+
+        public List<Dictionary<string, string>> getStTasksInTeam(Dictionary<string, string> info)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.getStTasksInTeam(info);
         }
     }
 }

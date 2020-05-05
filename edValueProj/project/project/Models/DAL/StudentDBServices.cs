@@ -191,8 +191,6 @@ namespace project.Models.DAL
                         rt.Task.QuizList = new List<Quiz>();
                         rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
                         rt.Task.TaskId = dr["TaskId"].ToString();
-                        if(dr["Ptime"] != DBNull.Value)
-                        rt.STime= Convert.ToDateTime(dr["Ptime"]);
                         if (dr["Grade"] != DBNull.Value)
                         rt.Score= Convert.ToInt32(dr["Grade"]);
                         rt.Task.Title = dr["Title"].ToString();
@@ -217,6 +215,8 @@ namespace project.Models.DAL
                         q.QuizID = dr["QuestionnaireId"].ToString();
                         q.TaskId = dr["IsChoose"].ToString();
                         if (q.TaskId == "1") {
+                            if (dr["Ptime"] != DBNull.Value)
+                                rt.STime = Convert.ToDateTime(dr["Ptime"]);
                             rt.Task.Grade =1;
                         }
                         q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(),dr["IntelligenceName"].ToString(),Convert.ToInt32(dr["Spoints"]));
@@ -465,7 +465,7 @@ namespace project.Models.DAL
             SqlConnection con;
             SqlCommand cmd;
             String cStr = "";
-            
+            string sqlFormattedDate = rt.STime.ToString("yyyy-MM-dd HH:mm:ss.fff");
             try
             {
                 con = connect("DBConnectionString"); // create the connection
@@ -477,7 +477,7 @@ namespace project.Models.DAL
             }
 
 
-            cStr = BuildPQInsertCommand(rt.Task.QuizList[0],rt.StPerformer,rt.YearOfStudy);
+            cStr = BuildPQInsertCommand(rt.Task.QuizList[0],rt.StPerformer,rt.YearOfStudy, sqlFormattedDate);
             cmd = CreateCommand(cStr, con);    // create the command
 
             try
@@ -507,7 +507,7 @@ namespace project.Models.DAL
             }
             return numEffected;
         }
-        private String BuildPQInsertCommand(Quiz q,Student t,string tId)
+        private String BuildPQInsertCommand(Quiz q,Student t,string tId,string sqlFormattedDate)
         {
             String command;
 
@@ -515,9 +515,9 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}')", t.Mail, q.TaskId, q.QuizID,"GetDate()",0,t.SCode,tId);
+            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}')", t.Mail, q.TaskId, q.QuizID,"GetDate()",0,t.SCode,tId, sqlFormattedDate);
 
-            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade,TeamSchoolCode,TeamId)";
+            String prefix = "INSERT INTO PerformQuestionnaire" + "(StudentId,TaskId,QuestionnaireId,SubmissionDate,Grade,TeamSchoolCode,TeamId,Ptime)";
             command = prefix + sb.ToString();
 
             return command;

@@ -23,11 +23,26 @@
         var classPage;
 
         $(document).ready(function () {
+             if(localStorage["user"])
+                userOBJ = JSON.parse(localStorage["user"]);
+             if(localStorage["Teacher_inClass"])
+                classPage = JSON.parse(localStorage["Teacher_inClass"]);
+             info = {
+                GradeClass: classPage.Grade,
+                ClassNumber: classPage.GradeNumber,
+                SchoolCode: classPage.InSchool,
+             }
 
-            userOBJ = JSON.parse(localStorage["user"]);
-            classPage = JSON.parse(localStorage["Teacher_inClass"]);
-
+            ajaxCall("PUT",'../api/Teacher/getGraphClassData',JSON.stringify(info),getGraphClassDataSuccess,getGraphClassDataError)
         });
+
+          function getGraphClassDataSuccess(data) {
+            console.log(data);
+          }
+
+        function getGraphClassDataError(err) {
+            cinsole.log(err);
+        }
 
         function confirmSignIn(){
             swal({

@@ -1480,5 +1480,224 @@ namespace project.Models.DAL
             return numEffected;
         }
 
+        public List<Dictionary<string,string>> getStTasksInTeam(Dictionary<string,string>info)
+        {
+            SqlConnection con = null;
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+            
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],";
+                string select2 = "u.Email,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
+                string from = "i.[ImgLink],Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform ";
+                string select3 = "from(";
+                string from1 = "select*";
+                string from2 = " from [dbo].[RealatedTo] as rt where rt.TeamId='"+info["TeamId"]+"')as rt left join ";
+                string from3 = " [dbo].[PerformQuestionnaire] as pq on pq.[StudentId]='" + info["Mail"] + "' and rt.TaskId=pq.TaskId and pq.TeamId='" + info["TeamId"] + "' ";
+                string from4 = " left join [User] as u on u.Email='" + info["Mail"] + "' left join Questionnaire as q on q.QuestionnaireId=pq.QuestionnaireId ";
+                string from5 = " left join [dbo].[Intelligence] as i on i.[EnglishName]=q.IntelligenceName ";
+              
+
+                String selectSTR = select1 + select2 + from + select3 + from1 + from2 + from3 + from4 + from5;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Dictionary<string, string> srt = new Dictionary<string, string>();
+                    srt.Add("Mail", Convert.ToString(dr["Email"]));
+                    srt.Add("IdNumber", Convert.ToString(dr["IdNumber"]));
+                    srt.Add("QuizID", Convert.ToString(dr["QuestionnaireId"]));
+                    srt.Add("Fname", Convert.ToString(dr["Fname"]));
+                    srt.Add("Lname", Convert.ToString(dr["Lname"]));
+                    srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
+                    srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    if (dr["Grade"] != DBNull.Value)
+                    {
+                        srt.Add("Grade", Convert.ToString(dr["Grade"]));
+                    }
+                    else
+                    {
+                        srt.Add("Grade", "0");
+                    }
+                    if (dr["Note"] != DBNull.Value)
+                    {
+                        srt.Add("Note", Convert.ToString(dr["Note"]));
+                    }
+                    else
+                    {
+                        srt.Add("Note", "");
+                    }
+
+                    list.Add(srt);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+        }
+
+        public List<Dictionary<string,string>> graphDataTeam(string teamId)
+        {
+            SqlConnection con = null;
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                string select1 = " select sit.StudentEmail,u.Fname,u.Lname,u.IdNumber,rt.TaskId,t.Title,q.QuestionnaireId,q.IntelligenceName,pq.Grade, ";
+                string select2 = " Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform from RealatedTo as rt left join StudentInTeam as sit  ";
+                string from = " on sit.TeamId=rt.TeamId inner join [User] as u on u.Email=sit.StudentEmail left join PerformQuestionnaire as pq on pq.StudentId=sit.StudentEmail ";
+                string select3 = " and pq.TeamId=rt.TeamId and pq.TaskId=rt.TaskId left join Questionnaire as q on q.QuestionnaireId=pq.QuestionnaireId ";
+                string from1 = " inner join Task as T on t.TaskId=rt.TaskId where rt.TeamId='"+teamId+"'";
+     
+
+                String selectSTR = select1 + select2 + from + select3 + from1;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Dictionary<string, string> srt = new Dictionary<string, string>();
+                    srt.Add("Mail", Convert.ToString(dr["StudentEmail"]));
+                    srt.Add("IdNumber", Convert.ToString(dr["IdNumber"]));
+                    srt.Add("Fname", Convert.ToString(dr["Fname"]));
+                    srt.Add("Lname", Convert.ToString(dr["Lname"]));
+                    srt.Add("QuizID", Convert.ToString(dr["QuestionnaireId"]));
+                    srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
+                    srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    srt.Add("TaskId", Convert.ToString(dr["TaskId"]));
+                    srt.Add("TaskTitle", Convert.ToString(dr["Title"]));
+                    if (dr["Grade"] != DBNull.Value)
+                    {
+                        srt.Add("Grade", Convert.ToString(dr["Grade"]));
+                    }
+                    else
+                    {
+                        srt.Add("Grade", "0");
+                    }
+                   
+
+                    list.Add(srt);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+        }
+
+        public List<Dictionary<string, string>> graphDataClass(Dictionary<string,string> info)
+        {
+            SqlConnection con = null;
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                string select1 = " select sit.StudentEmail,u.Fname,u.Lname,u.IdNumber,rt.TaskId,t.Title,t.SubjectName,q.QuestionnaireId,q.IntelligenceName,pq.Grade, ";
+                string select2 = " Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform,s.ClassNumber,S.GradeClass,S.ClassSchoolCode,sit.TeamId  ";
+                string from = " from RealatedTo as rt left join StudentInTeam as sit on sit.TeamId=rt.TeamId inner join [User] as u on u.Email=sit.StudentEmail inner join Student as s ";
+                string select3 = " on s.StudentEmail=u.Email left join PerformQuestionnaire as pq on pq.StudentId=sit.StudentEmail and pq.TeamId=rt.TeamId and pq.TaskId=rt.TaskId ";
+                string from1 = " left join Questionnaire as q on q.QuestionnaireId=pq.QuestionnaireId inner join Task as T on t.TaskId=rt.TaskId where s.ClassNumber="+info["ClassNumber"]+" and s.GradeClass="+info["GradeClass"]+" and s.ClassSchoolCode='"+info["SchoolCode"]+"'";
+
+
+
+                String selectSTR = select1 + select2 + from + select3 + from1;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Dictionary<string, string> srt = new Dictionary<string, string>();
+                    srt.Add("Mail", Convert.ToString(dr["StudentEmail"]));
+                    srt.Add("IdNumber", Convert.ToString(dr["IdNumber"]));
+                    srt.Add("Fname", Convert.ToString(dr["Fname"]));
+                    srt.Add("Lname", Convert.ToString(dr["Lname"]));
+                    srt.Add("QuizID", Convert.ToString(dr["QuestionnaireId"]));
+                    srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
+                    srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    srt.Add("TaskId", Convert.ToString(dr["TaskId"]));
+                    srt.Add("TaskTitle", Convert.ToString(dr["Title"]));
+                    srt.Add("ClassNumber", Convert.ToString(dr["ClassNumber"]));
+                    srt.Add("GradeClass", Convert.ToString(dr["GradeClass"]));
+                    srt.Add("ClassSchoolCode", Convert.ToString(dr["ClassSchoolCode"]));
+                    srt.Add("TeamId", Convert.ToString(dr["TeamId"]));
+                    srt.Add("SubjectName", Convert.ToString(dr["SubjectName"]));
+                    if (dr["Grade"] != DBNull.Value)
+                    {
+                        srt.Add("Grade", Convert.ToString(dr["Grade"]));
+                    }
+                    else
+                    {
+                        srt.Add("Grade", "0");
+                    }
+
+
+                    list.Add(srt);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+        }
+
     }
 }

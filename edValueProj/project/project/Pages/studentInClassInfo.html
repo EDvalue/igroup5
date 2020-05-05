@@ -80,7 +80,7 @@
              if(localStorage["user"])
                 userOBJ = JSON.parse(localStorage["user"])
             if (localStorage["performer"])
-                performer = JSON.parse(localStorage["performer"])
+                performer = localStorage["performer"];
              if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
@@ -98,6 +98,18 @@
                 Mail: performer,
                 TeamId:activeTteam.Id,
             }
+
+            ajaxCall("PUT", "../api/Teacher/getStTasksInTeam", JSON.stringify(info),getStTasksInTeamSuccess,getStTasksInTeamError)
+        }
+
+        function getStTasksInTeamSuccess(data) {
+            console.log(data);
+
+
+        }
+
+        function getStTasksInTeamError(err) {
+            console.log(err);
         }
 
         function getSuccess(data) {

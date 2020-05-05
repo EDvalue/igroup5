@@ -108,7 +108,7 @@
                 if (activeOpenArr[rt].Task.TaskId == taskId) {
                     cq_activeTask = activeOpenArr[rt];
                     for (q in activeOpenArr[rt].Task.QuizList) {
-                        if (activeOpenArr[rt].Task.QuizList[q].QuestionnairId != qId) {
+                        if (activeOpenArr[rt].Task.QuizList[q].QuizID != qId) {
                             str += `<div class="cq_questionnaire">
                                           <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
                                         </div>`

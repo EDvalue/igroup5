@@ -64,6 +64,12 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.openSI(dict);
         }
+
+        public List<Dictionary<string, string>> getGraphClassData(Dictionary<string, string> info)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.graphDataClass(info);
+        }
     }
 }
             

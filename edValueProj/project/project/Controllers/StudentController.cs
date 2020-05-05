@@ -15,6 +15,7 @@ namespace project.Controllers
         [Route("api/Student/postQ")]
         public int postQ([FromBody] RealetedTask rt)
         {
+            rt.STime = DateTime.Now;
             return rt.postQ();
         }
 
