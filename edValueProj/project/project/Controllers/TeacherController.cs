@@ -142,9 +142,9 @@ namespace project.Controllers
             RealetedTask rt = new RealetedTask();
             return rt.getTTasks(data);
         }
+      
 
-        
-        
+
 
         [HttpPut]
         [Route("api/Teacher/openSI")]
