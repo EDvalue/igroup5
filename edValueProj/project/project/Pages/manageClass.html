@@ -122,7 +122,8 @@
                 }
             }
             console.log(sortedGraphData)
-            
+            task.data.datasets = sortedGraphData
+            UpdateTaskDoughnut()
         }
         function printIntelligence(obj) {
             var str = "";
@@ -608,6 +609,7 @@
                     }
                 }
             });
+            task.update()
         }
 
         function ChartChange() {
