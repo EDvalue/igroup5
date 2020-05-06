@@ -30,23 +30,42 @@ span.markAns,p.markAns {
     display:flex;
     text-align:right;
 }
+
+#nextSt_pop>#per_sel>select>option:hover {
+    background-color: white;
+}
+
 #nextSt_pop {
-    width: 600px;
-    height: 415px;
+    width: 20%;
+    height: 170px;
     position: fixed;
-    top: 50%; /* position the top  edge of the element at the middle of the parent */
-    left: 50%; /* position the left edge of the element at the middle of the parent */
+    top: 50%;
+    left: 50%;
+    text-align: center;
     transform: translate(-50%, -50%);
     border: 1px groove #808080;
     z-index: 3;
-    background: #f1f1f1;
+    background: #fff;
+    border-radius: 7%;
+    padding-bottom: 2%;
     display: flex;
+    align-content: space-around;
+    justify-content: space-around;
+    box-shadow: 2px 2px 2px #000;
     flex-direction: column;
 }
 #nextSt_pop {
     display: flex;
     flex-direction: column;
 }
+.c_opt{
+
+    background-color:rgba(42, 255, 0, 0.84);
+}
+.Nc_opt {
+    background-color: rgba(128, 128, 128, 0.81);
+}
+
 .grade_fb {
     margin-right: 5px;
     display: flex;
@@ -81,8 +100,9 @@ span.markAns,p.markAns {
 
 .qu {
     margin-bottom: 30px;
-    border-bottom: 2px dashed #007bff;
     padding: 50px;
+    box-shadow: 2px 2px 2px #000;
+    border-radius: 7%;
 }
 
 

@@ -229,6 +229,9 @@
                 else if (file.value.split('.')[1] == 'rar' || file.value.split('.')[1] == 'zip') {
                     $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/rar-icon.png" />`)
 
+                } else {
+                    swal("קובץ לא נתמך");
+                    
                 }
             }
         }
@@ -252,10 +255,12 @@
                     }
                 } else if (el.Question[q].Type == 'U') {
                     if (el.Question[q].AnsContent) {
-                        $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
-                        $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>הורד קובץ</a>`);
-
                         ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
+                        name = el.Question[q].AnsContent.split('uploadedFile')[1];
+                        $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
+                        $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>${name}</a>`);
+
+                     
                         if (ext == "xlsx" || ext == "xls") {
                             $(`#${q} .filedrag`).html(`<img src="../images/excel-icon.png" />`);
                         } else if (ext == "docx") {
@@ -315,25 +320,29 @@
                 
                 if (!performers[s].QuizID=="") {
 
-                    if ((performers[s].Grade != undefined && performers[s].Grade != 0) || (performers[s].Note != "" && performers[s].Note != undefined)) {
+                    if (performers[s].isWaiting) {
+                        let x = performers[s].Grade ?"-"+performers[s].Grade : "";
+                        ncStr += `<option of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`;
 
-                        cStr += `<option of="${performers[s].Mail}" class=c_opt>${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName}-${performers[s].Grade})</option>`;
-
-                    } else {
-
-                        ncStr += `<option of="${performers[s].Mail}" class=Nc_opt>${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName})</option>`;
-                    }
+                    } 
+                 
                 }
                
             }
-            popup +=ncStr+cStr;
+            popup +=ncStr;
              popup +=`</select>
           </div>
           <input type="button" class="btn btn-info" value='המשך'/>
          </div>`;
+            if (ncStr != "") {
+                $('#main').html(popup);
+                $("#per_sel select").change(reOpenQuiz);
+                $("#nextSt_title input[type=button]").click( window.history.back())
+            } else {
+                window.history.back();
+            }
 
-            $('#main').html(popup);
-            $("#per_sel select").change(reOpenQuiz)
+            
         }
 
           function getPdata(id) {

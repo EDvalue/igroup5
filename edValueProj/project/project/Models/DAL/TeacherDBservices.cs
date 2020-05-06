@@ -1194,7 +1194,7 @@ namespace project.Models.DAL
 
 
 
-                string select1 = "select st.StudentEmail,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
+                string select1 = "select st.StudentEmail,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,pq.isWaiting,";
                 string select2 = "pq.SubmissionDate,pq.Ptime,Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform";
                 string from = " from(";
                 string select3 = "select * ";
@@ -1222,6 +1222,7 @@ namespace project.Models.DAL
                     srt.Add("Lname",Convert.ToString(dr["Lname"]));
                     srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
                     srt.Add("isperform", Convert.ToString(dr["isperform"]));
+                    srt.Add("isWaiting", Convert.ToString(dr["isWaiting"]));
                     if (dr["Grade"] != DBNull.Value)
                     {
                         srt.Add("Grade",Convert.ToString(dr["Grade"]));
