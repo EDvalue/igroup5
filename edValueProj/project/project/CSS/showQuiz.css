@@ -110,8 +110,8 @@ span.markAns,p.markAns {
     display: flex;
     align-content: center;
     justify-content: space-around;
-    width: 30%;
-    margin-right: 35%;
+    width: 40%;
+    margin-right: 30%;
     padding: 3%;
 }
  .filedrag img{
@@ -166,7 +166,8 @@ span.markAns,p.markAns {
     display: flex;
     width: 100%;
     justify-content: center;
-    margin:10% 0 5% 0;
+    margin: 8% 0 5% 0;
+    box-shadow: 1px 1px 1px #000;
 }
 
 #AmericanAmswerBlock {
@@ -267,5 +268,17 @@ textarea {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width:975px) {
+    .displayFile {
+        width:80%;
+        margin-right:10%;
+    }
+
+    #upload-BTN {
+        width: 80%;
+        margin-right:10%;
     }
 }

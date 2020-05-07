@@ -44,6 +44,7 @@
 
             if (localStorage["active_student_team"])
                 activeStTeam = JSON.parse(localStorage["active_student_team"])
+
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
@@ -256,15 +257,9 @@
                 } else if (el.Question[q].Type == 'U') {
                     if (el.Question[q].AnsContent) {
                         ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
-                        name = el.Question[q].AnsContent.split('uploadedFile')[1];var ages = [3, 10, 18, 20];
+                        name = el.Question[q].AnsContent.split('uploadedFile')[1].replace('\\', '');
 
-                        function checkAdult(age) {
-                            return age >= 18;
-                        }
-
-                        function myFunction() {
-                            document.getElementById("demo").innerHTML = ages.findIndex(checkAdult);
-                        }
+                   
                         $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
                         $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>${name}</a>`);
 
@@ -426,7 +421,7 @@
                 });
 
                 $('.sf').click(function () {
-                    $('.loader').show();
+                    $(this.parentNode.parentNode).find('.loader').show();
                     var data = new FormData();
                     LufDiv = this.parentNode;
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
@@ -455,9 +450,16 @@
                     //connect the file drag
                     $(daArr[d]).on('drop', (e) => {
                         e.preventDefault();
+                       
                         e.stopPropagation();
                         e.dataTransfer = e.originalEvent.dataTransfer
-                        let fileInput = document.querySelector("#file" + e.target.parentNode.parentNode.parentNode.id);
+                        if ($(e.target).is('img')){
+                            num = e.target.parentNode.parentNode.parentNode.parentNode.id
+                        } else {
+                            num=e.target.parentNode.parentNode.parentNode.id
+                        }
+                        
+                        let fileInput = document.querySelector("#file" + num);
 
                         for (const f of e.dataTransfer.files) {
                             console.log('File(s) you dragged here: ', f.path)
@@ -469,14 +471,24 @@
                     $(daArr[d]).on('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        $(".filedrag").css("borderColor", "#007bff")
+                        if ($(e.target).is("img")){
+                            val = e.target.parentNode;
+                        } else {
+                            val = e.target;
+                        }
+                        $(val).css("borderColor", "#007bff")
 
                     });
 
                     $(daArr[d]).on('dragleave', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        $(".filedrag").css("borderColor", "#ccc")
+                          if ($(e.target).is("img")){
+                            val = e.target.parentNode;
+                        } else {
+                            val = e.target;
+                        }
+                        $(val).css("borderColor", "#ccc")
 
                     });
 
@@ -498,12 +510,13 @@
 
         function PostDocSuccess(data) {
             //upload doc of student success
-              $('.loader').hide();
+            $('.loader').hide();
             $(LufDiv).children('.link').remove();
             $(LufDiv).children('.dl').remove();
+            arg = data.split('uploadedFile')[1];
 
             $(LufDiv).append(`<div class='link'>${data}</div>`);
-            $(LufDiv).append(`<a class='dl' href="${data}" download>הורד קובץ</a>`)
+            $(LufDiv).append(`<a class='dl' href="${data}" download>${arg}</a>`)
         }
 
         function PostDocError(err) {

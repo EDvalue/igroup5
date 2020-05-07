@@ -827,7 +827,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
 
-                String UpdateSIquiz = "UPDATE PerformQuestionnaire  Set isWaiting=1  where ac.TaskId='" + rt.Task.QuizList[0].TaskId + "' and ac.StudentEmail='" + rt.StPerformer.Mail + "' and ac.QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and ac.TeamId='" + rt.YearOfStudy + "'";
+                String UpdateSIquiz = "UPDATE PerformQuestionnaire  Set isWaiting=1  where TaskId='" + rt.Task.QuizList[0].TaskId + "' and StudentId='" + rt.StPerformer.Mail + "' and QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and TeamId='" + rt.YearOfStudy + "'";
 
 
 
