@@ -35,8 +35,13 @@
         var tbl;//data table
         var graphData;
         var graphObject = {
-            teammArr: [],
+            taskArr: [],
             intelligenceArr:[]
+        };
+        var sortTags = {
+            taskArr: [],
+            intelligenceArr: [],
+            
         };
         var sortedGraphData;
 
@@ -50,9 +55,7 @@
             className();
             getTasks();
             $("#ShowQuestionnaire").hide();
-            
-           
-
+       
             ajaxCall("GET",'../api/Teacher/getGraphTeamData/'+activeTteam.Id,"",getGraphTeamDataSuccess,getGraphTeamDataError)
 
         });
@@ -90,7 +93,7 @@
                 }
                 if (!taskName[graphData[x].TaskTitle]) {
                     taskName[graphData[x].TaskTitle] = graphData[x].TaskTitle;
-                    graphObject.teammArr.push(graphData[x].TaskTitle)
+                    graphObject.taskArr.push(graphData[x].TaskTitle)
                 }
                   
                 
@@ -105,37 +108,48 @@
             var isChecked = $(val).prop("checked");
 
             if (isChecked) {
-                graphObject[arrName].push(valID)
+                sortTags[arrName].push(valID)
             }
             else {
-                if (graphObject[arrName].indexOf(valID) != -1) {
-                    var index = graphObject[arrName].indexOf(valID);
-                    graphObject[arrName].splice(index,1)
+                if (sortTags[arrName].indexOf(valID) != -1) {
+                    var index = sortTags[arrName].indexOf(valID);
+                    sortTags[arrName].splice(index,1)
                     }   
                 
             }
-            var i = 0;
-            for (x in graphData) {
-                i++;
-                if ((graphObject["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 && graphObject["teammArr"].indexOf(graphData[x].TaskTitle) != -1) ) {
-                    sortedGraphData.push(graphData[x])
+            var arr = $("#main input:checked")
+            if (arr.length > 0) {
+                for (x in graphData) {
+                    
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle) != -1)) {
+                        sortedGraphData.push(graphData[x])
+                    }
+
+                        
                 }
+                 console.log(sortedGraphData)
+                         task.data.datasets = sortedGraphData
+                         UpdateTaskDoughnut()
+            } else {
+                 sortedGraphData = graphData;
+                console.log(sortedGraphData)
+                 task.data.datasets = sortedGraphData
+                 UpdateTaskDoughnut()
             }
-            console.log(sortedGraphData)
-            task.data.datasets = sortedGraphData
-            UpdateTaskDoughnut()
+         
+           
         }
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" checked/></div>`
+                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
         function printTaksName(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('teammArr',this)" checked/><span>${x}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
             }
             $("#taskName").append(str)
         }
