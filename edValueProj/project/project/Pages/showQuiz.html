@@ -256,7 +256,15 @@
                 } else if (el.Question[q].Type == 'U') {
                     if (el.Question[q].AnsContent) {
                         ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
-                        name = el.Question[q].AnsContent.split('uploadedFile')[1];
+                        name = el.Question[q].AnsContent.split('uploadedFile')[1];var ages = [3, 10, 18, 20];
+
+                        function checkAdult(age) {
+                            return age >= 18;
+                        }
+
+                        function myFunction() {
+                            document.getElementById("demo").innerHTML = ages.findIndex(checkAdult);
+                        }
                         $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
                         $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>${name}</a>`);
 
