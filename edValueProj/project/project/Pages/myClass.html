@@ -27,11 +27,18 @@
         var classPage;
            var graphData;
         var graphObject = {
-            teammArr: [],
+            taskArr: [],
             intelligenceArr: [],
             stArr: [],
             subj:[],
         };
+
+        var sortTags={
+            taskArr: [],
+            intelligenceArr: [],
+            stArr: [],
+            subj:[],
+        }
         var sortedGraphData;
 
         $(document).ready(function () {
@@ -77,19 +84,17 @@
                 }
                 if (!taskName[graphData[x].TaskTitle]) {
                     taskName[graphData[x].TaskTitle] = graphData[x].TaskTitle;
-                    graphObject.teammArr.push(graphData[x].TaskTitle)
+                    graphObject.taskArr.push(graphData[x].TaskTitle)
                 }
                 if (!st[graphData[x].Mail]) {
                     st[graphData[x].Mail] = graphData[x].Mail;
-                    graphObject.stArr.push(graphData[x].TaskTitle)
+                    graphObject.stArr.push(graphData[x].Mail)
                 }
                 if (!sub[graphData[x].SubjectName]) {
                     sub[graphData[x].SubjectName] = graphData[x].SubjectName;
                     graphObject.subj.push(graphData[x].SubjectName)
                 }
 
-                  
-                
             }
             printIntelligence(intl);
             printTaksName(taskName);
@@ -100,32 +105,68 @@
         function printSt(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" checked/><span>${x}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('stArr',this)" /><span>${x}</span></div>`
             }
             $("#stList").append(str);
         }
         function printSubj(obj) {
              var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" checked/><span>${x}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" /><span>${x}</span></div>`
             }
             $("#subjectsList").append(str);
         }
-
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" checked/></div>`
+                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
-
         function printTaksName(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('teammArr',this)" checked/><span>${x}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
             }
             $("#taskName").append(str)
+        }
+
+        function sortGraphData(arrName, val) {
+            
+            sortedGraphData = [];
+            var valID = val.parentNode.id;
+            var isChecked = $(val).prop("checked");
+
+            if (isChecked) {
+                sortTags[arrName].push(valID)
+            }
+            else {
+                if (sortTags[arrName].indexOf(valID) != -1) {
+                    var index = sortTags[arrName].indexOf(valID);
+                    sortTags[arrName].splice(index,1)
+                } 
+                
+            }
+            var arr = $("#main input:checked")
+            if (arr.length > 0) {
+                for (x in graphData) {
+
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle) != -1) || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                        sortedGraphData.push(graphData[x])
+                    }
+                }
+                console.log(sortedGraphData)
+                //task.data.datasets = sortedGraphData
+                //UpdateTaskDoughnut()
+
+            } else {
+                
+                sortedGraphData = graphData;
+                console.log(sortedGraphData)
+                 //task.data.datasets = sortedGraphData
+                //UpdateTaskDoughnut()
+            }
+        
         }
 
         function getGraphClassDataError(err) {
