@@ -1,6 +1,9 @@
 ﻿#main {
     margin-right: 1%;
     margin-top: 1%;
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
 }
 
 #tbl_int {
@@ -27,9 +30,10 @@
 }
 
 #info {
-    float: left;
+    flex:1 1 80%;
     text-align: center;
     height: 600px;
+    width: 75%;
 }
 
 #imgLogo {
@@ -192,6 +196,12 @@ canvas {
     text-align: center;
 }
 /*------------------------------*/
+#tasks {
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
+}
+
 #tasks > div {
     border: 2px solid #f1f1f1;
     display: flex;
@@ -278,6 +288,8 @@ canvas {
     justify-items: baseline;
 }
 
+
+
 #sList {
     min-height: 250px;
     max-height: 350px;
@@ -342,9 +354,15 @@ canvas {
 .navPadding {
     padding: 0;
 }
-#teamList{
-    background-color:white;
-    border-radius:5px;
+#teamList {
+    background-color: white;
+    border-radius: 5px;
+    flex: 0 1 20%;
+}
+#class_info {
+    display: flex;
+    flex-flow: row wrap;
+    flex: 0 1 80%;
 }
 #TaskView {
     margin: auto;
