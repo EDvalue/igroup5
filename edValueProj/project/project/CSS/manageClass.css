@@ -375,9 +375,10 @@ canvas {
     border-radius:6%;
     margin-bottom:2%;
 }
-#taskName {
+#taskName, #subjectsList, #stList {
     display: flex;
-    flex:1;
+    text-align: right;
+    flex: 1;
     flex-direction: column;
     justify-content: space-around;
     background-color: white;
@@ -386,10 +387,10 @@ canvas {
     border-radius: 6%;
     margin-bottom: 2%;
 }
-    #taskName>div{
-        display:flex;
-        align-items:baseline;
-        
+    #taskName > div {
+        display: flex;
+        align-items: baseline;
+        text-align: right;
     }
     #taskName span{
         padding:7px;

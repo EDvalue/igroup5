@@ -2,6 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link href="../CSS/manageClass.css" rel="stylesheet" />
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <link href="../CSS/myClass.css" rel="stylesheet" />
+
     <title></title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
@@ -21,30 +25,114 @@
         var userOBJ;
         var SignIn;
         var classPage;
+           var graphData;
+        var graphObject = {
+            teammArr: [],
+            intelligenceArr: [],
+            stArr: [],
+            subj:[],
+        };
+        var sortedGraphData;
 
         $(document).ready(function () {
-             if(localStorage["user"])
+            if (localStorage["user"])
                 userOBJ = JSON.parse(localStorage["user"]);
-             if(localStorage["Teacher_inClass"])
+            if (localStorage["Teacher_inClass"])
                 classPage = JSON.parse(localStorage["Teacher_inClass"]);
-             info = {
+            info = {
                 GradeClass: classPage.Grade,
                 ClassNumber: classPage.GradeNumber,
                 SchoolCode: classPage.InSchool,
-             }
+            }
 
-            ajaxCall("PUT",'../api/Teacher/getGraphClassData',JSON.stringify(info),getGraphClassDataSuccess,getGraphClassDataError)
+            ajaxCall("PUT", '../api/Teacher/getGraphClassData', JSON.stringify(info), getGraphClassDataSuccess, getGraphClassDataError)
         });
 
-          function getGraphClassDataSuccess(data) {
+        function getGraphClassDataSuccess(data) {
             console.log(data);
-          }
-
-        function getGraphClassDataError(err) {
-            cinsole.log(err);
+            graphData = data;
+            sortedGraphData = data;
+            sortDivs();
         }
 
-        function confirmSignIn(){
+        function sortDivs() {
+            var intl = {};
+            var taskName = {};
+            var st = {};
+            var sub = {};
+            var flag = 0;
+            for (x in graphData) {
+
+                if (graphData[x].isperform == 1) {
+                    if (!intl[graphData[x].IntelligenceName])
+                    graphObject.intelligenceArr.push(graphData[x].IntelligenceName);
+                    intl[graphData[x].IntelligenceName] = graphData[x].IntelligenceName;
+                }
+                else {                    
+                    graphData[x].IntelligenceName="לא ביצעו"
+                    intl["לא ביצעו"] = "לא ביצעו"
+                    if(!flag)
+                        graphObject.intelligenceArr.push("לא ביצעו");
+                    flag = 1;
+                }
+                if (!taskName[graphData[x].TaskTitle]) {
+                    taskName[graphData[x].TaskTitle] = graphData[x].TaskTitle;
+                    graphObject.teammArr.push(graphData[x].TaskTitle)
+                }
+                if (!st[graphData[x].Mail]) {
+                    st[graphData[x].Mail] = graphData[x].Mail;
+                    graphObject.stArr.push(graphData[x].TaskTitle)
+                }
+                if (!sub[graphData[x].SubjectName]) {
+                    sub[graphData[x].SubjectName] = graphData[x].SubjectName;
+                    graphObject.subj.push(graphData[x].SubjectName)
+                }
+
+                  
+                
+            }
+            printIntelligence(intl);
+            printTaksName(taskName);
+            printSubj(sub);
+            printSt(st);
+        }
+
+        function printSt(obj) {
+            var str = "";
+            for (x in obj) {
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" checked/><span>${x}</span></div>`
+            }
+            $("#stList").append(str);
+        }
+        function printSubj(obj) {
+             var str = "";
+            for (x in obj) {
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" checked/><span>${x}</span></div>`
+            }
+            $("#subjectsList").append(str);
+        }
+
+        function printIntelligence(obj) {
+            var str = "";
+            for (x in obj) {
+                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" checked/></div>`
+            }
+            $("#IntelligenceCheckBox").append(str);
+        }
+
+        function printTaksName(obj) {
+            var str = "";
+            for (x in obj) {
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('teammArr',this)" checked/><span>${x}</span></div>`
+            }
+            $("#taskName").append(str)
+        }
+
+        function getGraphClassDataError(err) {
+            console.log(err);
+        }
+
+        function confirmSignIn() {
             swal({
                 title: "האם אתה בטוח",
                 text: "ההרשמה לכיתה תפתח למשך 15 דקות",
@@ -58,13 +146,13 @@
                 if (isConfirm) {
 
                     OpenSignIn()
-                  
+
                 } else {
                     swal("פתיחת הרשמה בוטלה", "❌");
                 }
             })
-           
-        }  
+
+        }
         function OpenSignIn() {
 
             SignIn = {
@@ -78,7 +166,7 @@
                 Title: classPage.Name,
             }
 
-            ajaxCall("PUT","../api/Teacher/openSI",JSON.stringify(SignIn),openSIsuccess,openSIerror)
+            ajaxCall("PUT", "../api/Teacher/openSI", JSON.stringify(SignIn), openSIsuccess, openSIerror)
 
         }
 
@@ -88,15 +176,94 @@
                 text: `כעת ניתן להירשם באמצעות הקוד:${SignIn.Code}`,
                 icon: 'success'
             });
-           
+
         }
         function openSIerror(err) { }
     </script>
 </head>
-<body>
+<body dir="rtl">
 
-    <div id="open_signIn">
-        <button onclick="confirmSignIn()">פתח רישום</button>
+    <div id="container">
+        <div id="header">
+            <div class="row">
+
+                <div id="imgLogo" class="col-lg-3">
+
+                    <img src="../images/EDvalueSmall.png" />
+
+                </div>
+
+                <div id="title" class="col-lg-6">
+                    <h3>שם הקבוצה...</h3>
+
+                </div>
+
+                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                    <!--<img src="../images/MindCet.png" />-->
+
+                </div>
+
+            </div>
+
+            <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav navPadding">
+                        <li class="nav-item active">
+                            <div id="open_signIn">
+                                <input type="button" class="btn btn-info" onclick="confirmSignIn()" value="פתח רישום" />
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+        </div>
+
+        <div id="main">
+
+            <div id="statistics">
+                <div id="stat_control_top">
+                    <div class="capr"></div>
+                    <div id="IntelligenceCheckBox">
+                    </div>
+                    <div class="capl"></div>
+                </div>
+
+                <div id="mainGraph">
+                    <div id="stat_control_right">
+
+                        <div id="slTitle">
+                            <h4>תלמידים</h4>
+                        </div>
+                        <div id="stList">
+
+                           
+
+                        </div>
+
+                    </div>
+                    <div class="content">
+
+
+                    </div>
+                    <div id="stat_control_left">
+                        <div id="taskName">
+
+                        </div>
+                        <div id="subjectsList">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
