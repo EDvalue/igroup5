@@ -331,7 +331,7 @@
                 
                 if (!performers[s].QuizID=="") {
 
-                    if (performers[s].isWaiting) {
+                    if (performers[s].isWaiting!=0) {
                         let x = performers[s].Grade ? "-" + performers[s].Grade : "";
                         ncStr += `<option of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`;
 
@@ -350,7 +350,7 @@
             if (ncStr != "") {
                 $('#main').html(popup);
                 $("#per_sel select").change(reOpenQuiz);
-                $("#nextSt_title input[type=button]").click( window.history.back())
+                $("#nextSt_title input[type=button]").click(function (){ window.history.back() });
             } else {
                 window.history.back();
             }
@@ -406,7 +406,7 @@
                     performers[p].Note = fb.text;
                 }
             }
-            localStorage["performers"] = performers;
+            localStorage["performers"] =JSON.stringify(performers);
         }
 
         function connectForm() {
