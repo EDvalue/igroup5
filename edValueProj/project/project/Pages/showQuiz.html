@@ -64,7 +64,7 @@
             ckReplace()
             connectCHK();
             connectForm();
-            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode="teacher"&&modeQuiz=="check")) {
+            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode=="teacher"&&modeQuiz=="check")) {
                 //fill answer of quiz
                 fillANS();
             }
@@ -172,7 +172,7 @@
 
             if (perform_showQuiz_mode == "student") {
                 quizString += `<div id="submitDIV"><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
-            } else {
+            } else if(perform_showQuiz_mode == "teacher" && modeQuiz=="check") {
                 //teacher note and grade
                 quizString += `
               <div id="t_fb">
@@ -279,6 +279,13 @@
                     }
 
                 }
+            }
+
+            if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+
+                $(".fb_txt>textarea").val("הפידבק");
+                $(".fb_grade>input[type='number']").val(90)
+
             }
         }
 

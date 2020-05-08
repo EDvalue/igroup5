@@ -111,7 +111,13 @@
         }
 
         function postAssigmentSuccess(data) {
+             swal({
+                
+                   title: "משימה שוייכה בהצלחה",
+                   icon: "success",
+               })
             console.log(data);
+            closeDivUS();
         }
 
         function postAssigmentError(err){
