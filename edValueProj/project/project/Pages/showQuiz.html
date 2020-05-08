@@ -282,9 +282,10 @@
             }
 
             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
-
-                $(".fb_txt>textarea").val("הפידבק");
-                $(".fb_grade>input[type='number']").val(90)
+                Pobj=getPdata(performer)
+                $(".fb_txt>textarea").val(Pobj.Note);
+                if(Pobj.Grade>0)
+                $(".fb_grade>input[type='number']").val(Pobj.Grade);
 
             }
         }
@@ -331,10 +332,12 @@
                 if (!performers[s].QuizID=="") {
 
                     if (performers[s].isWaiting) {
-                        let x = performers[s].Grade ?"-"+performers[s].Grade : "";
+                        let x = performers[s].Grade ? "-" + performers[s].Grade : "";
                         ncStr += `<option of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`;
 
-                    } 
+                    } else if (performers[s].isWaiting==undefined) {
+                        localStorage["performer"]=performers[s].Mail
+                    }
                  
                 }
                
@@ -358,7 +361,7 @@
           function getPdata(id) {
 
             for (x in performers) {
-                if (performers[x].Mail == id) {
+                if (performers[x].Mail == id||performers[x].TaskId) {
                     return performers[x];
                 }
             }
@@ -397,12 +400,13 @@
 
         function updatePreformers() {
             for (p in performers) {
-                if (performers[p].Mail == performer) {
+                if (performers[p].Mail == performer||performers[p].TaskId==performer) {
 
                     performers[p].Grade = fb.grade;
                     performers[p].Note = fb.text;
                 }
             }
+            localStorage["performers"] = performers;
         }
 
         function connectForm() {
