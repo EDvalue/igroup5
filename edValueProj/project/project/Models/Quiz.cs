@@ -59,7 +59,7 @@ namespace project.Models
             StudentDBServices dbs2 = new StudentDBServices();
             dbs1 = dbs1.updateQansC(rt);
             dbs2 = dbs2.updateQansO(rt);
-            dbs1.dt = closeQ(rt.Task.QuizList[0], dbs1.dt,rt.YearOfStudy);
+            dbs1.dt = closeQ(rt.Task.QuizList[0], dbs1.dt,rt.YearOfStudy,rt.StPerformer.Mail);
             dbs2.dt = openQ(rt.Task.QuizList[0], dbs2.dt, rt.YearOfStudy);
 
             dbs1.update();
@@ -69,7 +69,7 @@ namespace project.Models
             return 1;
         }
 
-        private DataTable closeQ(Quiz q, DataTable dt,string tId)
+        private DataTable closeQ(Quiz q, DataTable dt,string tId,string mail)
         {
             int flag = 0;
             foreach (var item in q.Question)
@@ -113,7 +113,7 @@ namespace project.Models
                             {
                                 DataRow workRow = dt.NewRow();
 
-                                workRow["StudentEmail"] = q.Title;
+                                workRow["StudentEmail"] =mail;
                                 workRow["QuestionnaireId"] = q.QuizID;
                                 workRow["TaskId"] = q.taskId;
                                 workRow["AnswerId"] = ans.AnsId;

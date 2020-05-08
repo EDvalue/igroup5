@@ -149,7 +149,7 @@
                             if (perform_showQuiz_mode == "teacher") {
                                 quizString += `<span class="markAns">${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
-                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p class="markAns">${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p class="">${el.Question[qu].Answer[y].Content}</p>`
                             }
 
                             quizString += `</div>`
@@ -576,6 +576,7 @@
                 Task: {
 
                     QuizList: [el],
+
                 },
                 StPerformer: userOBJ,
                 yearOfStudy: activeStTeam.Id,

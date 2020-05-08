@@ -166,7 +166,7 @@
                 if (cq_activeTask.Task.QuizList[k].TaskId == 1) {
                     cq_activeTask.Task.QuizList[k].TaskId = cq_activeTask.Task.TaskId;
                 } else if (cq_activeTask.Task.QuizList[k].TaskId == 2) {
-                    cq_activeTask.Task.QuizList[k].TaskId = 1;
+                    cq_activeTask.Task.QuizList[k].TaskId = cq_activeTask.Task.TaskId;
                     cq_activeTask.Task.QuizList[k].Title = cq_activeTask.Task.Title;
                     quizC = cq_activeTask.Task.QuizList[k];
                     
@@ -367,6 +367,7 @@
                             if (arr[t].Task.QuizList[q].QuizID == selectedTask.getAttribute('quiz')) {
                                 arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
                                 arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
+                               
                                 localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
 
                                 location.assign("showQuiz.html");
