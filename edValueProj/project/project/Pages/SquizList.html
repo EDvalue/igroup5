@@ -120,7 +120,7 @@
                         $("#ch_q_div").slideDown("slow");
                         $(".cq_questionnaire>img").click(confirmChange);
                     } else {
-                        swal('אין שאלון זמינה להחלפה');
+                        swal('אין שאלון זמין להחלפה');
                     }
                    
                 }
@@ -185,13 +185,42 @@
             console.log(err)
         }
 
+        function compare(a, b) {
+            // Use toUpperCase() to ignore character casing
+            const bandA = a.Inteligence.Points;
+            const bandB = b.Inteligence.Points;
+
+            let comparison = 0;
+            if (bandA > bandB) {
+                comparison = 1;
+            } else if (bandA < bandB) {
+                comparison = -1;
+            }
+            return comparison;
+        }
+
         function printNactive(data) {
             //print tasks that non quiz was selected in them;
             str = "";
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (x in data) {
+
+                data[x].Task.QuizList.sort(compare);
+                systemPoints = [];
+                for (z in data[x].Task.QuizList) {
+                    Sobj = {
+                        name: data[x].Task.QuizList[z].Inteligence.Ename,
+                        Spoints:data[x].Task.QuizList[z].Inteligence.Spoints
+                    };
+                    
+                    systemPoints.push(Sobj)
+                }
+                systemPoints.sort((a,b) => (a.Spoints > b.Spoints) ? 1 : ((b.Spoints > a.Spoints) ? -1 : 0));
+                
+            
+
                 str += `
-                             <div id="Task" class="col-md-6 col-12">
+                        <div id="Task" class="col-md-6 col-12">
 
                                 <div class="content_new">
                                     <div class="name_date">
@@ -204,14 +233,17 @@
 
                 str += `</div>
 
-                                    <div id="intelliO" class="imgQuiz">`
+                  <div id="intelliO">`
                 for (i in data[x].Task.QuizList) {
+                    str+="<div class='imgQuiz'>"
+                    n = data[x].Task.QuizList[i].Inteligence.Ename;
+                    let span = `<div class='spanPoints'><span>${systemPoints.findIndex(x => x.name ===n)+1}</span></div>`;
                     if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
-                        str += `<img title="פתח לביצוע"   task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                        str += `${span}<div class='NaImage'> <img title="פתח לביצוע"   task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" /></div>`
                     } else {
-                        str += `<img title="מטלה טרם נפתחה" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" />`
+                        str += `${span}<div class='NaImage'> <img title="מטלה טרם נפתחה" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" /></div>`
                     }
-
+                    str+="</div>"
                 }
 
                 str += ` </div>
