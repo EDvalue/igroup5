@@ -420,3 +420,17 @@ canvas {
 .content {
     flex: 0 1 72%;
 }
+#filterStudent {
+
+    max-width: 400px;
+    height: 400px;
+    text-align: right;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: white;
+    box-shadow: 2px 2px 2px #000;
+    padding: 3%;
+    border-radius: 6%;
+    margin-bottom: 2%;
+    overflow-y:scroll
+}
