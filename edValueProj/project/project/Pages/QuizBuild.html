@@ -278,8 +278,8 @@
                 strM += "<button type='button' onclick=AddOptionMRadio(" + arg.id + ")>Add Option </button>";
                 $("#Q" + arg.id + " .adding_btn").text("")
                 $("#Q" + arg.id + " .adding_btn").append(strM);
-
                 AddOptionMRadio(arg.id)
+                $("#Q" + arg.id + " #op .delete_opt_span").remove();
 
             }
         }
@@ -305,9 +305,13 @@
             console.log(arg)
 
             strMradio = "";
-            strMradio += "<div><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
+            strMradio += "<div><span class='delete_opt_span' style='font-size:14px'>❌</span><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
             $("#Q" + num).find('#op').append(strMradio);
+              $(".delete_opt_span").click(function () {
+            
+                $(this.parentNode).remove();
 
+            });
 
 
         }
