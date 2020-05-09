@@ -1,5 +1,7 @@
 ﻿
-
+html{
+    background-color:#f1f1f1;
+}
 .link {
 
     visibility: hidden;
@@ -10,7 +12,7 @@
 .clearFile {
     width: max-content;
     position: absolute;
-    transform: translate(24px, -25px);
+    transform: translate(26px, -28px);
 }
 
 #controll {
@@ -68,9 +70,16 @@
     margin-bottom: auto;
     height: 100%;
 }
-input[type=checkbox]{
-    zoom:2;
+#video_add {
+    width: 80%;
 }
+    #video_add input[type=text] {
+
+        width:60%;
+    }
+    input[type=checkbox] {
+        zoom: 2;
+    }
 #op {
     margin-top: 4%;
     margin-bottom: 1%;
@@ -90,6 +99,8 @@ input[type=checkbox]{
     border: 1px solid #1B4DDD;
     height: 100px;
     padding: 3%;
+    box-shadow: 1px 1px 3px;
+    margin: auto auto;
 }
 #img_add img {
     height: 100%;
