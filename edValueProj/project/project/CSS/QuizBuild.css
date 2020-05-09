@@ -1,21 +1,27 @@
 ﻿
 
 .link {
+
     visibility: hidden;
-    width:0;
+    width: 0;
+    position: absolute;
 }
 
+.clearFile {
+    width: max-content;
+    position: absolute;
+    transform: translate(24px, -25px);
+}
 
-
-    #controll {
-        background-color: rgba(65, 55, 55, 0.75);
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        padding: 1%;
-        color: white;
-        z-index: 3;
-    }
+#controll {
+    background-color: rgba(65, 55, 55, 0.75);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1%;
+    color: white;
+    z-index: 3;
+}
 
 .Qclass {
     display:flex;
@@ -47,15 +53,20 @@
     display: flex;
 }
 #add_VI {
+    align-items: end;
+    height: 170px;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 2px 2px #000;
+    background-color: #fff;
+    border-radius: 5px;
 }
-#img_add,#video_add {
+
+#img_add, #video_add {
     display: flex;
     align-items: center;
-    width:max content;
-    height:100px;
-    border:1px groove white;
+    margin-bottom: auto;
+    height: 100%;
 }
 input[type=checkbox]{
     zoom:2;
@@ -69,15 +80,19 @@ input[type=checkbox]{
     font-size:22px;
     font-weight:bold;
 }
-#img_add input{
-    width:55%;
+#img_add input {
+    width: 55%;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #17a2b8;
 }
-#img_holder{
-    border:1px solid #1B4DDD;
+#img_holder {
+    border: 1px solid #1B4DDD;
+    height: 100px;
+    padding: 3%;
 }
 #img_add img {
-    height: 99px;
-    width: 180px;
+    height: 100%;
 }
 
 
@@ -152,11 +167,7 @@ body {
     height: 50%;
     z-index: -3;
 }*/
-
-
-    
-
-#create,#AddQestion,#upload {
+    #create,#AddQestion,#upload {
     background-color: rgba(65, 55, 55, 0.75);
     border: 1px solid rgba(65, 55, 55, 0.75);
     border-bottom: 1px solid rgba(117, 136, 245, 0.90);
