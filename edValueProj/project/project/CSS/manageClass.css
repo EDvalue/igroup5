@@ -21,7 +21,7 @@
 
 #tList {
     float: left;
-    width: 100%;
+    width: 100;
     color: white;
     border-radius:5px;
 }
@@ -29,7 +29,7 @@
 #info {
     float: left;
     text-align: center;
-    height: 600px;
+    height: 0;
 }
 
 #imgLogo {
@@ -247,9 +247,10 @@ canvas {
     flex: 0 0 60%
 }
 
-.c_time {
-    flex: 1;
-}
+
+    .c_time {
+        flex: 1;
+    }
 
 #data {
     display: flex;
@@ -401,4 +402,8 @@ canvas {
     }
 .content {
     flex: 0 1 72%;
+}
+
+ion-icon {
+
 }

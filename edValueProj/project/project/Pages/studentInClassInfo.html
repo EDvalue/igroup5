@@ -89,6 +89,7 @@
         var activeTteam;
         var taskData
         var selectedTaskId
+        var myTeams;
 
         $(document).ready(function () {
             if (localStorage["user"])
@@ -101,6 +102,8 @@
             ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
 
             bringStTasks();
+
+            createTDDL();
 
             UpdateTaskDoughnut();
 
@@ -148,8 +151,39 @@
             swal("הניסיון לפתוח את המשימה נכשל")
         }
 
-        //-----------------------------------------------------------
+        
+        //-----------------יצירת רשימת הכיתות שלי----------------------------
+        function createTDDL(){
+            myTeams = JSON.parse(localStorage["myTeams"]);
+            var cstr = "<option>בחר כיתה</option>";
+              for (a in myTeams) {
+             
+                    cstr += "<option id=plink  value=" + myTeams[a].Id + "><a  href='manageClass.html'>" + myTeams[a].Title + "</a></option>"
+                  
 
+            }
+           console.log(cstr)
+            $("#TeamDDL").html(cstr);
+
+        }
+        function openTeam() {
+             
+
+            tId = $("#TeamDDL").val();
+            console.log(tId)
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                 
+                    location.assign("manageClass.html");
+
+
+                }
+            }
+        }
+        
+         //-----------------יצירת דאטה טייבל----------------------------
         function bringStTasks() {
 
             info = {
@@ -536,10 +570,11 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav navPadding">
                     
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-primary  dropdown-toggle btnonSmall" data-toggle="dropdown">
+                    <li  class="nav-item">
+                        <select class="btn btn-primary btnonSmall" id="TeamDDL" onchange="openTeam()">
+
                             הכיתות שלי
-                        </button>
+                        </select>
                     </li>
                     <li class="nav-item dropdown">
 
@@ -610,31 +645,30 @@
             </div>
 
         </div>
-        <div id="quizes">
-
-            <h3>משימות התלמיד</h3>
+       
 
             
 
-                <div id="TaskView">
-                    <div id="addContent">
+            <div id="TaskView">
+              
+                <div id="addContent">
 
-                        <table id="sp_table" class="display nowrap" style="width:100%">
-                            <thead>
-                                <tr>
+                    <table id="sp_table" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
 
-                                    <th>משימה</th>
-                                    <th>שאלון</th>
-                                    <th>ציון</th>
-                                    <th>הערה</th>
-                                </tr>
-                            </thead>
-                        </table>
+                                <th>משימה</th>
+                                <th>שאלון</th>
+                                <th>ציון</th>
+                                <th>הערה</th>
+                            </tr>
+                        </thead>
+                    </table>
 
-                    </div>
-                </div>            
+                </div>
+            </div>            
             </div>
-        </div>
+        <!--</div>-->
     
 </body>
 </html>

@@ -56,6 +56,27 @@
             ajaxCall("GET",'../api/Teacher/getGraphTeamData/'+activeTteam.Id,"",getGraphTeamDataSuccess,getGraphTeamDataError)
 
         });
+        function checkTTime() {
+            var d = Date.now();
+            
+            console.log("HEYY")
+
+            for(a in taskList){
+                if (taskList[a].ForDate < d.toString() && taskList[a].OpenTill > d.toString()) {
+                    $("ion-icon").css("color", "green");
+                    console.log("green")
+                }
+
+                else if (taskList[a].OpenTill < d.toString()) {
+                    $("ion-icon").css("color", "red");
+                    console.log("red")
+                }
+                  
+               
+
+            }
+
+        }
 
         function getGraphTeamDataSuccess(data) {
             console.log(data);
@@ -310,7 +331,7 @@
             var cstr = "";
             for (a in myTeams) {
                 if (myTeams[a].Title != listdata.Title)                   
-                cstr += `<option team_id="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
 
             }
             $("#teamSelect").append(cstr);
@@ -326,15 +347,15 @@
             title = listdata.Title;
             $("#title>h3").html(title);
         }
-        function openTeam(val) {
+        function openTeam() {
 
-            tId = $("#teamSelect"). children("option:selected").getAttribute("team_id");
+            tId = $("#teamSelect").val();
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    var href = $(val).children("a").attr('href');
-                    location.assign(href);
+                    
+                    location.assign("manageClass.html");
 
 
                 }
@@ -351,6 +372,7 @@
         function getTTasksSuccess(data) {
             console.log(data)
             taskList = data;
+            checkTTime();
             var cstr = "";
             for (a in taskList) {
                 
@@ -367,7 +389,7 @@
 
                                                     <div class="sr">
                                                         <div class="isActive">
-                                                            <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                                                            <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline" id=></ion-icon>
                                                         </div>
                                                         <div class="c_time">
                                                             <span>${taskList[a].OpenTill}  </span><ion-icon name="pencil-outline"></ion-icon>
