@@ -23,6 +23,7 @@
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
+    <script src="../js/Graphs.js"></script>
     <script>
 
         var myTeams;
@@ -43,7 +44,7 @@
         var sortTags = {
             taskArr: [],
             intelligenceArr: [],
-           // studentArr:[]
+            // studentArr:[]
         };
         var sortedGraphData;
 
@@ -81,7 +82,7 @@
         function sortDivs() {
             var obj = {};
             var taskName = {};
-           // var studentName = {};
+            // var studentName = {};
             //var fullName = "";
             var flag = 0;
             for (x in graphData) {
@@ -105,7 +106,7 @@
                 //fullName = graphData[x].Fname + " " + graphData[x].Lname;
                 //graphObject.studentArr.push(fullName);
                 //studentName[x] = fullName;
-                
+
 
             }
             //console.log(graphObject.studentArr)
@@ -134,7 +135,9 @@
             if (arr.length > 0) {
                 for (x in graphData) {
 
-                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle) != -1)) {
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`,"")) != -1))
+                    {
+                        
                         sortedGraphData.push(graphData[x])
                     }
 
@@ -160,7 +163,7 @@
                 else if (document.getElementById("AverageCharts").style.display == "block") {
                     ChartOne();
                 }*/
-                
+
             }
 
 
@@ -175,14 +178,14 @@
         function printTaskName(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
+                str += `<div id="${x.replace(`"`,"")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
             }
             $("#taskName").append(str)
         }
         function printStudentForGraph(obj) {
             str = "";
             for (x in obj) {
-                str+=`<div id="${x}"><input type="checkbox" onchange="sortGraphData('studentArr',this)"/><span>${obj[x]}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('studentArr',this)"/><span>${obj[x]}</span></div>`
             }
             $("#filterStudent").append(str);
         }
@@ -245,7 +248,13 @@
         }
 
         function openSt() {
-
+            var studentArr = [];
+            for (x in graphData) {
+                if (graphData[x].Mail == this.getAttribute('st')) {
+                    studentArr.push(graphData[x])
+                }
+            }
+            localStorage["studentData"] = JSON.stringify(studentArr);
             localStorage["performer"] = this.getAttribute('st');
             location.assign("studentInClassInfo.html");
 
@@ -403,34 +412,34 @@
 
                 cstr += `<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a].taskId}">
 
-                                                            <div class="fr">
-                                                            <div class="name">
-                                                                <p>${taskList[a].Title}</p>
+                                                                <div class="fr">
+                                                                <div class="name">
+                                                                    <p>${taskList[a].Title}</p>
+                                                                </div>
+                                                                <div class="time">
+                                                                    <p>${taskList[a].Date_Assignment}</p>
+                                                                </div>
                                                             </div>
-                                                            <div class="time">
-                                                                <p>${taskList[a].Date_Assignment}</p>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="sr">
-                                                            <div class="isActive">
-                                                                <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                                                            <div class="sr">
+                                                                <div class="isActive">
+                                                                    <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
+                                                                </div>
+                                                                <div class="c_time">
+                                                                    <span>${taskList[a].OpenTill}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                                                </div>
                                                             </div>
-                                                            <div class="c_time">
-                                                                <span>${taskList[a].OpenTill}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                                            <div class="tr">
+                                                                <div class="notification">
+                                                                    <p>${taskList[a].numWaiting}</p >
+                                                                </div>
+                                                                <div class="cancel">
+                                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="tr">
-                                                            <div class="notification">
-                                                                <p>${taskList[a].numWaiting}</p >
-                                                            </div>
-                                                            <div class="cancel">
-                                                                <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                            </div>
-                                                        </div>
 
 
-                                                    </div>`
+                                                        </div>`
             }
             $("#tasks").html(cstr);
         }
@@ -460,334 +469,7 @@
 
 
 
-        var options = {
-            responsive: true,
-            maintainAspectRatio: true,
-            legend: {
-                labels: {
-                    // This more specific font property overrides the global property
-                    fontColor: 'black',
-                    fontSize: 20
-                },
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
 
-                        fontColor: 'black',
-                        fontSize: 25
-                    },
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontColor: 'black',
-                        fontSize: 25
-                    },
-                }],
-
-            },
-
-        };
-        var chart1;
-        var chart2;
-        var chart3;
-        var chart4;
-
-
-        function ChartOne() {
-            var IntData = {
-                "personal": 0,
-                "spatial": 0,
-                "לא ביצעו":0
-            };
-            var IntLabels = [ "personal", "spatial", "לא ביצעו"];
-            ctx = document.getElementById('AverageChart').getContext('2d');
-            for (x in sortedGraphData) {
-
-                if (sortedGraphData[x].IntelligenceName == "personal") 
-                    IntData["personal"]++;
-                if (sortedGraphData[x].IntelligenceName == "spatial")
-                    IntData["spatial"]++;
-                if (sortedGraphData[x].IntelligenceName == "לא ביצעו")
-                    IntData["לא ביצעו"]++;
-            }
-  
-            
-            var Average = 0.0;
-            var sum = 0;
-            var numOfselectedInt=0
-            for (x in IntData) {
-                if (IntData[x] != 0) {
-                    sum += IntData[x];
-                    numOfselectedInt++
-                }
-            }
-            Average = sum / numOfselectedInt;
-            console.log("average is: "+Average)
-            chart1 = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [IntLabels[0],IntLabels[1],IntLabels[2]],
-                    datasets: [{
-                        type: 'bar',
-                        label: 'תלמידים לפי אינטלגנציות',
-                        data: [IntData["personal"], IntData["spatial"], IntData["לא ביצעו"]],
-                            backgroundColor: 'rgb(0,123,254)',
-                            borderColor: 'rgb(0,123,254)',
-                            borderWidth: 1
-                    },
-
-                    ]
-                },
-                options: {
-
-                    annotation: {
-                        annotations: [{
-                            type: 'line',
-                            mode: 'horizontal',
-                            scaleID: 'y-axis-0',
-                            value: Average,
-                            borderColor: 'red',
-                            borderWidth: 4,
-                            label: {
-                                enabled: true,
-                                content: 'Average'
-                            }
-                        }]
-                    },
-                   
-                }
-            });
-            chart1.update();
-        }
-        function drawDashedLine(pattern) {
-            ctx.beginPath();
-            ctx.setLineDash(pattern);
-            ctx.moveTo(0, y);
-            ctx.lineTo(300, y);
-            ctx.stroke();
-            y += 20;
-        }
-        function ChartTwo() {
-             var IntData = {
-                "personal": 0,
-                "spatial": 0
-            }; 
-            var medianArr = [];
-            var IntLabels = [ "personal", "spatial", "לא ביצעו"];
-            var personalCount = 0.0;
-            var spatialCount = 0.0;
-            var medianValue = 0.0;
-            var ctx = document.getElementById('GradeChart').getContext('2d');
-
-            for (x in sortedGraphData) {
-                if (sortedGraphData[x].IntelligenceName == "personal" && sortedGraphData[x].Grade != 0) {
-                    IntData["personal"] += parseInt(sortedGraphData[x].Grade);
-                    personalCount++;
-                    medianArr.push(sortedGraphData[x].Grade)
-                }
-                   
-                if (sortedGraphData[x].IntelligenceName == "spatial" && sortedGraphData[x].Grade != 0) {
-                    IntData["spatial"] += parseInt(sortedGraphData[x].Grade);
-                    spatialCount++;
-                    medianArr.push(sortedGraphData[x].Grade)
-                }               
-            }
-            medianValue = median(medianArr)
-            //console.log(medianArr)
-            //console.log(medianValue)
-            for (x in IntData) {
-                    if (x == "personal")
-                        IntData[x] = IntData[x] / personalCount;
-                    if (x == "spatial")
-                        IntData[x] = IntData[x] / spatialCount;
-            }
-            
-            chart2 = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [IntLabels[0], IntLabels[1]],
-                    datasets: [
-                        {
-                            label: 'ממוצע ציונים לפי אינטלגנציות',
-                            data: [IntData["personal"], IntData["spatial"]],
-                            backgroundColor: 'rgba(222, 222, 132, 1)',
-                            borderColor: 'rgba(222, 222, 132, 2)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options:{
-                    scales: {
-                        yAxes: [{
-                            display: true,
-                            ticks: {
-                                beginAtZero: true   // minimum value will be 0.
-                            }
-                        }]
-                    },
-                    annotation: {
-                        annotations: [{
-                            type: 'line',
-                            mode: 'horizontal',
-                            scaleID: 'y-axis-0',
-                            value: medianValue,
-                            borderColor: 'red',
-                            borderWidth: 4,
-                            label: {
-                                enabled: true,
-                                content: 'Median'
-                            }
-                        }]
-                    }
-                },
-
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
-            });
-            chart2.update();
-        }
-        function median(arrForMedian) {
-            // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
-            var median = 0, arrLen = arrForMedian.length;
-            arrForMedian.sort();
-
-            if (arrLen % 2 === 0){  // is even
-                // average of two middle numbers
-                median = (parseInt(arrForMedian[arrLen / 2 - 1]) + parseInt(arrForMedian[arrLen / 2])) / 2;
-            }
-            else { // is odd
-                // middle number only
-                median = arrForMedian[(arrLen - 1) / 2];
-            }
-
-            return median;
-        }
-        function ChartThree() {
-
-            var ctx = document.getElementById('PercentageChart').getContext('2d');
-            var countPersonal = 0;
-            var percentagePersonal = 0.0;
-            var countSpatial = 0;
-            var percentageSpatial = 0.0;
-            var countOther = 0;
-            var percentageOther = 0.0;
-            var sum = 0;
-
-            for (x in sortedGraphData) {
-                if (sortedGraphData[x].IntelligenceName == "personal") {
-                    countPersonal++;
-                }
-                if (sortedGraphData[x].IntelligenceName == "spatial") {
-                    countSpatial++
-                }
-                countOther++
-            }
-            sum = countPersonal + countSpatial + countOther;
-            percentagePersonal = (countPersonal / sum) * 100;
-            percentageSpatial = (countSpatial / sum) * 100;
-            percentageOther = (countOther / sum) * 100;
-            //console.log(percentagePersonal)
-            //console.log(percentageSpatial)
-            //console.log(percentageOther)
-            chart3 = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ["personal", "spatial", "other"],
-                    datasets: [
-                        {
-                            label: 'אחוז תלמידים לפי אינטליגנציות',
-                            data: [percentagePersonal.toFixed(2), percentageSpatial.toFixed(2), percentageOther.toFixed(2)],
-                            backgroundColor: ['red', 'lightgreen', 'lightblue'],
-                            borderColor: ['red', 'lightgreen', 'lightblue'],
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
-            });
-            chart3.update()
-        }
-
-        function ChartFour() {
-
-            var ctx = document.getElementById('chart4').getContext('2d');
-
-            chart4 = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
-                    datasets: [
-                        {
-                            label: 'History',
-                            data: [44, 55, 32, 14, 22],
-                            backgroundColor: 'rgba(200, 150, 132, 1)',
-                            borderColor: 'rgba(200, 150, 132, 2)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: options,
-
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
-            });
-
-        }
-
-        function UpdateTaskDoughnut() {
-            var egish = 0;
-            var loegish = 0;
-            var ctx2 = document.getElementById('TaskChart').getContext('2d');
-            for (x in sortedGraphData) {
-                if (sortedGraphData[x].isperform == 1)
-                    egish++
-                else
-                    loegish++
-            }
-            task = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['הוגש', 'לא הוגש'],
-                    datasets: [
-                        {
-
-                            data: [egish, loegish],
-                            backgroundColor: ['rgba(152,251,152)', 'rgba(135,206,250)'],
-
-                        },
-
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            // This more specific font property overrides the global property
-                            fontColor: 'black',
-                            fontSize: 15
-                        },
-                    },
-
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            });
-            task.update()
-        }
 
         function ChartChange() {
             $("#statistics").height("400px")
@@ -797,44 +479,41 @@
             var GradeCharts = document.getElementById("GradeCharts");
             var PercentageCharts = document.getElementById("PercentageCharts")
             if (x == "AverageCharts") {
+                document.getElementById("info").style.display = "block"
                 AverageCharts.style.display = "block";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
-                //ThirdCharts.style.display = "none";
-                //ChartOne();
             }
             else if (x == "TaskCharts") {
+                document.getElementById("info").style.display = "block"
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
-                //UpdateTaskDoughnut();
             }
             else if (x == "GradeCharts") {
+                document.getElementById("info").style.display = "block"
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
                 PercentageCharts.style.display = "none";
-                
-                //ChartTwo();
-                //ChartFour();
+
             }
-            else if (x=="PercentageCharts") {
+            else if (x == "PercentageCharts") {
+                document.getElementById("info").style.display = "block"
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "block";
-                
+
             }
             else {
-
-                $("#statistics").height("0")
+                document.getElementById("info").style.display = "none"
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
-
             }
 
         }

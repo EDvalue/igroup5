@@ -35,6 +35,7 @@
 
 
     <script>
+        var studentGraphData;
         var studentsArr = [];
         var userOBJ;
         var xLabels = [];
@@ -97,7 +98,8 @@
                 performer = localStorage["performer"];
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
-
+            if (localStorage["studentData"])
+                studentGraphData = localStorage["studentData"];
             //ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
 
             bringStTasks();

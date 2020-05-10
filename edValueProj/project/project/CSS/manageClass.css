@@ -1,5 +1,5 @@
 ﻿#main {
-    margin-right: 1%;
+    padding:1%;
     margin-top: 1%;
     display: flex;
     width: 100%;
@@ -202,17 +202,18 @@ canvas {
     flex-flow: row wrap;
 }
 
-#tasks > div {
-    border: 2px solid #f1f1f1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 200px;
-    margin-bottom: 3%;
-    margin-top: 2%;
-    background-color: white;
-    border-radius: 5px;
-}
+    #tasks > div {
+        height: max-content;
+        border: 2px solid #f1f1f1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 200px;
+        margin-bottom: 3%;
+        margin-top: 2%;
+        background-color: white;
+        border-radius: 5px;
+    }
 
 #task {
     border: 2px solid #f1f1f1;
@@ -409,6 +410,7 @@ canvas {
         display: flex;
         align-items: baseline;
         text-align: right;
+        
     }
     #taskName span{
         padding:7px;

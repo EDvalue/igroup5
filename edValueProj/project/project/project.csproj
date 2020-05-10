@@ -320,6 +320,7 @@
     <Content Include="images\PersonalN.jpg" />
     <Content Include="images\musicallyN.jpg" />
     <Content Include="images\word-icon.png" />
+    <Content Include="js\Graphs.js" />
     <Content Include="js\js.js" />
     <Content Include="Pages\Assignment_assignment.html" />
     <Content Include="Pages\classInfo.html" />
