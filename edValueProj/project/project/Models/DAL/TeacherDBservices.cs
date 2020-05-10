@@ -1134,7 +1134,7 @@ namespace project.Models.DAL
                 String part4 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId= '"+teamId+"' ";
                 string part5 = "group by t.taskId,t.Title,t.SubjectName,rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy,rt.TeamId)as tbl ";
                 string part6 = "left join [dbo].[PerformQuestionnaire] as pq on pq.TeamId=tbl.TeamId and pq.TaskId=tbl.TaskId ";
-                string part7 = " group by pq.Grade,tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy";
+                string part7 = " group by pq.TaskId,tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy";
                 String selectSTR = part1 + part2 + part3 + part4 + part5 +part6 +part7;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -1194,7 +1194,7 @@ namespace project.Models.DAL
 
 
 
-                string select1 = "select st.StudentEmail,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,pq.isWaiting,";
+                string select1 = "select st.StudentEmail,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,Case when pq.isWaiting is Null Then 0 Else pq.isWaiting END AS isWaiting,";
                 string select2 = "pq.SubmissionDate,pq.Ptime,Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform";
                 string from = " from(";
                 string select3 = "select * ";
@@ -1222,7 +1222,7 @@ namespace project.Models.DAL
                     srt.Add("Lname",Convert.ToString(dr["Lname"]));
                     srt.Add("IntelligenceName", dr["IntelligenceName"].ToString());
                     srt.Add("isperform", Convert.ToString(dr["isperform"]));
-                    srt.Add("isWaiting", Convert.ToString(dr["isWaiting"]));
+                    srt.Add("isWaiting", Convert.ToInt32(dr["isWaiting"]).ToString());
                     if (dr["Grade"] != DBNull.Value)
                     {
                         srt.Add("Grade",Convert.ToString(dr["Grade"]));

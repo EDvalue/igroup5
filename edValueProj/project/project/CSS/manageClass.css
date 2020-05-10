@@ -1,6 +1,9 @@
 ﻿#main {
     margin-right: 1%;
     margin-top: 1%;
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
 }
 
 #tbl_int {
@@ -27,9 +30,13 @@
 }
 
 #info {
-    float: left;
+    flex:1 1 80%;
     text-align: center;
-    height: 0;
+
+    height: 600px;
+
+    width: 75%;
+
 }
 
 #imgLogo {
@@ -114,7 +121,7 @@ canvas {
 }
 
 #tList > ul > li, #sList > ul > li {
-    
+
     margin-top: 5%;
     text-align: center;
     margin-left: 2%;
@@ -192,6 +199,12 @@ canvas {
     text-align: center;
 }
 /*------------------------------*/
+#tasks {
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
+}
+
 #tasks > div {
     border: 2px solid #f1f1f1;
     display: flex;
@@ -279,6 +292,8 @@ canvas {
     justify-items: baseline;
 }
 
+
+
 #sList {
     min-height: 250px;
     max-height: 350px;
@@ -290,7 +305,6 @@ canvas {
 #statistics {
     height: 0;
     width: 90%;
-    margin-top: 5%;
     margin-bottom: 10%;
     margin-left: auto;
     margin-right: auto;
@@ -344,9 +358,15 @@ canvas {
 .navPadding {
     padding: 0;
 }
-#teamList{
-    background-color:white;
-    border-radius:5px;
+#teamList {
+    background-color: white;
+    border-radius: 5px;
+    flex: 0 1 20%;
+}
+#class_info {
+    display: flex;
+    flex-flow: row wrap;
+    flex: 0 1 80%;
 }
 #TaskView {
     margin: auto;
@@ -377,9 +397,10 @@ canvas {
     border-radius:6%;
     margin-bottom:2%;
 }
-#taskName {
+#taskName, #subjectsList, #stList {
     display: flex;
-    flex:1;
+    text-align: right;
+    flex: 1;
     flex-direction: column;
     justify-content: space-around;
     background-color: white;
@@ -388,22 +409,38 @@ canvas {
     border-radius: 6%;
     margin-bottom: 2%;
 }
-    #taskName>div{
-        display:flex;
-        align-items:baseline;
-        
+    #taskName > div {
+        display: flex;
+        align-items: baseline;
+        text-align: right;
     }
     #taskName span{
         padding:7px;
     }
     #mainGraph {
         display: flex;
-        
+
     }
 .content {
     flex: 0 1 72%;
 }
 
+
 ion-icon {
 
+}
+
+#filterStudent {
+
+    max-width: 400px;
+    height: 400px;
+    text-align: right;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: white;
+    box-shadow: 2px 2px 2px #000;
+    padding: 3%;
+    border-radius: 6%;
+    margin-bottom: 2%;
+    overflow-y:scroll
 }

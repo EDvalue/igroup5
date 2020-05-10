@@ -163,7 +163,7 @@ namespace project.Models.DAL
                 String part6 = "  inner join  Intelligence as i on q.IntelligenceName=i.[EnglishName] group by t.taskId,t.Title,t.SubjectName,q.IntelligenceName,i.[Name],rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.YearOfStudy)as tbl  ";
                 String part7 = "  inner join Question as quest on quest.QuestionnaireId=tbl.QuestionnaireId inner join PointsInIntelligence as pio on pio.IntelligenceName=tbl.IntelligenceName and pio.StudentEmail='"+userEmail+"' ";
                 String part8 = "  left join Answer as a on a.QuestionId=quest.QuestionId left join [dbo].[PerformQuestionnaire] as pq on pq.[QuestionnaireId]=tbl.[QuestionnaireId] and pq.[StudentId]='" + userEmail + "' and  pq.TeamId='"+teamId+"' ";
-                String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId] order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
+                String part9 = " left join [dbo].[AnsClose] as ac on ac.[AnswerId]=a.[AnswerId] and ac.StudentEmail='" + userEmail + "' left join [dbo].[AnsOpen] as ao on ao.[QuestionId]=quest.[QuestionId] and ao.StudentEmail='" + userEmail + "' order by tbl.ForDate,tbl.TaskId,tbl.IntelligenceName,points ";
                 String selectSTR = part1+part2+part3+part4+part5+part6+part7+part8+part9;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -219,8 +219,9 @@ namespace project.Models.DAL
                                 rt.STime = Convert.ToDateTime(dr["Ptime"]);
                             rt.Task.Grade =1;
                         }
-                        q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(),dr["IntelligenceName"].ToString(),Convert.ToInt32(dr["Spoints"]));
-          
+                        q.Inteligence=new Inteligence(Convert.ToInt32(dr["points"]),dr["Name"].ToString(),dr["IntelligenceName"].ToString(),0);
+                        if (dr["Spoints"] != DBNull.Value)
+                            q.Inteligence.Spoints = Convert.ToInt32(dr["Spoints"]);
                     }
    
                     if (dr["QuestionId"].ToString() != que.QuestionId)
@@ -827,7 +828,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
 
-                String UpdateSIquiz = "UPDATE PerformQuestionnaire  Set isWaiting=1  where ac.TaskId='" + rt.Task.QuizList[0].TaskId + "' and ac.StudentEmail='" + rt.StPerformer.Mail + "' and ac.QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and ac.TeamId='" + rt.YearOfStudy + "'";
+                String UpdateSIquiz = "UPDATE PerformQuestionnaire  Set isWaiting=1  where TaskId='" + rt.Task.QuizList[0].TaskId + "' and StudentId='" + rt.StPerformer.Mail + "' and QuestionnaireId='" + rt.Task.QuizList[0].QuizID + "' and TeamId='" + rt.YearOfStudy + "'";
 
 
 

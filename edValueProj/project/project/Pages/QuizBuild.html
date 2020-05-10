@@ -168,7 +168,7 @@
                     <div id="add_VI">
                         <div id="img_add">
                           <input type="file" class="btn btn-info" onchange="showFile(${count})" accept="image/*" />
-                          <div id="img_holder">`
+                          <div id="img_holder"><div class='clearFile'>❌</div>`
             if (QuestionnaireData) {
 
                 NewQestionString += `<img src="${QuestionnaireData.Question[quest].ImgLink}" width="150" alt="תצוגה מקדימה">
@@ -184,7 +184,7 @@
 
                 NewQestionString += `<div id="video_add">
                            <span>צרף קישור לסרטון</span>
-                          <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="btn btn-info"/>
+                          <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="form-control"/>
                            
                         </div>
                     </div>
@@ -194,7 +194,7 @@
             else {
                 NewQestionString += `<div id="video_add">
                            <span>צרף קישור לסרטון</span>
-                          <input value="" type="text" class="btn btn-info"/>
+                          <input value="" type="text" class="form-control"/>
                            
                         </div>
                     </div>
@@ -206,6 +206,14 @@
             $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             $('#main').append(NewQestionString);
             CKEDITOR.replace(`text${count}`);
+            $(".clearFile").click(function () {
+                
+                $(this.parentNode).children('img').attr('src', '')
+                $(this.parentNode.parentNode).children('input[type="file"]').attr('type', 'text');
+                $(this.parentNode.parentNode).children('input[type="text"]').attr('type', 'file');
+                $(`#${this.parentNode.parentNode.id}>.link`).remove();
+
+            });
 
 
 
@@ -251,6 +259,7 @@
                 $("#Q" + arg.id + " .adding_btn").text("")
                 $("#Q" + arg.id + " .adding_btn").append(strA);
                 AddOptionRadio(arg.id);
+                $("#Q" + arg.id + " #op .delete_opt_span").remove();
 
             }
             else if (choose == 'O') {
@@ -269,8 +278,8 @@
                 strM += "<button type='button' onclick=AddOptionMRadio(" + arg.id + ")>Add Option </button>";
                 $("#Q" + arg.id + " .adding_btn").text("")
                 $("#Q" + arg.id + " .adding_btn").append(strM);
-
                 AddOptionMRadio(arg.id)
+                $("#Q" + arg.id + " #op .delete_opt_span").remove();
 
             }
         }
@@ -296,9 +305,13 @@
             console.log(arg)
 
             strMradio = "";
-            strMradio += "<div><span>:הכנס אופציה</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
+            strMradio += "<div><span class='delete_opt_span' style='font-size:14px'>❌</span><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
             $("#Q" + num).find('#op').append(strMradio);
+              $(".delete_opt_span").click(function () {
+            
+                $(this.parentNode).remove();
 
+            });
 
 
         }
@@ -307,8 +320,13 @@
             console.log(arg)
 
             str1 = "";
-            str1 += "<div><span>:הכנס אופציה</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
+            str1 += "<div><span class='delete_opt_span' style='font-size:14px'>❌</span><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
             $("#Q" + num).find('#op').append(str1);
+            $(".delete_opt_span").click(function () {
+            
+                $(this.parentNode).remove();
+
+            });
 
             connectCHK();
 

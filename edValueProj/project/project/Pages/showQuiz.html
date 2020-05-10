@@ -44,6 +44,7 @@
 
             if (localStorage["active_student_team"])
                 activeStTeam = JSON.parse(localStorage["active_student_team"])
+
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
@@ -63,7 +64,7 @@
             ckReplace()
             connectCHK();
             connectForm();
-            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode="teacher"&&modeQuiz=="check")) {
+            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode=="teacher"&&modeQuiz=="check")) {
                 //fill answer of quiz
                 fillANS();
             }
@@ -148,7 +149,7 @@
                             if (perform_showQuiz_mode == "teacher") {
                                 quizString += `<span class="markAns">${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>`
                             } else {
-                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p class="markAns">${el.Question[qu].Answer[y].Content}</p>`
+                                quizString += `<span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  /> <p class="">${el.Question[qu].Answer[y].Content}</p>`
                             }
 
                             quizString += `</div>`
@@ -171,7 +172,7 @@
 
             if (perform_showQuiz_mode == "student") {
                 quizString += `<div id="submitDIV"><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
-            } else {
+            } else if(perform_showQuiz_mode == "teacher" && modeQuiz=="check") {
                 //teacher note and grade
                 quizString += `
               <div id="t_fb">
@@ -256,7 +257,9 @@
                 } else if (el.Question[q].Type == 'U') {
                     if (el.Question[q].AnsContent) {
                         ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
-                        name = el.Question[q].AnsContent.split('uploadedFile')[1];
+                        name = el.Question[q].AnsContent.split('uploadedFile')[1].replace('\\', '');
+
+                   
                         $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
                         $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>${name}</a>`);
 
@@ -276,6 +279,14 @@
                     }
 
                 }
+            }
+
+            if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+                Pobj=getPdata(performer)
+                $(".fb_txt>textarea").val(Pobj.Note);
+                if(Pobj.Grade>0)
+                $(".fb_grade>input[type='number']").val(Pobj.Grade);
+
             }
         }
 
@@ -320,11 +331,13 @@
                 
                 if (!performers[s].QuizID=="") {
 
-                    if (performers[s].isWaiting) {
-                        let x = performers[s].Grade ?"-"+performers[s].Grade : "";
+                    if (performers[s].isWaiting!=0) {
+                        let x = performers[s].Grade ? "-" + performers[s].Grade : "";
                         ncStr += `<option of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`;
 
-                    } 
+                    } else if (performers[s].isWaiting==undefined) {
+                        localStorage["performer"]=performers[s].Mail
+                    }
                  
                 }
                
@@ -337,7 +350,7 @@
             if (ncStr != "") {
                 $('#main').html(popup);
                 $("#per_sel select").change(reOpenQuiz);
-                $("#nextSt_title input[type=button]").click( window.history.back())
+                $("#nextSt_title input[type=button]").click(function (){ window.history.back() });
             } else {
                 window.history.back();
             }
@@ -348,7 +361,7 @@
           function getPdata(id) {
 
             for (x in performers) {
-                if (performers[x].Mail == id) {
+                if (performers[x].Mail == id||performers[x].TaskId) {
                     return performers[x];
                 }
             }
@@ -387,12 +400,13 @@
 
         function updatePreformers() {
             for (p in performers) {
-                if (performers[p].Mail == performer) {
+                if (performers[p].Mail == performer||performers[p].TaskId==performer) {
 
                     performers[p].Grade = fb.grade;
                     performers[p].Note = fb.text;
                 }
             }
+            localStorage["performers"] =JSON.stringify(performers);
         }
 
         function connectForm() {
@@ -418,7 +432,7 @@
                 });
 
                 $('.sf').click(function () {
-                    $('.loader').show();
+                    $(this.parentNode.parentNode).find('.loader').show();
                     var data = new FormData();
                     LufDiv = this.parentNode;
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
@@ -447,9 +461,16 @@
                     //connect the file drag
                     $(daArr[d]).on('drop', (e) => {
                         e.preventDefault();
+                       
                         e.stopPropagation();
                         e.dataTransfer = e.originalEvent.dataTransfer
-                        let fileInput = document.querySelector("#file" + e.target.parentNode.parentNode.parentNode.id);
+                        if ($(e.target).is('img')){
+                            num = e.target.parentNode.parentNode.parentNode.parentNode.id
+                        } else {
+                            num=e.target.parentNode.parentNode.parentNode.id
+                        }
+                        
+                        let fileInput = document.querySelector("#file" + num);
 
                         for (const f of e.dataTransfer.files) {
                             console.log('File(s) you dragged here: ', f.path)
@@ -461,14 +482,24 @@
                     $(daArr[d]).on('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        $(".filedrag").css("borderColor", "#007bff")
+                        if ($(e.target).is("img")){
+                            val = e.target.parentNode;
+                        } else {
+                            val = e.target;
+                        }
+                        $(val).css("borderColor", "#007bff")
 
                     });
 
                     $(daArr[d]).on('dragleave', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        $(".filedrag").css("borderColor", "#ccc")
+                          if ($(e.target).is("img")){
+                            val = e.target.parentNode;
+                        } else {
+                            val = e.target;
+                        }
+                        $(val).css("borderColor", "#ccc")
 
                     });
 
@@ -490,12 +521,13 @@
 
         function PostDocSuccess(data) {
             //upload doc of student success
-              $('.loader').hide();
+            $('.loader').hide();
             $(LufDiv).children('.link').remove();
             $(LufDiv).children('.dl').remove();
+            arg = data.split('uploadedFile')[1];
 
             $(LufDiv).append(`<div class='link'>${data}</div>`);
-            $(LufDiv).append(`<a class='dl' href="${data}" download>הורד קובץ</a>`)
+            $(LufDiv).append(`<a class='dl' href="${data}" download>${arg}</a>`)
         }
 
         function PostDocError(err) {
@@ -555,6 +587,7 @@
                 Task: {
 
                     QuizList: [el],
+
                 },
                 StPerformer: userOBJ,
                 yearOfStudy: activeStTeam.Id,

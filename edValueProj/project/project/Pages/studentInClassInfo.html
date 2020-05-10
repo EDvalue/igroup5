@@ -99,7 +99,7 @@
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
-            ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
+            //ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
 
             bringStTasks();
 
@@ -137,10 +137,11 @@
      
 
         function getQsuccess(data) {
+            
             localStorage["performers"] = JSON.stringify(taskData);
             localStorage["userMode"] = "teacher";
             localStorage["quiz_mode"] = "check";
-            localStorage["performer"] = chosenSt.Mail;
+            localStorage["performer"] = chosenSt.TaskId;
             localStorage["quiz"] = JSON.stringify(data);
 
             location.assign("showQuiz.html");
@@ -264,8 +265,6 @@
             catch (err) {
                 alert(err);
             }
-
-
 
         }
 
