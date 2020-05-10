@@ -224,3 +224,8 @@ canvas {
 .navPadding {
     padding: 0;
 }
+/*----DataTable----*/
+#sp_table_wrapper {
+    display: block;
+    text-align:right;
+}

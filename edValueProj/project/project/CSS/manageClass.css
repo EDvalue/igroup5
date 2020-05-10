@@ -24,7 +24,7 @@
 
 #tList {
     float: left;
-    width: 100%;
+    width: 100;
     color: white;
     border-radius:5px;
 }
@@ -32,8 +32,11 @@
 #info {
     flex:1 1 80%;
     text-align: center;
+
     height: 600px;
+
     width: 75%;
+
 }
 
 #imgLogo {
@@ -118,7 +121,7 @@ canvas {
 }
 
 #tList > ul > li, #sList > ul > li {
-    
+
     margin-top: 5%;
     text-align: center;
     margin-left: 2%;
@@ -258,9 +261,10 @@ canvas {
     flex: 0 0 60%
 }
 
-.c_time {
-    flex: 1;
-}
+
+    .c_time {
+        flex: 1;
+    }
 
 #data {
     display: flex;
@@ -417,11 +421,17 @@ canvas {
     }
     #mainGraph {
         display: flex;
-        
+
     }
 .content {
     flex: 0 1 72%;
 }
+
+
+ion-icon {
+
+}
+
 #filterStudent {
 
     max-width: 400px;
