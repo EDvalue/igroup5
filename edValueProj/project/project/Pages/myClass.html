@@ -5,7 +5,8 @@
     <link href="../CSS/manageClass.css" rel="stylesheet" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/myClass.css" rel="stylesheet" />
-
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <script src="../js/js.js"></script>
     <title></title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
@@ -46,8 +47,11 @@
         var sortedGraphData;
 
         $(document).ready(function () {
-            if (localStorage["user"])
+            if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
+                $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            }
+
             if (localStorage["Teacher_inClass"])
                 classPage = JSON.parse(localStorage["Teacher_inClass"]);
             info = {
@@ -134,7 +138,7 @@
         function printTaksName(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x.replace(`"`,"")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
+                str += `<div id="${x.replace(`"`, "")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
             }
             $("#taskName").append(str)
         }
@@ -159,12 +163,12 @@
             if (arr.length > 0) {
                 for (x in graphData) {
 
-                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`,"")) != -1) || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1) || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
                         sortedGraphData.push(graphData[x])
                     }
                 }
                 console.log(sortedGraphData)
-              
+
                 chart1.data.datasets = sortedGraphData;
                 chart2.data.datasets = sortedGraphData
                 chart3.data.datasets = sortedGraphData
@@ -183,7 +187,7 @@
                 ChartOne()
                 ChartTwo()
                 ChartThree()
-                
+
             }
 
         }
@@ -249,21 +253,21 @@
             var GradeCharts = document.getElementById("GradeCharts");
             var PercentageCharts = document.getElementById("PercentageCharts")
             if (x == "AverageCharts") {
-               
+
                 AverageCharts.style.display = "block";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
             }
             else if (x == "TaskCharts") {
-             
+
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
             }
             else if (x == "GradeCharts") {
-              
+
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
@@ -271,7 +275,7 @@
 
             }
             else if (x == "PercentageCharts") {
-               
+
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
@@ -279,7 +283,7 @@
 
             }
             else {
-               
+
                 AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
@@ -290,7 +294,7 @@
     </script>
 </head>
 <body dir="rtl">
-
+    <div id="disbackg"></div>
     <div id="container">
         <div id="header">
             <div class="row">
@@ -316,26 +320,36 @@
 
             <nav class="navbar navbar-expand-lg navbar-light navBar">
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                    <option value="" disabled selected hidden>בחר אפשרות</option>
-                    <option value="AverageCharts">גרף 1</option>
-                    <option value="TaskCharts">גרף 2</option>
-                    <option value="GradeCharts">גרף 3</option>
-                    <option value="PercentageCharts">גרף 4</option>
-                    <option value="CloseAll">לסגור הכל</option>
-                </select>
+               
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav navPadding">
                         <li class="nav-item active">
                             <div id="open_signIn">
-                                <input type="button" class="btn btn-info" onclick="confirmSignIn()" value="פתח רישום" />
+                                <input type="button" class="btn btn-primary" onclick="confirmSignIn()" value="פתח רישום" />
                             </div>
                         </li>
                     </ul>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                        <option value="" disabled selected hidden>בחר אפשרות</option>
+                        <option value="AverageCharts">גרף 1</option>
+                        <option value="TaskCharts">גרף 2</option>
+                        <option value="GradeCharts">גרף 3</option>
+                        <option value="PercentageCharts">גרף 4</option>
+                        <option value="CloseAll">לסגור הכל</option>
+                    </select>
+                </div>
 
+
+                <div id="user_manage">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    </button>
+                    <div id="nav_cnt" class="dropdown-menu">
+                        <p id="disconnect" onclick="disconnect()">התנתק</p>
+                        <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -397,7 +411,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 </body>

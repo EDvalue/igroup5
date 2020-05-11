@@ -3,11 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/manageClass.css" rel="stylesheet" />
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="../js/js.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
@@ -53,9 +56,10 @@
 
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
-              if (localStorage["user"]) {
+            if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
-              }
+                $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            }
 
             createSList();
             createTList();
@@ -80,14 +84,14 @@
             var ClassDate = new Date($('#classDate').val());
             var SubmitionDate = new Date($('#submitionDate').val());
 
-            classTime =$("#class_date>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
-                $("#class_date>input[type='datetime-local']").val() + ":00" :$("#class_date>input[type='datetime-local']").val();
+            classTime = $("#class_date>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
+                $("#class_date>input[type='datetime-local']").val() + ":00" : $("#class_date>input[type='datetime-local']").val();
 
             subTime = $("#submition_date>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
-                $("#submition_date>input[type='datetime-local']").val()+":00":$("#submition_date>input[type='datetime-local']").val()
+                $("#submition_date>input[type='datetime-local']").val() + ":00" : $("#submition_date>input[type='datetime-local']").val()
             assignment = {
                 classTime: classTime,
-                submitionTime:subTime,
+                submitionTime: subTime,
                 TaskId: selectedTsakId,
                 TeamId: activeTteam.Id,
                 TeamSchoolCode: userOBJ.SCode,
@@ -101,19 +105,19 @@
             //    swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
             else {
 
-                    ajaxCall('PUT', '../api/Teacher/updateAssigment', JSON.stringify(assignment), updateAssigmentSuccess, updateAssigmentError)
+                ajaxCall('PUT', '../api/Teacher/updateAssigment', JSON.stringify(assignment), updateAssigmentSuccess, updateAssigmentError)
 
 
-                 }
+            }
 
         }
 
         function updateAssigmentSuccess(data) {
-             swal({
-                
-                   title: "תאריך המשימה עודכן",
-                   icon: "success",
-               })
+            swal({
+
+                title: "תאריך המשימה עודכן",
+                icon: "success",
+            })
             console.log(data);
             t = getTakById(selectedTsakId);
             t.ForDate = $("#class_date>input[type='datetime-local']").val();
@@ -127,16 +131,16 @@
             console.log(err);
         }
 
-         function closeDivAU() {
+        function closeDivAU() {
             $("#assigment").hide();
-         
-         }
+
+        }
 
         function checkTTime() {
             var d = Date.now();
 
 
-            for(a in taskList){
+            for (a in taskList) {
                 if (taskList[a].ForDate < d.toString() && taskList[a].OpenTill > d.toString()) {
                     $("ion-icon").css("color", "green");
                     console.log("green")
@@ -225,9 +229,8 @@
             if (arr.length > 0) {
                 for (x in graphData) {
 
-                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`,"")) != -1))
-                    {
-                        
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1)) {
+
                         sortedGraphData.push(graphData[x])
                     }
 
@@ -269,7 +272,7 @@
         function printTaskName(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x.replace(`"`,"")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
+                str += `<div id="${x.replace(`"`, "")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
             }
             $("#taskName").append(str)
         }
@@ -458,7 +461,7 @@
             for (a in myTeams) {
 
                 if (myTeams[a].Title != listdata.Title)
-                cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                    cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
 
                 if (myTeams[a].Title != listdata.Title)
                     cstr += `<option team_id="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
@@ -509,8 +512,8 @@
             taskList = data;
             checkTTime();
             var cstr = "";
-            const optionsForDate = { weekday: 'long',month: 'long', day: 'numeric'};
-            const timeForDate = { hour: 'numeric', minute: 'numeric'};
+            const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
+            const timeForDate = { hour: 'numeric', minute: 'numeric' };
             const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (a in taskList) {
                 dateTimeArr = taskList[a].ForDate.split(" ");
@@ -522,43 +525,43 @@
                 taskList[a].OpenTill = dateTimeArr.join("T")
                 cstr += `<div class="col-sm-4" id="${taskList[a].taskId}">
 
-                                                             <div class="fr">
-                                                                <div class="name">
-                                                                    <p>${taskList[a].Title}</p>
-                                                                </div>
-                                                                <div class="time">
-                                                                    <p  title='${new Date(taskList[a].ForDate).toLocaleDateString(undefined,timeForDate)}'>${new Date(taskList[a].ForDate).toLocaleDateString(undefined,optionsForDate).replace("'","")}'</p>
-                                                                </div>
-                                                              </div>                                
-                            
-
-                                                            <div class="sr">
-                                                                
-                                                                <div class="c_time">
-                                                                    <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                                                    <span>`
-                                                                     if (new Date(taskList[a].OpenTill) > new Date() && new Date(taskList[a].ForDate) < new Date())
-                                                                        
-                                                                      cstr+=` <ion-icon id="green" name="play"></ion-icon>`
-
-                                                                        else 
-                                                                        cstr+=`<ion-icon id="red" name="play"></ion-icon>`
-                                                                         
-                                                                       cstr+=`</span>`
-                                                                                                                                          
-                                                                cstr+=`</div>
-                                                            </div>
-                                                            <div class="tr">
-                                                                <div class="notification">
-                                                                    <p>${taskList[a].numWaiting}</p >
-                                                                </div>
-                                                                <div class="cancel">
-                                                                    <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                                </div>
-                                                            </div>
+                                                                         <div class="fr">
+                                                                            <div class="name">
+                                                                                <p>${taskList[a].Title}</p>
+                                                                            </div>
+                                                                            <div class="time">
+                                                                                <p  title='${new Date(taskList[a].ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(taskList[a].ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                                                            </div>
+                                                                          </div>
 
 
-                                                        </div>`
+                                                                        <div class="sr">
+
+                                                                            <div class="c_time">
+                                                                                <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                                                                <span>`
+                if (new Date(taskList[a].OpenTill) > new Date() && new Date(taskList[a].ForDate) < new Date())
+
+                    cstr += ` <ion-icon id="green" name="play"></ion-icon>`
+
+                else
+                    cstr += `<ion-icon id="red" name="play"></ion-icon>`
+
+                cstr += `</span>`
+
+                cstr += `</div>
+                                                                        </div>
+                                                                        <div class="tr">
+                                                                            <div class="notification">
+                                                                                <p>${taskList[a].numWaiting}</p >
+                                                                            </div>
+                                                                            <div class="cancel">
+                                                                                <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                    </div>`
             }
             $("#tasks").html(cstr);
 
@@ -588,7 +591,7 @@
                         if (willDelete) removeTask(this.parentNode.parentNode.parentNode.id);
                         else {
                             swal("Not Deleted!")
-                            
+
                         };
                     });
             });
@@ -597,14 +600,14 @@
         function removeTask(taskId) {
 
             assignment = {
-                
+
                 TaskId: selectedTsakId,
                 TeamId: activeTteam.Id,
                 TeamSchoolCode: userOBJ.SCode,
 
             }
 
-            ajaxCall("DELETE", "api/Teacher/deleteAssigment", JSON.stringify(assignment),deleteAssigmentSuccess,deleteAssigmentError)
+            ajaxCall("DELETE", "api/Teacher/deleteAssigment", JSON.stringify(assignment), deleteAssigmentSuccess, deleteAssigmentError)
         }
 
         function deleteAssigmentSuccess(data) {
@@ -685,9 +688,9 @@
             var IntData = {
                 "personal": 0,
                 "spatial": 0,
-                "לא ביצעו":0
+                "לא ביצעו": 0
             };
-            var IntLabels = [ "personal", "spatial", "לא ביצעו"];
+            var IntLabels = ["personal", "spatial", "לא ביצעו"];
             ctx = document.getElementById('AverageChart').getContext('2d');
             for (x in sortedGraphData) {
 
@@ -702,7 +705,7 @@
 
             var Average = 0.0;
             var sum = 0;
-            var numOfselectedInt=0
+            var numOfselectedInt = 0
             for (x in IntData) {
                 if (IntData[x] != 0) {
                     sum += IntData[x];
@@ -710,18 +713,18 @@
                 }
             }
             Average = sum / numOfselectedInt;
-            console.log("average is: "+Average)
+            console.log("average is: " + Average)
             chart1 = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [IntLabels[0],IntLabels[1],IntLabels[2]],
+                    labels: [IntLabels[0], IntLabels[1], IntLabels[2]],
                     datasets: [{
                         type: 'bar',
                         label: 'תלמידים לפי אינטלגנציות',
                         data: [IntData["personal"], IntData["spatial"], IntData["לא ביצעו"]],
-                            backgroundColor: 'rgb(0,123,254)',
-                            borderColor: 'rgb(0,123,254)',
-                            borderWidth: 1
+                        backgroundColor: 'rgb(0,123,254)',
+                        borderColor: 'rgb(0,123,254)',
+                        borderWidth: 1
                     },
 
                     ]
@@ -756,12 +759,12 @@
             y += 20;
         }
         function ChartTwo() {
-             var IntData = {
+            var IntData = {
                 "personal": 0,
                 "spatial": 0
             };
             var medianArr = [];
-            var IntLabels = [ "personal", "spatial", "לא ביצעו"];
+            var IntLabels = ["personal", "spatial", "לא ביצעו"];
             var personalCount = 0.0;
             var spatialCount = 0.0;
             var medianValue = 0.0;
@@ -784,10 +787,10 @@
             //console.log(medianArr)
             //console.log(medianValue)
             for (x in IntData) {
-                    if (x == "personal")
-                        IntData[x] = IntData[x] / personalCount;
-                    if (x == "spatial")
-                        IntData[x] = IntData[x] / spatialCount;
+                if (x == "personal")
+                    IntData[x] = IntData[x] / personalCount;
+                if (x == "spatial")
+                    IntData[x] = IntData[x] / spatialCount;
             }
 
             chart2 = new Chart(ctx, {
@@ -948,7 +951,7 @@
                     </div>
 
                 </div>
-
+                <div id="sNav"></div>
                 <nav class="navbar navbar-expand-lg navbar-light navBar">
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -990,21 +993,36 @@
                                     <option href="#quiz" value="quiz">משימות</option>
                                 </select>
                             </li>
+
                         </ul>
-                        <form class="form-inline my-2 my-lg-0 mr-auto">
-                            <input class="myForm mr-sm-2" type="search" placeholder="חפש תלמיד/מורה" aria-label="Search">
-                            <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-                        </form>
+
                     </div>
+                    
+
+                    <div id="user_manage">
+                        <button type="button" class=" btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        </button>
+                        <div id="nav_cnt" class="dropdown-menu">
+                            <p id="disconnect" onclick="disconnect()">התנתק</p>
+                            <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                        </div>
+                    </div>
+                        
+                   
+
+                  
                 </nav>
 
-
-
             </div>
+               
+
+
+       </div>
 
 
 
             <div id="main">
+                
                 <div class="hide_list_teams change " onclick="myFunction(this)">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
@@ -1021,8 +1039,6 @@
                         </ul>
 
                     </div>
-
-
 
                 </div>
 
