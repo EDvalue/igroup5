@@ -191,5 +191,21 @@ namespace project.Controllers
             return c.getGraphClassData(info);
         }
 
+        [HttpPut]
+        [Route("api/Teacher/updateAssigment")]
+        public int updateAssigment([FromBody]Dictionary<string,string> info)
+        {
+            RealetedTask rt = new RealetedTask();
+            return rt.updateAssigment(info);
+        }
+
+        [HttpDelete]
+        [Route("api/Teacher/deleteAssigment")]
+        public int deleteAssigment([FromBody]Dictionary<string, string> info)
+        {
+            RealetedTask rt = new RealetedTask();
+            return 1;
+        }
+
     }
 }

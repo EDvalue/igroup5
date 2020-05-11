@@ -6,6 +6,10 @@
     flex-flow: row wrap;
 }
 
+#header .row {
+    width: 100%;
+}
+
 #tbl_int {
     display: flex;
     flex-direction: row;
@@ -201,7 +205,8 @@ canvas {
 /*------------------------------*/
 #tasks {
     display: flex;
-    width: 100%;
+    width: 95%;
+    margin-right: 2.5%;
     flex-flow: row wrap;
 }
 
@@ -212,6 +217,7 @@ canvas {
         flex-direction: column;
         align-items: center;
         width: 200px;
+        height: 210px;
         margin-bottom: 3%;
         margin-top: 2%;
         background-color: white;
@@ -236,13 +242,37 @@ canvas {
         z-index: 2;
     }
 
+.name > p {
+    text-align: right;
+    padding-left: 5%;
+    font-size: 20px;
+}
+.time > p {
+    text-align: center;
+    font-size: 12px;
+}
 .fr, .sr, .tr {
     width: 100%;
     display: flex;
 }
+.tr{
+    margin-top:auto;
+    padding-bottom:2%;
+
+}
+
+.sr {
+    text-align: right;
+    font-size:15px;
+}
+    .sr ion-icon {
+        padding-right: 6px;
+        border-right: 1px dotted #000;
+        margin-right: 5px;
+    }
 
 .cancel {
-    margin-right: auto;
+    width: 90%;
 }
 
     .cancel > ion-icon {
@@ -250,9 +280,9 @@ canvas {
     }
 
 .c_time > span {
-    font-size: 12px;
+    font-size: 18px;
     border-right: 1px dotted white;
-    padding-right: 30%;
+   
 }
 
 .isActive {
@@ -281,23 +311,19 @@ canvas {
     width: 40px;
     font-size: 20px;
     height: 40px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
     border: 1px solid white;
     border-radius: 50% 50%;
     background-color: #1BADDD;
-    padding-top: 2%;
     transform: translate(.0em, -.3em);
     box-shadow: #1BADDD 1px 1px;
 }
 
-.tr {
-    justify-items: baseline;
-}
-
-
-
 #sList {
     min-height: 250px;
-    max-height: 350px;
+    max-height: 600px;
     overflow-y: scroll;
     background-color:white;
     border-radius:5px;
@@ -367,7 +393,7 @@ canvas {
 #class_info {
     display: flex;
     flex-flow: row wrap;
-    flex: 0 1 80%;
+    flex: 1 1 80%;
 }
 #TaskView {
     margin: auto;
@@ -401,6 +427,8 @@ canvas {
 #taskName, #subjectsList, #stList {
     display: flex;
     text-align: right;
+    overflow-y: scroll;
+    height: 500px;
     flex: 1;
     flex-direction: column;
     justify-content: space-around;
@@ -409,6 +437,7 @@ canvas {
     padding: 3%;
     border-radius: 6%;
     margin-bottom: 2%;
+}
 }
     #taskName > div {
         display: flex;
@@ -428,9 +457,7 @@ canvas {
 }
 
 
-ion-icon {
 
-}
 
 #filterStudent {
 
@@ -445,4 +472,36 @@ ion-icon {
     border-radius: 6%;
     margin-bottom: 2%;
     overflow-y:scroll
+}
+
+#assigment {
+    background-color: #f1f1f1;
+    position: fixed;
+    top: 50%; /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    border: 1px solid black;
+    border-radius: 4px;
+    text-align: center;
+}
+
+    #assigment a {
+        text-align: left;
+    }
+
+#assigmentForm {
+    display: flex;
+    flex-direction: column;
+}
+ #assigmentForm .btn {
+        background-color: #007bff;
+ }
+
+#class_date {
+    margin-left: -12%;
+}
+
+#submition_date {
+    padding: 4px;
 }

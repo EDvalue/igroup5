@@ -19,6 +19,7 @@ body, html {
 }
 #statistics, #stat_control_left {
     display: flex;
+    height: 500px;
     flex-direction: column;
 }
 #stat_control_top{

@@ -7,7 +7,7 @@
 
     <script src="../Scripts/ajaxCalls.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
@@ -27,6 +27,7 @@
     <script>
 
         var myTeams;
+        var userOBJ;
         var listdata;
         var chosenSt;
         var taskList;
@@ -52,20 +53,87 @@
 
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
+              if (localStorage["user"]) {
+                userOBJ = JSON.parse(localStorage["user"]);
+              }
 
             createSList();
             createTList();
             className();
             getTasks();
             $("#ShowQuestionnaire").hide();
+            $("#assigmentForm").hide();
 
             ajaxCall("GET", '../api/Teacher/getGraphTeamData/' + activeTteam.Id, "", getGraphTeamDataSuccess, getGraphTeamDataError)
 
+            $("#assigmentForm").submit(function () {
+                submitTaskAssigment()
+                return false;
+            });
+
         });
+
+        function submitTaskAssigment() {
+
+            var currentDate = new Date();
+            var ClassDate = new Date($('#classDate').val());
+            var SubmitionDate = new Date($('#submitionDate').val());
+
+            classTime =$("#class_date>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
+                $("#class_date>input[type='datetime-local']").val() + ":00" :$("#class_date>input[type='datetime-local']").val();
+
+            subTime = $("#submition_date>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
+                $("#submition_date>input[type='datetime-local']").val()+":00":$("#submition_date>input[type='datetime-local']").val()
+            assignment = {
+                classTime: classTime,
+                submitionTime:subTime,
+                TaskId: selectedTsakId,
+                TeamId: activeTteam.Id,
+                TeamSchoolCode: userOBJ.SCode,
+
+            }
+
+
+            if (ClassDate > SubmitionDate)
+                swal("התאריך הראשון מאוחר מהשני");
+            //else if (ClassDate < currentDate)
+            //    swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
+            else {
+
+                    ajaxCall('PUT', '../api/Teacher/updateAssigment', JSON.stringify(assignment), updateAssigmentSuccess, updateAssigmentError)
+
+
+                 }
+
+        }
+
+        function updateAssigmentSuccess(data) {
+             swal({
+                
+                   title: "תאריך המשימה עודכן",
+                   icon: "success",
+               })
+            console.log(data);
+            t = getTakById(selectedTsakId);
+            t.ForDate = $("#class_date>input[type='datetime-local']").val();
+            t.OpenTill = $("#submition_date>input[type='datetime-local']").val()
+            getTTasksSuccess(taskList);
+
+            closeDivAU();
+        }
+
+        function updateAssigmentError(err) {
+            console.log(err);
+        }
+
+         function closeDivAU() {
+            $("#assigment").hide();
+         
+         }
+
         function checkTTime() {
             var d = Date.now();
 
-            console.log("HEYY")
 
             for(a in taskList){
                 if (taskList[a].ForDate < d.toString() && taskList[a].OpenTill > d.toString()) {
@@ -175,15 +243,16 @@
                 ChartThree()
             } else {
                 sortedGraphData = graphData;
-                console.log(sortedGraphData)
-                /*if (document.getElementById("TaskCharts").style.display == "block") {
-                    task.data.datasets = sortedGraphData
-                    UpdateTaskDoughnut()
-                }
-
-                else if (document.getElementById("AverageCharts").style.display == "block") {
-                    ChartOne();
-                }*/
+                console.log(sortedGraphData);
+                console.log(sortedGraphData);
+                task.data.datasets = sortedGraphData
+                chart1.data.datasets = sortedGraphData
+                chart2.data.datasets = sortedGraphData
+                chart3.data.datasets = sortedGraphData
+                UpdateTaskDoughnut()
+                ChartOne()
+                ChartTwo()
+                ChartThree()
 
             }
 
@@ -439,38 +508,33 @@
             taskList = data;
             checkTTime();
             var cstr = "";
+            const optionsForDate = { weekday: 'long',month: 'long', day: 'numeric'};
+            const timeForDate = { hour: 'numeric', minute: 'numeric'};
+            const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             for (a in taskList) {
+                dateTimeArr = taskList[a].ForDate.split(" ");
+                dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
+                taskList[a].ForDate = dateTimeArr.join("T")
 
-                cstr += `<div onclick="ShowSubmitted(this.id)" class="col-sm-4" id="${taskList[a].taskId}">
+                dateTimeArr = taskList[a].OpenTill.split(" ")
+                dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
+                taskList[a].OpenTill = dateTimeArr.join("T")
+                cstr += `<div class="col-sm-4" id="${taskList[a].taskId}">
 
-                                                                <div class="fr">
+                                                             <div class="fr">
                                                                 <div class="name">
                                                                     <p>${taskList[a].Title}</p>
                                                                 </div>
                                                                 <div class="time">
-                                                                    <p>${taskList[a].Date_Assignment}</p>
+                                                                    <p  title='${new Date(taskList[a].ForDate).toLocaleDateString(undefined,timeForDate)}'>${new Date(taskList[a].ForDate).toLocaleDateString(undefined,optionsForDate).replace("'","")}'</p>
                                                                 </div>
-                                                            </div>
-                                               <div class="sr">
-                                                        <div class="isActive">
-                                                            <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline" id=></ion-icon>
-
-                                                            <div class="fr">
-                                                            <div class="name">
-                                                                <p>${taskList[a].Title}</p>
-                                                            </div>
-                                                            <div class="time">
-                                                                <p>${taskList[a].Date_Assignment}</p>
-                                                            </div>
-
-                                                        </div>
+                                                              </div>                                
+                            
 
                                                             <div class="sr">
-                                                                <div class="isActive">
-                                                                    <p>${taskList[a].ForDate}</p><ion-icon name="caret-back-outline"></ion-icon>
-                                                                </div>
+                                                                
                                                                 <div class="c_time">
-                                                                    <span>${taskList[a].OpenTill}  </span><ion-icon name="pencil-outline"></ion-icon>
+                                                                    <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined,optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
                                                                 </div>
                                                             </div>
                                                             <div class="tr">
@@ -486,6 +550,65 @@
                                                         </div>`
             }
             $("#tasks").html(cstr);
+
+            $(".fr").click(function () {
+                ShowSubmitted(this.id);
+            });
+            $(".sr span,.tr .notification").click(function () {
+
+                ShowSubmitted(this.parentNode.id);
+            });
+            $(".sr ion-icon").click(function () {
+                $("#assigmentForm").slideToggle('2s');
+                selectedTsakId = this.parentNode.parentNode.parentNode.id;
+                t = getTakById(selectedTsakId);
+                $("#classDate").val(t.ForDate);
+                $("#submitionDate").val(t.OpenTill);
+            });
+            $(".cancel ion-icon").click(function () {
+                swal({
+                    title: "אתה בטוח ??",
+                    text: "שיוך המשימה והמשימות של תלמידים במשימה ימחקו",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                })
+                    .then(function (willDelete) {
+                        if (willDelete) removeTask(this.parentNode.parentNode.parentNode.id);
+                        else {
+                            swal("Not Deleted!")
+                            
+                        };
+                    });
+            });
+        }
+
+        function removeTask(taskId) {
+
+            assignment = {
+                
+                TaskId: selectedTsakId,
+                TeamId: activeTteam.Id,
+                TeamSchoolCode: userOBJ.SCode,
+
+            }
+
+            ajaxCall("DELETE", "api/Teacher/deleteAssigment", JSON.stringify(assignment),deleteAssigmentSuccess,deleteAssigmentError)
+        }
+
+        function deleteAssigmentSuccess(data) {
+            console.log(data);
+        }
+        function deleteAssigmentError(err) {
+            console.log(err);
+        }
+
+        function getTakById(id) {
+            for (x in taskList) {
+                if (taskList[x].taskId == id) {
+                    return taskList[x];
+                }
+            }
         }
 
         function getTTasksError(ex) {
@@ -670,7 +793,7 @@
                         },
                     ]
                 },
-                options:{
+                options: {
                     scales: {
                         yAxes: [{
                             display: true,
@@ -694,7 +817,7 @@
                         }]
                     }
                 }
-            }
+            });
         }
 
         function ChartChange() {
@@ -750,179 +873,198 @@
     </script>
 </head>
 <body dir="rtl">
-    <div id="ShowQuestionnaire">
-        <a onclick="closeDivUS()"><span>Close x</span></a>
-        <div id="TaskView">
-            <div id="addContent">
+    <div id="assigment">
+        <form id="assigmentForm">
+            <a onclick="closeDivAU()"><span>Close x</span></a>
+            <div id="class_date">
+                <span>עבור תאריך:</span>
+                <input type="datetime-local" step="1" id="classDate" />
+            </div>
+            <div id="submition_date">
+                <span>תאריך הגשה אחרון:</span>
+                <input type="datetime-local" step="1" id="submitionDate" />
 
-                <table id="sp_table" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
+            </div>
+            <div id="assignmentFormBtn">
+                <input type="submit" class="btn btn-info" value="שלח" />
+            </div>
 
-                            <th>מייל תלמיד</th>
-                            <th>ת.ז</th>
-                            <th>שם מלא</th>
-                            <th>שאלון</th>
-                            <th>ציון</th>
-                            <th>הערה</th>
-                        </tr>
-                    </thead>
-                </table>
+        </form>
+  </div>
 
+        <div id="ShowQuestionnaire">
+            <a onclick="closeDivUS()"><span>Close x</span></a>
+            <div id="TaskView">
+                <div id="addContent">
+
+                    <table id="sp_table" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+
+                                <th>מייל תלמיד</th>
+                                <th>ת.ז</th>
+                                <th>שם מלא</th>
+                                <th>שאלון</th>
+                                <th>ציון</th>
+                                <th>הערה</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="container">
-        <div id="header">
-            <div class="row">
+        <div id="container">
+            <div id="header">
+                <div class="row">
 
-                <div id="imgLogo" class="col-lg-3">
+                    <div id="imgLogo" class="col-lg-3">
 
-                    <img src="../images/EDvalueSmall.png" />
-
-                </div>
-
-                <div id="title" class="col-lg-6">
-                    <h3>שם הקבוצה...</h3>
-
-                </div>
-
-                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
-
-                    <!--<img src="../images/MindCet.png" />-->
-
-                </div>
-
-            </div>
-
-            <nav class="navbar navbar-expand-lg navbar-light navBar">
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav navPadding">
-                        <li class="nav-item active">
-                            <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
-                        </li>
-                        <li class="nav-item active">
-                            <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
-                        </li>
-                        <li class="nav-item active">
-                            <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
-                                <option team_Id="">בחר קבוצה</option>
-                            </select>
-                        </li>
-                        <li class="nav-item active">
-                            <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                                <option value="" disabled selected hidden>בחר אפשרות</option>
-                                <option value="AverageCharts">גרף 1</option>
-                                <option value="TaskCharts">גרף 2</option>
-                                <option value="GradeCharts">גרף 3</option>
-                                <option value="PercentageCharts">גרף 4</option>
-                                <option value="CloseAll">לסגור הכל</option>
-                            </select>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <select class="btn btn-primary btnonSmall" id="Smenue">
-                                <option value="" disabled selected hidden>סנן לפי כיתה</option>
-                                <option href="#statistics" value="statistics">סטטיסטיקה</option>
-                                <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
-                                <option href="#quiz" value="quiz">משימות</option>
-                            </select>
-                        </li>
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0 mr-auto">
-                        <input class="myForm mr-sm-2" type="search" placeholder="חפש תלמיד/מורה" aria-label="Search">
-                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                </div>
-            </nav>
-
-
-
-        </div>
-
-
-
-        <div  id="main">
-            <div class="hide_list_teams change " onclick="myFunction(this)">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
-            </div>
-            <div id="teamList">
-
-                <div id="slTitle">
-                    <h4>תלמידים</h4>
-                </div>
-                <div id="sList">
-
-                    <ul>
-                    </ul>
-
-                </div>
-
-
-
-            </div>
-
-            <div id="info">
-                <div id="statistics">
-                    <div id="IntelligenceCheckBox">
+                        <img src="../images/EDvalueSmall.png" />
 
                     </div>
-                    <div id="mainGraph">
-                        <div class="content">
-                            <div class="row" id="AverageCharts" style="display:none">
-                                <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
 
-                            </div>
-                            <div class="row" id="TaskCharts" style="display:none">
+                    <div id="title" class="col-lg-6">
+                        <h3>שם הקבוצה...</h3>
 
-                                <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
+                    </div>
 
-                            </div>
-                            <div class="row" id="GradeCharts" style="display:none">
+                    <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
 
-                                <div class="wrapper col-12"><canvas id="GradeChart"></canvas></div>
+                        <!--<img src="../images/MindCet.png" />-->
 
-                            </div>
-                            <div class="row" id="PercentageCharts" style="display:none">
+                    </div>
 
-                                <div class="wrapper col-12"><canvas id="PercentageChart"></canvas></div>
+                </div>
 
-                            </div>
-                        </div>
+                <nav class="navbar navbar-expand-lg navbar-light navBar">
 
-                        <div id="taskName">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                        </div>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav navPadding">
+                            <li class="nav-item active">
+                                <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
+                            </li>
+                            <li class="nav-item active">
+                                <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
+                            </li>
+                            <li class="nav-item active">
+                                <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
+                                    <option team_Id="">בחר קבוצה</option>
+                                </select>
+                            </li>
+                            <li class="nav-item active">
+                                <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                                    <option value="" disabled selected hidden>בחר אפשרות</option>
+                                    <option value="AverageCharts">גרף 1</option>
+                                    <option value="TaskCharts">גרף 2</option>
+                                    <option value="GradeCharts">גרף 3</option>
+                                    <option value="PercentageCharts">גרף 4</option>
+                                    <option value="CloseAll">לסגור הכל</option>
+                                </select>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <select class="btn btn-primary btnonSmall" id="Smenue">
+                                    <option value="" disabled selected hidden>סנן לפי כיתה</option>
+                                    <option href="#statistics" value="statistics">סטטיסטיקה</option>
+                                    <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
+                                    <option href="#quiz" value="quiz">משימות</option>
+                                </select>
+                            </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0 mr-auto">
+                            <input class="myForm mr-sm-2" type="search" placeholder="חפש תלמיד/מורה" aria-label="Search">
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                </nav>
+
+
+
+            </div>
+
+
+
+            <div id="main">
+                <div class="hide_list_teams change " onclick="myFunction(this)">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+                <div id="teamList">
+
+                    <div id="slTitle">
+                        <h4>תלמידים</h4>
+                    </div>
+                    <div id="sList">
+
+                        <ul>
+                        </ul>
+
                     </div>
 
 
 
                 </div>
 
+                <div id="info">
+                    <div id="statistics">
+                        <div id="IntelligenceCheckBox">
 
-            </div>
+                        </div>
+                        <div id="mainGraph">
+                            <div class="content">
+                                <div class="row" id="AverageCharts" style="display:none">
+                                    <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
 
-            <div class="" id="class_info">
+                                </div>
+                                <div class="row" id="TaskCharts" style="display:none">
 
-                <div class="" id="tasks">
+                                    <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
+
+                                </div>
+                                <div class="row" id="GradeCharts" style="display:none">
+
+                                    <div class="wrapper col-12"><canvas id="GradeChart"></canvas></div>
+
+                                </div>
+                                <div class="row" id="PercentageCharts" style="display:none">
+
+                                    <div class="wrapper col-12"><canvas id="PercentageChart"></canvas></div>
+
+                                </div>
+                            </div>
+
+                            <div id="taskName">
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
 
 
                 </div>
 
-            </div>
+                <div class="" id="class_info">
 
+                    <div class="" id="tasks">
+
+
+                    </div>
+
+                </div>
+
+            </div>
         </div>
-    </div>
 </body>
 </html>

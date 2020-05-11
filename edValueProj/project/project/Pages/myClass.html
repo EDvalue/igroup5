@@ -164,16 +164,26 @@
                     }
                 }
                 console.log(sortedGraphData)
-                //task.data.datasets = sortedGraphData
-                //UpdateTaskDoughnut()
-                chart1.data.datasets = sortedGraphData
+              
+                chart1.data.datasets = sortedGraphData;
+                chart2.data.datasets = sortedGraphData
+                chart3.data.datasets = sortedGraphData
+                UpdateTaskDoughnut()
                 ChartOne()
+                ChartTwo()
+                ChartThree()
             } else {
 
                 sortedGraphData = graphData;
                 console.log(sortedGraphData)
-                //task.data.datasets = sortedGraphData
-                //UpdateTaskDoughnut()
+                chart1.data.datasets = sortedGraphData;
+                chart2.data.datasets = sortedGraphData
+                chart3.data.datasets = sortedGraphData
+                UpdateTaskDoughnut()
+                ChartOne()
+                ChartTwo()
+                ChartThree()
+                
             }
 
         }

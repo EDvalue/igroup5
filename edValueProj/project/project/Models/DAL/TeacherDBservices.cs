@@ -1146,7 +1146,7 @@ namespace project.Models.DAL
                 while (dr.Read())
                 {   // Read till the end of the data into a row
                     Dictionary<string, string> srt = new Dictionary<string, string>();
-
+                    DateTime d=Convert.ToDateTime(dr["ForDate"]);
                     srt.Add("taskId", Convert.ToString(dr["taskId"]));
                     srt.Add("Title", Convert.ToString(dr["Title"]));
                     srt.Add("Date_Assignment", Convert.ToString(dr["Date_Assignment"]));
@@ -1632,6 +1632,63 @@ namespace project.Models.DAL
             }
 
             return list;
+        }
+
+        public int updateAssigment(Dictionary<string,string> info)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Update [RealatedTo] SET [ForDate]='{0}',[OpenTill]='{1}' where [TaskId]='{2}' and [TeamSchoolCode]={3} and [TeamId]='{4}'", info["classTime"], info["submitionTime"], info["TaskId"], info["TeamSchoolCode"], info["TeamId"]);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con); // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+
+
+
+            return numEffected;
         }
 
     }
