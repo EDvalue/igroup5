@@ -505,3 +505,9 @@ canvas {
 #submition_date {
     padding: 4px;
 }
+ion-icon {
+    color:green;
+}
+ #red {
+    color: red;
+}

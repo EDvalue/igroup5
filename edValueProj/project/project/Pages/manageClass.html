@@ -64,6 +64,7 @@
             $("#ShowQuestionnaire").hide();
             $("#assigmentForm").hide();
 
+
             ajaxCall("GET", '../api/Teacher/getGraphTeamData/' + activeTteam.Id, "", getGraphTeamDataSuccess, getGraphTeamDataError)
 
             $("#assigmentForm").submit(function () {
@@ -534,8 +535,18 @@
                                                             <div class="sr">
                                                                 
                                                                 <div class="c_time">
-                                                                    <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined,optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                                                </div>
+                                                                    <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                                                    <span>`
+                                                                     if (new Date(taskList[a].OpenTill) > new Date() && new Date(taskList[a].ForDate) < new Date())
+                                                                        
+                                                                      cstr+=` <ion-icon id="green" name="play"></ion-icon>`
+
+                                                                        else 
+                                                                        cstr+=`<ion-icon id="red" name="play"></ion-icon>`
+                                                                         
+                                                                       cstr+=`</span>`
+                                                                                                                                          
+                                                                cstr+=`</div>
                                                             </div>
                                                             <div class="tr">
                                                                 <div class="notification">
