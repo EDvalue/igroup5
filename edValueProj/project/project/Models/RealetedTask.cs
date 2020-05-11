@@ -173,5 +173,11 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.updateAssigment(info);
         }
+
+        public int deleteAssigment(Dictionary<string, string> info)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.deleteAssigment(info);
+        } 
     }
 }

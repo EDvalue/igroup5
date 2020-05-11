@@ -580,6 +580,7 @@
                 $("#submitionDate").val(t.OpenTill);
             });
             $(".cancel ion-icon").click(function () {
+                val = this.parentNode.parentNode.parentNode.id;
                 swal({
                     title: "אתה בטוח ??",
                     text: "שיוך המשימה והמשימות של תלמידים במשימה ימחקו",
@@ -588,7 +589,7 @@
                     dangerMode: true
                 })
                     .then(function (willDelete) {
-                        if (willDelete) removeTask(this.parentNode.parentNode.parentNode.id);
+                        if (willDelete) removeTask(val);
                         else {
                             swal("Not Deleted!")
 
@@ -601,13 +602,13 @@
 
             assignment = {
 
-                TaskId: selectedTsakId,
+                TaskId: taskId,
                 TeamId: activeTteam.Id,
                 TeamSchoolCode: userOBJ.SCode,
 
             }
 
-            ajaxCall("DELETE", "api/Teacher/deleteAssigment", JSON.stringify(assignment), deleteAssigmentSuccess, deleteAssigmentError)
+            ajaxCall("DELETE", "../api/Teacher/deleteAssigment", JSON.stringify(assignment), deleteAssigmentSuccess, deleteAssigmentError)
         }
 
         function deleteAssigmentSuccess(data) {

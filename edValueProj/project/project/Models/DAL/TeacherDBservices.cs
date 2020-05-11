@@ -1691,5 +1691,59 @@ namespace project.Models.DAL
             return numEffected;
         }
 
+        public int deleteAssigment(Dictionary<string, string> info)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Delete From [RealatedTo]  where [TaskId]='{0}' and [TeamSchoolCode]={1} and [TeamId]='{2}'", info["TaskId"], info["TeamSchoolCode"], info["TeamId"]);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con); // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+            return numEffected;
+        }
+
     }
 }

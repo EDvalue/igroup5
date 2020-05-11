@@ -204,7 +204,7 @@ namespace project.Controllers
         public int deleteAssigment([FromBody]Dictionary<string, string> info)
         {
             RealetedTask rt = new RealetedTask();
-            return 1;
+            return rt.deleteAssigment(info);
         }
 
     }

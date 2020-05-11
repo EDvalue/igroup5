@@ -155,7 +155,7 @@
                             quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                                 <span>${parseInt(y) + 1}</span><input type="checkbox" /> <p>${el.Question[qu].Answer[y].Content}</p>
+                                                 <span>${parseInt(y) + 1}</span><input type="checkbox" ansID="${el.Question[qu].Answer[y].AnsId}" /> <p>${el.Question[qu].Answer[y].Content}</p>
                                                  </div>`
                         }
 
