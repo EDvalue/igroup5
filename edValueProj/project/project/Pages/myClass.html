@@ -69,9 +69,8 @@
             sortedGraphData = data;
             sortDivs();
             UpdateTaskDoughnut();
-            ChartOne()
-            ChartTwo()
-            ChartThree();
+            GradesAvgChart()
+            PercentageChart();
         }
 
         function sortDivs() {
@@ -169,25 +168,22 @@
                     }
                 }
                 console.log(sortedGraphData)
-
-                chart1.data.datasets = sortedGraphData;
-                chart2.data.datasets = sortedGraphData
-                chart3.data.datasets = sortedGraphData
+                task.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
                 UpdateTaskDoughnut()
-                ChartOne()
-                ChartTwo()
-                ChartThree()
+                GradesAvgChart()
+                PercentageChart()
             } else {
 
                 sortedGraphData = graphData;
                 console.log(sortedGraphData)
-                chart1.data.datasets = sortedGraphData;
-                chart2.data.datasets = sortedGraphData
-                chart3.data.datasets = sortedGraphData
+                task.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
                 UpdateTaskDoughnut()
-                ChartOne()
-                ChartTwo()
-                ChartThree()
+                GradesAvgChart()
+                PercentageChart()
 
             }
 
@@ -335,11 +331,10 @@
                     </ul>
                   
                     <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                        <option value="" disabled selected hidden>בחר אפשרות</option>
-                        <option value="AverageCharts">גרף 1</option>
-                        <option value="TaskCharts">גרף 2</option>
-                        <option value="GradeCharts">גרף 3</option>
-                        <option value="PercentageCharts">גרף 4</option>
+                        <option value="" disabled selected hidden>בחר גרף</option>
+                        <option value="TaskCharts">גרף הגשות</option>
+                        <option value="GradeCharts">גרף ממוצעי ציונים</option>
+                        <option value="PercentageCharts">גרף אחוזי אינטלגנציות</option>
                         <option value="CloseAll">לסגור הכל</option>
                     </select>
                 </div>

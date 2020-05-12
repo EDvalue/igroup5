@@ -188,9 +188,8 @@
 
             sortDivs();
             UpdateTaskDoughnut();
-            ChartOne()
-            ChartTwo()
-            ChartThree();
+            GradesAvgChart()
+            PercentageChart();
         }
 
         function getGraphTeamDataError(err) {
@@ -264,25 +263,21 @@
                 }
                 console.log(sortedGraphData)
                 task.data.datasets = sortedGraphData
-                chart1.data.datasets = sortedGraphData
-                chart2.data.datasets = sortedGraphData
-                chart3.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
                 UpdateTaskDoughnut()
-                ChartOne()
-                ChartTwo()
-                ChartThree()
+                GradesAvgChart()
+                PercentageChart()
             } else {
                 sortedGraphData = graphData;
                 console.log(sortedGraphData);
                 console.log(sortedGraphData);
                 task.data.datasets = sortedGraphData
-                chart1.data.datasets = sortedGraphData
-                chart2.data.datasets = sortedGraphData
-                chart3.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
                 UpdateTaskDoughnut()
-                ChartOne()
-                ChartTwo()
-                ChartThree()
+                GradesAvgChart()
+                PercentageChart()
 
             }
 
@@ -717,37 +712,24 @@
         function ChartChange() {
             $("#statistics").height("400px")
             var x = document.getElementById("mySelect").value;
-            var AverageCharts = document.getElementById("AverageCharts");
             var TaskCharts = document.getElementById("TaskCharts");
             var GradeCharts = document.getElementById("GradeCharts");
             var PercentageCharts = document.getElementById("PercentageCharts")
-            if (x == "AverageCharts") {
+
+            if (x == "TaskCharts") {
                 document.getElementById("info").style.display = "block"
-                AverageCharts.style.display = "block";
-                TaskCharts.style.display = "none";
-                GradeCharts.style.display = "none";
-                PercentageCharts.style.display = "none";
-            }
-            else if (x == "TaskCharts") {
-                document.getElementById("info").style.display = "block"
-                AverageCharts.style.display = "none";
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
             }
             else if (x == "GradeCharts") {
                 document.getElementById("info").style.display = "block"
-                AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
                 PercentageCharts.style.display = "none";
-
-                //ChartTwo();
-                //ChartFour();
             }
             else if (x == "PercentageCharts") {
                 document.getElementById("info").style.display = "block"
-                AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "block";
@@ -755,7 +737,6 @@
             }
             else {
                 document.getElementById("info").style.display = "none"
-                AverageCharts.style.display = "none";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
@@ -831,7 +812,7 @@
                     </div>
 
                 </div>
-                <div id="sNav"></div>
+                
                 <nav class="navbar navbar-expand-lg navbar-light navBar">
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -857,11 +838,10 @@
 
                             <li class="nav-item dropdown">
                                 <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                                    <option value="" disabled selected hidden>בחר אפשרות</option>
-                                    <option value="AverageCharts">גרף 1</option>
-                                    <option value="TaskCharts">גרף 2</option>
-                                    <option value="GradeCharts">גרף 3</option>
-                                    <option value="PercentageCharts">גרף 4</option>
+                                    <option value="" disabled selected hidden>בחר גרף</option>
+                                    <option value="TaskCharts">גרף הגשות</option>
+                                    <option value="GradeCharts">גרף ממוצעי ציונים</option>
+                                    <option value="PercentageCharts">גרף אחוזי אינטלגנציות</option>
                                     <option value="CloseAll">לסגור הכל</option>
                                 </select>
                             </li>
@@ -880,7 +860,7 @@
                     
 
                     <div id="user_manage">
-                        <button type="button" class=" btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         </button>
                         <div id="nav_cnt" class="dropdown-menu">
                             <p id="disconnect" onclick="disconnect()">התנתק</p>
@@ -929,10 +909,6 @@
                         </div>
                         <div id="mainGraph">
                             <div class="content">
-                                <div class="row" id="AverageCharts" style="display:none">
-                                    <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
-
-                                </div>
                                 <div class="row" id="TaskCharts" style="display:none">
 
                                     <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>

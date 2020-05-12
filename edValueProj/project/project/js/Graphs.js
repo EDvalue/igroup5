@@ -27,91 +27,15 @@ var options = {
     },
 
 };
-var chart1;
-var chart2;
-var chart3;
+
+var gradesAvgChart;
+var IntPercentageChart;
 var chart4;
 
 
-function ChartOne() {
 
 
-    ctx = document.getElementById('AverageChart').getContext('2d');
-    var IntData = [];
-    var medianArr = [];
-    var IntLabels = [];
-    var obj = [];
-    var medianValue = 0.0;
-
-
-    for (x in sortedGraphData) {
-        if (!obj[sortedGraphData[x].SubjectName] && sortedGraphData[x].IntelligenceName != "לא ביצעו") {
-            obj[sortedGraphData[x].SubjectName] = [0, 0];
-
-        }
-        if (sortedGraphData[x].Grade != 0) {
-            obj[sortedGraphData[x].SubjectName][0] += parseInt(sortedGraphData[x].Grade);
-            obj[sortedGraphData[x].SubjectName][1]++;
-            medianArr.push(sortedGraphData[x].Grade)
-        }
-
-    }
-
-    
-    for (x in obj) {
-        IntLabels.push(x);
-        IntData.push(obj[x][0] / obj[x][1])
-    }
-    console.log(IntLabels)
-    console.log(IntData)
-    medianValue = median(medianArr)
-
-    chart1 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: IntLabels,
-            datasets: [{
-                type: 'bar',
-                label: 'תלמידים לפי אינטלגנציות',
-                data: IntData,
-                backgroundColor: 'rgb(0,123,254)',
-                borderColor: 'rgb(0,123,254)',
-                borderWidth: 1
-            },
-
-            ]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true   // minimum value will be 0.
-                    }
-                }]
-            },
-            annotation: {
-                
-                annotations: [{
-                    type: 'line',
-                    mode: 'horizontal',
-                    scaleID: 'y-axis-0',
-                    value: medianValue,
-                    borderColor: 'red',
-                    borderWidth: 4,
-                    label: {
-                        enabled: true,
-                        content: 'Median'
-                    }
-                }]
-            },
-
-        }
-    });
-    chart1.update();
-}
-
-function ChartTwo() {
+function GradesAvgChart() {
     var IntData = [];
     var medianArr = [];
     var IntLabels = [];
@@ -141,7 +65,7 @@ function ChartTwo() {
     medianValue = median(medianArr);
  
 
-    chart2 = new Chart(ctx, {
+    gradesAvgChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: IntLabels,
@@ -190,7 +114,7 @@ function ChartTwo() {
             animateRotate: true
         }
     });
-    chart2.update();
+    gradesAvgChart.update();
 }
 function median(arrForMedian) {
     // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
@@ -208,7 +132,7 @@ function median(arrForMedian) {
 
     return median;
 }
-function ChartThree() {
+function PercentageChart() {
 
     var ctx = document.getElementById('PercentageChart').getContext('2d');
     var IntData = [];
@@ -230,7 +154,7 @@ function ChartThree() {
         IntData.push(((obj[x] / sum) * 100).toFixed(2))
     }
 
-    chart3 = new Chart(ctx, {
+    IntPercentageChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: IntLabels,
@@ -252,7 +176,7 @@ function ChartThree() {
             animateRotate: true
         }
     });
-    chart3.update();
+    IntPercentageChart.update();
 }
 
 function ChartFour() {

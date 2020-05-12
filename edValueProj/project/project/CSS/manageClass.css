@@ -520,3 +520,6 @@ ion-icon {
  #red {
     color: red;
 }
+.navbar-collapse.collapse.in {
+    display: block !important;
+}
