@@ -32,6 +32,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 
 
     <script>
@@ -109,6 +110,8 @@
 
             UpdateTaskDoughnut();
 
+             $("#assigmentForm").hide();
+
         });
 
         //-----------------Opening a Questionnaire----------------------------
@@ -124,22 +127,22 @@
         }
         function openQ(val) {
 
-            chosenSt= getPdata(val.getAttribute('data_loc'));
+            chosenSt = getPdata(val.getAttribute('data_loc'));
 
             Oquiz = {
-                QuizID:chosenSt.QuizID,
+                QuizID: chosenSt.QuizID,
                 Mail: chosenSt.Mail,
                 TaskId: chosenSt.TaskId,
                 TeamId: activeTteam.Id,
             }
 
-            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+            ajaxCall("PUT", "../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
         }
 
-     
+
 
         function getQsuccess(data) {
-            
+
             localStorage["performers"] = JSON.stringify(taskData);
             localStorage["userMode"] = "teacher";
             localStorage["quiz_mode"] = "check";
@@ -154,23 +157,23 @@
             swal("הניסיון לפתוח את המשימה נכשל")
         }
 
-        
+
         //-----------------יצירת רשימת הכיתות שלי----------------------------
-        function createTDDL(){
+        function createTDDL() {
             myTeams = JSON.parse(localStorage["myTeams"]);
             var cstr = "<option>בחר כיתה</option>";
-              for (a in myTeams) {
-             
-                    cstr += "<option id=plink  value=" + myTeams[a].Id + "><a  href='manageClass.html'>" + myTeams[a].Title + "</a></option>"
-                  
+            for (a in myTeams) {
+
+                cstr += "<option id=plink  value=" + myTeams[a].Id + "><a  href='manageClass.html'>" + myTeams[a].Title + "</a></option>"
+
 
             }
-           console.log(cstr)
+            console.log(cstr)
             $("#TeamDDL").html(cstr);
 
         }
         function openTeam() {
-             
+
 
             tId = $("#TeamDDL").val();
             console.log(tId)
@@ -178,15 +181,15 @@
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                 
+
                     location.assign("manageClass.html");
 
 
                 }
             }
         }
-        
-         //-----------------יצירת דאטה טייבל----------------------------
+
+        //-----------------יצירת דאטה טייבל----------------------------
         function bringStTasks() {
 
             info = {
@@ -257,18 +260,38 @@
 
                             }
                         },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.Ptime != "") {
+                                    return `<span>${row.Ptime} <ion-icon name="pencil-outline"></ion-icon></span>`
+
+                                } else {
+                                    return "לא ניתן זמן הגשה"
+                                }
+
+                            }
+                        },
 
 
                     ],
                 });
 
             }
+     
 
             catch (err) {
                 alert(err);
             }
 
         }
+                 $(".sr ion-icon").click(function () {
+                $("#assigmentForm").slideToggle('2s');
+                selectedTsakId = this.parentNode.parentNode.parentNode.id;
+                t = getTakById(selectedTsakId);
+                $("#classDate").val(t.ForDate);
+                $("#submitionDate").val(t.OpenTill);
+            });
 
         function getStTasksInTeamError(err) {
             console.log(err);
@@ -539,6 +562,24 @@
     </script>
 </head>
 <body dir="rtl">
+    <div id="assigment">
+        <form id="assigmentForm">
+            <a onclick="closeDivAU()"><span>Close x</span></a>
+            <div id="class_date">
+                <span>עבור תאריך:</span>
+                <input type="datetime-local" step="1" id="classDate" />
+            </div>
+            <div id="submition_date">
+                <span>תאריך הגשה אחרון:</span>
+                <input type="datetime-local" step="1" id="submitionDate" />
+
+            </div>
+            <div id="assignmentFormBtn">
+                <input type="submit" class="btn btn-info" value="שלח" />
+            </div>
+
+        </form>
+    </div>
     <div id="container">
         <div id="header" class="row">
 
@@ -570,8 +611,8 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav navPadding">
-                    
-                    <li  class="nav-item">
+
+                    <li class="nav-item">
                         <select class="btn btn-primary btnonSmall" id="TeamDDL" onchange="openTeam()">
 
                             הכיתות שלי
@@ -646,30 +687,31 @@
             </div>
 
         </div>
-       
 
-            
 
-            <div id="TaskView">
-              
-                <div id="addContent">
 
-                    <table id="sp_table" class="display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
 
-                                <th>משימה</th>
-                                <th>שאלון</th>
-                                <th>ציון</th>
-                                <th>הערה</th>
-                            </tr>
-                        </thead>
-                    </table>
+        <div id="TaskView">
 
-                </div>
-            </div>            
+            <div id="addContent">
+
+                <table id="sp_table" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+
+                            <th>משימה</th>
+                            <th>שאלון</th>
+                            <th>ציון</th>
+                            <th>הערה</th>
+                            <th>זמן הגשה אחרון</th>
+                        </tr>
+                    </thead>
+                </table>
+
             </div>
-        <!--</div>-->
-    
+        </div>
+    </div>
+    <!--</div>-->
+
 </body>
 </html>

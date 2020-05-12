@@ -1423,7 +1423,7 @@ namespace project.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],t.title,pq.TaskId,";
+                string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],t.title,pq.TaskId,pq.Ptime,";
                 string select2 = "u.Email,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
                 string from = "i.[ImgLink],Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform ";
                 string select3 = "from(";
@@ -1468,6 +1468,14 @@ namespace project.Models.DAL
                     else
                     {
                         srt.Add("Note", "");
+                    }
+                    if (dr["Ptime"] != DBNull.Value)
+                    {
+                        srt.Add("Ptime", Convert.ToString(dr["Ptime"]));
+                    }
+                    else
+                    {
+                        srt.Add("Ptime", "");
                     }
 
                     list.Add(srt);
