@@ -92,7 +92,7 @@
             else if (ClassDate < currentDate)
                 swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
             else {
-                yearOfStudy = (new Hebcal.HDate.prototype.getMonth() != 6 && new Date().getMonth != 8) ?
+                yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
                     new Hebcal.HDate(new Date(new Date().getFullYear(), 8, 30)).toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``'):
                     new Hebcal.HDate().toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``');
                     

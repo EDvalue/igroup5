@@ -1128,7 +1128,7 @@ namespace project.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String part1 = "select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy, ";
+                String part1 = "select  tbl.taskId,tbl.Title,tbl.SubjectName,tbl.Date_Assignment,tbl.ForDate,tbl.OpenTill,tbl.YearOfStudy,tbl.YearOfStudy, ";
                 String part2 = "Case when sum(CAST(pq.isWaiting as Int))>0 then sum(CAST(pq.isWaiting as Int)) else 0 END AS numWaiting ";
                 String part3 = "from(select rt.TeamId, t.taskId, t.Title, t.SubjectName, rt.Date_Assignment, rt.ForDate, rt.OpenTill, rt.YearOfStudy ";
                 String part4 = " from task as t inner join RealatedTo rt on rt.TaskId=t.TaskId and rt.TeamId= '"+teamId+"' ";
@@ -1153,6 +1153,7 @@ namespace project.Models.DAL
                     srt.Add("ForDate", Convert.ToString(dr["ForDate"]));
                     srt.Add("OpenTill", Convert.ToString(dr["OpenTill"]));
                     srt.Add("numWaiting", Convert.ToString(dr["numWaiting"]));
+                    srt.Add("YearOfStudy", Convert.ToString(dr["YearOfStudy"]));
 
 
                     list.Add(srt);

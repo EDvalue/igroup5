@@ -9,6 +9,8 @@
 
     <script src="../Scripts/ajaxCalls.js"></script>
     <script src="../js/js.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="https://rawgit.com/hebcal/hebcal-js/master/client/hebcal.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -33,7 +35,7 @@
         var userOBJ;
         var listdata;
         var chosenSt;
-        var taskList;
+        var taskList,sortedTaskList=[];
         var selectedTsakId;
         var taskData;
         var activeTteam;
@@ -60,6 +62,19 @@
                 userOBJ = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
+
+            $("#years>select").change(function () {
+
+                sortedTaskList=[]
+                val = $(this).children("option:selected").val();
+                for (x in taskList) {
+                    if (taskList[x].YearOfStudy.replace("``","")==val) {
+                        sortedTaskList.push(taskList[x]);
+                    }
+                }
+                printSortedTaskList();
+
+            });
 
             createSList();
             createTList();
@@ -119,12 +134,21 @@
                 icon: "success",
             })
             console.log(data);
+          
             t = getTakById(selectedTsakId);
             t.ForDate = $("#class_date>input[type='datetime-local']").val();
             t.OpenTill = $("#submition_date>input[type='datetime-local']").val()
-            getTTasksSuccess(taskList);
+            printSortedTaskLOist();
 
             closeDivAU();
+        }
+        function printSortedTaskList() {
+            var str = "";
+            for (t in sortedTaskList) {
+                str+=createTaskDiv(sortedTaskList[t]);
+            }
+            $("#tasks").html(str);
+            connectTaskList();
         }
 
         function updateAssigmentError(err) {
@@ -307,8 +331,6 @@
 
             ajaxCall("PUT", "../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
         }
-
-
 
         function getQsuccess(data) {
             localStorage["performers"] = JSON.stringify(taskData);
@@ -511,10 +533,9 @@
             console.log(data)
             taskList = data;
             checkTTime();
-            var cstr = "";
-            const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
-            const timeForDate = { hour: 'numeric', minute: 'numeric' };
-            const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            var cstrA = "";
+            var cstrC = "";
+            var years = {}
             for (a in taskList) {
                 dateTimeArr = taskList[a].ForDate.split(" ");
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
@@ -523,48 +544,29 @@
                 dateTimeArr = taskList[a].OpenTill.split(" ")
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
                 taskList[a].OpenTill = dateTimeArr.join("T")
-                cstr += `<div class="col-sm-4" id="${taskList[a].taskId}">
 
-                                                                         <div class="fr">
-                                                                            <div class="name">
-                                                                                <p>${taskList[a].Title}</p>
-                                                                            </div>
-                                                                            <div class="time">
-                                                                                <p  title='${new Date(taskList[a].ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(taskList[a].ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
-                                                                            </div>
-                                                                          </div>
+                yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
+                    new Hebcal.HDate(new Date(new Date().getFullYear(), 8, 30)).toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``') :
+                    new Hebcal.HDate().toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``');
+                if (yearOfStudy == taskList[a].YearOfStudy) {
+                    cstrA += createTaskDiv(taskList[a]);
+                    sortedTaskList.push();
+                }
+                years[yearOfStudy] = yearOfStudy;
+                years[taskList[a].YearOfStudy] = taskList[a].YearOfStudy;
 
-
-                                                                        <div class="sr">
-
-                                                                            <div class="c_time">
-                                                                                <span>${new Date(taskList[a].OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                                                                <span>`
-                if (new Date(taskList[a].OpenTill) > new Date() && new Date(taskList[a].ForDate) < new Date())
-
-                    cstr += ` <ion-icon id="green" name="play"></ion-icon>`
-
-                else
-                    cstr += `<ion-icon id="red" name="play"></ion-icon>`
-
-                cstr += `</span>`
-
-                cstr += `</div>
-                                                                        </div>
-                                                                        <div class="tr">
-                                                                            <div class="notification">
-                                                                                <p>${taskList[a].numWaiting}</p >
-                                                                            </div>
-                                                                            <div class="cancel">
-                                                                                <ion-icon name="close-circle-outline" size="large"></ion-icon>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                    </div>`
             }
-            $("#tasks").html(cstr);
+            $("#tasks").html(cstrA);
+            for (y in years) {
+                $("#years>select").append(`<option value="${y.replace("``","")}">${y}</optin>`);
+            }
 
+             $('#years>select>option[value='+ yearOfStudy.replace("``","")+']').attr('selected',true);
+            connectTaskList();
+            
+        }
+
+        function connectTaskList() {
             $(".fr").click(function () {
                 ShowSubmitted(this.id);
             });
@@ -598,8 +600,57 @@
             });
         }
 
-        function removeTask(taskId) {
 
+        function createTaskDiv(task) {
+
+                     
+            const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
+            const timeForDate = { hour: 'numeric', minute: 'numeric' };
+            const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            var cstr = "";
+            cstr += `<div class="col-sm-4" id="${task.taskId}">
+                         <div class="fr">
+                             <div class="name">
+                                <p>${task.Title}</p>
+                              </div>
+                            <div class="time">
+                               <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                             </div>
+                         </div>
+
+                           <div class="sr">
+
+                            <div class="c_time">
+                               <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                <span>`
+            if (new Date(task.OpenTill) > new Date() && new Date(task.ForDate) < new Date())
+
+                cstr += ` <ion-icon id="green" name="play"></ion-icon>`
+
+            else
+                cstr += `<ion-icon id="red" name="play"></ion-icon>`
+
+            cstr += `</span>`
+
+            cstr += `</div>
+                                    </div>
+                                     <div class="tr">
+                                       <div class="notification">
+                                           <p>${task.numWaiting}</p >
+                                       </div>
+                                      <div class="cancel">
+                                         <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                      </div>
+                                  </div>
+
+
+                             </div>`
+
+            return cstr;
+        }
+
+        function removeTask(taskId) {
+            selectedTsakId = taskId;
             assignment = {
 
                 TaskId: taskId,
@@ -613,6 +664,15 @@
 
         function deleteAssigmentSuccess(data) {
             console.log(data);
+            for (x in taskList){
+                if (taskList[x].taskId == selectedTsakId) {
+                    taskList.splice(x, 1);
+                    break;
+                }
+            }
+
+            $("#years>select").trigger('change');
+            
         }
         function deleteAssigmentError(err) {
             console.log(err);
@@ -1084,6 +1144,18 @@
                 </div>
 
                 <div class="" id="class_info">
+                    <div id="tasksTitle">
+                        <div id="title">
+                            <p>משימות ששוייכו</p>
+                        </div>
+                            <div id="years">
+                                <select>
+                                    <option>תש"פ</option>
+                                    <option>תשפ"א</option>
+                                </select>
+                            </div>
+               
+                    </div>
 
                     <div class="" id="tasks">
 
