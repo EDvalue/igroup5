@@ -1,8 +1,11 @@
 ﻿#header {
     width:100%;
 }
-.row{
-    width:100%;
+#open_signIn{
+    float:right;
+}
+.row {
+    width: 100%;
 }
 body, html {
     margin: 0;

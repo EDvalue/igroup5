@@ -144,7 +144,8 @@
         }
 
         function sortGraphData(arrName, val) {
-
+               $("#statistics input[type='checkbox']").attr('disabled','disabled')
+            setTimeout(function(){ $("#statistics input[type=checkbox]").attr('disabled',false); }, 1100);
             sortedGraphData = [];
             var valID = val.parentNode.id;
             var isChecked = $(val).prop("checked");
@@ -319,8 +320,11 @@
             </div>
 
             <nav class="navbar navbar-expand-lg navbar-light navBar">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-               
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav navPadding">
                         <li class="nav-item active">
@@ -329,9 +333,7 @@
                             </div>
                         </li>
                     </ul>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                  
                     <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
                         <option value="" disabled selected hidden>בחר אפשרות</option>
                         <option value="AverageCharts">גרף 1</option>

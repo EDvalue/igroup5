@@ -7,7 +7,7 @@ var options = {
             // This more specific font property overrides the global property
             fontColor: 'black',
             fontSize: 20
-        },
+        }
     },
     scales: {
         yAxes: [{
@@ -134,11 +134,11 @@ function ChartTwo() {
     }
     for (x in obj) {
         IntLabels.push(x);
-        IntData.push(obj[x][0] / obj[x][1])
+        IntData.push(obj[x][0] / obj[x][1]);
     }
-    console.log(IntLabels)
-    console.log(IntData)
-    medianValue = median(medianArr)
+    console.log(IntLabels);
+    console.log(IntData);
+    medianValue = median(medianArr);
  
 
     chart2 = new Chart(ctx, {
@@ -149,18 +149,23 @@ function ChartTwo() {
                 {
                     label: 'ממוצע ציונים לפי אינטלגנציות',
                     data: IntData,
-                    backgroundColor: 'rgba(222, 222, 132, 1)',
+                    backgroundColor: ['#007bff', '#6610f2', '#20c997', '#dc3545', '#28a745', '#17a2b8','#fd7e14'],
                     borderColor: 'rgba(222, 222, 132, 2)',
                     borderWidth: 1
-                },
+                }
             ]
         },
         options: {
+
+            animation: {
+                duration: 100
+            },
             scales: {
                 yAxes: [{
                     display: true,
                     ticks: {
-                        beginAtZero: true   // minimum value will be 0.
+                        beginAtZero: true,   // minimum value will be 0.
+                        suggestedMax: 100
                     }
                 }]
             },
@@ -247,7 +252,7 @@ function ChartThree() {
             animateRotate: true
         }
     });
-    chart3.update()
+    chart3.update();
 }
 
 function ChartFour() {
@@ -275,7 +280,7 @@ function ChartFour() {
             animateRotate: true
         }
     });
-
+    chart4.update();
 }
 
 function UpdateTaskDoughnut() {
@@ -283,10 +288,10 @@ function UpdateTaskDoughnut() {
     var loegish = 0;
     var ctx2 = document.getElementById('TaskChart').getContext('2d');
     for (x in sortedGraphData) {
-        if (sortedGraphData[x].isperform == 1)
-            egish++
+        if (sortedGraphData[x].isperform === 1)
+            egish++;
         else
-            loegish++
+            loegish++;
     }
     task = new Chart(ctx2, {
         type: 'doughnut',
