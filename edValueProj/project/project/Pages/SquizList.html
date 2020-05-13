@@ -25,7 +25,9 @@
     <script>
         var userOBJ;//save the user that active in the page;
         var pArr = [];
-        var activeStTeam;
+        var quizSubject;
+        var userMode
+        var activeStTeam, teamOBJ;
         var selectedTask;//save the selected open task;
         var cq_activeTask;//save the realated task for change quiz;
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];//arrs of related tasks
@@ -41,8 +43,23 @@
             if(localStorage["active_student_team"])
                 teamOBJ = JSON.parse(localStorage["active_student_team"]);
 
+            if (localStorage['quizSubject'])
+                quizSubject = localStorage['quizSubject'];
+
+
             if (localStorage["active_student_team"])
-                activeStTeam=JSON.parse(localStorage["active_student_team"])
+                activeStTeam = JSON.parse(localStorage["active_student_team"])
+
+              if ((localStorage["userMode"]))
+                userMode = localStorage["userMode"];
+
+              localStorage.clear();
+            $(window).on('beforeunload', function () {
+                  localStorage["user"] = JSON.stringify(userOBJ);
+                localStorage['userMode'] = userMode;
+                localStorage["active_student_team"] = JSON.stringify(activeStTeam);
+                  localStorage['quizSubject'] =quizSubject;
+            });
 
             userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;

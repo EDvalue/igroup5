@@ -82,7 +82,11 @@
             UpdateTaskDoughnut();
 
             $("#assigmentForm").hide();
-            console.log(studentGraphData)
+            $("#assigmentForm").submit(function () {
+                submitPtime()
+                return false;
+            });
+            
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
             sortDivs();
@@ -102,18 +106,18 @@
         function submitPtime() {
 
             var currentDate = new Date();
-            var Ptime = new Date($('#ptime').val());
+            var Ptime =$('#pTime').val();
 
-            Ptime = $("#Ptime>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
-                $("#Ptime>input[type='datetime-local']").val() + ":00" : $("#class_date>input[type='datetime-local']").val();
-            t = getTakById(selectedTsakId);
+            Ptime = $("#pTime").val().split("T")[1].split(":").length != 3 ?
+                $("#pTime").val() + ":00" : $("#class_date>input[type='datetime-local']").val();
+           
 
             assignment = {
                 Ptime: Ptime,
 
                 TaskId: selectedTsakId,
                 TeamId: activeTteam.Id,
-                Mail:t.Mail,
+                Mail:userOBJ.Mail,
 
             }
 
@@ -316,14 +320,16 @@
                 alert(err);
             }
 
-        }
-                 $("#cptime").click(function () {
+             $("#cptime").click(function () {
                 $("#assigmentForm").slideToggle('2s');
                 selectedTsakId = this.parentNode.parentNode.parentNode.id;
                 t = getTakById(selectedTsakId);
                 $("#ptime").val(t.Ptime);
 
             });
+
+        }
+         
 
 
         function getStTasksInTeamError(err) {

@@ -27,11 +27,28 @@
     <script>
         var myTeams;
         var userOBJ;
+        var userMode;
+        var privateLocalStorage;
         
         $(document).ready(function () {
 
             userOBJ = JSON.parse(localStorage["user"])
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            if ((localStorage["userMode"]))
+                userMode = localStorage["userMode"];
+
+            localStorage.clear();
+            $(window).on('beforeunload', function (e) {
+                  localStorage["user"] = JSON.stringify(userOBJ);
+                 localStorage['userMode'] = userMode;
+            });
+
+            //window.onhashchange = function () {
+
+            //    localStorage["user"] = JSON.stringify(data);
+            //     localStorage['userMode'] = userMode;
+            //}
+   
             
             ajaxCall("PUT","../api/Student/getSTeams",JSON.stringify(userOBJ),getSTeamsSuccess,getSTeamsError)
         });
