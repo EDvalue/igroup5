@@ -84,6 +84,14 @@
             $("#assigmentForm").hide();
 
         });
+        //----------------------בחירת משימה לפי הת.ז של המשימה
+         function getTakById(id) {
+            for (x in taskList) {
+                if (taskList[x].taskId == id) {
+                    return taskList[x];
+                }
+            }
+        }
 
         //-----------------Opening a Questionnaire----------------------------
 
@@ -235,7 +243,7 @@
                             render: function (data, type, row, meta) {
 
                                 if (row.Ptime != "") {
-                                    return `<span>${row.Ptime} <ion-icon name="pencil-outline"></ion-icon></span>`
+                                    return `<span>${row.Ptime} <ion-icon id="cptime" name="pencil-outline"></ion-icon></span>`
 
                                 } else {
                                     return "לא ניתן זמן הגשה"
@@ -256,13 +264,13 @@
             }
 
         }
-        $(".sr ion-icon").click(function () {
-            $("#assigmentForm").slideToggle('2s');
-            selectedTsakId = this.parentNode.parentNode.parentNode.id;
-            t = getTakById(selectedTsakId);
-            $("#classDate").val(t.ForDate);
-            $("#submitionDate").val(t.OpenTill);
-        });
+                 $("#cptime").click(function () {
+                $("#assigmentForm").slideToggle('2s');
+                selectedTsakId = this.parentNode.parentNode.parentNode.id;
+                t = getTakById(selectedTsakId);
+                $("#ptime").val(t.Ptime);
+               
+            });
 
         function getStTasksInTeamError(err) {
             console.log(err);
@@ -348,13 +356,10 @@
     <div id="assigment">
         <form id="assigmentForm">
             <a onclick="closeDivAU()"><span>Close x</span></a>
-            <div id="class_date">
-                <span>עבור תאריך:</span>
-                <input type="datetime-local" step="1" id="classDate" />
-            </div>
+
             <div id="submition_date">
-                <span>תאריך הגשה אחרון:</span>
-                <input type="datetime-local" step="1" id="submitionDate" />
+                <span>תאריך הגשה אחרון לתלמיד:</span>
+                <input type="datetime-local" step="1" id="pTime" />
 
             </div>
             <div id="assignmentFormBtn">
