@@ -90,7 +90,11 @@
                 submitTaskAssigment()
                 return false;
             });
-
+            $('#mySelect').change().val('GradeCharts').trigger('change');
+                  
+           
+            
+                
         });
 
         function submitTaskAssigment() {
@@ -841,7 +845,7 @@
                                     <option value="" disabled selected hidden>בחר גרף</option>
                                     <option value="TaskCharts">גרף הגשות</option>
                                     <option value="GradeCharts">גרף ממוצעי ציונים</option>
-                                    <option value="PercentageCharts">גרף אחוזי אינטלגנציות</option>
+                                    <option value="PercentageCharts">אחוזי אינטלגנציות</option>
                                     <option value="CloseAll">לסגור הכל</option>
                                 </select>
                             </li>

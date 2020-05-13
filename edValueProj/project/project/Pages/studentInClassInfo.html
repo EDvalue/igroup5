@@ -17,7 +17,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
     <script src="../Scripts/ajaxCalls.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
@@ -33,60 +33,31 @@
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
+    <script src="../js/Graphs.js"></script>
 
     <script>
         var studentGraphData;
-        var studentsArr = [];
+       
         var userOBJ;
-        var xLabels = [];
-        var yLabels = [];
-        var xLableCharts = new Array();
-        var yLableBibleChart = new Array();
-        var yLableScienceChart = new Array();
-        var yLableHistoryChart = new Array();
-        var options = {
-            responsive: true,
-            maintainAspectRatio: true,
-            legend: {
-
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            legend: {
-                labels: {
-                    // This more specific font property overrides the global property
-                    fontColor: 'black',
-                    fontSize: 20
-                },
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        fontColor: 'black',
-                        fontSize: 25
-                    },
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontColor: 'black',
-                        fontSize: 25
-                    },
-                }]
-            },
-
+        var graphData;
+        var graphObject = {
+            taskArr: [],
+            intelligenceArr: [],
+            subj: [],
         };
-        var myChart;
+
+        var sortTags = {
+            taskArr: [],
+            intelligenceArr: [],
+            subj: [],
+        }
+        var sortedGraphData;
+
+
         var task;
-        var bibleChart;
-        var historyChart;
-        var scienceChart;
         var performer;
         var activeTteam;
         var taskData
@@ -110,7 +81,7 @@
 
             UpdateTaskDoughnut();
 
-             $("#assigmentForm").hide();
+            $("#assigmentForm").hide();
 
         });
 
@@ -168,7 +139,7 @@
 
 
             }
-            console.log(cstr)
+            // console.log(cstr)
             $("#TeamDDL").html(cstr);
 
         }
@@ -278,20 +249,20 @@
                 });
 
             }
-     
+
 
             catch (err) {
                 alert(err);
             }
 
         }
-                 $(".sr ion-icon").click(function () {
-                $("#assigmentForm").slideToggle('2s');
-                selectedTsakId = this.parentNode.parentNode.parentNode.id;
-                t = getTakById(selectedTsakId);
-                $("#classDate").val(t.ForDate);
-                $("#submitionDate").val(t.OpenTill);
-            });
+        $(".sr ion-icon").click(function () {
+            $("#assigmentForm").slideToggle('2s');
+            selectedTsakId = this.parentNode.parentNode.parentNode.id;
+            t = getTakById(selectedTsakId);
+            $("#classDate").val(t.ForDate);
+            $("#submitionDate").val(t.OpenTill);
+        });
 
         function getStTasksInTeamError(err) {
             console.log(err);
@@ -336,228 +307,40 @@
             console.log(err);
 
         }
-        function ChartIt() {
-            //myChart.destroy();
-
-            var ctx = document.getElementById('myChart').getContext('2d');
-
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: xLableCharts,
-                    datasets: [
-                        {
-                            label: 'Bible',
-                            data: yLableBibleChart,
-                            backgroundColor: 'rgba(255, 99, 132, 1)',
-                            borderColor: 'rgba(255, 99, 132, 2)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Science',
-                            data: yLableScienceChart,
-                            backgroundColor: 'rgba(255, 150, 132, 1)',
-                            borderColor: 'rgba(255, 150, 132, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'History',
-                            data: yLableHistoryChart,
-                            backgroundColor: 'rgba(255, 13, 22, 1)',
-                            borderColor: 'rgba(255, 13, 22, 1)',
-                            borderWidth: 1
-                        },
-
-                    ]
-                },
-                options: options
-            });
-        }
-        function updateBible() {
-
-            //  b = document.getElementById('BibleChart');
-            //   toggle_visibility(b);
-            var ctx = document.getElementById('BibleChart').getContext('2d');
-
-            bibleChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: xLableCharts,
-                    datasets: [
-                        {
-                            label: 'Bible',
-                            data: yLableBibleChart,
-                            backgroundColor: 'rgba(255, 99, 132, 1)',
-                            borderColor: 'rgba(255, 99, 132, 2)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: options
-            });
-        }
-
-        function updateScience() {
-
-            // s = document.getElementById('ScienceChart');
-            //toggle_visibility(s);
-            var ctx = document.getElementById('ScienceChart').getContext('2d');
-
-            scienceChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: xLableCharts,
-                    datasets: [
-                        {
-                            label: 'Science',
-                            data: yLableScienceChart,
-                            backgroundColor: 'rgba(255, 150, 132, 1)',
-                            borderColor: 'rgba(255, 150, 132, 1)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: options
-            });
-        }
-
-        function updateHistory() {
-
-            // h = document.getElementById('HistoryChart');
-            // toggle_visibility(h);
-            var ctx = document.getElementById('HistoryChart').getContext('2d');
-
-            historyChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: xLableCharts,
-                    datasets: [
-                        {
-                            label: 'History',
-                            data: yLableHistoryChart,
-                            backgroundColor: 'rgba(255, 13, 22, 1)',
-                            borderColor: 'rgba(255, 13, 22, 1)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: options
-            });
-
-        }
-        function UpdateTaskDoughnut() {
-            var ctx2 = document.getElementById('TasksDoughnut').getContext('2d');
-
-            task = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['הוגש', 'לא הוגש'],
-                    datasets: [
-                        {
-
-                            data: [2, 3],
-                            backgroundColor: ['rgba(152,251,152)', 'rgba(135,206,250)'],
-
-                        },
-
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            // This more specific font property overrides the global property
-                            fontColor: 'black',
-                            fontSize: 15
-                        },
-                    },
-
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            });
-        }
-        function ChartChange() {
+ 
+         function ChartChange() {
+            $("#statistics").height("400px")
             var x = document.getElementById("mySelect").value;
-            //  var statDiv = document.getElementById("statistics");
-            var FirstCharts = document.getElementById("FirstCharts");
-            var SecondCharts = document.getElementById("SecondCharts");
-            var ThirdCharts = document.getElementById("ThirdCharts");
-            var FourthCharts = document.getElementById("FourthCharts");
-            if (x == "FirstCharts") {
-                //   statDiv.style.display = "block";
-                FirstCharts.style.display = "block";
-                SecondCharts.style.display = "none";
-                // ThirdCharts.style.display = "none";
-                //FourthCharts.style.display = "none";
-                ChartIt();
+            var TaskCharts = document.getElementById("TaskCharts");
+            var GradeCharts = document.getElementById("GradeCharts");
+            var PercentageCharts = document.getElementById("PercentageCharts")
+
+            if (x == "TaskCharts") {
+                document.getElementById("info").style.display = "block"
+                TaskCharts.style.display = "block";
+                GradeCharts.style.display = "none";
+                PercentageCharts.style.display = "none";
             }
-            else if (x == "SecondCharts") {
-                //    statDiv.style.display = "block";
-                FirstCharts.style.display = "none";
-                SecondCharts.style.display = "block";
-                //ThirdCharts.style.display = "none";
-                //FourthCharts.style.display = "none";
-                updateBible();
-                updateScience();
-                updateHistory();
+            else if (x == "GradeCharts") {
+                document.getElementById("info").style.display = "block"
+                TaskCharts.style.display = "none";
+                GradeCharts.style.display = "block";
+                PercentageCharts.style.display = "none";
+            }
+            else if (x == "PercentageCharts") {
+                document.getElementById("info").style.display = "block"
+                TaskCharts.style.display = "none";
+                GradeCharts.style.display = "none";
+                PercentageCharts.style.display = "block";
+
             }
             else {
-                // statDiv.style.display = "none";
-                FirstCharts.style.display = "none";
-                SecondCharts.style.display = "none";
+                document.getElementById("info").style.display = "none"
+                TaskCharts.style.display = "none";
+                GradeCharts.style.display = "none";
+                PercentageCharts.style.display = "none";
             }
-            /* else if (x == "ThirdCharts") {
-                 FirstCharts.style.display = "none";
-                 SecondCharts.style.display = "none";
-                 ThirdCharts.style.display = "block";
-                 FourthCharts.style.display = "none";
-                 updateScience();
-             }
-             else if (x == "FourthCharts") {
-                 FirstCharts.style.display = "none";
-                 SecondCharts.style.display = "none";
-                 ThirdCharts.style.display = "none";
-                 FourthCharts.style.display = "block";
-                 updateHistory();
-             }
-             else {
-                 FirstCharts.style.display = "none";
-                 SecondCharts.style.display = "none";
-                 ThirdCharts.style.display = "none";
-                 FourthCharts.style.display = "none";
-             }*/
 
-        }
-        function func1() {
-
-            //  var statDiv = document.getElementById("statistics");
-            var FirstCharts = document.getElementById("FirstCharts");
-            var SecondCharts = document.getElementById("SecondCharts");
-
-            FirstCharts.style.display = "block";
-            SecondCharts.style.display = "none";
-        }
-        function func2() {
-
-            //  var statDiv = document.getElementById("statistics");
-            var FirstCharts = document.getElementById("FirstCharts");
-            var SecondCharts = document.getElementById("SecondCharts");
-
-            FirstCharts.style.display = "none";
-            SecondCharts.style.display = "block";
-        }
-        function func3() {
-
-            //  var statDiv = document.getElementById("statistics");
-            var FirstCharts = document.getElementById("FirstCharts");
-            var SecondCharts = document.getElementById("SecondCharts");
-
-            FirstCharts.style.display = "none";
-            SecondCharts.style.display = "none";
         }
     </script>
 </head>
@@ -622,8 +405,9 @@
 
                         <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
                             <option value="" disabled selected hidden>בחר גרף</option>
-                            <option value="FirstCharts">כולם ביחד</option>
-                            <option value="SecondCharts">כולם לחוד</option>
+                            <option value="TaskCharts">גרף הגשות</option>
+                            <option value="GradeCharts">גרף ממוצעי ציונים</option>
+                            <option value="PercentageCharts">אחוזי אינטלגנציות</option>
                             <option value="CloseAll">לסגור הכל</option>
                         </select>
                     </li>
@@ -637,55 +421,62 @@
         </nav>
 
 
-        <!-- <div id="Tcontroll">
-            <div id="TControlBtns">
-                <button id="newClassBTN" class="btn btn-primary " onclick="CnewTeam()">צור קבוצה חדשה</button>
+        <div id="main">
 
-                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
-                    הכיתות שלי
-                </button>
-                <select class="btn btn-primary" id="mySelect" onchange="ChartChange()">
-                    <option value="" disabled selected hidden>בחר גרף</option>
-                    <option value="FirstCharts">כולם ביחד</option>
-                    <option value="SecondCharts">כולם לחוד</option>
-                    <option value="CloseAll">לסגור הכל</option>
-                </select>
-                <div id="nav_cnt" class="dropdown-menu">
-
-
+            <div id="statistics">
+                <div id="stat_control_top">
+                    <div class="capr"></div>
+                    <div id="IntelligenceCheckBox">
+                    </div>
+                    <div class="capl"></div>
                 </div>
-            </div>
 
-            <div class="searchDiv">
-                <div class="d-flex justify-content-center ">
-                    <div class="searchbar">
-                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
-                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                <div id="mainGraph">
+                    <div id="stat_control_right">
+
+                        <div id="slTitle">
+                            <h4>תלמידים</h4>
+                        </div>
+                        <div id="stList">
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="content">
+                        <div class="row" id="AverageCharts" style="display:none">
+                            <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
+
+                        </div>
+                        <div class="row" id="TaskCharts" style="display:none">
+
+                            <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
+
+                        </div>
+                        <div class="row" id="GradeCharts" style="display:none">
+
+                            <div class="wrapper col-12"><canvas id="GradeChart"></canvas></div>
+
+                        </div>
+                        <div class="row" id="PercentageCharts" style="display:none">
+
+                            <div class="wrapper col-12"><canvas id="PercentageChart"></canvas></div>
+
+                        </div>
+                    </div>
+
+
+                    <div id="stat_control_left">
+                        <div id="taskName">
+
+                        </div>
+                        <div id="subjectsList">
+
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>-->
-
-        <div id="statistics">
-            <div class="row" id="FirstCharts" style="display:none">
-
-                <div class="col-12 col-lg-12" id="mixedChart">
-                    <canvas id="myChart"></canvas>
-                </div>
-            </div>
-            <div class="row" id="SecondCharts" style="display:none">
-                <div class="col-12 col-lg-4 canvasDiv">
-                    <canvas id="BibleChart"></canvas>
-                </div>
-                <div class="col-12 col-lg-4 canvasDiv">
-                    <canvas id="HistoryChart"></canvas>
-                </div>
-                <div class="col-12 col-lg-4 canvasDiv">
-                    <canvas id="ScienceChart"></canvas>
-                </div>
-            </div>
-
         </div>
 
 
@@ -711,7 +502,7 @@
             </div>
         </div>
     </div>
-    <!--</div>-->
+
 
 </body>
 </html>

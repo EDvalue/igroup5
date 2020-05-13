@@ -61,6 +61,7 @@
             }
 
             ajaxCall("PUT", '../api/Teacher/getGraphClassData', JSON.stringify(info), getGraphClassDataSuccess, getGraphClassDataError)
+            $('#mySelect').change().val('TaskCharts').trigger('change');
         });
 
         function getGraphClassDataSuccess(data) {
@@ -334,7 +335,7 @@
                         <option value="" disabled selected hidden>בחר גרף</option>
                         <option value="TaskCharts">גרף הגשות</option>
                         <option value="GradeCharts">גרף ממוצעי ציונים</option>
-                        <option value="PercentageCharts">גרף אחוזי אינטלגנציות</option>
+                        <option value="PercentageCharts">אחוזי אינטלגנציות</option>
                         <option value="CloseAll">לסגור הכל</option>
                     </select>
                 </div>
