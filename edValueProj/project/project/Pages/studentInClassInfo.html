@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <title></title>
     <link href="../CSS/studentInClassInfo.css" rel="stylesheet" />
-
+    <link href="../CSS/manageClass.css" rel="stylesheet" />
+    <link href="../CSS/myClass.css" rel="stylesheet" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -40,19 +41,17 @@
 
     <script>
         var studentGraphData;
-       
+
         var userOBJ;
         var graphData;
         var graphObject = {
             taskArr: [],
             intelligenceArr: [],
-            subj: [],
         };
 
         var sortTags = {
             taskArr: [],
             intelligenceArr: [],
-            subj: [],
         }
         var sortedGraphData;
 
@@ -72,7 +71,7 @@
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
             if (localStorage["studentData"])
-                studentGraphData = localStorage["studentData"];
+                studentGraphData = JSON.parse(localStorage["studentData"]);
             //ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
 
             bringStTasks();
@@ -82,10 +81,17 @@
             UpdateTaskDoughnut();
 
             $("#assigmentForm").hide();
-
+            console.log(studentGraphData)
+            graphData = studentGraphData;
+            sortedGraphData = studentGraphData;
+            sortDivs();
+            UpdateTaskDoughnut();
+            GradesAvgChart()
+            PercentageChart();
+            $('#mySelect').change().val('GradeCharts').trigger('change');
         });
         //----------------------בחירת משימה לפי הת.ז של המשימה
-         function getTakById(id) {
+        function getTakById(id) {
             for (x in taskList) {
                 if (taskList[x].taskId == id) {
                     return taskList[x];
@@ -264,48 +270,19 @@
             }
 
         }
-                 $("#cptime").click(function () {
-                $("#assigmentForm").slideToggle('2s');
-                selectedTsakId = this.parentNode.parentNode.parentNode.id;
-                t = getTakById(selectedTsakId);
-                $("#ptime").val(t.Ptime);
-               
-            });
+        $("#cptime").click(function () {
+            $("#assigmentForm").slideToggle('2s');
+            selectedTsakId = this.parentNode.parentNode.parentNode.id;
+            t = getTakById(selectedTsakId);
+            $("#ptime").val(t.Ptime);
+
+        });
 
         function getStTasksInTeamError(err) {
             console.log(err);
         }
 
-        function getSuccess(data) {
-            studentsArr = data;
-            console.log(studentsArr);
 
-            for (var i = 0; i < studentsArr.length; i++) {
-                if (studentsArr[i].SubjectName == "Bible") {
-                    yLableBibleChart.push(studentsArr[i].Grade);
-                    xLableCharts.push(studentsArr[i].IntelligenceName)
-                }
-
-                else if (studentsArr[i].SubjectName == "Science")
-                    yLableScienceChart.push(studentsArr[i].Grade);
-                else if (studentsArr[i].SubjectName == "History")
-                    yLableHistoryChart.push(studentsArr[i].Grade);
-
-            }
-            console.log("this is bible chart : ");
-            console.log(yLableBibleChart);
-            console.log("this is science chart : ");
-            console.log(yLableScienceChart);
-            console.log("this is history chart : ");
-            console.log(yLableHistoryChart);
-            console.log("this is x for charts: ");
-            console.log(xLableCharts);
-
-        }
-        function getError(err) {
-            console.log(err);
-
-        }
         function getByEmailSuccess(data) {
 
             console.log(data);
@@ -315,8 +292,99 @@
             console.log(err);
 
         }
- 
-         function ChartChange() {
+         function sortDivs() {
+            var intl = {};
+            var taskName = {};
+            var st = {};
+            var sub = {};
+            var flag = 0;
+            for (x in graphData) {
+
+                if (graphData[x].isperform == 1) {
+                    if (!intl[graphData[x].IntelligenceName])
+                        graphObject.intelligenceArr.push(graphData[x].IntelligenceName);
+                    intl[graphData[x].IntelligenceName] = graphData[x].IntelligenceName;
+                }
+                else {
+                    graphData[x].IntelligenceName = "לא ביצעו"
+                    intl["לא ביצעו"] = "לא ביצעו"
+                    if (!flag)
+                        graphObject.intelligenceArr.push("לא ביצעו");
+                    flag = 1;
+                }
+                if (!taskName[graphData[x].TaskTitle]) {
+                    taskName[graphData[x].TaskTitle] = graphData[x].TaskTitle;
+                    graphObject.taskArr.push(graphData[x].TaskTitle)
+                }
+
+
+            }
+            printIntelligence(intl);
+            printTaskName(taskName);
+
+        }
+
+        function printIntelligence(obj) {
+            var str = "";
+            for (x in obj) {
+                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+            }
+            $("#IntelligenceCheckBox").append(str);
+        }
+        function sortGraphData(arrName, val) {
+               $("#statistics input[type='checkbox']").attr('disabled','disabled')
+            setTimeout(function(){ $("#statistics input[type=checkbox]").attr('disabled',false); }, 1100);
+            sortedGraphData = [];
+            var valID = val.parentNode.id;
+            var isChecked = $(val).prop("checked");
+
+            if (isChecked) {
+                sortTags[arrName].push(valID)
+            }
+            else {
+                if (sortTags[arrName].indexOf(valID) != -1) {
+                    var index = sortTags[arrName].indexOf(valID);
+                    sortTags[arrName].splice(index, 1)
+                }
+
+            }
+            var arr = $("#main input:checked")
+            if (arr.length > 0) {
+                for (x in graphData) {
+
+                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1)) {
+                        sortedGraphData.push(graphData[x])
+                    }
+                }
+                console.log(sortedGraphData)
+                task.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
+                UpdateTaskDoughnut()
+                GradesAvgChart()
+                PercentageChart()
+            } else {
+
+                sortedGraphData = graphData;
+                console.log(sortedGraphData)
+                task.data.datasets = sortedGraphData
+                gradesAvgChart.data.datasets = sortedGraphData
+                IntPercentageChart.data.datasets = sortedGraphData
+                UpdateTaskDoughnut()
+                GradesAvgChart()
+                PercentageChart()
+
+            }
+
+        }
+        function printTaskName(obj) {
+            var str = "";
+            for (x in obj) {
+                str += `<div id="${x.replace(`"`, "")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`
+            }
+            $("#taskName").append(str)
+        }
+        function ChartChange() {
             $("#statistics").height("400px")
             var x = document.getElementById("mySelect").value;
             var TaskCharts = document.getElementById("TaskCharts");
@@ -324,26 +392,26 @@
             var PercentageCharts = document.getElementById("PercentageCharts")
 
             if (x == "TaskCharts") {
-                document.getElementById("info").style.display = "block"
+                document.getElementById("statistics").style.display = "block"
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
             }
             else if (x == "GradeCharts") {
-                document.getElementById("info").style.display = "block"
+                document.getElementById("statistics").style.display = "block"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
                 PercentageCharts.style.display = "none";
             }
             else if (x == "PercentageCharts") {
-                document.getElementById("info").style.display = "block"
+                document.getElementById("statistics").style.display = "block"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "block";
 
             }
             else {
-                document.getElementById("info").style.display = "none"
+                document.getElementById("statistics").style.display = "none"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
@@ -437,18 +505,7 @@
                 </div>
 
                 <div id="mainGraph">
-                    <div id="stat_control_right">
 
-                        <div id="slTitle">
-                            <h4>תלמידים</h4>
-                        </div>
-                        <div id="stList">
-
-
-
-                        </div>
-
-                    </div>
                     <div class="content">
                         <div class="row" id="AverageCharts" style="display:none">
                             <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
@@ -476,9 +533,7 @@
                         <div id="taskName">
 
                         </div>
-                        <div id="subjectsList">
 
-                        </div>
                     </div>
                 </div>
             </div>
@@ -487,7 +542,7 @@
 
 
 
-        <div id="TaskView">
+        <div id="TaskView" style="margin-top:4%;display:inline">
 
             <div id="addContent">
 

@@ -109,7 +109,7 @@
 
             }
             printIntelligence(intl);
-            printTaksName(taskName);
+            printTaskName(taskName);
             printSubj(sub);
             printSt(st);
         }
@@ -135,7 +135,7 @@
             }
             $("#IntelligenceCheckBox").append(str);
         }
-        function printTaksName(obj) {
+        function printTaskName(obj) {
             var str = "";
             for (x in obj) {
                 str += `<div id="${x.replace(`"`, "")}"><input type="checkbox" onchange="sortGraphData('taskArr',this)" /><span>${x}</span></div>`

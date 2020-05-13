@@ -51,11 +51,11 @@ namespace project.Models
             StudentInClassDBservices dbs = new StudentInClassDBservices();
             return dbs.getStudentByEmail(email);
         }
-        public int updatePtime(Dictionary<string, string> info)
+       /* public int updatePtime(Dictionary<string, string> info)
         {
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.updatePtime(info);
-        }
+        }*/
 
     }
 }
