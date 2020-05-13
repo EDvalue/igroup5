@@ -199,6 +199,14 @@ namespace project.Controllers
             return rt.updateAssigment(info);
         }
 
+        [HttpPut]
+        [Route("api/Teacher/updatePtime")]
+        public int updatePtime([FromBody]Dictionary<string, string> info)
+        {
+            StudentInClass st = new StudentInClass();
+            return st.updatePtime(info);
+        }
+
         [HttpDelete]
         [Route("api/Teacher/deleteAssigment")]
         public int deleteAssigment([FromBody]Dictionary<string, string> info)

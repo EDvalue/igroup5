@@ -77,6 +77,7 @@
             bringStTasks();
 
             createTDDL();
+            $("#assigmentForm").hide();
 
             UpdateTaskDoughnut();
 
@@ -97,6 +98,52 @@
                     return taskList[x];
                 }
             }
+        }
+        function submitPtime() {
+
+            var currentDate = new Date();
+            var Ptime = new Date($('#ptime').val());
+
+            Ptime = $("#Ptime>input[type='datetime-local']").val().split("T")[1].split(":").length != 3 ?
+                $("#Ptime>input[type='datetime-local']").val() + ":00" : $("#class_date>input[type='datetime-local']").val();
+            t = getTakById(selectedTsakId);
+
+            assignment = {
+                Ptime: Ptime,
+
+                TaskId: selectedTsakId,
+                TeamId: activeTteam.Id,
+                Mail:t.Mail,
+
+            }
+
+
+
+            if (Ptime < currentDate)
+              swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
+            else {
+
+                ajaxCall('PUT', '../api/Teacher/Ptime', JSON.stringify(assignment), updatePtimeSuccess, updatePtimeError)
+
+
+            }
+
+        }
+
+        function updatePtimeSuccess(data) {
+            swal({
+
+                title: "תאריך המשימה עודכן",
+                icon: "success",
+            })
+            console.log(data);
+
+            t = getTakById(selectedTsakId);
+            t.ForDate = $("#class_date>input[type='datetime-local']").val();
+            t.OpenTill = $("#submition_date>input[type='datetime-local']").val()
+            printSortedTaskLOist();
+
+            closeDivAU();
         }
 
         //-----------------Opening a Questionnaire----------------------------
@@ -249,7 +296,7 @@
                             render: function (data, type, row, meta) {
 
                                 if (row.Ptime != "") {
-                                    return `<span>${row.Ptime} <ion-icon id="cptime" name="pencil-outline"></ion-icon></span>`
+                                    return `<span id="cptime">${row.Ptime} <ion-icon  name="pencil-outline"></ion-icon></span>`
 
                                 } else {
                                     return "לא ניתן זמן הגשה"
@@ -270,13 +317,14 @@
             }
 
         }
-        $("#cptime").click(function () {
-            $("#assigmentForm").slideToggle('2s');
-            selectedTsakId = this.parentNode.parentNode.parentNode.id;
-            t = getTakById(selectedTsakId);
-            $("#ptime").val(t.Ptime);
+                 $("#cptime").click(function () {
+                $("#assigmentForm").slideToggle('2s');
+                selectedTsakId = this.parentNode.parentNode.parentNode.id;
+                t = getTakById(selectedTsakId);
+                $("#ptime").val(t.Ptime);
 
-        });
+            });
+
 
         function getStTasksInTeamError(err) {
             console.log(err);

@@ -1700,6 +1700,63 @@ namespace project.Models.DAL
             return numEffected;
         }
 
+        public int updatePtime(Dictionary<string, string> info)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Update [PerformQuestionnaire] SET [Ptime]='{0}', where [TaskId]='{1}' and [StudentId]={2} and [TeamId]='{3}'", info["Ptime"],  info["TaskId"], info["Mail"], info["TeamId"]);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con); // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+
+
+
+            return numEffected;
+        }
+
         public int deleteAssigment(Dictionary<string, string> info)
         {
 
