@@ -111,11 +111,15 @@
                 if ($('#IntelligenceCheckBox').is(':visible')) {
                     $('#IntelligenceCheckBox').toggle('drop');
                     $("div#stat_control_top").css("width", "5%");
+                    $(".capr").css("border-radius", "50%");
      
                 }
                 else {
                     $('#IntelligenceCheckBox').toggle();
-                    $("div#stat_control_top").css('width', 'inherit');
+                    $("div#stat_control_top").css('width', '100%');
+                     $(".capr").css("border-radius", "0%");
+                    $(".capr").css("border-top-right-radius", "50%");
+                    $(".capr").css("border-bottom-right-radius", "50%");
                     
 
                 }     

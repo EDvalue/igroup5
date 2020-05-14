@@ -242,6 +242,7 @@ canvas {
 
 div#taskName {
     border-top-right-radius: 0;
+    align-items:start;
 }
 
 #task {
@@ -534,6 +535,8 @@ ion-icon {
     height: 73px;
     background-color: #fff;
     flex: 1;
+    display:flex;
+    justify-items:center;
 }
 
 .capl {
@@ -556,6 +559,12 @@ ion-icon {
 }
 #stat_control_top {
     display: flex;
+
+}
+#stat_control_left {
+
+    margin-right: auto;
+    margin-top: 5%;
 }
 @media screen and (max-width: 740px) {
 
@@ -587,7 +596,6 @@ ion-icon {
 
     #stat_control_top {
         display: flex;
-        position: absolute;
         z-index: 3;
     }
 

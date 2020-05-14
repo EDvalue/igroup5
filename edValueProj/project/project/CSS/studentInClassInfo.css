@@ -301,9 +301,8 @@ div#taskName {
 
     #stat_control_top {
         display: flex;
-        position: absolute;
         z-index: 3;
-        width: 200px;
+
     }
 
     div#TaskView {

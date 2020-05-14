@@ -102,11 +102,15 @@
                 if ($('#IntelligenceCheckBox').is(':visible')) {
                     $('#IntelligenceCheckBox').toggle('drop');
                     $("div#stat_control_top").css("width", "5%");
+                    $(".capr").css("border-radius", "50%");
 
                 }
                 else {
                     $('#IntelligenceCheckBox').toggle();
                     $("div#stat_control_top").css('width', 'inherit');
+                    $(".capr").css("border-radius", "0%");
+                    $(".capr").css("border-top-right-radius", "50%");
+                    $(".capr").css("border-bottom-right-radius", "50%");
 
 
                 }
@@ -626,7 +630,7 @@
             const timeForDate = { hour: 'numeric', minute: 'numeric' };
             const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
-            cstr += `<div class="col-sm-4" id="${task.taskId}">
+            cstr += `<div class="col-sm-6 col-md-4" id="${task.taskId}">
                          <div class="fr">
                              <div class="name">
                                 <p>${task.Title}</p>
@@ -866,19 +870,21 @@
                                     <option value="CloseAll">לסגור הכל</option>
                                 </select>
                             </li>
-                            <li class="nav-item dropdown">
-                                <select class="btn btn-primary btnonSmall" id="Smenue">
-                                    <option value="" disabled selected hidden>סנן לפי כיתה</option>
-                                    <option href="#statistics" value="statistics">סטטיסטיקה</option>
-                                    <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
-                                    <option href="#quiz" value="quiz">משימות</option>
-                                </select>
-                            </li>
+                            <!--<li class="nav-item dropdown">
+                <select class="btn btn-primary btnonSmall" id="Smenue">
+                    <option value="" disabled selected hidden>סנן לפי כיתה</option>
+                    <option href="#statistics" value="statistics">סטטיסטיקה</option>
+                    <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
+                    <option href="#quiz" value="quiz">משימות</option>
+                </select>
+            </li>-->
 
                         </ul>
 
                     </div>
-                    
+
+
+
 
                     <div id="user_manage">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -888,11 +894,10 @@
                             <p id="cp" onclick="displayCP()">שנה סיסמא</p>
                         </div>
                     </div>
-                        
-                   
 
-                  
+
                 </nav>
+
 
             </div>
                
