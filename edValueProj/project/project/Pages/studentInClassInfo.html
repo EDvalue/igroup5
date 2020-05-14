@@ -77,15 +77,16 @@
             bringStTasks();
 
             createTDDL();
-            $("#assigmentForm").hide();
-
-            UpdateTaskDoughnut();
-
+           
             $("#assigmentForm").hide();
             $("#assigmentForm").submit(function () {
                 submitPtime()
                 return false;
             });
+            //UpdateTaskDoughnut();
+
+          
+            
             
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
@@ -95,15 +96,22 @@
             PercentageChart();
             $('#mySelect').change().val('GradeCharts').trigger('change');
         });
+
+         function closeDivAU() {
+            $("#assigment").hide();
+
+        }
         //----------------------בחירת משימה לפי הת.ז של המשימה
         function getTakById(id) {
-            for (x in taskList) {
-                if (taskList[x].taskId == id) {
-                    return taskList[x];
+            for (x in taskData) {
+                if (taskData[x].TaskId == id) {
+                    return taskData[x];
                 }
             }
         }
         function submitPtime() {
+
+            console.log("Boker Tov")
 
             var currentDate = new Date();
             var Ptime =$('#pTime').val();
@@ -300,7 +308,8 @@
                             render: function (data, type, row, meta) {
 
                                 if (row.Ptime != "") {
-                                    return `<span id="cptime">${row.Ptime} <ion-icon  name="pencil-outline"></ion-icon></span>`
+                                    let loc = "data_loc='" + row.TaskId + "'";
+                                    return `<span id="cptime" ${loc}>${row.Ptime} <ion-icon  name="pencil-outline"></ion-icon></span>`
 
                                 } else {
                                     return "לא ניתן זמן הגשה"
@@ -322,8 +331,14 @@
 
              $("#cptime").click(function () {
                 $("#assigmentForm").slideToggle('2s');
-                selectedTsakId = this.parentNode.parentNode.parentNode.id;
-                t = getTakById(selectedTsakId);
+                 selectedTsakId = this.getAttribute("data_loc");
+                 console.log(selectedTaskId)
+                 t = getTakById(selectedTsakId);
+                 console.log(t)
+                 dateTimeArr = t.Ptime.split(" ");
+                dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
+                t.Ptime = dateTimeArr.join("T")
+               
                 $("#ptime").val(t.Ptime);
 
             });
@@ -481,7 +496,7 @@
 
             <div id="submition_date">
                 <span>תאריך הגשה אחרון לתלמיד:</span>
-                <input type="datetime-local" step="1" id="pTime" />
+                <input type="datetime-local" step="1" id="ptime" />
 
             </div>
             <div id="assignmentFormBtn">
