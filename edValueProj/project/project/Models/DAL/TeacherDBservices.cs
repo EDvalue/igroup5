@@ -1720,7 +1720,7 @@ namespace project.Models.DAL
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Update [PerformQuestionnaire] SET [Ptime]='{0}', where [TaskId]='{1}' and [StudentId]={2} and [TeamId]='{3}'", info["Ptime"],  info["TaskId"], info["Mail"], info["TeamId"]);
+            sb.AppendFormat("Update [PerformQuestionnaire] SET [Ptime]='{0}' where [TaskId]='{1}' and [StudentId]='{2}' and [TeamId]='{3}'", info["Ptime"],  info["TaskId"], info["Mail"], info["TeamId"]);
             String cStr = sb.ToString();
             // helper method to build the insert string
 

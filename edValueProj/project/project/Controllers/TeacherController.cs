@@ -200,7 +200,7 @@ namespace project.Controllers
         }
 
         [HttpPut]
-        [Route("api/Teacher/updatePtime")]
+        [Route("api/Teacher/Ptime")]
         public int updatePtime([FromBody]Dictionary<string, string> info)
         {
             StudentInClass st = new StudentInClass();

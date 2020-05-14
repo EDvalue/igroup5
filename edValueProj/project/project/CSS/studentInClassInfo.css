@@ -28,8 +28,14 @@
     background: #f1f1f1;
 }
 
-#statistics {
-    height: 0;
+#main{
+    display:flex;
+    flex-direction:column;
+    flex-flow:inherit;
+}
+
+div#statistics {
+    height: max-content;
     width: 90%;
     margin-top: 5%;
     margin-left: auto;
@@ -161,6 +167,32 @@
     color: white;
     text-decoration: none;
 }
+th {
+    text-align: center;
+}
+
+div.content {
+    flex: 0 1 73%;
+    margin-right: 3%;
+}
+#disbackg {
+    visibility: hidden;
+    height: 1000px;
+    width: 1410px;
+    background: #000;
+    opacity: 0.8;
+    z-index: 2 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+div#TaskView {
+    margin-top: 4%;
+    margin-right: 10%;
+    width: 80%;
+}
+
 
 #choose > p {
     margin-top: 5%;
@@ -224,8 +256,60 @@ canvas {
 .navPadding {
     padding: 0;
 }
+#toggleTask {
+    font-size: 14px;
+    text-align: center;
+    background-color: #fff;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+div#taskName {
+   border-top-right-radius:0;
+   
+}
+
 /*----DataTable----*/
 #sp_table_wrapper {
     display: block;
-    text-align:right;
+    text-align: right;
+}
+
+@media screen and (max-width: 740px) {
+
+    #stat_control_left{
+        position:absolute;
+        left:10px;
+    }
+    div.content {
+        flex: 0 1 60%;
+        margin-right: 3%;
+        height: inherit;
+    }
+    #taskName{
+        height:inherit;
+
+    }
+    div.content {
+        flex: 0 1 90%;
+        margin-right:5%;
+    }
+    #IntelligenceCheckBox {
+        flex: 0 1 100%;
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    #stat_control_top {
+        display: flex;
+        position: absolute;
+        z-index: 3;
+        width: 200px;
+    }
+
+    div#TaskView {
+        width: 100%;
+        margin-top: 8%;
+    }
+
+   
 }
