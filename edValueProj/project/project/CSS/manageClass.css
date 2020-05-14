@@ -232,6 +232,17 @@ canvas {
         background-color: white;
         border-radius: 5px;
     }
+#toggleTask {
+    font-size: 14px;
+    text-align: center;
+    background-color: #fff;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+div#taskName {
+    border-top-right-radius: 0;
+}
 
 #task {
     border: 2px solid #f1f1f1;
@@ -424,18 +435,9 @@ canvas {
     border-radius: 5px;
     text-align: center;
 }
-#IntelligenceCheckBox {
-    display:flex;
-    justify-content:space-around;
-    background-color:white;
-    box-shadow:2px 2px 2px #000;
-    padding:3%;
-    border-radius:6%;
-    margin-bottom:2%;
-}
+
 #taskName, #subjectsList, #stList {
     display: flex;
-    text-align: right;
     overflow-y: scroll;
     height: 500px;
     flex: 1;
@@ -522,4 +524,75 @@ ion-icon {
 }
 .navbar-collapse.collapse.in {
     display: block !important;
+}
+.capr {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    box-shadow: -2px 2px 2px #000;
+    font-size: 14px;
+    text-align: center;
+    height: 73px;
+    background-color: #fff;
+    flex: 1;
+}
+
+.capl {
+    flex: 1;
+    background-color: #fff;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    box-shadow: -2px 2px 2px #000;
+    height: 73px;
+}
+#IntelligenceCheckBox {
+    flex: 0 1 85%;
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    box-shadow: -2px 2px 2px #000;
+    border-radius: 0%;
+    margin-bottom: 0%;
+    padding: 0%;
+}
+#stat_control_top {
+    display: flex;
+}
+@media screen and (max-width: 740px) {
+
+    #stat_control_left {
+        position: absolute;
+        left: 10px;
+    }
+
+    div.content {
+        flex: 0 1 60%;
+        margin-right: 3%;
+        height: inherit;
+    }
+
+    #taskName {
+        height: inherit;
+    }
+
+    div.content {
+        flex: 0 1 90%;
+        margin-right: 5%;
+    }
+
+    #IntelligenceCheckBox {
+        flex: 0 1 100%;
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    #stat_control_top {
+        display: flex;
+        position: absolute;
+        z-index: 3;
+    }
+
+    div#TaskView {
+        width: 100%;
+        margin-top: 8%;
+    }
 }
