@@ -29,18 +29,41 @@
         var userOBJ;
         var userMode;
         var privateLocalStorage;
-        
+        var el;
+        var modeQuiz;
+        var performer;
+        var perform_showQuiz_mode;
+
         $(document).ready(function () {
 
             userOBJ = JSON.parse(localStorage["user"])
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             if ((localStorage["userMode"]))
                 userMode = localStorage["userMode"];
+            if(localStorage['quiz'])
+                el = JSON.parse(localStorage['quiz']);
+            if(localStorage['quiz_mode'])
+                modeQuiz = localStorage['quiz_mode'];
+            if (localStorage["userMode"]) 
+                perform_showQuiz_mode = localStorage["userMode"];
+                 if(localStorage["active_student_team"])
+                   teamOBJ = JSON.parse(localStorage["active_student_team"]);
 
             localStorage.clear();
             $(window).on('beforeunload', function (e) {
-                  localStorage["user"] = JSON.stringify(userOBJ);
-                 localStorage['userMode'] = userMode;
+                localStorage["user"] = JSON.stringify(userOBJ);
+                localStorage['userMode'] = userMode;
+                if(el)
+                    localStorage['quiz'] = JSON.stringify(el);
+                if(performer)
+                    localStorage["performer"] = performer;
+                 if(modeQuiz)
+                    localStorage['quiz_mode'] = modeQuiz;
+                 if(perform_showQuiz_mode)
+                    localStorage['userMode'] = perform_showQuiz_mode;
+                  if (teamOBJ)
+                    localStorage["active_student_team"] =JSON.stringify(teamOBJ);
+
             });
 
             //window.onhashchange = function () {

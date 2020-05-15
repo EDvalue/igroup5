@@ -31,6 +31,10 @@
         var selectedTask;//save the selected open task;
         var cq_activeTask;//save the realated task for change quiz;
         var NactiveArr = [], activeOpenArr = [], activeCloseArr = [], allTask = [];//arrs of related tasks
+        var el;
+        var performer;
+        var modeQuiz;
+        var perform_showQuiz_mode;
 
         $(document).ready(function () {
 
@@ -48,22 +52,40 @@
 
 
             if (localStorage["active_student_team"])
-                activeStTeam = JSON.parse(localStorage["active_student_team"])
+                activeStTeam = JSON.parse(localStorage["active_student_team"]);
+            if (localStorage["userMode"]) 
+                  perform_showQuiz_mode = localStorage["userMode"];
 
               if ((localStorage["userMode"]))
                 userMode = localStorage["userMode"];
+            if(localStorage['quiz'])
+                el = JSON.parse(localStorage['quiz']);
+            if (localStorage["performer"])
+                performer = localStorage["performer"];
+            if(localStorage['quiz_mode'])
+                modeQuiz = localStorage['quiz_mode'];
+
 
               localStorage.clear();
+              localStorage.clear();
             $(window).on('beforeunload', function () {
-                  localStorage["user"] = JSON.stringify(userOBJ);
+                localStorage["user"] = JSON.stringify(userOBJ);
                 localStorage['userMode'] = userMode;
                 localStorage["active_student_team"] = JSON.stringify(activeStTeam);
-                  localStorage['quizSubject'] =quizSubject;
+                localStorage['quizSubject'] = quizSubject;
+                 if(el)
+                    localStorage['quiz'] = JSON.stringify(el);
+                  if(modeQuiz)
+                    localStorage['quiz_mode'] = modeQuiz;
+                 if(perform_showQuiz_mode)
+                    localStorage['userMode'] = perform_showQuiz_mode;
+                if (teamOBJ||activeStTeam)
+                    localStorage["active_student_team"] =JSON.stringify(teamOBJ);
             });
 
             userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;
-
+            
             ajaxCall("GET", "../api/Student/getSTasks/" + getTask, "", getSTasksSuccess, getSTasksError)
 
         });
@@ -189,10 +211,11 @@
                     
                 }
             }
-
+            el = quizC;
             localStorage["quiz"] = JSON.stringify(quizC);
             localStorage["perform_showQuiz_mode"] = "student";
             localStorage['quiz_mode'] = "edit";
+            modeQuiz = "edit";
             location.assign("showQuiz.html");
         }
 
@@ -365,6 +388,7 @@
         function chooseQuestionnaire(val, arr, mode) {
             localStorage["perform_showQuiz_mode"] = "student";
             localStorage['quiz_mode'] = mode;
+            modeQuiz = mode;
             selectedTask = val;
             title = "";
             if (mode != "watch") {
@@ -375,6 +399,7 @@
                         title = allTask[rt].Task.Title;
                         validate = allTask[rt];
                         validate.Task.Title = userOBJ.Mail;
+
 
                         ajaxCall("PUT", "../api/Student/validateTime", JSON.stringify(validate), validateTimeSuccess, validateTimeError)
                         allTask[rt].Task.Title = title;
@@ -390,6 +415,7 @@
                             if (arr[t].Task.QuizList[q].QuizID == selectedTask.getAttribute('quiz')) {
                                 arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
                                 arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
+                                el = arr[t].Task.QuizList[q];
                                 localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
 
                                 location.assign("showQuiz.html");
@@ -416,8 +442,9 @@
                             if (arr[t].Task.QuizList[q].QuizID == selectedTask.getAttribute('quiz')) {
                                 arr[t].Task.QuizList[q].Title = arr[t].Task.Title;
                                 arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
-                               
+                                arr[t].Task.QuizList[q]
                                 localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
+                                el = arr[t].Task.QuizList[q];
 
                                 location.assign("showQuiz.html");
                                 break;

@@ -212,7 +212,7 @@ function UpdateTaskDoughnut() {
     var loegish = 0;
     var ctx2 = document.getElementById('TaskChart').getContext('2d');
     for (x in sortedGraphData) {
-        if (sortedGraphData[x].isperform === 1)
+        if (sortedGraphData[x].isperform == 1)
             egish++;
         else
             loegish++;
