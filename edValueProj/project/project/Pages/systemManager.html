@@ -12,13 +12,13 @@
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+    <script src="../Scripts/ajaxCalls.js"></script>
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="../CSS/systemManager.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
@@ -26,7 +26,59 @@
                 userarg = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userarg.Name);
             }
+
+            $("#pass_chk>input[type='checkbox']").change(function () {
+                if ($(this).prop("checked")) {
+                    $("#pass_BTN>input[type='button']").attr('disabled', false);
+                } else {
+                    $("#pass_BTN>input[type='button']").attr('disabled', true);
+                }
+            });
+
+            $("#pass_BTN>input[type='button']").click(function () {
+
+                
+                swal({
+
+                    title: "האם אתה בטוח??",
+                    text: "מצב המערכת ישמר כגיבוי ושאר בכיתות והקבוצות יעלו שכבת גיל,שים לב שהמידע על תלמידי כיתה ט הנו בחייים לא יהיה זמין",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                })
+                    .then(function (confirm) {
+                        if (confirm) {
+                            swal({
+                                title: "המערכת כעת תבצע עדכון",
+                               icon: "warning",
+                               buttons: true,
+                               dangerMode: true
+                            }).then(function (confirm) {
+                                if (confirm) {
+
+                                    ajaxCall("PUT","../api/EDvalue/sysUpdates","",sysUpdateSuccess,sysUpateError)
+
+                                } else {
+                                    swal("ביצוע עדכון בוטל")
+                                }
+                            })
+                        }
+                        else {
+
+                            swal("ביצוע עדכון בוטל")
+                        }  
+                    })
+
+            });
         });
+
+        function sysUpateError(err) {
+            console.log(err);
+        }
+
+        function sysUpdateSuccess(data) {
+            console.log(data)
+        }
     </script>
 </head>
 <body dir="rtl">
@@ -49,6 +101,17 @@
             </div>
         </div>
         <div id="bar">
+
+            <div id="passYear">
+
+                <div id="pass_chk">
+                    <input type="checkbox" />
+                </div>
+                <div id="pass_BTN">
+                    <input type="button" class="btn btn-danger" disabled value="מעבר שנה"/>
+                </div>
+
+            </div>
 
             <div id="sub_title">
                 <h5>בחר פעילות</h5>

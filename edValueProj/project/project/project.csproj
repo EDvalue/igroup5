@@ -244,6 +244,7 @@
     <Compile Include="Models\DAL\StudentInClassDBservices.cs" />
     <Compile Include="Models\DAL\SystemDBservices.cs" />
     <Compile Include="Models\DAL\TeacherDBservices.cs" />
+    <Compile Include="Models\EDsystem.cs" />
     <Compile Include="Models\ExcelDocument.cs" />
     <Compile Include="Models\FeedBack.cs" />
     <Compile Include="Models\Inteligence.cs" />
@@ -413,6 +414,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="backup\" />
     <Folder Include="uploadedFile\" />
   </ItemGroup>
   <ItemGroup>

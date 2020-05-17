@@ -28,11 +28,12 @@
         var myTeams;
         var userOBJ;
         var userMode;
-        var privateLocalStorage;
         var el;
         var modeQuiz;
         var performer;
         var perform_showQuiz_mode;
+        var quizSubject;
+        var teamOBJ;
 
         $(document).ready(function () {
 
@@ -47,7 +48,10 @@
             if (localStorage["userMode"]) 
                 perform_showQuiz_mode = localStorage["userMode"];
                  if(localStorage["active_student_team"])
-                   teamOBJ = JSON.parse(localStorage["active_student_team"]);
+                teamOBJ = JSON.parse(localStorage["active_student_team"]);
+            if (localStorage['quizSubject'])
+                quizSubject = localStorage['quizSubject'];
+           
 
             localStorage.clear();
             $(window).on('beforeunload', function (e) {
@@ -62,7 +66,10 @@
                  if(perform_showQuiz_mode)
                     localStorage['userMode'] = perform_showQuiz_mode;
                   if (teamOBJ)
-                    localStorage["active_student_team"] =JSON.stringify(teamOBJ);
+                    localStorage["active_student_team"] = JSON.stringify(teamOBJ);
+                 if(quizSubject )
+                    localStorage['quizSubject'] = quizSubject;
+                 
 
             });
 
@@ -114,7 +121,9 @@
             for (team in myTeams) {
                 if (myTeams[team].Id == tId) {
                     localStorage["active_student_team"] = JSON.stringify(myTeams[team]);
+                    teamOBJ = myTeams[team];
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
+                    quizSubject=myTeams[team].Subject.Name;
                     location.assign("SquizList.html");
 
                 }

@@ -78,6 +78,15 @@ namespace project.Controllers
             return s.SignRequest(code);
         }
 
+        [HttpPut]
+        [Route("api/EDvalue/sysUpdates")]
+        public int sysUpdates()
+        {
+
+            EDsystem s = new EDsystem();
+            return s.sysUpdates();
+        }
+
     }
 }
 

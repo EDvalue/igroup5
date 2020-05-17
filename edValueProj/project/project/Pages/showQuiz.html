@@ -79,7 +79,8 @@
                 localStorage["user"] = JSON.stringify(userOBJ);
                 localStorage['userMode'] = perform_showQuiz_mode;
                  if(activeStTeam)
-                localStorage["active_student_team"] = JSON.stringify(activeStTeam);
+                    localStorage["active_student_team"] = JSON.stringify(activeStTeam);
+                 if(quizSubject )
                 localStorage['quizSubject'] = quizSubject;
                  if(activeTteam)
                     localStorage['active_teacher_team'] = JSON.stringify(activeTteam);
