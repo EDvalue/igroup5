@@ -268,8 +268,15 @@ div#taskName {
    
 }
 
-/*----DataTable----*/
-#sp_table_wrapper {
+#stName {
+    transform: translate(0%,-15px);
+    position: absolute;
+    left: 48%;
+    top: 50%;
+    color: white;
+}
+    /*----DataTable----*/
+    #sp_table_wrapper {
     display: block;
     text-align: right;
 }

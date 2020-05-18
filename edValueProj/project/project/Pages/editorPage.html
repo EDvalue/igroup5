@@ -314,7 +314,7 @@
 
                     myTask.QuizList[q].Title = myTask.Title;
                     localStorage["quiz"] = JSON.stringify(myTask.QuizList[q]);
-                  
+                  localStorage["quiz_mode"]='watch'
                     window.open("showQuiz.html")
                     break;
                 }

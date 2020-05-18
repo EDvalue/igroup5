@@ -93,10 +93,9 @@
             //UpdateTaskDoughnut();
 
 
-
-
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
+            $("#stName").append(studentGraphData[0].Fname+" "+studentGraphData[0].Lname)
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
@@ -593,6 +592,11 @@
                 </ul>
 
             </div>
+
+            <div id="stName">
+
+            </div>
+
             <div id="user_manage">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 </button>

@@ -276,7 +276,7 @@ namespace project.Models.DAL
 
                         userName = dr["Email"].ToString();
                         password = dr["Password"].ToString();
-                        name= dr["name"].ToString();
+                        name= dr["Fname"].ToString();
 
 
                     }

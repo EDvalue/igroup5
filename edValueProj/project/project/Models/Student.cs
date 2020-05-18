@@ -64,6 +64,7 @@ namespace project.Models
 
             if (dbs.dt.Rows.Count > 0)
             {
+                C.EdTeacher = new Teacher();
                 C.InSchool = Convert.ToInt32(dbs.dt.Rows[0]["SchoolCode"]);
                 C.Grade = Convert.ToInt32(dbs.dt.Rows[0]["Grade"]);
                 C.GradeNumber = Convert.ToInt32(dbs.dt.Rows[0]["GradeNumber"]);
