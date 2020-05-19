@@ -54,6 +54,8 @@
 
             if (localStorage["Teacher_inClass"])
                 classPage = JSON.parse(localStorage["Teacher_inClass"]);
+
+            $("#title h3").html(classPage.Name)
             info = {
                 GradeClass: classPage.Grade,
                 ClassNumber: classPage.GradeNumber,

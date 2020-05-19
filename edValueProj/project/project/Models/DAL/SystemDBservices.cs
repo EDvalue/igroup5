@@ -58,9 +58,9 @@ namespace project.Models.DAL
             return cmd;
         }
 
-        public User conect(Dictionary<string,string> conection)
+        public User conect(Dictionary<string, string> conection)
         {
-           
+
             SqlConnection con = null;
             //Dictionary<string, string> user = new Dictionary<string, string>();
             Teacher t = new Teacher();
@@ -74,12 +74,12 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
 
-                String selectSTR = "select * from [User] inner join Student on StudentEmail=[User].Email where [User].Email='" + conection["Email"]+"' and "+" [User].Password='"+conection["Password"]+"'" ;
+                String selectSTR = "select * from [User] inner join Student on StudentEmail=[User].Email where [User].Email='" + conection["Email"] + "' and " + " [User].Password='" + conection["Password"] + "'";
 
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
-                
+
 
                 // get a reader
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
@@ -93,7 +93,7 @@ namespace project.Models.DAL
                     s.IsCompleteIquizz = Convert.ToBoolean(dr["CompletedIQuiz"]);
                     countstudent++;
 
-                    
+
                 }
 
 
@@ -103,8 +103,8 @@ namespace project.Models.DAL
                     dr = null;
                     cmd.Connection = null;
                     con = connect("DBConnectionString");
-                   
-                    selectSTR = "select * from [User] inner join Teacher on TeacherEmail=[User].Email where [User].Email='" + conection["Email"] + "' and " + " [User].Password='" + conection["Password"]+"'";
+
+                    selectSTR = "select * from [User] inner join Teacher on TeacherEmail=[User].Email where [User].Email='" + conection["Email"] + "' and " + " [User].Password='" + conection["Password"] + "'";
                     cmd = new SqlCommand(selectSTR, con);
                     dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
@@ -140,12 +140,12 @@ namespace project.Models.DAL
 
                         while (dr.Read())
                         {
-                            
+
                             u.Name = dr["UserName"].ToString();
-                         
+
                         }
                     }
-                }   
+                }
 
 
             }
@@ -167,7 +167,7 @@ namespace project.Models.DAL
             {
                 return s;
             }
-            else if(counteacher>0)
+            else if (counteacher > 0)
             {
 
                 return t;
@@ -180,13 +180,13 @@ namespace project.Models.DAL
         }
 
 
-        public SystemDBservices updateAPass(string userName,string pass)
+        public SystemDBservices updateAPass(string userName, string pass)
         {
             SqlConnection con = null;
             try
             {
                 con = connect("DBConnectionString");
-                da = new SqlDataAdapter("select * from Admin where UserName='" + userName + "' and Password='"+pass+"'", con);
+                da = new SqlDataAdapter("select * from Admin where UserName='" + userName + "' and Password='" + pass + "'", con);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -247,7 +247,7 @@ namespace project.Models.DAL
 
         public string fp(Dictionary<string, string> conection)
         {
-            string msg="";
+            string msg = "";
             SqlConnection con = null;
             string password = "";
             string userName = "";
@@ -257,7 +257,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
 
-                String selectSTR = "select * from [User] where [User].Email='"+conection["userName"] + "' and [User].Lname='" + conection["lastName"]+"'";
+                String selectSTR = "select * from [User] where [User].Email='" + conection["userName"] + "' and [User].Lname='" + conection["lastName"] + "'";
 
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -276,7 +276,7 @@ namespace project.Models.DAL
 
                         userName = dr["Email"].ToString();
                         password = dr["Password"].ToString();
-                        name= dr["Fname"].ToString();
+                        name = dr["Fname"].ToString();
 
 
                     }
@@ -298,7 +298,7 @@ namespace project.Models.DAL
 
                     msg = "הסיסמא שלך מחכה לך בחשבון המייל";
                 }
-             
+
             }
             catch (Exception ex)
             {
@@ -313,7 +313,7 @@ namespace project.Models.DAL
                 }
 
             }
-          
+
             return msg;
         }
 
@@ -355,46 +355,13 @@ namespace project.Models.DAL
 
         }
 
-        public SystemDBservices getAllClasses()
+        public SystemDBservices getAllClassesByGrade(int g)
         {
             SqlConnection con = null;
             try
             {
                 con = connect("DBConnectionString");
-                da = new SqlDataAdapter("select * from Class", con);
-                SqlCommandBuilder builder = new SqlCommandBuilder(da);
-                DataSet ds = new DataSet();
-                da.Fill(ds);
-                dt = ds.Tables[0];
-            }
-
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-
-            return this;
-
-         
-        }
-
-        public SystemDBservices getAllTeams()
-        {
-            SqlConnection con = null;
-            try
-            {
-                con = connect("DBConnectionString");
-                da = new SqlDataAdapter("select * from Team", con);
+                da = new SqlDataAdapter("select * from Class Where Grade=" + g, con);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -421,8 +388,76 @@ namespace project.Models.DAL
 
         }
 
-        public int backup()
+        public SystemDBservices getAllTeamsByGrade(int g)
         {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from Team where Grade=" + g, con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+
+        }
+
+        public SystemDBservices getAllStudentbyGrade(int g)
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString");
+                da = new SqlDataAdapter("select * from Student where GradeClass=" + g, con);
+                SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                dt = ds.Tables[0];
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+
+            return this;
+
+        }
+
+
+        public int deleteSt(string mail)
+        {
+
             int numEffected = 0;
             SqlConnection con;
             SqlCommand cmd;
@@ -437,12 +472,15 @@ namespace project.Models.DAL
                 throw (ex);
             }
 
+
             StringBuilder sb = new StringBuilder();
-            string backLocation = HttpContext.Current.Server.MapPath("~/backup/");
-            string query = "backup database igroup5_prod to disk='"+ backLocation+DateTime.Now.ToString("ddMMyyyy_HHmmss")+".Bak'";
 
 
-            cmd = CreateCommand(query, con);             // create the command
+            sb.AppendFormat("DELETE from [Student] WHERE [Student].[StudentEmail]={0}", mail);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
 
             try
             {
@@ -466,10 +504,63 @@ namespace project.Models.DAL
                     // close the db connection
                     con.Close();
                 }
-
-
             }
             return numEffected;
+        }
+
+        public int deleteUser(string mail)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.AppendFormat("DELETE from [User] WHERE [User].[Email]={0}", mail);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+            return numEffected;
+
+
         }
     }
 }

@@ -45,6 +45,7 @@
             $("#questionnaire_div").hide();
             $("#w_fb").hide();
             $("#assigment").hide();
+            $("#disbackg").css("visibility", "hidden");
             $("input[type='button'][value='צפה בשאלון']").prop('disabled', 'disabled');
             $(".fb").hide();
 
@@ -115,6 +116,7 @@
         }
 
         function postAssigmentSuccess(data) {
+            $("#disbackg").css("visibility", "hidden");
              swal({
                 
                    title: "משימה שוייכה בהצלחה",
@@ -124,7 +126,8 @@
             closeDivUS();
         }
 
-        function postAssigmentError(err){
+        function postAssigmentError(err) {
+            $("#disbackg").css("visibility", "hidden");
             console.log(err);
             swal("המשימה כבר שוייכה");
             closeDivUS();
@@ -188,7 +191,7 @@
 
                 //markSelected(this);
                 //var saleId = this.getAttribute('data-SaleId');
-
+                $("#disbackg").css("visibility", "visible");
                 myTask_id = this.getAttribute('data-TaskId');
                 myTask = getTaskAById(myTask_id);
                 $("#assigment").show();
@@ -404,6 +407,7 @@
         }
         function closeDivUS() {
             $("#assigment").hide();
+            $("#disbackg").css("visibility", "hidden");
             $("#classDate").val("");
             $("#submitionDate").val("");
         }
@@ -434,7 +438,7 @@
 
 </head>
 <body dir="rtl">
-    
+    <div id="disbackg"></div>
     <div id="addFB">
         <div onclick="closeAddFB()" id="close_addFB">X</div>
         <div id="fbTitle">

@@ -52,7 +52,7 @@ function GradesAvgChart() {
         if (obj[sortedGraphData[x].IntelligenceName] != "לא ביצעו" && sortedGraphData[x].Grade != 0) {
             obj[sortedGraphData[x].IntelligenceName][0] += parseInt(sortedGraphData[x].Grade);
             obj[sortedGraphData[x].IntelligenceName][1]++;
-            medianArr.push(sortedGraphData[x].Grade)
+            medianArr.push(sortedGraphData[x].Grade);
         }
 
     }
@@ -73,9 +73,9 @@ function GradesAvgChart() {
                 {
                     label: 'ממוצע ציונים לפי אינטלגנציות',
                     data: IntData,
-                    backgroundColor: ['#007bff', '#6610f2', '#20c997', '#dc3545', '#28a745', '#17a2b8','#fd7e14'],
-                    borderColor: 'rgba(222, 222, 132, 2)',
-                    borderWidth: 1
+                    backgroundColor: ['rgba(0, 123, 255, 0.78)', 'rgba(102, 16, 242, 0.78)', 'rgba(32, 201, 151, 0.78)', 'rgba(220, 53, 69, 0.78)', 'rgba(40, 167, 69, 0.78)', 'rgba(23, 162, 184, 0.78)', 'rgba(253, 126, 20, 0.78)'],
+                    borderColor: ['#007bff', '#6610f2', '#20c997', '#dc3545', '#28a745', '#17a2b8', '#fd7e14'],
+                    borderWidth: 3
                 }
             ]
         },
@@ -151,7 +151,7 @@ function PercentageChart() {
     }
     for (x in obj) {
         IntLabels.push(x);
-        IntData.push(((obj[x] / sum) * 100).toFixed(2))
+        IntData.push(((obj[x] / sum) * 100).toFixed(2));
     }
 
     IntPercentageChart = new Chart(ctx, {
@@ -162,10 +162,11 @@ function PercentageChart() {
                 {
                     label: 'אחוז תלמידים לפי אינטליגנציות',
                     data: IntData,
-                    backgroundColor: ['red', 'lightgreen', 'lightblue'],
-                    borderColor: ['red', 'lightgreen', 'lightblue'],
-                    borderWidth: 1
-                },
+                    backgroundColor: ['rgba(0, 123, 255, 0.78)', 'rgba(102, 16, 242, 0.78)', 'rgba(32, 201, 151, 0.78)', 'rgba(220, 53, 69, 0.78)', 'rgba(40, 167, 69, 0.78)', 'rgba(23, 162, 184, 0.78)', 'rgba(253, 126, 20, 0.78)'],
+                    borderColor: ['#007bff', '#6610f2', '#20c997', '#dc3545', '#28a745', '#17a2b8', '#fd7e14'],
+                    borderWidth: 3,
+                  
+                }
             ]
         },
         options: {
@@ -225,7 +226,9 @@ function UpdateTaskDoughnut() {
                 {
 
                     data: [egish, loegish],
-                    backgroundColor: ['rgba(152,251,152)', 'rgba(135,206,250)'],
+                    backgroundColor: ['rgba(0, 255, 33, 0.78)','rgba(255, 0, 0, 0.78)'],
+                    borderColor: ['#00ff21', '#ff0000'],
+                    borderWidth: 3
 
                 },
 
