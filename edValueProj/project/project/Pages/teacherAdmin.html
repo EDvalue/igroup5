@@ -264,7 +264,7 @@
             console.log(data);
             str = "";
             for (x in data) {
-
+                
                 str += `<option id='${data[x].IdNumber}'>${data[x].Mail}-${data[x].Name} ${data[x].LastName}</option>`;
             }
 
@@ -521,7 +521,7 @@
         function showme(arg) {
             sortedClasses = [];
             for (c in classes) {
-                if (classes[c].Grade == arg || arg == 0) {
+                if (classes[c].Grade == arg || (arg == 0&&classes[c].Grade!=10)) {
 
                     sortedClasses.push(classes[c])
                 }
@@ -541,8 +541,13 @@
 
         function getClassBySchoolSuccess(data) {
             classes = data;
-            sortedClasses = data;
-            printClasses(classes);
+            sortedClasses = [];
+            for (x in data) {
+                if (data[x].Grade != 10)
+                      sortedClasses.push(data[x]);
+            }
+          
+            printClasses(sortedClasses);
         }
 
         function printClasses(data) {
@@ -686,6 +691,7 @@
                         <option value="7">ז</option>
                         <option value="8">ח</option>
                         <option value="9">ט</option>
+                        
                     </select>
 
                     <label>מספר כיתה: </label>
@@ -777,8 +783,9 @@
                     <p id="7" onclick="showme(this.id)">שכבה ז</p>
                     <p id="8" onclick="showme(this.id)">שכבה ח</p>
                     <p id="9" onclick="showme(this.id)">שכבה ט</p>
-                    <p id="0" onclick="showme(this.id)">כולם</p>
-                   
+                    <p id="0" onclick="showme(this.id)">ז-ט</p>
+                    <p id="10" onclick="showme(this.id)">י</p>
+
                 </div>
             </div>
             <div id="classes" class="row">
