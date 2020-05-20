@@ -52,7 +52,7 @@
         function getClassesbyMailSuccess(data) {
             console.log(data)
             myClasses = data;
-
+            localStorage['myClasses'] = JSON.stringify(myClasses)
             for (c in data) {
 
                 if (data[c].Grade != 10) {
