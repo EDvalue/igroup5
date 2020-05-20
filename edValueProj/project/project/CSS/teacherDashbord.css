@@ -5,6 +5,15 @@
     /*justify-content: space-between;*/
     margin-right: 0;
 }
+
+.PastC{
+
+    background-color:rgba(241, 241, 241, 0.85);
+}
+
+#selector {
+    margin: auto 45.5%;
+}
     #TControlBtns>button:hover{
         border-bottom:1px solid white;
     }

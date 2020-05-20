@@ -26,6 +26,7 @@
     <script>
 
         var myClasses;
+        var mySortedTeams;
         var myTeams;
         var userOBJ;
 
@@ -54,24 +55,78 @@
 
             for (c in data) {
 
-                str = `<p id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
-                $("#nav_cnt").append(str);
+                if (data[c].Grade != 10) {
+
+                    str = `<p id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
+                    $("#nav_cnt").append(str);
+
+                } else {
+
+                    str = `<p class='PastC' id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
+                    $("#nav_cnt").append(str);
+
+                }
+
             }
 
         }
+
+
         function getClassesbyMailError(err) {
             console.log(err);
+        }
+
+        function showme(arg) {
+            mySortedTeams = [];
+            if (arg == 'al') {
+
+                mySortedTeams = myTeams;
+                printTeams(myTeams);
+            } else {
+                if (arg == 'pa') {
+                    for (c in myTeams) {
+
+                        if (myTeams[c].Grade == 10) {
+
+                            mySortedTeams.push(myTeams[c])
+                        }
+                       
+                    }
+                     printTeams(mySortedTeams);
+                } else {
+
+                    for (c in myTeams) {
+
+                        if (myTeams[c].Grade != 10) {
+
+                            mySortedTeams.push(myTeams[c])
+                        }
+                        
+                    }
+                    printTeams(mySortedTeams);
+                }
+            }
+            
+
+           
         }
 
         function getTeamsbyMailSuccess(data) {
             console.log(data)
             myTeams = data;
+            mySortedTeams = data;
             $("#teams").text("");
             imgId = '';
             localStorage["myTeams"] = JSON.stringify(myTeams);
-            for (t in data) {
+            printTeams(myTeams);
+           
+        }
 
-                teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
+        function printTeams(data) {
+            teamStr = "";
+             for (t in data) {
+
+                teamStr += `<div id="team" class="col-12 col-md-6 col-lg-4">
                         <div id="team_bar">
                             <div id="addTaskBTN">
                                 <button name="${data[t].Id}" onclick="openAddTaskPage(this.getAttribute('name'))">הוספת משימה</button>
@@ -93,8 +148,9 @@
 
                       </div>`;
 
-                $("#teams").append(teamStr);
+              
             }
+              $("#teams").html(teamStr);
         }
 
         function openTeam(val) {
@@ -213,8 +269,20 @@
             </div>
         </div>
 
-        <div id="choose"class="row">
+        <div id="choose" class="row">
             <p>בחר קבוצה מתאימה</p>
+
+            <div id="selector">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    סנן קבוצות
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="ac" onclick="showme(this.id)">קבוצות פעילות</p>
+                    <p id="pa" onclick="showme(this.id)">קבוצות עבר</p>
+                    <p id="al" onclick="showme(this.id)">כל הקבוצות</p>
+
+                </div>
+            </div>
         </div>
         <div id="teams" class="row">
             

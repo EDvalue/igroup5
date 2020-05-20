@@ -504,11 +504,17 @@
             var cstr = "";
             for (a in myTeams) {
 
-                if (myTeams[a].Title != listdata.Title)
-                    cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                if (myTeams[a].Title != listdata.Title) {
 
-                if (myTeams[a].Title != listdata.Title)
-                    cstr += `<option team_id="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                    if (myTeams[a].Grade != 10)
+                        cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`;
+                    else {
+                         cstr += `<option class='PastC' value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                    }
+                }
+                   
+
+                
 
 
             }
@@ -590,13 +596,11 @@
 
         function connectTaskList() {
             $(".fr").click(function () {
-                y=2
-                x=1
+              
                 ShowSubmitted(this.parentNode.id);
             });
             $(".tr .notification").click(function () {
-                x=1
-                y=2
+            
                 ShowSubmitted(this.parentNode.parentNode.id);
             });
             $(".sr span").click(function () {

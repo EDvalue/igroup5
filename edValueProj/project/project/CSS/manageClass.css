@@ -8,8 +8,9 @@
 #tasksTitle>#years{
     margin-right:3%;
 }
-
-
+.PastC{
+    background-color:rgba(128, 128, 128, 0.68)
+}
 #tasksTitle {
     margin-top: 7%;
     margin-bottom: 3%;
