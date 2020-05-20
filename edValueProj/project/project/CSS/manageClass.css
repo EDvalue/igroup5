@@ -573,11 +573,19 @@ ion-icon {
     margin-right: auto;
     margin-top: 3%;
 }
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 870px) {
+
+    #teamList {
+        position: absolute;
+        z-index: 2;
+        width:35%;
+
+    }
 
     #stat_control_left {
         position: absolute;
-        left: 10px;
+        left: 12px;
+       
     }
 
     div.content {
@@ -602,6 +610,7 @@ ion-icon {
     }
 
     #stat_control_top {
+        margin-right: 21px;
         display: flex;
         z-index: 3;
     }
