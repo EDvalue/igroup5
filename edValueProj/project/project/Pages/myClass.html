@@ -29,6 +29,8 @@
 
         var userOBJ;
         var SignIn;
+        var intGraphData;
+         var intSortedGraphData;
         var classPage;
         var graphData;
         var graphObject = {
@@ -77,19 +79,20 @@
                 SchoolCode: classPage.InSchool,
             }
              ajaxCall("PUT", '../api/Teacher/intlClassGraph', JSON.stringify(info), intlClassGraphSuccess, intlClassGraphError)
-            sortDivs();
-            UpdateTaskDoughnut();
-            GradesAvgChart()
-            PercentageChart();
-            ChartIntl();
+            
+      
         }
 
         function intlClassGraphSuccess(data) {
+
+            intGraphData = data;
+            intSortedGraphData = data;
             console.log(data);
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
             PercentageChart();
+            ChartIntl();
 
         }
 
@@ -154,7 +157,7 @@
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+                str += `<div id="${x}"><span>${intDictionary[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
@@ -170,11 +173,13 @@
                $("#statistics input[type='checkbox']").attr('disabled','disabled')
             setTimeout(function(){ $("#statistics input[type=checkbox]").attr('disabled',false); }, 1100);
             sortedGraphData = [];
+            intSortedGraphData = [];
             var valID = val.parentNode.id;
             var isChecked = $(val).prop("checked");
 
             if (isChecked) {
-                sortTags[arrName].push(valID)
+                sortTags[arrName].push(valID);
+                
             }
             else {
                 if (sortTags[arrName].indexOf(valID) != -1) {
@@ -191,23 +196,34 @@
                         sortedGraphData.push(graphData[x])
                     }
                 }
+                for (s in intGraphData) {
+                    if (sortTags["stArr"].indexOf(intGraphData[s].Mail) != -1) {
+                        intSortedGraphData.push(intGraphData[s]);
+                    }
+                }
                 console.log(sortedGraphData)
                 task.data.datasets = sortedGraphData
                 gradesAvgChart.data.datasets = sortedGraphData
                 IntPercentageChart.data.datasets = sortedGraphData
-                UpdateTaskDoughnut()
-                GradesAvgChart()
-                PercentageChart()
+                intlMultiBar.data.datasets[0] = intSortedGraphData;
+                intlMultiBar.data.datasets[1] = intSortedGraphData;
+                UpdateTaskDoughnut();
+                GradesAvgChart();
+                PercentageChart();
+                ChartIntl();
             } else {
 
                 sortedGraphData = graphData;
-                console.log(sortedGraphData)
+                intSortedGraphData = intGraphData;
                 task.data.datasets = sortedGraphData
                 gradesAvgChart.data.datasets = sortedGraphData
                 IntPercentageChart.data.datasets = sortedGraphData
+               intlMultiBar.data.datasets[0] = intSortedGraphData;
+               intlMultiBar.data.datasets[1] = intSortedGraphData;
                 UpdateTaskDoughnut()
                 GradesAvgChart()
                 PercentageChart()
+                ChartIntl();
 
             }
 
@@ -413,7 +429,7 @@
                     <div class="content">
                         <div class="row" id="intlCharts" style="display:none">
                             <h3 style="text-align:center">
-                                גרף זה לא מסונן
+                                סינון רק על פי תלמיד
                             </h3>
                             <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
 

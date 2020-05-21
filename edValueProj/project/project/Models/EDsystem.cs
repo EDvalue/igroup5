@@ -10,6 +10,14 @@ namespace project.Models
     public class EDsystem
     {
 
+        Dictionary<int, string> gradesDict = new Dictionary<int, string>
+        {
+             {7,"z"},
+             {8,"ח"},
+             {9,"ט"},
+             {10,"י"}
+        };
+
         public int sysUpdates()
         {
             int grade = 8;
@@ -82,7 +90,7 @@ namespace project.Models
                 int g = Convert.ToInt32(dt.Rows[len]["Grade"]) + 1;
                 workRow["Grade"] = g;
                 workRow["GradeNumber"] = c;
-                workRow["Title"] = g + "`" + c;
+                workRow["Title"] = gradesDict[g] + "`" + c;
                 workRow["TeacherEmail"] = dt.Rows[len]["TeacherEmail"].ToString();
                 workRow["SchoolCode"] = Convert.ToInt32(dt.Rows[len]["SchoolCode"]);
 

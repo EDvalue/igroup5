@@ -30,17 +30,17 @@ var options = {
 
 var gradesAvgChart;
 var IntPercentageChart;
-var multiBar;
-var chart4;
-var intDictonairy = {
+var intlMultiBar;
+
+var intDictionary = {
     "logically": "לוגית",
     "movemental": "תנועתית",
     "musically": "מוזיקלית",
     "personal": "אישית",
     "spatial": "מרחבית",
     "tongue": "לשונית",
-    "לא ביצעו":"לא ביצעו"
-}
+    "לא ביצעו": "לא ביצעו"
+};
 
 
 
@@ -66,7 +66,7 @@ function GradesAvgChart() {
 
     }
     for (x in obj) {
-        IntLabels.push(intDictonairy[x]);
+        IntLabels.push(intDictionary[x]);
         IntData.push(obj[x][0] / obj[x][1]);
     }
     console.log(IntLabels);
@@ -173,7 +173,7 @@ function PercentageChart() {
 
     }
     for (x in obj) {
-        IntLabels.push(intDictonairy[x]);
+        IntLabels.push(intDictionary[x]);
         IntData.push(((obj[x] / sum) * 100).toFixed(2));
     }
 
@@ -226,16 +226,16 @@ function ChartIntl() {
     }
     var dataSpoints = [];
     var dataPoints = [];
-    for (x in intGraphData) {
-        if (!intGraphData[x].hasOwnProperty("Spoints")) {
-            for (y in intDictonairy) {
-                if (intDictonairy[y] != "לא ביצעו") {
-                    if (intGraphData[x][y + "Spoints"] > 0) {
-                        intPoints[y][1] += parseInt( intGraphData[x][y + "Spoints"]);
+    for (x in intSortedGraphData) {
+        if (!intSortedGraphData[x].hasOwnProperty("Spoints")) {
+            for (y in intDictionary) {
+                if (intDictionary[y] != "לא ביצעו") {
+                    if (intSortedGraphData[x][y + "Spoints"] > 0) {
+                        intPoints[y][1] += parseInt(intSortedGraphData[x][y + "Spoints"]);
                         intPoints[y][3] += 1;
                     }
-                    if (intGraphData[x][y + "points"] > 0) {
-                        intPoints[y][0] += parseInt( intGraphData[x][y + "points"]);
+                    if (intSortedGraphData[x][y + "points"] > 0) {
+                        intPoints[y][0] += parseInt(intSortedGraphData[x][y + "points"]);
                         intPoints[y][2] += 1;
                     }
                 }
@@ -247,8 +247,8 @@ function ChartIntl() {
         dataPoints.push((intPoints[x][0] / intPoints[x][2]).toFixed(2))
         dataSpoints.push(((intPoints[x][1] / intPoints[x][3]) / 10).toFixed(2))
     }
-    console.log(intPoints)
-    chart4 = new Chart(ctx, {
+    console.log(intPoints);
+    intlMultiBar = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['לוגית', 'תנועתית', 'מוזיקלית', 'אישית', 'מרחבית', 'לשונית'],
@@ -304,7 +304,7 @@ function ChartIntl() {
             animateRotate: true
         }
     });
-    chart4.update();
+    intlMultiBar.update();
 }
       
 

@@ -10,6 +10,7 @@
 
     <script src="../Scripts/ajaxCalls.js"></script>
     <script src="../js/js.js"></script>
+    <script src="../js/Graphs.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="https://rawgit.com/hebcal/hebcal-js/master/client/hebcal.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -41,7 +42,7 @@
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
-    <script src="../js/Graphs.js"></script>
+    
     <script>
 
         var myTeams;
@@ -66,19 +67,19 @@
             // studentArr:[]
         };
         var sortedGraphData;
-        var intGraphData;
+        var intGraphData, intSortedGraphData;
         var myClasses;
 
         $(document).ready(function () {
             if (localStorage["myClasses"])
-                 myClasses = JSON.parse(localStorage["myClasses"])
+                myClasses = JSON.parse(localStorage["myClasses"])
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
             if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
-           
+
             getClasses();
             $("#years>select").change(function () {
 
@@ -241,7 +242,7 @@
         }
 
         function openClass() {
-            x=1
+            x = 1
             x = $("#nav_classes").children("option:selected")
             myclass = myClasses[$(x).attr("value")];
             localStorage["Teacher_inClass"] = JSON.stringify(myclass);
@@ -253,8 +254,8 @@
             console.log(data);
             graphData = data;
             sortedGraphData = data;
-            
-            ajaxCall("GET","../api/Teacher/intTeamGraph/"+activeTteam.Id,"",intTeamGraphSuccess,intTeamGraphError)
+
+            ajaxCall("GET", "../api/Teacher/intTeamGraph/" + activeTteam.Id, "", intTeamGraphSuccess, intTeamGraphError)
 
         }
 
@@ -274,10 +275,11 @@
             GradesAvgChart()
             PercentageChart();
             intGraphData = data;
+            intSortedGraphData = data;
             ChartIntl();
         }
 
-      
+
 
         function sortDivs() {
             var obj = {};
@@ -369,7 +371,7 @@
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${intDictonairy[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+                str += `<div id="${x}"><span>${intDictionary[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
@@ -707,20 +709,20 @@
             const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
             cstr += `<div class="col-sm-6 col-md-4 col-12" id="${task.taskId}">
-                             <div class="fr">
-                                 <div class="name">
-                                    <p>${task.Title}</p>
-                                  </div>
-                                <div class="time">
-                                   <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                 <div class="fr">
+                                     <div class="name">
+                                        <p>${task.Title}</p>
+                                      </div>
+                                    <div class="time">
+                                       <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                     </div>
                                  </div>
-                             </div>
 
-                               <div class="sr">
+                                   <div class="sr">
 
-                                <div class="c_time">
-                                   <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                    <span>`
+                                    <div class="c_time">
+                                       <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                        <span>`
             if (new Date(task.OpenTill) > new Date() && new Date(task.ForDate) < new Date())
 
                 cstr += ` <ion-icon id="green" name="play"></ion-icon>`
@@ -731,18 +733,18 @@
             cstr += `</span>`
 
             cstr += `</div>
-                                        </div>
-                                         <div class="tr">
-                                           <div class="notification">
-                                               <p>${task.numWaiting}</p >
-                                           </div>
-                                          <div class="cancel">
-                                             <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                            </div>
+                                             <div class="tr">
+                                               <div class="notification">
+                                                   <p>${task.numWaiting}</p >
+                                               </div>
+                                              <div class="cancel">
+                                                 <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                              </div>
                                           </div>
-                                      </div>
 
 
-                                 </div>`
+                                     </div>`
 
             return cstr;
         }

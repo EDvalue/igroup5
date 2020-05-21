@@ -224,8 +224,8 @@ namespace project.Controllers
             return t.intTeamGraph(teamId);
         }
 
-        [HttpGet]
-        [Route("api/Teacher/intlClassGraph/{info}")]
+        [HttpPut]
+        [Route("api/Teacher/intlClassGraph")]
         public List<Dictionary<string, string>> intlClassGraph(Dictionary<string,string> info)
         {
             Classroom c = new Classroom();

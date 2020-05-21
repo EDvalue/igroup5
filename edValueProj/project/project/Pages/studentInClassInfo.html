@@ -57,7 +57,7 @@
             taskArr: [],
             intelligenceArr: [],
         }
-        var sortedGraphData;
+        var sortedGraphData,intSortedGraphData;
 
         var intGraphData;
         var task;
@@ -80,8 +80,11 @@
             if (localStorage["studentData"])
                 studentGraphData = JSON.parse(localStorage["studentData"]);
             //ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
-            if (localStorage["intStudentData"])
+            if (localStorage["intStudentData"]) {
                 intGraphData = JSON.parse(localStorage["intStudentData"]);
+                intSortedGraphData=JSON.parse(localStorage["intStudentData"]);
+            }
+                
 
             bringStTasks();
 
