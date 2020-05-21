@@ -70,6 +70,12 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.graphDataClass(info);
         }
+
+        public List<Dictionary<string,string>> intlClassGraph(Dictionary<string, string> info)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.intlClassGraph(info);
+        }
     }
 }
             

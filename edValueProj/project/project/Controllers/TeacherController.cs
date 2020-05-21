@@ -223,5 +223,14 @@ namespace project.Controllers
             Team t = new Team();
             return t.intTeamGraph(teamId);
         }
+
+        [HttpGet]
+        [Route("api/Teacher/intlClassGraph/{info}")]
+        public List<Dictionary<string, string>> intlClassGraph(Dictionary<string,string> info)
+        {
+            Classroom c = new Classroom();
+            return c.intlClassGraph(info);
+        }
+
     }
 }

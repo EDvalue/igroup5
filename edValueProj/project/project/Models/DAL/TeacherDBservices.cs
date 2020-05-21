@@ -1876,7 +1876,73 @@ namespace project.Models.DAL
 
             return list;
 
-        }           
+        }
 
+        public List<Dictionary<string, string>> intlClassGraph(Dictionary<string,string>info)
+        {
+            SqlConnection con = null;
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                string select1 = " select s.StudentEmail,pio.IntelligenceName,pio.points,pio.Spoints  ";
+                string select2 = " from Student as s left join PointsInIntelligence as pio on pio.StudentEmail=s.StudentEmail   ";
+                string select3 = " where s.ClassNumber="+info["ClassNumber"] +" and s.GradeClass="+info["GradeClass"] +" and s.ClassSchoolCode="+info["SchoolCode"];
+
+                String selectSTR = select1 + select2 + select3;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                Dictionary<string, string> srt = new Dictionary<string, string>();
+                srt["Mail"] = "";
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    if (srt["Mail"] != Convert.ToString(dr["StudentEmail"]))
+                    {
+                        if (srt["Mail"] != "")
+                            list.Add(srt);
+                        srt = new Dictionary<string, string>();
+                        srt.Add("Mail", Convert.ToString(dr["StudentEmail"]));
+                    }
+
+                    if (dr["IntelligenceName"] != DBNull.Value)
+                    {
+                        string Spoints = dr["Spoints"] != DBNull.Value ? Convert.ToString(dr["Spoints"]) : "0";
+                        srt.Add(Convert.ToString(dr["IntelligenceName"]) + "points", Convert.ToString(dr["points"]));
+                        srt.Add(Convert.ToString(dr["IntelligenceName"]) + "Spoints", Spoints);
+                    }
+                    else
+                    {
+                        srt.Add("points", "none");
+                        srt.Add("Spoints", "none");
+                    }
+
+
+
+                }
+                list.Add(srt);
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+
+        }
     }
 }

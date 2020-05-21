@@ -70,10 +70,30 @@
             console.log(data);
             graphData = data;
             sortedGraphData = data;
+
+            info = {
+                GradeClass: classPage.Grade,
+                ClassNumber: classPage.GradeNumber,
+                SchoolCode: classPage.InSchool,
+            }
+             ajaxCall("PUT", '../api/Teacher/intlClassGraph', JSON.stringify(info), intlClassGraphSuccess, intlClassGraphError)
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
             PercentageChart();
+        }
+
+        function intlClassGraphSuccess(data) {
+            console.log(data);
+            sortDivs();
+            UpdateTaskDoughnut();
+            GradesAvgChart()
+            PercentageChart();
+
+        }
+
+        function intlClassGraphError(err) {
+            console.log(err);
         }
 
         function sortDivs() {
