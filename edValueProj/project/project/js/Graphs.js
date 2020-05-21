@@ -12,9 +12,9 @@ var options = {
     scales: {
         yAxes: [{
             ticks: {
-
                 fontColor: 'black',
-                fontSize: 25
+                fontSize: 25,
+               
             }
         }],
         xAxes: [{
@@ -32,7 +32,15 @@ var gradesAvgChart;
 var IntPercentageChart;
 var multiBar;
 var chart4;
-
+var intDictonairy = {
+    "logically": "לוגית",
+    "movemental": "תנועתית",
+    "musically": "מוזיקלית",
+    "personal": "אישית",
+    "spatial": "מרחבית",
+    "tongue": "לשונית",
+    "לא ביצעו":"לא ביצעו"
+}
 
 
 
@@ -58,7 +66,7 @@ function GradesAvgChart() {
 
     }
     for (x in obj) {
-        IntLabels.push(x);
+        IntLabels.push(intDictonairy[x]);
         IntData.push(obj[x][0] / obj[x][1]);
     }
     console.log(IntLabels);
@@ -81,7 +89,13 @@ function GradesAvgChart() {
             ]
         },
         options: {
-
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 20
+                }
+            },
             animation: {
                 duration: 100
             },
@@ -90,7 +104,15 @@ function GradesAvgChart() {
                     display: true,
                     ticks: {
                         beginAtZero: true,   // minimum value will be 0.
-                        suggestedMax: 100
+                        suggestedMax: 100,
+                        fontColor: 'black',
+                        fontSize: 25
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: 'black',
+                        fontSize: 25
                     }
                 }]
             },
@@ -151,7 +173,7 @@ function PercentageChart() {
 
     }
     for (x in obj) {
-        IntLabels.push(x);
+        IntLabels.push(intDictonairy[x]);
         IntData.push(((obj[x] / sum) * 100).toFixed(2));
     }
 
@@ -171,8 +193,16 @@ function PercentageChart() {
             ]
         },
         options: {
-            responsive: true
+            responsive: true,
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 25
+                }
+            }
         },
+        
         animation: {
             animateScale: true,
             animateRotate: true
@@ -182,25 +212,92 @@ function PercentageChart() {
 }
 
 
-function ChartFour() {
+function ChartIntl() {
 
     var ctx = document.getElementById('intlChart').getContext('2d');
+    var intPoints = {
+        "logically": [0, 0, 0, 0],//a-סוכם ציונים של השאלון||b-סוכם ציונים של המערכת||c-סופר מספר שאלונים||d-סופר את מספר ציונים שונים מאפס
+        "movemental": [0, 0, 0, 0],
+        "musically": [0, 0, 0, 0],
+        "personal": [0, 0, 0, 0],
+        "spatial": [0, 0, 0, 0],
+        "tongue": [0, 0, 0, 0]
+     
+    }
+    var dataSpoints = [];
+    var dataPoints = [];
+    for (x in intGraphData) {
+        if (!intGraphData[x].hasOwnProperty("Spoints")) {
+            for (y in intDictonairy) {
+                if (intDictonairy[y] != "לא ביצעו") {
+                    if (intGraphData[x][y + "Spoints"] > 0) {
+                        intPoints[y][1] += parseInt( intGraphData[x][y + "Spoints"]);
+                        intPoints[y][3] += 1;
+                    }
+                    if (intGraphData[x][y + "points"] > 0) {
+                        intPoints[y][0] += parseInt( intGraphData[x][y + "points"]);
+                        intPoints[y][2] += 1;
+                    }
+                }
+            }
+        }       
+    }
 
+    for (x in intPoints) {
+        dataPoints.push((intPoints[x][0] / intPoints[x][2]).toFixed(2))
+        dataSpoints.push(((intPoints[x][1] / intPoints[x][3]) / 10).toFixed(2))
+    }
+    console.log(intPoints)
     chart4 = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['label1', 'label2', 'label3', 'label4', 'label5'],
+            labels: ['לוגית', 'תנועתית', 'מוזיקלית', 'אישית', 'מרחבית', 'לשונית'],
             datasets: [
                 {
-                    label: 'History',
-                    data: [44, 55, 32, 14, 22],
+                    label: 'דירוג שאלון',
+                    data: dataPoints,
                     backgroundColor: 'rgba(200, 150, 132, 1)',
                     borderColor: 'rgba(200, 150, 132, 2)',
+                    borderWidth: 1
+                }, {
+                    label: 'דירוג מערכת',
+                    data: dataSpoints,
+                    backgroundColor: 'rgba(12, 150, 132, 1)',
+                    borderColor: 'rgba(12, 150, 132, 2)',
                     borderWidth: 1
                 }
             ]
         },
-        options: options,
+        options: {
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'black',
+                    fontSize: 20
+                }
+            },
+
+            animation: {
+                duration: 100
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true,   // minimum value will be 0.
+                        suggestedMax: 10,
+                        fontColor: 'black',
+                        fontSize: 25
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: 'black',
+                        fontSize: 25
+                    }
+                }]
+            }
+        },
 
         animation: {
             animateScale: true,
@@ -265,7 +362,7 @@ function UpdateTaskDoughnut() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 15
+                    fontSize: 25
                 },
             },
 

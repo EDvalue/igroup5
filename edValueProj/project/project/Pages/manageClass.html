@@ -66,7 +66,7 @@
             // studentArr:[]
         };
         var sortedGraphData;
-
+        var intGraphData;
         var myClasses;
 
         $(document).ready(function () {
@@ -228,21 +228,22 @@
 
                 if (myClasses[c].Grade != 10) {
 
-                    str = `<p id="${c}" onclick="openClass(this.id)">${myClasses[c].Name}</p>`
-                    $("#nav_cnt").append(str);
+                    str = `<option value="${c}">${myClasses[c].Name}</option>`
+                    $("#nav_classes").append(str);
 
                 } else {
 
-                    str = `<p class='PastC' id="${c}" onclick="openClass(this.id)">${myClasses[c].Name}</p>`
-                    $("#nav_cnt").append(str);
+                    str = `<option class='PastC' value="${c}">${myClasses[c].Name}</option>`
+                    $("#nav_classes").append(str);
 
                 }
             }
         }
 
-        function openClass(val) {
-
-            myclass = myClasses[val];
+        function openClass() {
+            x=1
+            x = $("#nav_classes").children("option:selected")
+            myclass = myClasses[$(x).attr("value")];
             localStorage["Teacher_inClass"] = JSON.stringify(myclass);
             location.assign("myClass.html");
 
@@ -252,7 +253,7 @@
             console.log(data);
             graphData = data;
             sortedGraphData = data;
-
+            
             ajaxCall("GET","../api/Teacher/intTeamGraph/"+activeTteam.Id,"",intTeamGraphSuccess,intTeamGraphError)
 
         }
@@ -272,8 +273,8 @@
             UpdateTaskDoughnut();
             GradesAvgChart()
             PercentageChart();
-            x=1
-            ChartFour();
+            intGraphData = data;
+            ChartIntl();
         }
 
       
@@ -368,7 +369,7 @@
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${x}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+                str += `<div id="${x}"><span>${intDictonairy[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
@@ -444,9 +445,17 @@
 
         function openSt() {
             var studentArr = [];
+            var intPointsArr = [];
             for (x in graphData) {
                 if (graphData[x].Mail == this.getAttribute('st')) {
                     studentArr.push(graphData[x])
+                }
+            }
+            for (x in intGraphData) {
+                if (intGraphData[x].Mail == this.getAttribute('st')) {
+                    intPointsArr.push(intGraphData[x])
+                    localStorage["intStudentData"] = JSON.stringify(intPointsArr);
+                    break;
                 }
             }
             localStorage["studentData"] = JSON.stringify(studentArr);
@@ -935,13 +944,10 @@
                                 </select>
                             </li>
                             <li class="nav-item">
-                                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
-                                    הכיתות שלי
-                                </button>
-                                <div id="nav_cnt" class="dropdown-menu">
+                                <select class="btn btn-primary btnonSmall" id="nav_classes" onchange="openClass()">
+                                    <option >הכיתות שלי</option>
+                                </select>
 
-
-                                </div>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -1008,7 +1014,9 @@
                         <div id="mainGraph">
                             <div class="content">
                                 <div class="row" id="intlCharts" style="display:none">
-
+                                    <h3 style="text-align:center">
+                                        גרף זה לא מסונן
+                                    </h3>
                                     <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
 
                                 </div>
