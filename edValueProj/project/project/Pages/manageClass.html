@@ -5,6 +5,7 @@
     <title></title>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/manageClass.css" rel="stylesheet" />
+    <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script src="../Scripts/ajaxCalls.js"></script>
@@ -12,6 +13,18 @@
 
     <script type="text/javascript" charset="utf-8" src="https://rawgit.com/hebcal/hebcal-js/master/client/hebcal.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
@@ -35,7 +48,7 @@
         var userOBJ;
         var listdata;
         var chosenSt;
-        var taskList,sortedTaskList=[];
+        var taskList, sortedTaskList = [];
         var selectedTsakId;
         var taskData;
         var activeTteam;
@@ -54,21 +67,25 @@
         };
         var sortedGraphData;
 
-        $(document).ready(function () {
+        var myClasses;
 
+        $(document).ready(function () {
+            if (localStorage["myClasses"])
+                myClasses = JSON.parse(localStorage["myClasses"])
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
             if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
-
+            console.log(myClasses)
+            getClasses();
             $("#years>select").change(function () {
 
-                sortedTaskList=[]
+                sortedTaskList = []
                 val = $(this).children("option:selected").val();
                 for (x in taskList) {
-                    if (taskList[x].YearOfStudy.replace("``","")==val) {
+                    if (taskList[x].YearOfStudy.replace("``", "") == val) {
                         sortedTaskList.push(taskList[x]);
                     }
                 }
@@ -91,12 +108,12 @@
                 return false;
             });
             $('#mySelect').change().val('GradeCharts').trigger('change');
-                  
-           
-            
-             $("#toggleTask").click(function () {
+
+
+
+            $("#toggleTask").click(function () {
                 $("#taskName").slideToggle('2s');
-             });
+            });
             $(".capr").click(function () {
 
                 if ($('#IntelligenceCheckBox').is(':visible')) {
@@ -159,7 +176,7 @@
                 icon: "success",
             })
             console.log(data);
-          
+
             t = getTakById(selectedTsakId);
             t.ForDate = $("#class_date>input[type='datetime-local']").val();
             t.OpenTill = $("#submition_date>input[type='datetime-local']").val()
@@ -170,7 +187,7 @@
         function printSortedTaskList() {
             var str = "";
             for (t in sortedTaskList) {
-                str+=createTaskDiv(sortedTaskList[t]);
+                str += createTaskDiv(sortedTaskList[t]);
             }
             $("#tasks").html(str);
             connectTaskList();
@@ -205,7 +222,31 @@
             }
 
         }
+        function getClasses() {
 
+            for (c in myClasses) {
+
+                if (myClasses[c].Grade != 10) {
+
+                    str = `<p id="${c}" onclick="openClass(this.id)">${myClasses[c].Name}</p>`
+                    $("#nav_cnt").append(str);
+
+                } else {
+
+                    str = `<p class='PastC' id="${c}" onclick="openClass(this.id)">${myClasses[c].Name}</p>`
+                    $("#nav_cnt").append(str);
+
+                }
+            }
+        }
+        function openClass(val) {
+
+            myclass = myClasses[val];
+            localStorage["Teacher_inClass"] = JSON.stringify(myclass);
+
+            location.assign("myClass.html");
+
+        }
         function getGraphTeamDataSuccess(data) {
             console.log(data);
             graphData = data;
@@ -259,8 +300,8 @@
         }
         function sortGraphData(arrName, val) {
 
-            $("#info input[type='checkbox']").attr('disabled','disabled')
-            setTimeout(function(){ $("#info input[type=checkbox]").attr('disabled',false); }, 1100);
+            $("#info input[type='checkbox']").attr('disabled', 'disabled')
+            setTimeout(function () { $("#info input[type=checkbox]").attr('disabled', false); }, 1100);
             sortedGraphData = [];
             var valID = val.parentNode.id;
             var isChecked = $(val).prop("checked");
@@ -509,12 +550,12 @@
                     if (myTeams[a].Grade != 10)
                         cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`;
                     else {
-                         cstr += `<option class='PastC' value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                        cstr += `<option class='PastC' value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
                     }
                 }
-                   
 
-                
+
+
 
 
             }
@@ -586,25 +627,25 @@
             }
             $("#tasks").html(cstrA);
             for (y in years) {
-                $("#years>select").append(`<option value="${y.replace("``","")}">${y}</optin>`);
+                $("#years>select").append(`<option value="${y.replace("``", "")}">${y}</optin>`);
             }
 
-             $('#years>select>option[value='+ yearOfStudy.replace("``","")+']').attr('selected',true);
+            $('#years>select>option[value=' + yearOfStudy.replace("``", "") + ']').attr('selected', true);
             connectTaskList();
-            
+
         }
 
         function connectTaskList() {
             $(".fr").click(function () {
-              
+
                 ShowSubmitted(this.parentNode.id);
             });
             $(".tr .notification").click(function () {
-            
+
                 ShowSubmitted(this.parentNode.parentNode.id);
             });
             $(".sr span").click(function () {
-              ShowSubmitted(this.parentNode.parentNode.parentNode.id);
+                ShowSubmitted(this.parentNode.parentNode.parentNode.id);
             });
             $(".sr ion-icon").click(function () {
                 $("#assigmentForm").slideToggle('2s');
@@ -635,26 +676,26 @@
 
         function createTaskDiv(task) {
 
-                     
+
             const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
             const timeForDate = { hour: 'numeric', minute: 'numeric' };
             const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
             cstr += `<div class="col-sm-6 col-md-4 col-12" id="${task.taskId}">
-                         <div class="fr">
-                             <div class="name">
-                                <p>${task.Title}</p>
-                              </div>
-                            <div class="time">
-                               <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                             <div class="fr">
+                                 <div class="name">
+                                    <p>${task.Title}</p>
+                                  </div>
+                                <div class="time">
+                                   <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                 </div>
                              </div>
-                         </div>
 
-                           <div class="sr">
+                               <div class="sr">
 
-                            <div class="c_time">
-                               <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                <span>`
+                                <div class="c_time">
+                                   <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                    <span>`
             if (new Date(task.OpenTill) > new Date() && new Date(task.ForDate) < new Date())
 
                 cstr += ` <ion-icon id="green" name="play"></ion-icon>`
@@ -665,18 +706,18 @@
             cstr += `</span>`
 
             cstr += `</div>
-                                    </div>
-                                     <div class="tr">
-                                       <div class="notification">
-                                           <p>${task.numWaiting}</p >
-                                       </div>
-                                      <div class="cancel">
-                                         <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                        </div>
+                                         <div class="tr">
+                                           <div class="notification">
+                                               <p>${task.numWaiting}</p >
+                                           </div>
+                                          <div class="cancel">
+                                             <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                          </div>
                                       </div>
-                                  </div>
 
 
-                             </div>`
+                                 </div>`
 
             return cstr;
         }
@@ -696,15 +737,15 @@
 
         function deleteAssigmentSuccess(data) {
             console.log(data);
-            for (x in taskList){
+            for (x in taskList) {
                 if (taskList[x].taskId == selectedTsakId) {
-                    taskList.splice(x,1);
+                    taskList.splice(x, 1);
                     break;
                 }
             }
 
             $("#years>select").trigger('change');
-            
+
         }
         function deleteAssigmentError(err) {
             console.log(err);
@@ -856,19 +897,25 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav navPadding">
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
                             </li>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
                             </li>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
                                     <option team_Id="">בחר קבוצה</option>
                                 </select>
                             </li>
-                            <li class="nav-item active">
-                                <button class="btn btn-primary btnonSmall" onclick="">הכיתה שלי</button>
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
+                                    הכיתות שלי
+                                </button>
+                                <div id="nav_cnt" class="dropdown-menu">
+
+
+                                </div>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -880,21 +927,9 @@
                                     <option value="CloseAll">לסגור הכל</option>
                                 </select>
                             </li>
-                            <!--<li class="nav-item dropdown">
-                <select class="btn btn-primary btnonSmall" id="Smenue">
-                    <option value="" disabled selected hidden>סנן לפי כיתה</option>
-                    <option href="#statistics" value="statistics">סטטיסטיקה</option>
-                    <option href="#kidsList" value="kidsList">רשימת תלמידים</option>
-                    <option href="#quiz" value="quiz">משימות</option>
-                </select>
-            </li>-->
-
                         </ul>
 
                     </div>
-
-
-
 
                     <div id="user_manage">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -904,8 +939,6 @@
                             <p id="cp" onclick="displayCP()">שנה סיסמא</p>
                         </div>
                     </div>
-
-
                 </nav>
 
 
