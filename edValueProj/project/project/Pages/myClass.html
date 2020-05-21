@@ -74,6 +74,7 @@
             UpdateTaskDoughnut();
             GradesAvgChart()
             PercentageChart();
+            ChartIntl();
         }
 
         function sortDivs() {
@@ -252,12 +253,14 @@
             var TaskCharts = document.getElementById("TaskCharts");
             var GradeCharts = document.getElementById("GradeCharts");
             var PercentageCharts = document.getElementById("PercentageCharts")
+            var intlCharts = document.getElementById("intlCharts");
             if (x == "AverageCharts") {
 
                 AverageCharts.style.display = "block";
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
             else if (x == "TaskCharts") {
 
@@ -265,6 +268,7 @@
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
             else if (x == "GradeCharts") {
 
@@ -272,7 +276,7 @@
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
                 PercentageCharts.style.display = "none";
-
+                intlCharts.style.display = "none";
             }
             else if (x == "PercentageCharts") {
 
@@ -280,7 +284,14 @@
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "block";
-
+                intlCharts.style.display = "none";
+            }
+            else if (x == "intlCharts") {
+                AverageCharts.style.display = "none";
+                TaskCharts.style.display = "none";
+                GradeCharts.style.display = "none";
+                PercentageCharts.style.display = "none";
+                intlCharts.style.display = "block";
             }
             else {
 
@@ -288,6 +299,7 @@
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
 
         }
@@ -338,6 +350,7 @@
                         <option value="TaskCharts">גרף הגשות</option>
                         <option value="GradeCharts">גרף ממוצעי ציונים</option>
                         <option value="PercentageCharts">אחוזי אינטלגנציות</option>
+                        <option value="intlCharts">ניקוד אינטליגנציות</option>
                         <option value="CloseAll">לסגור הכל</option>
                     </select>
                 </div>
@@ -378,6 +391,13 @@
 
                     </div>
                     <div class="content">
+                        <div class="row" id="intlCharts" style="display:none">
+                            <h3 style="text-align:center">
+                                גרף זה לא מסונן
+                            </h3>
+                            <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
+
+                        </div>
                         <div class="row" id="AverageCharts" style="display:none">
                             <div class="wrapper col-12"><canvas id="AverageChart"></canvas></div>
 
