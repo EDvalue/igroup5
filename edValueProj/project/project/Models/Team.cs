@@ -167,5 +167,11 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.graphDataTeam(teamId);
         }
+
+        public List<Dictionary<string, string>> intTeamGraph(string teamId)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.intTeamGraph(teamId);
+        }
     }
 }

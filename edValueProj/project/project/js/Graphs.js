@@ -15,21 +15,22 @@ var options = {
 
                 fontColor: 'black',
                 fontSize: 25
-            },
+            }
         }],
         xAxes: [{
             ticks: {
                 fontColor: 'black',
                 fontSize: 25
-            },
-        }],
+            }
+        }]
 
-    },
+    }
 
 };
 
 var gradesAvgChart;
 var IntPercentageChart;
+var multiBar;
 var chart4;
 
 
@@ -164,7 +165,7 @@ function PercentageChart() {
                     data: IntData,
                     backgroundColor: ['rgba(0, 123, 255, 0.78)', 'rgba(102, 16, 242, 0.78)', 'rgba(32, 201, 151, 0.78)', 'rgba(220, 53, 69, 0.78)', 'rgba(40, 167, 69, 0.78)', 'rgba(23, 162, 184, 0.78)', 'rgba(253, 126, 20, 0.78)'],
                     borderColor: ['#007bff', '#6610f2', '#20c997', '#dc3545', '#28a745', '#17a2b8', '#fd7e14'],
-                    borderWidth: 3,
+                    borderWidth: 3
                   
                 }
             ]
@@ -180,9 +181,10 @@ function PercentageChart() {
     IntPercentageChart.update();
 }
 
+
 function ChartFour() {
 
-    var ctx = document.getElementById('chart4').getContext('2d');
+    var ctx = document.getElementById('intlChart').getContext('2d');
 
     chart4 = new Chart(ctx, {
         type: 'bar',
@@ -195,7 +197,7 @@ function ChartFour() {
                     backgroundColor: 'rgba(200, 150, 132, 1)',
                     borderColor: 'rgba(200, 150, 132, 2)',
                     borderWidth: 1
-                },
+                }
             ]
         },
         options: options,
@@ -207,6 +209,28 @@ function ChartFour() {
     });
     chart4.update();
 }
+      
+
+function chartIntl(data) {
+
+    var ctx = document.getElementById('').getContext('2d');
+
+    multiBar = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            
+        },
+        options: options,
+
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+    });
+ 
+}
+
+
 
 function UpdateTaskDoughnut() {
     var egish = 0;

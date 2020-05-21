@@ -215,5 +215,13 @@ namespace project.Controllers
             return rt.deleteAssigment(info);
         }
 
+
+        [HttpGet]
+        [Route("api/Teacher/intTeamGraph/{teamId}")]
+        public List<Dictionary<string, string>> intTeamGraph(string teamId)
+        {
+            Team t = new Team();
+            return t.intTeamGraph(teamId);
+        }
     }
 }

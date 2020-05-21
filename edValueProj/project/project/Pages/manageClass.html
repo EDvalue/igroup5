@@ -71,14 +71,14 @@
 
         $(document).ready(function () {
             if (localStorage["myClasses"])
-                myClasses = JSON.parse(localStorage["myClasses"])
+                 myClasses = JSON.parse(localStorage["myClasses"])
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
             if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
-            console.log(myClasses)
+           
             getClasses();
             $("#years>select").change(function () {
 
@@ -239,28 +239,44 @@
                 }
             }
         }
+
         function openClass(val) {
 
             myclass = myClasses[val];
             localStorage["Teacher_inClass"] = JSON.stringify(myclass);
-
             location.assign("myClass.html");
 
         }
+
         function getGraphTeamDataSuccess(data) {
             console.log(data);
             graphData = data;
             sortedGraphData = data;
 
+            ajaxCall("GET","../api/Teacher/intTeamGraph/"+activeTteam.Id,"",intTeamGraphSuccess,intTeamGraphError)
+
+        }
+
+        function getGraphTeamDataError(err) {
+            console.log(err);
+        }
+
+        function intTeamGraphError(err) {
+
+        }
+
+        function intTeamGraphSuccess(data) {
+            console.log(data);
+
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
             PercentageChart();
+            x=1
+            ChartFour();
         }
 
-        function getGraphTeamDataError(err) {
-            cinsole.log(err);
-        }
+      
 
         function sortDivs() {
             var obj = {};
@@ -924,6 +940,7 @@
                                     <option value="TaskCharts">גרף הגשות</option>
                                     <option value="GradeCharts">גרף ממוצעי ציונים</option>
                                     <option value="PercentageCharts">אחוזי אינטלגנציות</option>
+                                    <option value="intlCharts">ניקוד אינטליגנציות</option>
                                     <option value="CloseAll">לסגור הכל</option>
                                 </select>
                             </li>
@@ -980,6 +997,11 @@
                         </div>
                         <div id="mainGraph">
                             <div class="content">
+                                <div class="row" id="intlCharts" style="display:none">
+
+                                    <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
+
+                                </div>
                                 <div class="row" id="TaskCharts" style="display:none">
 
                                     <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
