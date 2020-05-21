@@ -806,32 +806,42 @@
             var x = document.getElementById("mySelect").value;
             var TaskCharts = document.getElementById("TaskCharts");
             var GradeCharts = document.getElementById("GradeCharts");
-            var PercentageCharts = document.getElementById("PercentageCharts")
-
+            var PercentageCharts = document.getElementById("PercentageCharts");
+            var intlCharts = document.getElementById("intlCharts");
             if (x == "TaskCharts") {
                 document.getElementById("info").style.display = "block"
                 TaskCharts.style.display = "block";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
             else if (x == "GradeCharts") {
                 document.getElementById("info").style.display = "block"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "block";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
             else if (x == "PercentageCharts") {
                 document.getElementById("info").style.display = "block"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "block";
-
+                intlCharts.style.display = "none";
+            }
+            else if (x == "intlCharts") {
+                document.getElementById("info").style.display = "block"
+                TaskCharts.style.display = "none";
+                GradeCharts.style.display = "none";
+                PercentageCharts.style.display = "none";
+                intlCharts.style.display = "block";
             }
             else {
                 document.getElementById("info").style.display = "none"
                 TaskCharts.style.display = "none";
                 GradeCharts.style.display = "none";
                 PercentageCharts.style.display = "none";
+                intlCharts.style.display = "none";
             }
 
         }
