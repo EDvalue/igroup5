@@ -38,7 +38,7 @@
              $("#TList").focusout(validate)
 
             userOBJ = JSON.parse(localStorage["user"]);
-            //localStorage.removeItem("user");
+             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
 
             $("#myUserForm").submit(function (e) {
                 createUpdateUser();
@@ -596,7 +596,7 @@
         }
 
         function getSchoolNameSuccess(data) {
-            $("#SCname>h4").html(data);
+            $("#SCname>h6").html(data);
         }
 
         function getSchoolNameError(err) {
@@ -759,46 +759,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
                 <ul class="navbar-nav navPadding">
                     <li class="nav-item">
-                        <button onclick="addSchool()" class="btn btn-primary btnonSmall">הוסף בית ספר</button>
+                        
+                            <button onclick="newClass()" class="btn btn-primary ">הוסף כיתה</button>
+                        
                     </li>
                     <li class="nav-item">
                         <button onclick="addUser()" class="btn btn-primary btnonSmall">
-                            <!--<ion-icon name="person-add-outline"></ion-icon>-->פתח משתמש
+                            <ion-icon name="person-add-outline"></ion-icon>פתח משתמש
                         </button>
                     </li>
 
 
                 </ul>
             </div>
-            <form class="form-inline" style="flex-flow:initial">
-                <input class="form-control mr-sm-2" type="search" placeholder="חיפוש תלמיד/מורה" aria-label="Search">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">חיפוש</button>
-            </form>
-            <div id="user_manage">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                </button>
-                <div id="nav_cnt" class="dropdown-menu">
-                    <p id="disconnect" onclick="disconnect()">התנתק</p>
-                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
-                </div>
-            </div>
-        </nav>
-        <div id="sNav">
-
-            <div id="createClass">
-                <button onclick="newClass()" class="btn btn-primary ">הוסף כיתה</button>
-            </div>
-
-            <div id="createUser">
-                <button onclick="addUser()" class="btn btn-primary ">
-                    <ion-icon name="person-add-outline"></ion-icon>פתח משתמש
-                </button>
-            </div>
-
             <div id="SCname">
-                <h4></h4>
+                <h6></h6>
             </div>
-
             <div id="search">
 
 
@@ -816,7 +792,17 @@
 
 
             </div>
-        </div>
+
+            <div id="user_manage">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="disconnect" onclick="disconnect()">התנתק</p>
+                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                </div>
+            </div>
+        </nav>
+   
 
         <div id="School_Classes">
 

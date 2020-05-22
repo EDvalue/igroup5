@@ -9,6 +9,15 @@
     width: max-content;
 }
 
+.navBar {
+    background-color: #007bff !important;
+ 
+}
+
+li{
+    text-align:right;
+}
+
 
 #createUser > button {
     align-items: center;
@@ -139,13 +148,18 @@ datalist{
 .searchbar {
     
     height: 36px;
-    background-color: #353b48;
+    background-color: #fff;
     border-radius: 30px;
     padding: 10px;
 }
 
+div#user_manage{
+
+    margin-right:5%;
+}
+
 .search_input {
-    color: white;
+    color: #000;
     border: 0;
     outline: 0;
     background: none;

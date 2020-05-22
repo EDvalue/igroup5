@@ -7,10 +7,15 @@ html {
     height: 100%;
 }
 
+
+li {
+    text-align: right;
+    
+}
+
 #SCname {
     color: white;
-    margin:auto auto;
-
+    margin-right: 25%;
 }
 #sNav button:hover{
 
@@ -158,13 +163,13 @@ datalist {
 .searchbar {
     
     height: 36px;
-    background-color: #353b48;
+    background-color: #fff;
     border-radius: 30px;
     padding: 10px;
 }
 
 .search_input {
-    color: white;
+    color: #000;
     border: 0;
     outline: 0;
     background: none;
@@ -176,7 +181,7 @@ datalist {
 .searchbar:hover > .search_input {
     padding: 0 10px;
     margin-left: 3%;
-    width: 200px;
+    width: 175px;
     transition: width 0.4s linear;
 }
 .search_icon{
@@ -199,39 +204,6 @@ datalist {
     color: white;
     text-decoration: none;
 }
-/*.searchbar {
-    margin-bottom: 12%;
-    height: 36px;
-    background-color: #353b48;
-    border-radius: 30px;
-    padding: 10px;
-}
-
-.search_input {
-    color: black;
-    border: 0;
-    outline: 0;
-    background: none;
-    width: 250px;
-    line-height: 20px;
-}
-
-.searchbar > .search_input {
-    padding: 0 10px;
-    margin-left: 3%;
-    transition: width 0.4s linear;
-}
-
-
-.searchbar > .search_icon {
-    background: white;
-    color: #e74c3c;
-}
-
-place {
-    color: red;
-    opacity: 1; /* Firefox */
-/*}*/
 
 .search_icon {
     height: 20px;
@@ -244,7 +216,7 @@ place {
     border-radius: 50%;
     color: white;
     text-decoration: none;
-}*/
+}
 
 /*------------------------------*/
 #search {
@@ -402,4 +374,26 @@ place {
 
 .navPadding {
     padding: 0;
+}
+@media only screen and (max-width: 785px) {
+    #search {
+        z-index: 4;
+    }
+
+ 
+}
+
+@media only screen and (max-width: 560px) {
+
+   #search{
+       width:17%;
+   }
+}
+
+
+@media only screen and (max-width: 530px) {
+  
+    #SCname{
+        margin-right:3%;
+    }
 }
