@@ -595,12 +595,21 @@
             console.log(err)
         }
 
+        function getSchoolNameSuccess(data) {
+            $("#SCname>h4").html(data);
+        }
+
+        function getSchoolNameError(err) {
+
+        }
         function bringSClasses() {
             
             sc = userOBJ.SCode;
-            apiLink = "../api/Admin/getClassBySchool/" + sc;
+            apiLink1 = "../api/Admin/getClassBySchool/" + sc;
+            apiLink2 = "../api/Admin/getSchoolName/" + sc;
 
-            ajaxCall("GET", apiLink, "", getClassBySchoolSuccess, getClassBySchoolError);
+            ajaxCall("GET", apiLink1, "", getClassBySchoolSuccess, getClassBySchoolError);
+            ajaxCall("GET", apiLink2, "", getSchoolNameSuccess, getSchoolNameError);
         }
 
         //---------------------------------------------------------------------//
@@ -753,6 +762,10 @@
                         <ion-icon name="person-add-outline"></ion-icon>פתח משתמש
                     </button>
                 </div>
+
+            <div id="SCname">
+                <h4></h4>
+            </div>
             
             <div id="search">
 

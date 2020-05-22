@@ -47,6 +47,12 @@ namespace project.Models
             return dbs.getClassBySchool(code);
         }
 
+        public string getSchoolName(int code)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getSchoolName(code);
+        }
+
         public int postNewClass()
         {
             DBservices dbs = new DBservices();

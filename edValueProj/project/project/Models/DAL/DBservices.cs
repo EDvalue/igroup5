@@ -1505,6 +1505,49 @@ namespace project.Models
             return list;
         }
 
+        public string getSchoolName(int code)
+        {
+            SqlConnection con = null;
+            string name="";
+
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+
+                String selectSTR = "select Name from School where SchoolCode="+code;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    name = dr["Name"].ToString();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return name;
+        }
+
         //------------------------------------------------------------------//
 
         //------------------------teacherBySchool--------------------------------//

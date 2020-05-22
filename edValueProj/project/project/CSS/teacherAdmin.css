@@ -6,6 +6,12 @@ html {
   
     height: 100%;
 }
+
+#SCname {
+    color: white;
+    margin:auto auto;
+
+}
 #sNav button:hover{
 
     border-bottom:2px solid white;
@@ -47,7 +53,9 @@ html {
 
 
 #search{
-    margin:auto auto auto 0;
+   display:flex;
+   width:20%;
+   align-content:end;
     
 }
 

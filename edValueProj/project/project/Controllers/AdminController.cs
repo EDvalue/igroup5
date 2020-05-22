@@ -55,6 +55,15 @@ namespace project.Controllers
             return c.getClassBySchool(code);
         }
 
+        [HttpGet]
+        [Route("api/Admin/getSchoolName/{code}")]
+
+        public string getSchoolName(int code)
+        {
+            Classroom c = new Classroom();
+            return c.getSchoolName(code);
+        }
+
         [HttpPost]
         [Route("api/Admin/postSchool")]
 
