@@ -372,7 +372,7 @@
                 </button>
 
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
                     <ul class="navbar-nav navPadding">
                         <li class="nav-item active">
                             <div id="open_signIn">
@@ -380,17 +380,17 @@
                             </div>
                         </li>
                     </ul>
-                  
-                    <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                        <option value="" disabled selected hidden>בחר גרף</option>
-                        <option value="TaskCharts">גרף הגשות</option>
-                        <option value="GradeCharts">גרף ממוצעי ציונים</option>
-                        <option value="PercentageCharts">אחוזי אינטלגנציות</option>
-                        <option value="intlCharts">ניקוד אינטליגנציות</option>
-                        <option value="CloseAll">לסגור הכל</option>
-                    </select>
+
                 </div>
 
+                <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                    <option value="" disabled selected hidden>בחר גרף</option>
+                    <option value="TaskCharts">גרף הגשות</option>
+                    <option value="GradeCharts">גרף ממוצעי ציונים</option>
+                    <option value="PercentageCharts">אחוזי אינטלגנציות</option>
+                    <option value="intlCharts">ניקוד אינטליגנציות</option>
+                    <option value="CloseAll">לסגור הכל</option>
+                </select>
 
                 <div id="user_manage">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">

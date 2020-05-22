@@ -57,13 +57,13 @@
 
                 if (data[c].Grade != 10) {
 
-                    str = `<p id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
-                    $("#nav_cnt").append(str);
+                    str = `<option value="${c}">${data[c].Name}</option>`
+                    $("#nav_classes").append(str);
 
                 } else {
 
-                    str = `<p class='PastC' id="${c}" onclick="openClass(this.id)">${data[c].Name}</p>`
-                    $("#nav_cnt").append(str);
+                    str = `<option class='PastC' value="${c}">${data[c].Name}</option>`
+                    $("#nav_classes").append(str);
 
                 }
 
@@ -167,11 +167,11 @@
                 }
             }
         }
-        function openClass(val) {
+        function openClass() {
 
-            myclass = myClasses[val];
+            x = $("#nav_classes").children("option:selected")
+            myclass = myClasses[$(x).attr("value")];
             localStorage["Teacher_inClass"] = JSON.stringify(myclass);
-
             location.assign("myClass.html");
 
         }
@@ -234,31 +234,31 @@
             </div>
 
         </div>
-        <div id="Tcontroll">
-            <div id="TControlBtns">
-                <button id="newClassBTN" class="btn btn-primary " onclick="CnewTeam()">צור קבוצה חדשה</button>
+        <nav class="navbar navbar-expand-lg navbar-light navBar">
 
-                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">
-                    הכיתות שלי
-                </button>
-                <div id="nav_cnt" class="dropdown-menu">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
+                <ul class="navbar-nav navPadding">
+                    <li class="nav-item">
+                        <button id="newClassBTN" class="btn btn-primary btnonSmall" onclick="CnewTeam()">צור קבוצה חדשה</button>
+                    </li>
+                    <li class="nav-item">
+                        <select class="btn btn-primary btnonSmall" id="nav_classes" onchange="openClass()">
+                            <option>הכיתות שלי</option>
+                        </select>
+                    </li>
+                    <li class="nav-item">
+                        <button id="EditorBTN" class="btn btn-primary btnonSmall" onclick="f1()">צור/ערוך משימה</button>
+                    </li>
+                    <li class="nav-item">
+                        <button disable id="saBTN" class="btn btn-primary btnonSmall" onclick="openTApage()">ניהול מערכת</button>
+                    </li>
 
-                </div>
-
-                <button id="EditorBTN" class="btn btn-primary " onclick="f1()">צור/ערוך משימה</button>
-
-                <button disable id="saBTN" class="btn btn-primary " onclick="openTApage()">ניהול מערכת</button>
+                </ul>
             </div>
-
-            <!--<div class="searchDiv">
-                <div class="d-flex justify-content-center ">
-                    <div class="searchbar">
-                        <input class="search_input" type="text" name="" placeholder="חיפוש תלמיד">
-                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
-                    </div>
-                </div>
-            </div>-->
             <div id="user_manage">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 </button>
@@ -267,32 +267,33 @@
                     <p id="cp" onclick="displayCP()">שנה סיסמא</p>
                 </div>
             </div>
-        </div>
+        </nav>
+           
 
-        <div id="choose" class="row">
-            <p>בחר קבוצה מתאימה</p>
+                <div id="choose" class="row">
+                    <p>בחר קבוצה מתאימה</p>
 
-            <div id="selector">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    סנן קבוצות
-                </button>
-                <div id="nav_cnt" class="dropdown-menu">
-                    <p id="ac" onclick="showme(this.id)">קבוצות פעילות</p>
-                    <p id="pa" onclick="showme(this.id)">קבוצות עבר</p>
-                    <p id="al" onclick="showme(this.id)">כל הקבוצות</p>
+                    <div id="selector">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            סנן קבוצות
+                        </button>
+                        <div id="nav_cnt" class="dropdown-menu">
+                            <p id="ac" onclick="showme(this.id)">קבוצות פעילות</p>
+                            <p id="pa" onclick="showme(this.id)">קבוצות עבר</p>
+                            <p id="al" onclick="showme(this.id)">כל הקבוצות</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="teams" class="row">
+
+
+
+
 
                 </div>
+
             </div>
-        </div>
-        <div id="teams" class="row">
-            
-
-
- 
-
-        </div>
-
-    </div>
 
 </body>
 </html>

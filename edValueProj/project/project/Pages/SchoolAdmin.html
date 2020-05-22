@@ -995,7 +995,7 @@
 
             <div id="title" class="col-lg-6">
                 <h3>ניהול בתי ספר/מורים/תלמידים</h3>
-                
+
             </div>
 
             <div id="mindcetImg" class="col-lg-3">
@@ -1004,6 +1004,39 @@
 
 
         </div>
+        <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
+                <ul class="navbar-nav navPadding">
+                    <li class="nav-item">
+                        <button onclick="addSchool()" class="btn btn-primary btnonSmall">הוסף בית ספר</button>
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="addUser()" class="btn btn-primary btnonSmall">
+                            <!--<ion-icon name="person-add-outline"></ion-icon>-->פתח משתמש
+                        </button>
+                    </li>
+
+
+                </ul>
+            </div>
+            <form class="form-inline" style="flex-flow:initial">
+                <input class="form-control mr-sm-2" type="search" placeholder="חיפוש תלמיד/מורה" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">חיפוש</button>
+            </form>
+            <div id="user_manage">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </button>
+                <div id="nav_cnt" class="dropdown-menu">
+                    <p id="disconnect" onclick="disconnect()">התנתק</p>
+                    <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                </div>
+            </div>
+        </nav>
         <div id="sNav">
             <div id="createSchool">
                 <button onclick="addSchool()" class="btn btn-primary ">הוסף בית ספר</button>
