@@ -33,8 +33,15 @@
         var quizSubject;
         var teamOBJ;
         var myTeams;
+        var studentGraphData;
+        var intStudentData;
 
         function init() {
+
+            if (localStorage["studentData"])
+                studentGraphData = JSON.parse(localStorage['studentData']);
+            if (localStorage["intStudentData"])
+                intStudentData = JSON.parse(localStorage["intStudentData"]);
 
              if (localStorage['quizSubject'])
                 quizSubject = localStorage['quizSubject'];
@@ -49,21 +56,25 @@
                 modeQuiz = localStorage['quiz_mode'];
 
             if (localStorage["active_student_team"])
-                activeStTeam = JSON.parse(localStorage["active_student_team"])
-               if(localStorage["active_student_team"])
-                    teamOBJ = JSON.parse(localStorage["active_student_team"]);
-                if(localStorage["active_teacher_team"])
-                   teamOBJ = JSON.parse(localStorage["active_teacher_team"]);
+                activeStTeam = JSON.parse(localStorage["active_student_team"]);
+
+            if(localStorage["active_student_team"])
+              teamOBJ = JSON.parse(localStorage["active_student_team"]);
+
+            if(localStorage["active_teacher_team"])
+                teamOBJ = JSON.parse(localStorage["active_teacher_team"]);
 
             if (localStorage["active_teacher_team"])
                 activeTteam = JSON.parse(localStorage["active_teacher_team"]);
 
             if (localStorage["performers"])
-                performers = JSON.parse(localStorage["performers"])
+                performers = JSON.parse(localStorage["performers"]);
+
             if (localStorage["performer"])
                 performer = localStorage["performer"];
+
             if (localStorage["myTeams"])
-                myTeams = JSON.stringify(localStorage["myTeams"]);
+                myTeams = JSON.parse(localStorage["myTeams"]);
 
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
@@ -91,8 +102,9 @@
                  if(modeQuiz)
                     localStorage['quiz_mode'] = modeQuiz;
                 if (myTeams)
-                    localStorage["myTeams"] =myTeams;
-                      
+                    localStorage["myTeams"] = JSON.stringify(myTeams);
+                if (studentGraphData)
+                    localStorage["studentData"]=JSON.stringify(studentGraphData)
 
             });
 

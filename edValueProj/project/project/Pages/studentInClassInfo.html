@@ -45,7 +45,7 @@
 
     <script>
         var studentGraphData;
-
+        var performers;
         var userOBJ;
         var graphData;
         var graphObject = {
@@ -72,6 +72,9 @@
                 userOBJ = JSON.parse(localStorage["user"])
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
+
+               if (localStorage["performers"])
+                performers =JSON.parse(localStorage["performers"]);
 
             if (localStorage["performer"])
                 performer = localStorage["performer"];
@@ -100,7 +103,7 @@
 
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
-            $("#stName").append(studentGraphData[0].Fname+" "+studentGraphData[0].Lname)
+            $("#title>h3").html(studentGraphData[0].Fname+" "+studentGraphData[0].Lname)
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
@@ -276,7 +279,8 @@
 
         //-----------------יצירת דאטה טייבל----------------------------
         function bringStTasks() {
-
+            if(performers)
+            performer = performers[0].Mail;
             info = {
                 Mail: performer,
                 TeamId: activeTteam.Id,
@@ -288,6 +292,7 @@
         function getStTasksInTeamSuccess(data) {
             console.log(data);
             taskData = data;
+          
 
             try {
                 tbl = $('#sp_table').DataTable({

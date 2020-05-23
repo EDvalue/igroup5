@@ -38,6 +38,7 @@
         var active_team; // active team
         var fb_quiz = ""; // save  questionnaire of fb
         var FeedBack; //obj feedback upload
+        var tbl//DataTable
 
         $(document).ready(function () {
           
@@ -390,6 +391,8 @@
         //pop divs close//
 
         function closeQuestionnaireADiv() {
+            $(".fb").hide();
+            $("input[type='button'][value='צפה בשאלון']").prop('disabled', 'disabled');
             $("#container * ").prop('disabled', false)
             $("#questionnaire_div").hide();
         }
@@ -402,6 +405,7 @@
         function closeAddFB() {
             
             $("#addFB").hide("1s")
+             $("#fb_text>textarea").val("")
             $("#insertStar").html("<ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon><ion-icon name='star'></ion-icon>")
             $("#grade_input input").html(3);
         }
@@ -417,17 +421,33 @@
         function postFBSuccess(data) {
             console.log(data);
             closeAddFB();
+            closeWfb();
+           
             swal("משוב נוסף בהצלחה")
             for (q in taskData) {
                 if (FeedBack.TaskId == taskData[q].TaskId) {
                     for (s in taskData[q].QuizList) {
-                        if (FeedBack.QuestionnaireId == taskData[q].QuizList[s].QuizID) {
+                        if (FeedBack.QuestionnaireId == taskData[q].QuizList[s].QuizID)
+                        {
+                            FeedBack.Score = parseInt(FeedBack.Score);
                             taskData[q].QuizList[s].FbList.push(FeedBack)
                             FeedBack = "";
                         }
                     }
                 }
             }
+
+            renderTable(tbl,taskData)
+        }
+
+          function renderTable(tbl, newData) {
+
+            tbl.clear();
+            for (var i = 0; i < newData.length; i++) {
+                tbl.row.add(newData[i]);
+            }
+            tbl.draw();
+
         }
 
         function postFBError(err) {
