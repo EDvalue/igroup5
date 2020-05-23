@@ -35,7 +35,8 @@
 
 
     <script>
-
+        var myTeams;
+        var myClasses;
         var userOBJ;
         var SignIn;
         var intGraphData;
@@ -97,6 +98,8 @@
                 ajaxCall("PUT", "../api/Teacher/changeClassName", JSON.stringify(classPage), changeClassNameSuccess, changeClassNameError)
                 
             })
+            createTList();
+            getClasses();
         });
 
         function changeClassNameSuccess(data) {
@@ -155,7 +158,69 @@
         function intlClassGraphError(err) {
             console.log(err);
         }
+        function openTeam() {
 
+            tId = $("#teamSelect").children("option:selected").attr("value");
+
+            for (team in myTeams) {
+                if (myTeams[team].Id == tId) {
+                    localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
+                    localStorage['quizSubject'] = myTeams[team].Subject.Name;
+
+                    location.assign("manageClass.html");
+
+
+                }
+            }
+        }
+        function createTList() {
+            myTeams = JSON.parse(localStorage["myTeams"]);
+            listdata = JSON.parse(localStorage["active_teacher_team"]);
+            console.log(myTeams)
+            var cstr = "";
+            for (a in myTeams) {
+
+                if (myTeams[a].Title != listdata.Title) {
+
+                    if (myTeams[a].Grade != 10)
+                        cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`;
+                    else {
+                        cstr += `<option class='PastC' value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
+                    }
+                }
+            }
+            $("#teamSelect").append(cstr);
+
+
+
+            console.log(cstr)
+            $("#tList").html(cstr);
+        }
+        function getClasses() {
+
+            for (c in myClasses) {
+
+                if (myClasses[c].Grade != 10) {
+
+                    str = `<option value="${c}">${myClasses[c].Name}</option>`
+                    $("#nav_classes").append(str);
+
+                } else {
+
+                    str = `<option class='PastC' value="${c}">${myClasses[c].Name}</option>`
+                    $("#nav_classes").append(str);
+
+                }
+            }
+        }
+
+        function openClass() {
+            x = $("#nav_classes").children("option:selected")
+            myclass = myClasses[$(x).attr("value")];
+            localStorage["Teacher_inClass"] = JSON.stringify(myclass);
+            location.assign("myClass.html");
+
+        }
         function sortDivs() {
             var intl = {};
             var taskName = {};
@@ -440,6 +505,19 @@
                                 <input type="button" class="btn btn-primary" onclick="confirmSignIn()" value="פתח רישום" />
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
+                                <option team_Id="">בחר קבוצה</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <select class="btn btn-primary btnonSmall" id="nav_classes" onchange="openClass()">
+                                <option>הכיתות שלי</option>
+                            </select>
+
+                        </li>
+
+
                     </ul>
 
                 </div>
