@@ -1944,5 +1944,57 @@ namespace project.Models.DAL
             return list;
 
         }
+
+        public int changeClassName(Classroom c)
+        {
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("Update [Class] SET [Title]='{0}' where [SchoolCode]={1} and [Grade]={2} and [GradeNumber]={3}",c.Name,c.InSchool,c.Grade,c.GradeNumber);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+            cmd = CreateCommand(cStr, con); // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+            return numEffected;
+
+        }
     }
 }

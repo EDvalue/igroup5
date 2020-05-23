@@ -2,14 +2,25 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <!--style sheets-->
     <link href="../CSS/manageClass.css" rel="stylesheet" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/myClass.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <!------------------------->
+    <!--JS outSource-->
     <script src="../js/js.js"></script>
-    <title></title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <!--Graphs-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
+    <script src="../js/Graphs.js"></script>
+    <!------------------------->
+    <title></title>
+
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -22,15 +33,13 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
-    <script src="../js/Graphs.js"></script>
+
     <script>
 
         var userOBJ;
         var SignIn;
         var intGraphData;
-         var intSortedGraphData;
+        var intSortedGraphData;
         var classPage;
         var graphData;
         var graphObject = {
@@ -39,6 +48,8 @@
             stArr: [],
             subj: [],
         };
+
+        var myClasses;
 
         var sortTags = {
             taskArr: [],
@@ -49,6 +60,7 @@
         var sortedGraphData;
 
         $(document).ready(function () {
+            $("#changeName").toggle();
             if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
@@ -57,7 +69,10 @@
             if (localStorage["Teacher_inClass"])
                 classPage = JSON.parse(localStorage["Teacher_inClass"]);
 
-            $("#title h3").html(classPage.Name)
+            if (localStorage["myClasses"])
+                myClasses=JSON.parse(localStorage["myClasses"])
+
+            $("#title h3").html(classPage.Name + "<ion-icon name='pencil-outline'></ion-icon>")
             info = {
                 GradeClass: classPage.Grade,
                 ClassNumber: classPage.GradeNumber,
@@ -66,7 +81,48 @@
 
             ajaxCall("PUT", '../api/Teacher/getGraphClassData', JSON.stringify(info), getGraphClassDataSuccess, getGraphClassDataError)
             $('#mySelect').change().val('TaskCharts').trigger('change');
+
+            $("#title ion-icon").click(function () {
+
+                $("#changeName").toggle();
+                $("#changeName input[type='text']").val(classPage.Name);
+               
+
+            });
+
+            $("#title input[type='button']").click(function () {
+
+                classPage.Name=$("#changeName input[type='text']").val().replace("'","`");
+
+                ajaxCall("PUT", "../api/Teacher/changeClassName", JSON.stringify(classPage), changeClassNameSuccess, changeClassNameError)
+                
+            })
         });
+
+        function changeClassNameSuccess(data) {
+            console.log(data);
+            $("#changeName").toggle();
+            updatemyClasses(classPage);
+            localStorage["myClasses"] = JSON.stringify(myClasses);
+            localStorage["Teacher_inClass"] =JSON.stringify(classPage);
+            $("#changeName input[type='text']").val(classPage.Name)
+            $("#title h3").html(classPage.Name)
+        }
+
+        function updatemyClasses(obj){
+            for (c in myClasses) {
+                if (myClasses[c].Grade == obj.Grade && myClasses[c].GradeNumber == obj.GradeNumber
+                    && myClasses[c].InSchool == obj.InSchool) {
+
+                    myClasses[c].Name = classPage.Name;
+                    break;
+                }
+            }
+        }
+
+        function changeClassNameError(err) {
+            console.log(err);
+        }
 
         function getGraphClassDataSuccess(data) {
             console.log(data);
@@ -78,9 +134,9 @@
                 ClassNumber: classPage.GradeNumber,
                 SchoolCode: classPage.InSchool,
             }
-             ajaxCall("PUT", '../api/Teacher/intlClassGraph', JSON.stringify(info), intlClassGraphSuccess, intlClassGraphError)
-            
-      
+            ajaxCall("PUT", '../api/Teacher/intlClassGraph', JSON.stringify(info), intlClassGraphSuccess, intlClassGraphError)
+
+
         }
 
         function intlClassGraphSuccess(data) {
@@ -170,8 +226,8 @@
         }
 
         function sortGraphData(arrName, val) {
-               $("#statistics input[type='checkbox']").attr('disabled','disabled')
-            setTimeout(function(){ $("#statistics input[type=checkbox]").attr('disabled',false); }, 1100);
+            $("#statistics input[type='checkbox']").attr('disabled', 'disabled')
+            setTimeout(function () { $("#statistics input[type=checkbox]").attr('disabled', false); }, 1100);
             sortedGraphData = [];
             intSortedGraphData = [];
             var valID = val.parentNode.id;
@@ -179,7 +235,7 @@
 
             if (isChecked) {
                 sortTags[arrName].push(valID);
-                
+
             }
             else {
                 if (sortTags[arrName].indexOf(valID) != -1) {
@@ -218,8 +274,8 @@
                 task.data.datasets = sortedGraphData
                 gradesAvgChart.data.datasets = sortedGraphData
                 IntPercentageChart.data.datasets = sortedGraphData
-               intlMultiBar.data.datasets[0] = intSortedGraphData;
-               intlMultiBar.data.datasets[1] = intSortedGraphData;
+                intlMultiBar.data.datasets[0] = intSortedGraphData;
+                intlMultiBar.data.datasets[1] = intSortedGraphData;
                 UpdateTaskDoughnut()
                 GradesAvgChart()
                 PercentageChart()
@@ -354,7 +410,12 @@
                 </div>
 
                 <div id="title" class="col-lg-6">
-                    <h3>שם הקבוצה...</h3>
+                    <div id="changeName" >
+                        <input type="text" />
+                        <input type="button" value="עדכן" class="btn btn-info" />
+                    </div>
+                  
+                    <h3>שם הכיתה...</h3>
 
                 </div>
 

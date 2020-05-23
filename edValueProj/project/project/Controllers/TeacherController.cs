@@ -232,5 +232,13 @@ namespace project.Controllers
             return c.intlClassGraph(info);
         }
 
+        [HttpPut]
+        [Route("api/Teacher/changeClassName")]
+        public int changeClassName([FromBody] Classroom c)
+        {
+           
+            return c.changeClassName();
+        }
+
     }
 }

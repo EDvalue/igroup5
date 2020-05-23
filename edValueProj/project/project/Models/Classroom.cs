@@ -82,6 +82,12 @@ namespace project.Models
             TeacherDBservices dbs = new TeacherDBservices();
             return dbs.intlClassGraph(info);
         }
+
+        public int changeClassName()
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.changeClassName(this);
+        }
     }
 }
             
