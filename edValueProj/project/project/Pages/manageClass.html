@@ -486,6 +486,15 @@
                     columns: [
 
                         { data: "Mail" },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.isWaiting == 0)
+                                    return `<input type='checkbox' disabled   style='zoom:2'/>`;
+                                else
+                                    return `<input type='checkbox' disabled checked style='zoom:2'/>`;
+                            }
+                        },
                         { data: "IdNumber" },
                         { render: function (data, type, row, meta) { return `${row.Fname} ${row.Lname}` } },
 
@@ -878,6 +887,7 @@
                             <tr>
 
                                 <th>מייל תלמיד</th>
+                                <th>ממתין לבדיקה</th>
                                 <th>ת.ז</th>
                                 <th>שם מלא</th>
                                 <th>שאלון</th>

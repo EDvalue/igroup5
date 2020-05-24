@@ -1424,7 +1424,7 @@ namespace project.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 string select1 = "select rt.Date_Assignment,rt.ForDate,rt.OpenTill,rt.[YearOfStudy],t.title,pq.TaskId,pq.Ptime,";
-                string select2 = "u.Email,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,";
+                string select2 = "u.Email,u.IdNumber,u.Fname,u.Lname,pq.QuestionnaireId,pq.Ptime,pq.Grade,pq.Note,q.IntelligenceName,pq.isWaiting,";
                 string from = "i.[ImgLink],Case When q.QuestionnaireId is null Then 0 Else 1 END AS isperform ";
                 string select3 = "from(";
                 string from1 = "select*";
@@ -1453,6 +1453,8 @@ namespace project.Models.DAL
                     srt.Add("isperform", Convert.ToString(dr["isperform"]));
                     srt.Add("title", Convert.ToString(dr["title"]));
                     srt.Add("TaskId", Convert.ToString(dr["TaskId"]));
+                    srt.Add("isWaiting", Convert.ToInt32(dr["isWaiting"]).ToString());
+
                     if (dr["Grade"] != DBNull.Value)
                     {
                         srt.Add("Grade", Convert.ToString(dr["Grade"]));

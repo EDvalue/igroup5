@@ -197,8 +197,6 @@
             tbl.draw();
 
 
-
-
             closeDivAU();
         }
 
@@ -279,10 +277,9 @@
 
         //-----------------יצירת דאטה טייבל----------------------------
         function bringStTasks() {
-            if(performers)
-            performer = performers[0].Mail;
+           
             info = {
-                Mail: performer,
+                Mail: studentGraphData[0].Mail,
                 TeamId: activeTteam.Id,
             }
 
@@ -301,9 +298,16 @@
                     pageLength: 5,
                     columns: [
 
-
-
                         { data: "title" },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                if (row.isWaiting == 0)
+                                    return `<input type='checkbox' disabled   style='zoom:2'/>`;
+                                else
+                                    return `<input type='checkbox' disabled checked style='zoom:2'/>`;
+                            }
+                        },
                         {
                             render: function (data, type, row, meta) {
 
@@ -353,9 +357,18 @@
                         {
                             render: function (data, type, row, meta) {
                                 const optionsPtime = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                                if (row.Ptime.includes("/")) {
+                                    d = row.Ptime.split(" ")[0].split("/").reverse().join("-")
+                                    t = row.Ptime.split(" ")[1]
+                                    dt = d + "T" + t;
+                                } else {
+                                    dt=row.Ptime
+                                }
+                               
+                              
                                 if (row.Ptime != "") {
                                     let loc = "data_loc='" + row.TaskId + "'";
-                                    return `<span id="cptime" ${loc}>${new Date(row.Ptime).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
+                                    return `<span id="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
 
                                 } else {
                                     return "לא ניתן זמן הגשה"
@@ -692,6 +705,7 @@
                             <tr>
 
                                 <th>משימה</th>
+                                <th>ממתין לבדיקה</th>
                                 <th>שאלון</th>
                                 <th>ציון</th>
                                 <th>הערה</th>

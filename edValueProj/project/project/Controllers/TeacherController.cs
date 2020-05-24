@@ -61,24 +61,26 @@ namespace project.Controllers
         }
 
 
-        [HttpGet]
-       [Route("api/Teacher/getClassesbyEmail/{mail}")]
+       [HttpPut]
+       [Route("api/Teacher/getClassesbyEmail")]
 
-       public List<Classroom> getClassesbyMail(string mail)
+       public List<Classroom> getClassesbyMail(Dictionary<string,string> mail)
        {
-            mail = mail.Replace(',', '.').Replace('~', '@');
+            //mail = mail.Replace(',', '.').Replace('~', '@');
+            string m = mail["Mail"];
             Classroom c = new Classroom();
-           return c.getClassesbyMail(mail);
+           return c.getClassesbyMail(m);
        }
 
-        [HttpGet]
-        [Route("api/Teacher/getTeamsbyMail/{mail}")]
+        [HttpPut]
+        [Route("api/Teacher/getTeamsbyMail")]
 
-        public List<Team> getTeamsbyMail(string mail)
+        public List<Team> getTeamsbyMail(Dictionary<string, string> mail)
         {
-            mail = mail.Replace(',', '.').Replace('~', '@');
+            //mail = mail.Replace(',', '.').Replace('~', '@');
+            string m = mail["Mail"];
             Team t = new Team();
-            return t.getTeamsbyMail(mail);
+            return t.getTeamsbyMail(m);
         }
 
         [HttpGet]

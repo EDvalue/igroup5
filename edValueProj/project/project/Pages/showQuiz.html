@@ -26,7 +26,7 @@
         var LufDiv;//save the last element upload active;
         var userOBJ;//save the user that active in the page;
         var performers;//save all performers list in teacher check mode;
-        var performer;//the last selected performer mail
+        var performer;//the last selected performer mail/task
         var fb;//save the last fb;
         var activeStTeam
         var activeTteam;
@@ -340,12 +340,16 @@
         }
 
         function updateFB() {
-
+            var smail;
+            if (performer.includes("@"))
+                smail = performer;
+            else
+                smail=performers[0].Mail
             
             fb = {
                 grade: $(".fb_grade input[type='number']").val(),
                 text: $(".fb_txt textarea").val(),
-                mail: performer,
+                mail: smail,
                 qid:el.QuizID,
             }
 

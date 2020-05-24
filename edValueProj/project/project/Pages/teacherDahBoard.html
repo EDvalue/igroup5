@@ -42,9 +42,9 @@
             if (!userOBJ.IsEditor) {
                 $("#EditorBTN").hide();
             }
-            repMail = userOBJ.Mail.replace('@', '~').replace('.', ',')
-            ajaxCall("GET", "../api/Teacher/getClassesbyEmail/" + repMail, "", getClassesbyMailSuccess, getClassesbyMailError)
-            ajaxCall("GET", "../api/Teacher/getTeamsbyMail/" + repMail, "", getTeamsbyMailSuccess, getTeamsbyMailError)
+            repMail = { Mail: userOBJ.Mail }
+            ajaxCall("PUT", "../api/Teacher/getClassesbyEmail", JSON.stringify(repMail), getClassesbyMailSuccess, getClassesbyMailError)
+            ajaxCall("PUT", "../api/Teacher/getTeamsbyMail", JSON.stringify(repMail), getTeamsbyMailSuccess, getTeamsbyMailError)
         });
 
 

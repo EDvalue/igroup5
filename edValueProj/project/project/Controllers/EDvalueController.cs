@@ -10,6 +10,7 @@ using project.Models.DAL;
 using System.IO;
 using System.Web.Hosting;
 
+
 namespace project.Controllers
 {
     public class EDvalueController : ApiController
@@ -37,6 +38,7 @@ namespace project.Controllers
         [Route("api/EDvalue/excelLoad")]
         public List<Dictionary<string,string>> excelLoad()
         {
+            
             //HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;
             HttpPostedFile file1 = httpRequest.Files[0];
@@ -46,9 +48,15 @@ namespace project.Controllers
             //To save file, use SaveAs method
             var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\" + file1.FileName);
             file1.SaveAs(filePath); //File will be saved in application root
-
-            ExcelDocument ex = new ExcelDocument();
-           return ex.ReadWorkbook(filePath);
+            try {
+                ExcelDocument ex = new ExcelDocument();
+                return ex.ReadWorkbook(filePath);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message + ", file path: " + filePath);
+            }
+          
 
 
 

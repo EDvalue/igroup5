@@ -9,6 +9,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
 using System.IO;
+using System.Web.Hosting;
+using System.Threading;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
@@ -226,8 +228,10 @@ namespace project.Models
 
             try
             {
-                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                
 
+                FileStream fs = new FileStream(path,FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                //var fs = System.IO.File.OpenRead(path);
                 // Try to read workbook as XLSX:
                 try
                 {
@@ -238,7 +242,7 @@ namespace project.Models
 
                     
                 }   
-                catch
+                catch(Exception ex)
                 {
                     book = null;
                 }

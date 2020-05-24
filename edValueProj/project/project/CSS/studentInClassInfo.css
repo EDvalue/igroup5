@@ -167,9 +167,10 @@ div#statistics {
     color: white;
     text-decoration: none;
 }
-th {
+th,td {
     text-align: center;
 }
+
 
 div.content {
     flex: 0 1 73%;
