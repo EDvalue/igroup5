@@ -229,7 +229,6 @@ namespace project.Models
             try
             {
                 
-
                 FileStream fs = new FileStream(path,FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 //var fs = System.IO.File.OpenRead(path);
                 // Try to read workbook as XLSX:
