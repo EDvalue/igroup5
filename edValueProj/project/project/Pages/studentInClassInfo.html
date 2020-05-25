@@ -136,7 +136,7 @@
         });
 
         function closeDivAU() {
-            $("#assigment").hide();
+            $("#assigmentForm").slideToggle('2s');
 
         }
         //----------------------בחירת משימה לפי הת.ז של המשימה
@@ -185,7 +185,11 @@
 
                 title: "תאריך המשימה עודכן",
                 icon: "success",
+            }).then(function (confirm) {
+                connectPT();
             })
+                
+            
             console.log(data);
 
             t = getTakById(selectedTsakId);
@@ -196,8 +200,8 @@
             }
             tbl.draw();
 
-
             closeDivAU();
+            
         }
 
         //-----------------Opening a Questionnaire----------------------------
@@ -360,6 +364,17 @@
                                 if (row.Ptime.includes("/")) {
                                     d = row.Ptime.split(" ")[0].split("/").reverse().join("-")
                                     t = row.Ptime.split(" ")[1]
+                                    if (isNaN(new Date(d + "T00:00:00").getTime())) {
+
+                                        e = row.Ptime.split(" ")[2];
+                                        x = d.split("-");
+                                        x = x.map(k => k.length == 1 ? "0" + k : k);
+                                        y = t.split(":");
+                                        y[0] = e == "PM" && parseInt(y[0]) != 12 ? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
+                                        y = y.map(k => k.length == 1 ? "0" + k : k);
+                                        d = x.join("-");
+                                        t = y.join(":");
+                                    }
                                     dt = d + "T" + t;
                                 } else {
                                     dt=row.Ptime
@@ -368,7 +383,7 @@
                               
                                 if (row.Ptime != "") {
                                     let loc = "data_loc='" + row.TaskId + "'";
-                                    return `<span id="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
+                                    return `<span class="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
 
                                 } else {
                                     return "לא ניתן זמן הגשה"
@@ -380,7 +395,7 @@
 
                     ],
                 });
-
+                connectPT();
             }
 
 
@@ -388,7 +403,11 @@
                 alert(err);
             }
 
-            $("#cptime").click(function () {
+        }
+
+        function connectPT() {
+
+             $(".cptime").click(function () {
                 $("#assigmentForm").slideToggle('2s');
                 selectedTsakId = this.getAttribute("data_loc");
                 console.log(selectedTaskId)
@@ -709,7 +728,7 @@
                                 <th>שאלון</th>
                                 <th>ציון</th>
                                 <th>הערה</th>
-                                <th>זמן הגשה אחרון</th>
+                                <th>זמן הגשה אישי</th>
                             </tr>
                         </thead>
                     </table>

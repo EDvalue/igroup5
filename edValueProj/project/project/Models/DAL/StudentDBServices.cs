@@ -546,7 +546,7 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
             String prefix = "";
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}','{5}')", s.Mail,q.TaskId,q.QuizID,qu.QuestionId,qu.Content,tId);
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}','{5}')", s.Mail,q.TaskId,q.QuizID,qu.QuestionId,qu.AnsContent,tId);
             if (qu.Type == "O")
             {
                 prefix = "INSERT INTO AnsOpen" + "(StudentEmail,TaskId,QuestionnaireId,QuestionId,Answer,TeamId)";

@@ -199,7 +199,7 @@
         }
 
         function closeDivAU() {
-            $("#assigment").hide();
+            $("#assigmentForm").slideToggle('2s');
 
         }
 
@@ -642,8 +642,7 @@
                     y[0] = e == "PM"&&parseInt(y[0])!=12? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
                      y= y.map(k => k.length == 1 ? "0" + k : k);
                     taskList[a].ForDate = `${x[0]}-${x[2]}-${x[1]}T${y[0]}:${y[1]}:${y[2]}`;
-                    
-
+              
                 } else {
                         taskList[a].ForDate = dateTimeArr[0]+"T"+dateTimeArr[1];
                         
@@ -729,11 +728,11 @@
 
 
         function createTaskDiv(task) {
-
+            
 
             const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
             const timeForDate = { hour: 'numeric', minute: 'numeric' };
-            const optionsTillDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            const optionsTillDate = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
             cstr += `<div class="col-sm-6 col-md-4 col-12" id="${task.taskId}">
                                  <div class="fr">

@@ -11,6 +11,9 @@
 .PastC{
     background-color:rgba(128, 128, 128, 0.68)
 }
+.content>.row{
+    margin:0;
+}
 #tasksTitle {
     margin-top: 7%;
     margin-bottom: 3%;

@@ -152,7 +152,7 @@ namespace project.Models
                                 }
                                 else if (item.Type == "U")
                                 {
-                                    dr["FileLink"] = item.Content;
+                                    dr["FileLink"] = item.AnsContent;
                                 }
                             }
                         }

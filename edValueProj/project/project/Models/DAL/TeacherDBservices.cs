@@ -1453,7 +1453,12 @@ namespace project.Models.DAL
                     srt.Add("isperform", Convert.ToString(dr["isperform"]));
                     srt.Add("title", Convert.ToString(dr["title"]));
                     srt.Add("TaskId", Convert.ToString(dr["TaskId"]));
-                    srt.Add("isWaiting", Convert.ToInt32(dr["isWaiting"]).ToString());
+                     if(dr["isWaiting"]!= DBNull.Value)
+                       srt.Add("isWaiting", Convert.ToInt32(dr["isWaiting"]).ToString());
+                     else
+                        srt.Add("isWaiting","0");
+
+
 
                     if (dr["Grade"] != DBNull.Value)
                     {
