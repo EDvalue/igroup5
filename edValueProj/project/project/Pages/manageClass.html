@@ -630,13 +630,43 @@
             var cstrC = "";
             var years = {}
             for (a in taskList) {
+                
                 dateTimeArr = taskList[a].ForDate.split(" ");
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
-                taskList[a].ForDate = dateTimeArr.join("T")
+                if (isNaN(new Date(dateTimeArr[0] + "T00:00:00").getTime())) {
+                    e = dateTimeArr[2];
+                    x = [];
+                    x = dateTimeArr[0].split("-");
+                    x = x.map(k => k.length == 1 ? "0" + k : k);
+                    y = dateTimeArr[1].split(":");
+                    y[0] = e == "PM"&&parseInt(y[0])!=12? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
+                     y= y.map(k => k.length == 1 ? "0" + k : k);
+                    taskList[a].ForDate = `${x[0]}-${x[2]}-${x[1]}T${y[0]}:${y[1]}:${y[2]}`;
+                    
 
-                dateTimeArr = taskList[a].OpenTill.split(" ")
+                } else {
+                        taskList[a].ForDate = dateTimeArr[0]+"T"+dateTimeArr[1];
+                        
+                }
+      
+                dateTimeArr = taskList[a].OpenTill.split(" ");
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
-                taskList[a].OpenTill = dateTimeArr.join("T")
+                if (isNaN(new Date(dateTimeArr[0] + "T00:00:00").getTime())) {
+                    e = dateTimeArr[2];
+                    x = [];
+                    x = dateTimeArr[0].split("-");
+                    x = x.map(k => k.length == 1 ? "0" + k : k);
+                    y = dateTimeArr[1].split(":");
+                     y[0] = e == "PM"&&parseInt(y[0])!=12? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
+                    y= y.map(k => k.length == 1 ? "0" + k : k);
+                    taskList[a].OpenTill = `${x[0]}-${x[2]}-${x[1]}T${y[0]}:${y[1]}:${y[2]}`;
+                   
+                } else {
+                    taskList[a].OpenTill =dateTimeArr[0]+"T"+dateTimeArr[1];
+                    
+                }  
+                
+                
 
                 yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
                     new Hebcal.HDate(new Date(new Date().getFullYear(), 8, 30)).toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``') :
