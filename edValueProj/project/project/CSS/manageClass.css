@@ -11,6 +11,12 @@
 .PastC{
     background-color:rgba(128, 128, 128, 0.68)
 }
+#sp_table_filter {
+    direction: ltr;
+    margin-right: 170%;
+    margin-bottom: 5%;
+}
+
 .content>.row{
     margin:0;
 }
@@ -147,10 +153,16 @@ canvas {
     text-align: center;
     margin-left: 2%;
 }
+#taskName > div, #IntelligenceCheckBox > div {
+    box-shadow: 2px 2px 2px;
+    border-radius: 5px;
+}
 
 #sList > ul > li {
     margin-left: 3%;
     width: 100%;
+    box-shadow: 2px 2px 2px;
+    border-radius: 5px;
 }
 
     #tList > ul > li > a, #sList > ul > li > a {
@@ -425,10 +437,10 @@ div#taskName {
 #TaskView {
     margin: auto;
     width: 90%;
-    margin-right: 15%;
+    margin-right: 5%;
 }
 #ShowQuestionnaire {
-    width: 80%;
+    width: 70%;
     height: 80%;
     position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */
@@ -537,6 +549,7 @@ ion-icon {
 }
 .capr {
     border-top-right-radius: 50%;
+    padding-top:10px;
     border-bottom-right-radius: 50%;
     box-shadow: -2px 2px 2px #000;
     font-size: 14px;

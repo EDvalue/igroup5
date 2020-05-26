@@ -24,10 +24,12 @@
 ion-icon.colorO {
     color: green;
     stroke: green;
+    font-size:20px
 }
 ion-icon.colorC {
     color: red;
-    stroke:red;
+    stroke: red;
+    font-size: 20px
 }
 
 
@@ -49,7 +51,7 @@ ion-icon.colorC {
 }
     #Task:hover, SmallTask:hover {
         transform: scale(1.03, 1.03);
-        background-color: rgba(72, 93, 215, 0.30);
+        
         z-index: 3;
     }
 
@@ -72,6 +74,8 @@ ion-icon.colorC {
     flex-direction: row-reverse;
     color: white;
     width: 100%;
+    border: 3px groove #f1f1f1;
+    box-shadow: 2px 2px 2px #000;
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -79,30 +83,56 @@ ion-icon.colorC {
     margin: auto;
     align-items: stretch;
 }
-.NaImage img{
-    width: 100%;
+.NaImage img {
+    width: 100px;
+    height: 100px;
 }
 
 .NaImage{
     width:100%;
 }
-
+#sys_tit {
+    position: absolute;
+    top: 27%;
+    right: 3%;
+    color: #007bff;
+}
+.classDate{
+    font-size:14px;
+}
+.times {
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+}
+.time_for, .time_till {
+    display: flex;
+}
+#q_tit {
+    position: absolute;
+    top: 77%;
+    right: 3%;
+    color: #007bff;
+}
+    #q_tit span{
+        font-size:10px;
+    }
 .spanPoints {
     border: 1px solid #007bff;
     border-radius: 50% 50%;
     height: 50%;
-    width: 20%;
-    transform: translate(0px, 11px);
+    box-shadow: 1px 1px 1px;
+    width: 23%;
+    transform: translate(-13px, -30px);
     font-size: 12px;
-    margin-left: auto;
     color: #007bff;
-    z-index:4;
+    z-index: 4;
 }
 
 .imgQuiz {
     width: 16.6667%;
     align-items: center;
-    height: 40%;
+    height: 70%;
     display: flex;
     flex-direction: column
 }
@@ -142,14 +172,15 @@ h3 {
 .NaImage > img:hover {
    
     transform: scale(1.1);
-    box-shadow:2px 2px 2px #fff;
+    box-shadow:2px 2px 2px #000;
     background-color:#fff;
     transition: all .25s linear;
     z-index:2;
 }
-.name_date{
-    display:flex;
-    align-items:baseline;
+.name_date {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 #ladder {
     width: 80%;

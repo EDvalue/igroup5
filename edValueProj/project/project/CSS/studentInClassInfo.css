@@ -189,7 +189,7 @@ div.content {
 }
 
 div#TaskView {
-    margin-top: 4%;
+    margin-top: 8%;
     margin-right: 10%;
     width: 80%;
 }
@@ -319,6 +319,24 @@ div#taskName {
     }
 
    
+}
+
+#addContent {
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px;
+}
+
+#sp_table_filter {
+    direction: ltr;
+    margin-right: 50%;
+    margin-bottom: 5%;
+}
+
+.cptime {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 #user_manage{
     margin-right:auto;

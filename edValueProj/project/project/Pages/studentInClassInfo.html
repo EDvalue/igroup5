@@ -372,7 +372,7 @@
                                         y = t.split(":");
                                         y[0] = e == "PM" && parseInt(y[0]) != 12 ? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
                                         y = y.map(k => k.length == 1 ? "0" + k : k);
-                                        d = x.join("-");
+                                        d = [x[0],x[2],x[1]].join("-");
                                         t = y.join(":");
                                     }
                                     dt = d + "T" + t;
@@ -383,10 +383,11 @@
                               
                                 if (row.Ptime != "") {
                                     let loc = "data_loc='" + row.TaskId + "'";
-                                    return `<span class="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
+                                    return `<span time='${dt}' class="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
 
                                 } else {
-                                    return "לא ניתן זמן הגשה"
+                                    let loc = "data_loc='" + row.TaskId + "'";
+                                    return `<span time='${dt}' class="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} </span>`
                                 }
 
                             }
@@ -417,7 +418,7 @@
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
                 t.Ptime = dateTimeArr.join("T")
 
-                $("#ptime").val(t.Ptime);
+                 $("#ptime").val(this.getAttribute("time"));
 
             });
 

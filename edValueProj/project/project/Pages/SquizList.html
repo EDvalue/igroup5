@@ -238,6 +238,20 @@
             return comparison;
         }
 
+        function compareSysPoints(a,b) {
+            // Use toUpperCase() to ignore character casing
+            const A = a.Spoints;
+            const B = b.Spoints;
+
+            let comparison = 0;
+            if (A > B) {
+                comparison = -1;
+            } else if (A < B) {
+                comparison = 1;
+            }
+            return comparison;
+        }
+
         function printNactive(data) {
             //print tasks that non quiz was selected in them;
             str = "";
@@ -254,25 +268,31 @@
                     
                     systemPoints.push(Sobj)
                 }
-                systemPoints.sort((a,b) => (a.Spoints > b.Spoints) ? 1 : ((b.Spoints > a.Spoints) ? -1 : 0));
-                
-            
 
+                
+                    systemPoints.sort(compareSysPoints)
+               
+            
                 str += `
                         <div id="Task" class="col-md-6 col-12">
 
                                 <div class="content_new">
                                     <div class="name_date">
-                                        <p>${data[x].Task.Title}</p>`
+                                        <p>${data[x].Task.Title}</p> <div class="times">`
+                
                 if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
-                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorO" name="caret-back-outline"></ion-icon>`
+                    str += `<div class="time_for"><p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorO" name="caret-back-outline"></ion-icon></div>`
+                    str+=`<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
                 } else {
-                    str += `<p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorC" name="caret-back-outline"></ion-icon>`
+                    str += `<div class="time_for"><p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorC" name="caret-back-outline"></ion-icon></div>`
+                    str+=`<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
                 }
 
-                str += `</div>
+                str += `</div></div>
 
-                  <div id="intelliO">`
+                  <div id="intelliO"><div id="sys_tit">דירוג מערכת</div>
+                     <div id="q_tit">דירוג שאלון<span>(ימין לשמאל)</span></div>`
+                
                 for (i in data[x].Task.QuizList) {
                     str+="<div class='imgQuiz'>"
                     n = data[x].Task.QuizList[i].Inteligence.Ename;
@@ -288,7 +308,7 @@
                 str += ` </div>
                                     <div id="ladder">
                                         <p>מומלץ מאוד</p>
-                                        <ion-icon name="analytics-outline" size="large"></ion-icon>
+                                        <ion-icon name="cellular-outline" style="font-size:35px"></ion-icon>
                                         <p>פחות מומלץ</p>
 
                                     </div>
@@ -341,6 +361,8 @@
         function createSmallTask(data, arg, num) {
             //create close/open active task div;
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            const shortDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const shorttime = {hour: 'numeric', minute: 'numeric' }
             str = `<div id="SmallTask" class="col-lg-4 col-md-6 col-12">
 
                                 <div class="content_active">
@@ -366,7 +388,7 @@
                                     </div>
                                     <div id="left">
                                         <div class="classDate">
-                                            <p>${new Date(data.ForDate).toLocaleDateString(undefined, options)}</p>
+                                            <p  title='${new Date(data.ForDate).toLocaleDateString(undefined, options)}'>${new Date(data.ForDate).toLocaleDateString(undefined, shortDate)}</p>
                                         </div>
                                         <div class="imgQuestionnire">`;
             if (arg == 'O') {

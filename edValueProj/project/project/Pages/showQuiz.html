@@ -33,6 +33,7 @@
         var quizSubject;
         var teamOBJ;
         var myTeams;
+        var myClasses;
         var studentGraphData;
         var intStudentData;
 
@@ -75,6 +76,8 @@
 
             if (localStorage["myTeams"])
                 myTeams = JSON.parse(localStorage["myTeams"]);
+            if ( localStorage["myClasses"])
+                myClasses = JSON.parse(localStorage["myClasses"]);
 
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
@@ -103,6 +106,8 @@
                     localStorage['quiz_mode'] = modeQuiz;
                 if (myTeams)
                     localStorage["myTeams"] = JSON.stringify(myTeams);
+                if (myClasses)
+                     localStorage["myClasses"]=JSON.stringify(myClasses)
                 if (studentGraphData)
                     localStorage["studentData"]=JSON.stringify(studentGraphData)
 
@@ -414,7 +419,7 @@
           function getPdata(id) {
 
             for (x in performers) {
-                if (performers[x].Mail == id||performers[x].TaskId) {
+                if (performers[x].Mail == id||performers[x].TaskId==id) {
                     return performers[x];
                 }
             }

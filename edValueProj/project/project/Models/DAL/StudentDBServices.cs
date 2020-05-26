@@ -191,18 +191,20 @@ namespace project.Models.DAL
                         rt.Task.QuizList = new List<Quiz>();
                         rt.Task.Grade = Convert.ToInt32(dr["IsChoose"]);
                         rt.Task.TaskId = dr["TaskId"].ToString();
-                        if (dr["Grade"] != DBNull.Value)
-                        rt.Score= Convert.ToInt32(dr["Grade"]);
+                        
                         rt.Task.Title = dr["Title"].ToString();
                         rt.Task.Grade =0;
-                        if(dr["Note"]!=DBNull.Value)
-                        rt.Note = dr["Note"].ToString();
+                      
                         rt.Task.Sub = new Subject(dr["SubjectName"].ToString(), "");
                         rt.YearOfStudy = dr["YearOfStudy"].ToString();
                         rt.ForDate = Convert.ToDateTime(dr["ForDate"]);
                         rt.TillDate = Convert.ToDateTime(dr["OpenTill"]);
                         rt.AssigmentDate = Convert.ToDateTime(dr["Date_Assignment"]);
                     }
+                    if (dr["Note"] != DBNull.Value)
+                        rt.Note = dr["Note"].ToString();
+                    if (dr["Grade"] != DBNull.Value)
+                        rt.Score = Convert.ToInt32(dr["Grade"]);
                     if (dr["QuestionnaireId"].ToString() != q.QuizID)
                     {
                         if (q.QuizID != null )
