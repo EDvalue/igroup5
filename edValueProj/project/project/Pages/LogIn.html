@@ -2,12 +2,12 @@
 <html>
 <head>
 
-    <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
 
+    <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
     <link href="../CSS/LogIn.css" rel="stylesheet" />
     <meta charset="utf-8" />
     <title></title>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <!-- Latest compiled and minified CSS -->
@@ -84,7 +84,7 @@
                         localStorage['userMode'] = "teacher";
                         location.replace("teacherDahBoard.html");
                     } else if (user.hasOwnProperty('IsCompleteIquizz')) {
-                        if(user.IsCompleteIquizz == true) {
+                        if (user.IsCompleteIquizz == true) {
                             localStorage['userMode'] = "student";
                             location.replace("studentDashboard.html");
                         }
@@ -124,12 +124,12 @@
                 $("#schoolList").val(data.InSchool)
                 $("#Grade").val(data.Grade);
                 $("#classNum").val(data.GradeNumber)
-              $("#disbackg").css("visibility", "visible");
+                $("#disbackg").css("visibility", "visible");
                 $("#addingDiv").toggle();
             }
             else {
 
-                swal("קוד לא תקין או שזמן ההרשמה חלף אנא פנה למורה המחנך שלך.","❌")
+                swal("קוד לא תקין או שזמן ההרשמה חלף אנא פנה למורה המחנך שלך.", "❌")
             }
         }
 
@@ -161,19 +161,19 @@
 
             swal("✔משתמש נוסף בהצלחה")
         }
-          function postNewUserError(err) {
+        function postNewUserError(err) {
 
             console.log(err);
-          }
+        }
 
-         function closeDivUS() {
+        function closeDivUS() {
 
             $("#addingDiv").toggle();
-           $("#disbackg").css("visibility", "hidden");
+            $("#disbackg").css("visibility", "hidden");
             $("#disbackg").css("visibility", "hidden");
             $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
             $("#NCgrade,#NCnumber").val('')
-            
+
         }
 
     </script>

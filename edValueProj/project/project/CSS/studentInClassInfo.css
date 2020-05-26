@@ -326,7 +326,7 @@ div#taskName {
     box-shadow: 2px 2px 2px;
 }
 
-#sp_table_filter {
+div#sp_table_filter {
     direction: ltr;
     margin-right: 50%;
     margin-bottom: 5%;

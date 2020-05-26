@@ -301,6 +301,7 @@
     <Content Include="images\EDvalueBig.png" />
     <Content Include="images\EDvalueSmall.png" />
     <Content Include="images\excel-icon.png" />
+    <Content Include="images\favicon.png" />
     <Content Include="images\file.jpg" />
     <Content Include="images\fileUpload.png" />
     <Content Include="images\History.jpg" />
@@ -323,6 +324,7 @@
     <Content Include="images\PersonalN.jpg" />
     <Content Include="images\musicallyN.jpg" />
     <Content Include="images\word-icon.png" />
+    <Content Include="js\fav.js" />
     <Content Include="js\Graphs.js" />
     <Content Include="js\js.js" />
     <Content Include="Pages\Assignment_assignment.html" />
