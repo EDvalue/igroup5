@@ -31,11 +31,16 @@ ion-icon.colorC {
     stroke: red;
     font-size: 20px
 }
+.imgQuestionnire>img:hover{
 
+    box-shadow:1px 1px 1px #000;
+    border-radius:5px;
+}
 
 #Task, #SmallTask {
     border: 3px groove white;
     box-shadow: 2px 2px rgba(255, 255, 255, 0.79);
+    border-radius: 5px;
     height: 340px;
     width: 208px;
     background: white;

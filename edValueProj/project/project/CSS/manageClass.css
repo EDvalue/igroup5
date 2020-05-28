@@ -51,7 +51,6 @@
 
 #tList {
     float: left;
-    width: 100;
     color: white;
     border-radius:5px;
 }
@@ -59,11 +58,8 @@
 #info {
     flex:1 1 80%;
     text-align: center;
-
-    height: 600px;
-
+    height: 530px;
     width: 75%;
-
 }
 
 #imgLogo {
@@ -350,6 +346,9 @@ div#taskName {
     margin-right: auto;
 }
 
+
+element.style {
+}
 .notification {
     width: 40px;
     font-size: 20px;
@@ -359,9 +358,8 @@ div#taskName {
     justify-content: center;
     border: 1px solid white;
     border-radius: 50% 50%;
-    background-color: #1BADDD;
     transform: translate(.0em, -.3em);
-    box-shadow: #1BADDD 1px 1px;
+    box-shadow: #1BADDD 2px 2px;
 }
 
 #sList {
@@ -459,7 +457,7 @@ div#taskName {
     display: flex;
     display: flex;
     overflow-y: scroll;
-    height: 500px;
+    height: 420px;
     flex: 1;
     font-size: 15px;
     flex-direction: column;
@@ -611,7 +609,7 @@ ion-icon {
     }
 
     #taskName {
-        height: inherit;
+        
     }
 
     div.content {

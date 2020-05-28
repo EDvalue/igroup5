@@ -55,12 +55,21 @@ namespace project.Controllers
             var httpRequest = HttpContext.Current.Request;
             HttpPostedFile file1 = httpRequest.Files[0];
 
-
+            var p = httpRequest.Form["user"]+"\\"+httpRequest.Form["taskId"];
+           
             //To save file, use SaveAs method
-            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\" + file1.FileName);
-            file1.SaveAs(filePath); //File will be saved in application root
+           // var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\"+p+"\\"+ file1.FileName);
+            var filePath = HttpContext.Current.Server.MapPath("~/uploadedFile\\" + p );
+            System.IO.Directory.CreateDirectory(filePath);
+            filePath = System.IO.Path.Combine(filePath, file1.FileName);
 
 
+            if (!System.IO.File.Exists(filePath))
+            {
+                file1.SaveAs(filePath);
+               
+            }
+           
             return filePath;
 
         }

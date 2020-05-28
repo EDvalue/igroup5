@@ -187,7 +187,7 @@
 
                     quizString += `<div id='OpenUploadBlock'>
                                         <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div><div class="loader"></div></div>
-                                                <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip"  id='file${qu}' />
+                                                <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip,.pptx"  id='file${qu}' />
                                                 <div id='upload-BTN'>
                                                    <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
                                                    <input type='button' toSave='file${qu}' class='btn btn-info sf' value='שמור' />
@@ -310,8 +310,11 @@
                     }
                 } else if (el.Question[q].Type == 'U') {
                     if (el.Question[q].AnsContent) {
-                        ext = el.Question[q].AnsContent.split('uploadedFile')[1].split('.')[1];
-                        name = el.Question[q].AnsContent.split('uploadedFile')[1].replace('\\', '');
+                        ext1 = el.Question[q].AnsContent.split('\\');
+                        ext = ext1[ext1.length - 1].split('.')[1];
+                        name1 = el.Question[q].AnsContent.split('\\');
+                         name = name1[name1.length - 1];
+
 
                    
                         $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
@@ -497,6 +500,8 @@
                     LufDiv = this.parentNode;
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
                     data.append("UploadedFile", file);
+                    data.append("user", userOBJ.Mail.split("@")[0]);
+                    data.append("taskId", el.TaskId.replace("|","_"));
 
                     $.ajax({
                         type: "POST",
@@ -584,10 +589,19 @@
             $('.loader').hide();
             $(LufDiv).children('.link').remove();
             $(LufDiv).children('.dl').remove();
-            arg = data.split('uploadedFile')[1];
+            arg = data.split('\\');
+            arg = arg[arg.length - 1];
+            link = "";
+            if (data.indexOf("wwwRoot")!=-1) {
+                        url1 = data.split("wwwRoot");
+                        link = "https://proj.ruppin.ac.il" + url1[1]
+            } else {
+                 url1 = data.split("project");
+                 link = "http://proj.ruppin.ac.il\\igroup5\\prod" + url1[3]
+            }
 
-            $(LufDiv).append(`<div class='link'>${data}</div>`);
-            $(LufDiv).append(`<a class='dl' href="${data}" download>${arg}</a>`)
+            $(LufDiv).append(`<div class='link'>${link}</div>`);
+            $(LufDiv).append(`<a class='dl' href="${link}" target="_blank" download>${arg}</a>`)
         }
 
         function PostDocError(err) {

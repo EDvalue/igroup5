@@ -364,13 +364,12 @@
             const files = document.querySelector('[type=file]').files
             const formData = new FormData()
 
-            //for (let i = 0; i < files.length; i++) {
+            
                 let file = files[0]
 
-        //        })
-        //}
+       
                 formData.append('files[]', file)
-            //}
+           
             const url = '../api/upload';
             fetch(url, {
                 method: 'POST',
@@ -379,21 +378,24 @@
             }).then((response) => response.json())
                 .then((result) => {
                     console.log('Success:', result);
+                    link = "";
                     data1 = JSON.parse(result)
-                    url3=data1["url"] 
-                    url1 = url3.split("wwwRoot");
-                    link = "https://proj.ruppin.ac.il" + url1[1]
+                    url3 = data1["url"] 
+                    if (url3.contains("wwwRoot")) {
+                        url1 = url3.split("wwwRoot");
+                        link = "https://proj.ruppin.ac.il" + url1[1]
+                    } else {
+                         url1 = url3.split("project");
+                        link = "http://proj.ruppin.ac.il\igroup5\prod" + url1[2]
+                    }
+                    
+                  
                     if ($(`#Q${uploadnumq} #img_add>.link`)) {
                         $(`#Q${uploadnumq} #img_add>.link`).remove();
                     }
                      
                     $(`#Q${uploadnumq} #img_add`).append(`<div class="link">${link}</div>`)
-                    
-                    
-                    //return "toot";
-                    
-                    
-
+  
                 })
         }
 

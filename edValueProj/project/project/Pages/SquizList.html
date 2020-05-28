@@ -110,7 +110,12 @@
             printActiveClose(activeCloseArr);
 
             //connect page
-            $("#Nactive,#activeO,#activeC").show();
+            if(NactiveArr.length>0)
+                $("#Nactive").show();
+            if (activeOpenArr.length > 0)
+                $("#activeO").show();
+            if (activeCloseArr.length > 0)
+                 $("#activeC").show();
             $("#activeC .cq,.fb_content").hide();
             $("#activeO .cq").click(changeQ);
             $(".fb").click(showNote)
