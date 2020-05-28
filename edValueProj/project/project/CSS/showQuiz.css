@@ -63,7 +63,7 @@ span.markAns,p.markAns {
     background-color:rgba(42, 255, 0, 0.84);
 }
 .Nc_opt {
-    background-color: rgba(128, 128, 128, 0.81);
+    background-color: #32e55bd1;
 }
 
 .grade_fb {
@@ -278,4 +278,9 @@ textarea {
         width: 80%;
         margin-right:10%;
     }
+}
+
+select {
+    width: 88%;
+    text-overflow: ellipsis;
 }

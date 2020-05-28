@@ -381,7 +381,7 @@
                     link = "";
                     data1 = JSON.parse(result)
                     url3 = data1["url"] 
-                    if (url3.contains("wwwRoot")) {
+                    if (url3.indexOf("wwwRoot")!=-1) {
                         url1 = url3.split("wwwRoot");
                         link = "https://proj.ruppin.ac.il" + url1[1]
                     } else {

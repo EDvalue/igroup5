@@ -26,7 +26,7 @@
         var LufDiv;//save the last element upload active;
         var userOBJ;//save the user that active in the page;
         var performers;//save all performers list in teacher check mode;
-        var performer;//the last selected performer mail/task
+        var performer,lastPerformer;//the last selected performer mail/task
         var fb;//save the last fb;
         var activeStTeam
         var activeTteam;
@@ -339,7 +339,11 @@
             }
 
             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
-                Pobj=getPdata(performer)
+                if (performer.indexOf('@')!=-1)
+                    
+                    Pobj = getPdataByMail(performer)
+                else
+                    Pobj = getPdataByTask(performer);
                 $(".fb_txt>textarea").val(Pobj.Note);
                 if(Pobj.Grade>0)
                 $(".fb_grade>input[type='number']").val(Pobj.Grade);
@@ -394,7 +398,7 @@
 
                     if (performers[s].isWaiting!=0) {
                         let x = performers[s].Grade ? "-" + performers[s].Grade : "";
-                        ncStr += `<option of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`;
+                        ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x} ${performers[s].title})</option>`;
 
                     } else if (performers[s].isWaiting==undefined) {
                         localStorage["performer"]=performers[s].Mail
@@ -411,7 +415,7 @@
             if (ncStr != "") {
                 $('#main').html(popup);
                 $("#per_sel select").change(reOpenQuiz);
-                $("#nextSt_title input[type=button]").click(function (){ window.history.back() });
+                $("#nextSt_pop input[type=button]").click(function (){ window.history.back() });
             } else {
                 window.history.back();
             }
@@ -419,25 +423,54 @@
             
         }
 
-          function getPdata(id) {
+          function getPdataByMail(id) {
 
             for (x in performers) {
-                if (performers[x].Mail == id||performers[x].TaskId==id) {
+                if (performers[x].Mail == id) {
                     return performers[x];
                 }
             }
 
-          }
+        }
+
+
+        function getPdataByTask(id) {
+
+             for (x in performers) {
+                if (performers[x].TaskId==id) {
+                    return performers[x];
+                }
+            }
+
+        }
+
 
         function reOpenQuiz() {
-            performer = $(this).find(":selected").attr('of');
-            arg=getPdata(performer)
+            taskId = "";
+            userId = "";
+            lastPerformer = performer;
+            userId = $(this).find(":selected").attr('of');
+            task=$(this).find(":selected").attr('task');
+            arg = "";
+            if ( lastPerformer.indexOf("@") != -1) {
+                arg = getPdataByMail(userId);
+                performer = userId;
+                taskId = el.TaskId;
+            }
+               
+            else {
+                arg = getPdataByTask(task);
+                performer = task;
+                taskId = task;
+            }
             Oquiz = {
                 QuizID:arg.QuizID,
-                Mail: performer,
-                TaskId: el.TaskId,
+                Mail: userId,
+                TaskId: taskId,
                 TeamId:activeTteam.Id,
             }
+
+            
 
             ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
         }
