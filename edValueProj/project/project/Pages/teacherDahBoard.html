@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <title></title>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
@@ -9,7 +10,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCalls.js"></script>
     <script src="../js/js.js"></script>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -34,6 +35,7 @@
 
             userOBJ = JSON.parse(localStorage["user"])
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            document.title="דשבורד מורה-"+userOBJ.Name + " " + userOBJ.LastName
             $("#title span").html(userOBJ.Name)
             if (!userOBJ.SchoolAdmin) {
                 $("#saBTN").hide()
@@ -90,9 +92,9 @@
 
                             mySortedTeams.push(myTeams[c])
                         }
-                       
+
                     }
-                     printTeams(mySortedTeams);
+                    printTeams(mySortedTeams);
                 } else {
 
                     for (c in myTeams) {
@@ -101,14 +103,14 @@
 
                             mySortedTeams.push(myTeams[c])
                         }
-                        
+
                     }
                     printTeams(mySortedTeams);
                 }
             }
-            
 
-           
+
+
         }
 
         function getTeamsbyMailSuccess(data) {
@@ -119,38 +121,38 @@
             imgId = '';
             localStorage["myTeams"] = JSON.stringify(myTeams);
             printTeams(myTeams);
-           
+
         }
 
         function printTeams(data) {
             teamStr = "";
-             for (t in data) {
+            for (t in data) {
 
                 teamStr += `<div id="team" class="col-12 col-md-6 col-lg-4">
-                        <div id="team_bar">
-                            <div id="addTaskBTN">
-                                <button name="${data[t].Id}" onclick="openAddTaskPage(this.getAttribute('name'))">הוספת משימה</button>
+                                <div id="team_bar">
+                                    <div id="addTaskBTN">
+                                        <button name="${data[t].Id}" onclick="openAddTaskPage(this.getAttribute('name'))">הוספת משימה</button>
 
-                            </div>
-                            <div id="name">
-                                <p>${data[t].Title}</p>
-                            </div>
-                            <div id="numOfS">
-                                <p dir="ltr">${data[t].StudentList.length} S</p>
-                            </div>
-                        </div>
+                                    </div>
+                                    <div id="name">
+                                        <p>${data[t].Title}</p>
+                                    </div>
+                                    <div id="numOfS">
+                                        <p dir="ltr">${data[t].StudentList.length} S</p>
+                                    </div>
+                                </div>
 
-                        <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
-                           <a  href="manageClass.html"></a>
-                                <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
+                                <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
+                                   <a  href="manageClass.html"></a>
+                                        <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
 
-                        </div>
+                                </div>
 
-                      </div>`;
+                              </div>`;
 
-              
+
             }
-              $("#teams").html(teamStr);
+            $("#teams").html(teamStr);
         }
 
         function openTeam(val) {
@@ -160,7 +162,7 @@
                 if (myTeams[team].Id == tId) {
                     localStorage["active_teacher_team"] = JSON.stringify(myTeams[team]);
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    
+
                     location.assign("manageClass.html");
 
 

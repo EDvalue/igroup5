@@ -2,11 +2,12 @@
 <html>
 <head>
 
-	
+
 	<meta charset="utf-8" />
 	<title></title>
 	<link href="../CSS/newQuiz.css" rel="stylesheet" />
 	<script src="../Scripts/ajaxCalls.js"></script>
+	<link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -26,15 +27,17 @@
 
 
 	<script>
-        function openBuildPage(val) {
-            if (val == "Himg") {
-                val = "היסטוריה";
-            } else if(val=="Bimg"){
-                val = "תנך";
 
-            } else {
-                val = "מדעים";
-                   }
+		document.title = "בחירת מקצוע";
+		function openBuildPage(val) {
+			if (val == "Himg") {
+				val = "היסטוריה";
+			} else if (val == "Bimg") {
+				val = "תנך";
+
+			} else {
+				val = "מדעים";
+			}
 			localStorage['quizSubject'] = val;
 
 			location.assign('editorPage.html')

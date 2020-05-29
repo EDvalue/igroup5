@@ -5,7 +5,7 @@
     <title></title>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="../js/js.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -21,6 +21,8 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="../CSS/systemManager.css" rel="stylesheet" />
     <script>
+
+        document.title="אדמין-דשבורד"
         $(document).ready(function () {
             if (localStorage["user"]) {
                 userarg = JSON.parse(localStorage["user"]);
@@ -37,7 +39,7 @@
 
             $("#pass_BTN>input[type='button']").click(function () {
 
-                
+
                 swal({
 
                     title: "האם אתה בטוח??",
@@ -50,13 +52,13 @@
                         if (confirm) {
                             swal({
                                 title: "המערכת כעת תבצע עדכון",
-                               icon: "warning",
-                               buttons: true,
-                               dangerMode: true
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true
                             }).then(function (confirm) {
                                 if (confirm) {
 
-                                    ajaxCall("PUT","../api/EDvalue/sysUpdates","",sysUpdateSuccess,sysUpateError)
+                                    ajaxCall("PUT", "../api/EDvalue/sysUpdates", "", sysUpdateSuccess, sysUpateError)
 
                                 } else {
                                     swal("ביצוע עדכון בוטל")
@@ -66,7 +68,7 @@
                         else {
 
                             swal("ביצוע עדכון בוטל")
-                        }  
+                        }
                     })
 
             });

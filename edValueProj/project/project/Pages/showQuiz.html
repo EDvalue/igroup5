@@ -8,9 +8,11 @@
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
     <link href="../CSS/showQuiz.css" rel="stylesheet" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
     <script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -18,7 +20,7 @@
     <title></title>
 
     <script>
-
+        
         var str;
         var el; //save the quiz object;
         var modeQuiz;//save the reason to open this page;
@@ -26,7 +28,7 @@
         var LufDiv;//save the last element upload active;
         var userOBJ;//save the user that active in the page;
         var performers;//save all performers list in teacher check mode;
-        var performer,lastPerformer;//the last selected performer mail/task
+        var performer, lastPerformer;//the last selected performer mail/task
         var fb;//save the last fb;
         var activeStTeam
         var activeTteam;
@@ -44,25 +46,25 @@
             if (localStorage["intStudentData"])
                 intStudentData = JSON.parse(localStorage["intStudentData"]);
 
-             if (localStorage['quizSubject'])
+            if (localStorage['quizSubject'])
                 quizSubject = localStorage['quizSubject'];
-            
-            if (localStorage["userMode"]) 
-                  perform_showQuiz_mode = localStorage["userMode"];
-            
-            if(localStorage['user'])
+
+            if (localStorage["userMode"])
+                perform_showQuiz_mode = localStorage["userMode"];
+
+            if (localStorage['user'])
                 userOBJ = JSON.parse(localStorage['user']);
 
-            if(localStorage['quiz_mode'])
+            if (localStorage['quiz_mode'])
                 modeQuiz = localStorage['quiz_mode'];
 
             if (localStorage["active_student_team"])
                 activeStTeam = JSON.parse(localStorage["active_student_team"]);
 
-            if(localStorage["active_student_team"])
-              teamOBJ = JSON.parse(localStorage["active_student_team"]);
+            if (localStorage["active_student_team"])
+                teamOBJ = JSON.parse(localStorage["active_student_team"]);
 
-            if(localStorage["active_teacher_team"])
+            if (localStorage["active_teacher_team"])
                 teamOBJ = JSON.parse(localStorage["active_teacher_team"]);
 
             if (localStorage["active_teacher_team"])
@@ -76,14 +78,15 @@
 
             if (localStorage["myTeams"])
                 myTeams = JSON.parse(localStorage["myTeams"]);
-            if ( localStorage["myClasses"])
+            if (localStorage["myClasses"])
                 myClasses = JSON.parse(localStorage["myClasses"]);
 
             quizString = "";
             document.getElementsByTagName('body')[0].innerHTML = ""
 
-            if(localStorage['quiz'])
+            if (localStorage['quiz'])
                 el = JSON.parse(localStorage['quiz']);//read the quiz
+            document.title =`${el.title}-${perform_showQuiz_mode}`;
 
             localStorage.clear();
 
@@ -92,24 +95,24 @@
                 localStorage['quiz'] = JSON.stringify(el);
                 localStorage["user"] = JSON.stringify(userOBJ);
                 localStorage['userMode'] = perform_showQuiz_mode;
-                 if(activeStTeam)
+                if (activeStTeam)
                     localStorage["active_student_team"] = JSON.stringify(activeStTeam);
-                 if(quizSubject )
-                localStorage['quizSubject'] = quizSubject;
-                 if(activeTteam)
+                if (quizSubject)
+                    localStorage['quizSubject'] = quizSubject;
+                if (activeTteam)
                     localStorage['active_teacher_team'] = JSON.stringify(activeTteam);
-                 if(performer)
+                if (performer)
                     localStorage["performer"] = performer;
-                  if(performers)
+                if (performers)
                     localStorage["performers"] = JSON.stringify(performers);
-                 if(modeQuiz)
+                if (modeQuiz)
                     localStorage['quiz_mode'] = modeQuiz;
                 if (myTeams)
                     localStorage["myTeams"] = JSON.stringify(myTeams);
                 if (myClasses)
-                     localStorage["myClasses"]=JSON.stringify(myClasses)
+                    localStorage["myClasses"] = JSON.stringify(myClasses)
                 if (studentGraphData)
-                    localStorage["studentData"]=JSON.stringify(studentGraphData)
+                    localStorage["studentData"] = JSON.stringify(studentGraphData)
 
             });
 
@@ -118,7 +121,7 @@
             ckReplace()
             connectCHK();
             connectForm();
-            if (perform_showQuiz_mode == "student" ||(perform_showQuiz_mode=="teacher"&&modeQuiz=="check")) {
+            if (perform_showQuiz_mode == "student" || (perform_showQuiz_mode == "teacher" && modeQuiz == "check")) {
                 //fill answer of quiz
                 fillANS();
             }
@@ -127,13 +130,13 @@
 
 
         function printPage() {
-             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+            if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
 
-                quizString +=`<div quizOf=${performer}>`
+                quizString += `<div quizOf=${performer}>`
             }
 
             quizString += `<div id='QuizTitle'><h1>${el.Title}</h1> </div>
-              <div id='main' dir="rtl"><form id=quizForm>`
+                      <div id='main' dir="rtl"><form id=quizForm>`
             for (qu in el.Question) {
                 //loop over the question in the quiz for print them;
                 quizString += `<div question_id="${el.Question[qu].QuestionId}" num_question="${el.Question[qu].OrderNum}" id='${qu}' class="qu" Qtype='${el.Question[qu].Type}'>`
@@ -171,8 +174,8 @@
                             quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                                 <span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>
-                                                 </div>`
+                                                         <span>${parseInt(y) + 1}</span><input ansID="${el.Question[qu].Answer[y].AnsId}" type="checkbox"  name="chk${qu}"/> <p>${el.Question[qu].Answer[y].Content}</p>
+                                                         </div>`
                         }
 
                     }
@@ -186,13 +189,13 @@
                 } else if (el.Question[qu].Type == 'U') {
 
                     quizString += `<div id='OpenUploadBlock'>
-                                        <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div><div class="loader"></div></div>
-                                                <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip,.pptx"  id='file${qu}' />
-                                                <div id='upload-BTN'>
-                                                   <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
-                                                   <input type='button' toSave='file${qu}' class='btn btn-info sf' value='שמור' />
-                                                 </div>
-                                            </div>`;
+                                                <div class='displayFile'><div name='file${qu}' class='filedrag' id='drag${qu}'></div><div class="loader"></div></div>
+                                                        <input type='file' accept=".xls,.xlsx,image/*,.pdf,.rar,.zip,.pptx"  id='file${qu}' />
+                                                        <div id='upload-BTN'>
+                                                           <input type='button' myFile='file${qu}' class='btn btn-primary upl' value='בחר קובץ' />
+                                                           <input type='button' toSave='file${qu}' class='btn btn-info sf' value='שמור' />
+                                                         </div>
+                                                    </div>`;
 
                 } else if (el.Question[qu].Type == 'M') {
 
@@ -209,8 +212,8 @@
                             quizString += `</div>`
                         } else {
                             quizString += `<div id="AmericanAmswerBlock">
-                                                 <span>${parseInt(y) + 1}</span><input type="checkbox" ansID="${el.Question[qu].Answer[y].AnsId}" /> <p>${el.Question[qu].Answer[y].Content}</p>
-                                                 </div>`
+                                                         <span>${parseInt(y) + 1}</span><input type="checkbox" ansID="${el.Question[qu].Answer[y].AnsId}" /> <p>${el.Question[qu].Answer[y].Content}</p>
+                                                         </div>`
                         }
 
                     }
@@ -222,41 +225,41 @@
 
             }
 
-     
+
 
             if (perform_showQuiz_mode == "student") {
                 quizString += `<div id="submitDIV"><button type="submit" class="btn btn-primary">הגש שאלון</button</div>`
-            } else if(perform_showQuiz_mode == "teacher" && modeQuiz=="check") {
+            } else if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
                 //teacher note and grade
                 quizString += `
-              <div id="t_fb">
-             <div class="fb_content">
-              <div class="note_fb">
-                <div clsss="p_note"><p>משוב לשאלון</p></div>
-                <div class="fb_txt"><textarea rows="5" cols="40"></textarea></div>
-              </div>
-               <div class="grade_fb">
-                <div clsss="p_grade"><p>ציון</p></div>
-                <div class="fb_grade"><input type="number" value="80" min="30" max="100"/></div>
-               </div>
-               </div>
-               <div id="submitDIV"><button type="submit" class="btn btn-primary">שלח משוב</button></div>
+                      <div id="t_fb">
+                     <div class="fb_content">
+                      <div class="note_fb">
+                        <div clsss="p_note"><p>משוב לשאלון</p></div>
+                        <div class="fb_txt"><textarea rows="5" cols="40"></textarea></div>
+                      </div>
+                       <div class="grade_fb">
+                        <div clsss="p_grade"><p>ציון</p></div>
+                        <div class="fb_grade"><input type="number" value="80" min="30" max="100"/></div>
+                       </div>
+                       </div>
+                       <div id="submitDIV"><button type="submit" class="btn btn-primary">שלח משוב</button></div>
 
-              </div>`;
+                      </div>`;
             }
 
             quizString += '</form></div>'
 
-             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
+            if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
 
-                quizString +=`</div>`
-             }
+                quizString += `</div>`
+            }
             document.getElementsByTagName('body')[0].innerHTML += quizString;
         }
 
         function fileperform() {
             file = this;
-            if (file.files[0].size > 2097152) {
+            if (file.files[0].size > 112097152) {
                 swal("File is too big!");
                 this.value = "";
             } else {
@@ -284,15 +287,17 @@
                 else if (file.value.split('.')[1] == 'rar' || file.value.split('.')[1] == 'zip') {
                     $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/rar-icon.png" />`)
 
+                } else if (file.value.split('.')[1] == 'pptx') {
+                    $("#" + this.parentNode.parentNode.id + ' .filedrag').html(`<img src="../images/pptx-icon.png" />`)
+
                 } else {
                     swal("קובץ לא נתמך");
-                    
                 }
             }
         }
 
         function fillANS() {
-            //this function fill the ans of student; 
+            //this function fill the ans of student;
             for (q in el.Question) {
 
                 if (el.Question[q].Type == 'O') {
@@ -313,14 +318,14 @@
                         ext1 = el.Question[q].AnsContent.split('\\');
                         ext = ext1[ext1.length - 1].split('.')[1];
                         name1 = el.Question[q].AnsContent.split('\\');
-                         name = name1[name1.length - 1];
+                        name = name1[name1.length - 1];
 
 
-                   
+
                         $(`#${q} #upload-BTN`).append(`<div class='link'>${el.Question[q].AnsContent}</div>`);
                         $(`#${q} #upload-BTN`).append(`<a class='dl' href="${el.Question[q].AnsContent}" download>${name}</a>`);
 
-                     
+
                         if (ext == "xlsx" || ext == "xls") {
                             $(`#${q} .filedrag`).html(`<img src="../images/excel-icon.png" />`);
                         } else if (ext == "docx") {
@@ -332,6 +337,8 @@
                         } else if (ext == 'rar' || ext == 'zip') {
                             $(`#${q} .filedrag`).html(`<img src="../images/rar-icon.png" />`)
 
+                        } if (ext == "pptx") {
+                            $(`#${q} .filedrag`).html(`<img src="../images/pptx-icon.png" />`)
                         }
                     }
 
@@ -339,14 +346,14 @@
             }
 
             if (perform_showQuiz_mode == "teacher" && modeQuiz == "check") {
-                if (performer.indexOf('@')!=-1)
-                    
+                if (performer.indexOf('@') != -1)
+
                     Pobj = getPdataByMail(performer)
                 else
                     Pobj = getPdataByTask(performer);
                 $(".fb_txt>textarea").val(Pobj.Note);
-                if(Pobj.Grade>0)
-                $(".fb_grade>input[type='number']").val(Pobj.Grade);
+                if (Pobj.Grade > 0)
+                    $(".fb_grade>input[type='number']").val(Pobj.Grade);
 
             }
         }
@@ -356,31 +363,31 @@
             if (performer.includes("@"))
                 smail = performer;
             else
-                smail=performers[0].Mail
-            
+                smail = performers[0].Mail
+
             fb = {
                 grade: $(".fb_grade input[type='number']").val(),
                 text: $(".fb_txt textarea").val(),
                 mail: smail,
-                qid:el.QuizID,
+                qid: el.QuizID,
             }
 
-            ajaxCall("PUT", "../api/Teacher/updateFB", JSON.stringify(fb),updateFBsuccess,updateFBerror)
+            ajaxCall("PUT", "../api/Teacher/updateFB", JSON.stringify(fb), updateFBsuccess, updateFBerror)
         }
 
         function updateFBsuccess(data) {
 
             updatePreformers();
 
-               swal({
-                
-                   title: "משוב עודכן",
-                   icon: "success",
-               })
-                    .then(function (confirm) {
-                        if (confirm) popupDiv() ;
-                        
-                    })
+            swal({
+
+                title: "משוב עודכן",
+                icon: "success",
+            })
+                .then(function (confirm) {
+                    if (confirm) popupDiv();
+
+                })
 
         }
 
@@ -389,41 +396,41 @@
             cStr = "";
             ncStr = "";
             popup += `<div id="nextSt_pop">
-           <div id="nextSt_title"><h3>בחר  תלמיד או המשך</h3></div>
-          <div id="per_sel">
-            <select><option>בחר מרשימה </option>`;
+                   <div id="nextSt_title"><h3>בחר  תלמיד או המשך</h3></div>
+                  <div id="per_sel">
+                    <select><option>בחר מרשימה </option>`;
             for (s in performers) {
-                
-                if (!performers[s].QuizID=="") {
 
-                    if (performers[s].isWaiting!=0) {
+                if (!performers[s].QuizID == "") {
+
+                    if (performers[s].isWaiting != 0) {
                         let x = performers[s].Grade ? "-" + performers[s].Grade : "";
                         ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x} ${performers[s].title})</option>`;
 
-                    } else if (performers[s].isWaiting==undefined) {
-                        localStorage["performer"]=performers[s].Mail
+                    } else if (performers[s].isWaiting == undefined) {
+                        localStorage["performer"] = performers[s].Mail
                     }
-                 
+
                 }
-               
+
             }
-            popup +=ncStr;
-             popup +=`</select>
-          </div>
-          <input type="button" class="btn btn-info" value='המשך'/>
-         </div>`;
+            popup += ncStr;
+            popup += `</select>
+                  </div>
+                  <input type="button" class="btn btn-info" value='המשך'/>
+                 </div>`;
             if (ncStr != "") {
                 $('#main').html(popup);
                 $("#per_sel select").change(reOpenQuiz);
-                $("#nextSt_pop input[type=button]").click(function (){ window.history.back() });
+                $("#nextSt_pop input[type=button]").click(function () { window.history.back() });
             } else {
                 window.history.back();
             }
 
-            
+
         }
 
-          function getPdataByMail(id) {
+        function getPdataByMail(id) {
 
             for (x in performers) {
                 if (performers[x].Mail == id) {
@@ -436,8 +443,8 @@
 
         function getPdataByTask(id) {
 
-             for (x in performers) {
-                if (performers[x].TaskId==id) {
+            for (x in performers) {
+                if (performers[x].TaskId == id) {
                     return performers[x];
                 }
             }
@@ -450,38 +457,38 @@
             userId = "";
             lastPerformer = performer;
             userId = $(this).find(":selected").attr('of');
-            task=$(this).find(":selected").attr('task');
+            task = $(this).find(":selected").attr('task');
             arg = "";
-            if ( lastPerformer.indexOf("@") != -1) {
+            if (lastPerformer.indexOf("@") != -1) {
                 arg = getPdataByMail(userId);
                 performer = userId;
                 taskId = el.TaskId;
             }
-               
+
             else {
                 arg = getPdataByTask(task);
                 performer = task;
                 taskId = task;
             }
             Oquiz = {
-                QuizID:arg.QuizID,
+                QuizID: arg.QuizID,
                 Mail: userId,
                 TaskId: taskId,
-                TeamId:activeTteam.Id,
+                TeamId: activeTteam.Id,
             }
 
-            
 
-            ajaxCall("PUT","../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
+
+            ajaxCall("PUT", "../api/Teacher/getQ", JSON.stringify(Oquiz), getQsuccess, getQerror)
         }
 
         function getQsuccess(data) {
-           
+
             localStorage["quiz"] = JSON.stringify(data);
             el = data;
             localStorage["performer"] = performer;
             location.assign("showQuiz.html");
-           
+
         }
 
         function getQerror(err) {
@@ -495,14 +502,14 @@
 
         function updatePreformers() {
             for (p in performers) {
-                if (performers[p].Mail == performer||performers[p].TaskId==performer) {
+                if (performers[p].Mail == performer || performers[p].TaskId == performer) {
 
                     performers[p].Grade = fb.grade;
                     performers[p].Note = fb.text;
                     performers[p].isWaiting = 0;
                 }
             }
-            localStorage["performers"] =JSON.stringify(performers);
+            localStorage["performers"] = JSON.stringify(performers);
         }
 
         function connectForm() {
@@ -511,13 +518,13 @@
 
                 window.onbeforeunload = function () {
                     return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";
-                  
+
                 };
 
                 $("#quizForm").submit(function () {
-                   
+
                     perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
-                    
+
                     return false;
                 });
 
@@ -534,7 +541,7 @@
                     var file = $('#' + $(this).attr('toSave')).get(0).files[0];
                     data.append("UploadedFile", file);
                     data.append("user", userOBJ.Mail.split("@")[0]);
-                    data.append("taskId", el.TaskId.replace("|","_"));
+                    data.append("taskId", el.TaskId.replace("|", "_"));
 
                     $.ajax({
                         type: "POST",
@@ -559,15 +566,15 @@
                     //connect the file drag
                     $(daArr[d]).on('drop', (e) => {
                         e.preventDefault();
-                       
+
                         e.stopPropagation();
                         e.dataTransfer = e.originalEvent.dataTransfer
-                        if ($(e.target).is('img')){
+                        if ($(e.target).is('img')) {
                             num = e.target.parentNode.parentNode.parentNode.parentNode.id
                         } else {
-                            num=e.target.parentNode.parentNode.parentNode.id
+                            num = e.target.parentNode.parentNode.parentNode.id
                         }
-                        
+
                         let fileInput = document.querySelector("#file" + num);
 
                         for (const f of e.dataTransfer.files) {
@@ -580,7 +587,7 @@
                     $(daArr[d]).on('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if ($(e.target).is("img")){
+                        if ($(e.target).is("img")) {
                             val = e.target.parentNode;
                         } else {
                             val = e.target;
@@ -592,7 +599,7 @@
                     $(daArr[d]).on('dragleave', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                          if ($(e.target).is("img")){
+                        if ($(e.target).is("img")) {
                             val = e.target.parentNode;
                         } else {
                             val = e.target;
@@ -608,10 +615,10 @@
                 $("#main *").prop('disabled', 'disabled')
                 $("#t_fb *,textarea").prop('disabled', false)
 
-                 $("#quizForm").submit(function () {
-                   console.log()
+                $("#quizForm").submit(function () {
+                    console.log()
                     perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
-                    
+
                     return false;
                 });
             }
@@ -625,12 +632,12 @@
             arg = data.split('\\');
             arg = arg[arg.length - 1];
             link = "";
-            if (data.indexOf("wwwRoot")!=-1) {
-                        url1 = data.split("wwwRoot");
-                        link = "https://proj.ruppin.ac.il" + url1[1]
+            if (data.indexOf("wwwRoot") != -1) {
+                url1 = data.split("wwwRoot");
+                link = "https://proj.ruppin.ac.il" + url1[1]
             } else {
-                 url1 = data.split("project");
-                 link = "http://proj.ruppin.ac.il\\igroup5\\prod" + url1[3]
+                url1 = data.split("project");
+                link = "http://proj.ruppin.ac.il\\igroup5\\prod" + url1[3]
             }
 
             $(LufDiv).append(`<div class='link'>${link}</div>`);
@@ -642,7 +649,7 @@
             $('.loader').hide();
             swal('העלאת קובץ נכשלה')
         }
-        
+
         function ckReplace() {
             //connect all text area to CKeditor;
             var areas = $(".ckeditor");
@@ -702,14 +709,14 @@
             }
 
             if (modeQuiz == 'new') {
-               
+
                 ajaxCall('POST', '../api/Student/postQ', JSON.stringify(rt), postQSuccess, postQError);
-                
+
             } else if (modeQuiz == 'edit') {
-               
-               
+
+
                 ajaxCall('PUT', '../api/Student/updateQ', JSON.stringify(rt), postQSuccess, postQError);
-                
+
             }
 
         }
@@ -723,12 +730,12 @@
                 icon: "success",
             })
                 .then(function (confirm) {
-                    
+
                     if (confirm) {
                         window.history.back();
                         window.onbeforeunload = null;
                     }
-                    
+
                     else { window.history.back() }
                 })
 

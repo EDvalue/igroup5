@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="../Scripts/ajaxCalls.js"></script>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/quizToAdd.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
@@ -23,7 +23,7 @@
 
     <script>
 
-
+        document.title = "עורך תוכן";
         var taskData; //all tasks of current subject
         var subject; //active subject
         var myTask, myTask_id; //save chosen task
@@ -105,12 +105,12 @@
                 sumScore += my_quiz.FbList[x].Score;
                 fbStars = "<ion-icon name='star'></ion-icon>".repeat(my_quiz.FbList[x].Score);
                 fbstr = `<div class="fbDiv">
-                                 <div class="fb_content">
-                                      <p>${my_quiz.FbList[x].Content}</p>
-                                 </div>
-                              <div id="fb_score">
-                                  ${fbStars}
-                              </div> </div>`
+                                     <div class="fb_content">
+                                          <p>${my_quiz.FbList[x].Content}</p>
+                                     </div>
+                                  <div id="fb_score">
+                                      ${fbStars}
+                                  </div> </div>`
                 $("#main_fb").append(fbstr)
             }
 
@@ -307,14 +307,14 @@
         }
 
         function iconOpenETask(val, quiz) {
-            
+
             myTask = getTaskById(val.getAttribute('img-QuizId'));
             for (q in myTask.QuizList) {
                 if (myTask.QuizList[q].Inteligence.Ename == quiz.id) {
 
                     myTask.QuizList[q].Title = myTask.Title;
                     localStorage["quiz"] = JSON.stringify(myTask.QuizList[q]);
-                  localStorage["quiz_mode"]='watch'
+                    localStorage["quiz_mode"] = 'watch'
                     window.open("showQuiz.html")
                     break;
                 }

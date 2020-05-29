@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <!--style sheets-->
     <link href="../CSS/manageClass.css" rel="stylesheet" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
@@ -35,6 +36,7 @@
 
 
     <script>
+        document.title = "הכיתה שלי";
         var myTeams;
         var myClasses;
         var userOBJ;
@@ -71,7 +73,7 @@
                 classPage = JSON.parse(localStorage["Teacher_inClass"]);
 
             if (localStorage["myClasses"])
-                myClasses=JSON.parse(localStorage["myClasses"])
+                myClasses = JSON.parse(localStorage["myClasses"])
 
             $("#title h3").html(classPage.Name + "<ion-icon name='pencil-outline'></ion-icon>")
             info = {
@@ -87,16 +89,16 @@
 
                 $("#changeName").toggle();
                 $("#changeName input[type='text']").val(classPage.Name);
-               
+
 
             });
 
             $("#title input[type='button']").click(function () {
 
-                classPage.Name=$("#changeName input[type='text']").val().replace("'","`");
+                classPage.Name = $("#changeName input[type='text']").val().replace("'", "`");
 
                 ajaxCall("PUT", "../api/Teacher/changeClassName", JSON.stringify(classPage), changeClassNameSuccess, changeClassNameError)
-                
+
             })
             createTList();
             getClasses();
@@ -107,12 +109,12 @@
             $("#changeName").toggle();
             updatemyClasses(classPage);
             localStorage["myClasses"] = JSON.stringify(myClasses);
-            localStorage["Teacher_inClass"] =JSON.stringify(classPage);
+            localStorage["Teacher_inClass"] = JSON.stringify(classPage);
             $("#changeName input[type='text']").val(classPage.Name)
             $("#title h3").html(classPage.Name)
         }
 
-        function updatemyClasses(obj){
+        function updatemyClasses(obj) {
             for (c in myClasses) {
                 if (myClasses[c].Grade == obj.Grade && myClasses[c].GradeNumber == obj.GradeNumber
                     && myClasses[c].InSchool == obj.InSchool) {

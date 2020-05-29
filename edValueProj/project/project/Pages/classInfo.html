@@ -9,6 +9,7 @@
     <link href="../CSS/SchoolAdmin.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <link href="../CSS/classInfo.css" rel="stylesheet" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -25,9 +26,10 @@
     <script src="../Scripts/ajaxCalls.js"></script>
 
     <script>
+        document.title = "ניהול כיתה";
         var classPage;
         var editClassMode = 'off';
-        var myStudent,st_id;
+        var myStudent, st_id;
         var tbl;
         var uType;//save the user type in page//
         var User;
@@ -44,7 +46,7 @@
                 return false;
             });
 
-           $("#myUserForm").submit(function (e) {
+            $("#myUserForm").submit(function (e) {
                 UpdateUser();
                 return false;
             });
@@ -57,46 +59,46 @@
             $("#className,#edTeacher,#edTeacher,#GradeClass,#classNumClass").prop("disabled", "disabled")
             classPage = JSON.parse(localStorage["class"]);
             if (localStorage["userInClassInfo"]) {
-                 uType = localStorage["userInClassInfo"];
-              if (uType == "teacher") {
-                   $("#schoolList").prop("disabled", "disabled")
-              }
+                uType = localStorage["userInClassInfo"];
+                if (uType == "teacher") {
+                    $("#schoolList").prop("disabled", "disabled")
+                }
             }
-           
+
             runPage();
             createSTtable();
             ajaxCall("GET", "../api/Admin/getTeacherByScode/" + classPage.InSchool, "", getTeacherBySchoolSuccess, getTeacherBySchoolError)
 
-             ajaxCall("GET", "../api/Admin/getAllschool", "", getSchoolSuccess, getSchoolError);
+            ajaxCall("GET", "../api/Admin/getAllschool", "", getSchoolSuccess, getSchoolError);
         });
 
 
-         function validate() {
+        function validate() {
             optionValuesArr = [];
             var val = $('#' + this.id).val();
             var dl = $("#" + this.getAttribute('name'));
             var options = $("#" + this.getAttribute('name'))[0].options
-            
+
             for (var i = 0; i < options.length; i++) {
 
                 optionValuesArr.push(options[i].value);
             }
 
-                
+
 
             if (val == "") {
-                
+
                 this.val('')
                 return false;
             } else if (optionValuesArr.indexOf(val) === -1) {
-                this.value=''
+                this.value = ''
                 swal("item not in from list.!");
                 return false;
-                
+
 
             }
         }
-        
+
         function getSchoolSuccess(data) {
 
             str = "";
@@ -112,7 +114,7 @@
             console.log(err)
         }
 
-       function UpdateUser() {
+        function UpdateUser() {
             var uType = $('#uType').find(":selected").text();
 
             uArr = [];
@@ -120,32 +122,32 @@
             User = {
 
                 "IdNumber": $("#userId").val(),
-                "Name": $("#userName").val().replace("'","`"),
-                "LastName": $("#userLName").val().replace("'","`"),
-                "Mail": $("#userMail").val().replace("'","`"),
+                "Name": $("#userName").val().replace("'", "`"),
+                "LastName": $("#userLName").val().replace("'", "`"),
+                "Mail": $("#userMail").val().replace("'", "`"),
                 "Password": $("#userId").val(),
                 "SCode": $("#schoolList").val(),
                 "orginal_mail": myStudent.Mail,
 
-               
-     
-            }
-           
-                 myStudent = User;
-                 st_id = User.Mail;
-                 User.Type = $('#uType').find(":selected").text();
-                User.Grade = $("#Grade").val();
-                User.ClassNumber = $("#classNum").val();
-          
-              
-           
-            uArr.push(User)
- 
-              apiLink = "../api/Admin/UpdateUser";
-              ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUser1Success, UpdateUser1Error)
-            
 
-       }
+
+            }
+
+            myStudent = User;
+            st_id = User.Mail;
+            User.Type = $('#uType').find(":selected").text();
+            User.Grade = $("#Grade").val();
+            User.ClassNumber = $("#classNum").val();
+
+
+
+            uArr.push(User)
+
+            apiLink = "../api/Admin/UpdateUser";
+            ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUser1Success, UpdateUser1Error)
+
+
+        }
 
         function renderTable(tbl, newData) {
 
@@ -171,14 +173,14 @@
                         break
                     }
 
-                  
-   
+
+
                 }
             }
             swal("עדכון עבר בהצלחה✔")
             closePOPdiv();
             localStorage["class"] = classPage;
-            renderTable(tbl,classPage.Slist)
+            renderTable(tbl, classPage.Slist)
         }
 
         function UpdateUser1Error(err) {
@@ -195,7 +197,7 @@
             }
 
             $("#teacherList").append(str);
-             $("#teacherList option:first").attr('selected','selected');
+            $("#teacherList option:first").attr('selected', 'selected');
         }
 
         function updateClass() {
@@ -209,14 +211,14 @@
                 }
             }
 
-              
-            classPage["Name"] = $("#className").val().replace("'","`");
+
+            classPage["Name"] = $("#className").val().replace("'", "`");
             classPage["Grade"] = $("#GradeClass").val();
             classPage["GradeNumber"] = $("#classNumClass").val();
             classPage["InSchool"] = classPage.InSchool;
             classPage["EdTeacher"]["Mail"] = selected;
- 
-            
+
+
 
             ajaxCall("PUT", "../api/Admin/updateclass", JSON.stringify(classPage), updateclassSuccess, updateclassError)
 
@@ -241,8 +243,8 @@
             $("#className").val(classPage.Name);
             $("#classNumClass").val(classPage.GradeNumber);
             $('#myClassForm option[value="' + classPage.Grade + '"]').prop('selected', 'selected');
-            $("#edTeacher").prop("value",classPage.EdTeacher.Mail).trigger("keypress") ;
-            
+            $("#edTeacher").prop("value", classPage.EdTeacher.Mail).trigger("keypress");
+
 
 
         }
@@ -265,24 +267,24 @@
         }
 
         function populateFields(SId) {
-              st_id = SId;
+            st_id = SId;
             myStudent = geStudent(SId);
             $("#schoolList").prop("value", classPage.InSchool);
             $("#userId").val(myStudent.IdNumber);
             $("#userName").val(myStudent.Name);
             $("#userLName").val(myStudent.LastName);
             $("#userMail").val(myStudent.Mail);
-            $('#Grade option[value="'+classPage.Grade+'"]').prop('selected', true).trigger('change');
+            $('#Grade option[value="' + classPage.Grade + '"]').prop('selected', true).trigger('change');
             $("#classNum").val(classPage.GradeNumber);
-            
-         
+
+
 
 
         }
 
         function geStudent(id) {
             for (i in classPage.Slist) {
-                if ( classPage.Slist[i].Mail == id)
+                if (classPage.Slist[i].Mail == id)
                     return classPage.Slist[i];
             }
             return null;
@@ -307,7 +309,7 @@
                                 let stData = "data-stId='" + row.Mail + "'";
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' " + stData + "> ערוך </button>";
-                              
+
 
                                 return editBtn
                             }
@@ -331,7 +333,7 @@
         function closePOPdiv() {
             $("#editUDiv").toggle("slow")
             $(".viewBtn,.editBtn").prop('disabled', false);
-             $("#ST tr").removeClass("selected");
+            $("#ST tr").removeClass("selected");
         }
 
         function changeMode() {
@@ -352,13 +354,13 @@
         }
 
 
-        
+
         function bringNumbers() {
             bc = "";
             //bring classes numbers of school or grade//
             $("#class_STdet>#classNum").prop('disabled', false);
             val = $("#schoolList").val();
-             bc = val + "," + $("#class_STdet>#Grade").val();
+            bc = val + "," + $("#class_STdet>#Grade").val();
             ajaxCall("GET", "../api/Admin/getnumbers/" + bc, "", getnumbersSuccess, getnumbersError);
 
         }
@@ -371,7 +373,7 @@
             }
             $("#class_STdet>#classNum").text("")
             $("#class_STdet>#classNum").append(numstrExists);
-             $("#class_STdet>#classNum").val(classPage.GradeNumber)
+            $("#class_STdet>#classNum").val(classPage.GradeNumber)
 
             //if (searchedUser.ClassNumber) {
 

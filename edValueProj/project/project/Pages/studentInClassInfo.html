@@ -8,7 +8,7 @@
     <link href="../CSS/myClass.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <script src="../js/js.js"></script>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -57,7 +57,7 @@
             taskArr: [],
             intelligenceArr: [],
         }
-        var sortedGraphData,intSortedGraphData;
+        var sortedGraphData, intSortedGraphData;
 
         var intGraphData;
         var task;
@@ -73,8 +73,8 @@
                 $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             }
 
-               if (localStorage["performers"])
-                performers =JSON.parse(localStorage["performers"]);
+            if (localStorage["performers"])
+                performers = JSON.parse(localStorage["performers"]);
 
             if (localStorage["performer"])
                 performer = localStorage["performer"];
@@ -85,9 +85,9 @@
             //ajaxCall("GET", "../api/StudentInClass", "", getSuccess, getError);
             if (localStorage["intStudentData"]) {
                 intGraphData = JSON.parse(localStorage["intStudentData"]);
-                intSortedGraphData=JSON.parse(localStorage["intStudentData"]);
+                intSortedGraphData = JSON.parse(localStorage["intStudentData"]);
             }
-                
+
 
             bringStTasks();
 
@@ -103,7 +103,8 @@
 
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
-            $("#title>h3").html(studentGraphData[0].Fname+" "+studentGraphData[0].Lname)
+            $("#title>h3").html(studentGraphData[0].Fname + " " + studentGraphData[0].Lname)
+            document.title =`תלמיד בקבוצה- ${studentGraphData[0].Fname} ${studentGraphData[0].Lname}`;
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
@@ -115,24 +116,24 @@
                 $("#taskName").slideToggle('2s');
             });
             $(".capr").click(function () {
-               
+
                 if ($('#IntelligenceCheckBox').is(':visible')) {
                     $('#IntelligenceCheckBox').toggle('drop');
                     $("div#stat_control_top").css("width", "5%");
                     $(".capr").css("border-radius", "50%");
-     
+
                 }
                 else {
                     $('#IntelligenceCheckBox').toggle();
                     $("div#stat_control_top").css('width', '100%');
-                     $(".capr").css("border-radius", "0%");
+                    $(".capr").css("border-radius", "0%");
                     $(".capr").css("border-top-right-radius", "50%");
                     $(".capr").css("border-bottom-right-radius", "50%");
-                    
 
-                }     
-          
-           });
+
+                }
+
+            });
         });
 
         function closeDivAU() {
@@ -188,8 +189,8 @@
             }).then(function (confirm) {
                 connectPT();
             })
-                
-            
+
+
             console.log(data);
 
             t = getTakById(selectedTsakId);
@@ -201,7 +202,7 @@
             tbl.draw();
 
             closeDivAU();
-            
+
         }
 
         //-----------------Opening a Questionnaire----------------------------
@@ -281,7 +282,7 @@
 
         //-----------------יצירת דאטה טייבל----------------------------
         function bringStTasks() {
-           
+
             info = {
                 Mail: studentGraphData[0].Mail,
                 TeamId: activeTteam.Id,
@@ -293,7 +294,7 @@
         function getStTasksInTeamSuccess(data) {
             console.log(data);
             taskData = data;
-          
+
 
             try {
                 tbl = $('#sp_table').DataTable({
@@ -372,15 +373,15 @@
                                         y = t.split(":");
                                         y[0] = e == "PM" && parseInt(y[0]) != 12 ? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
                                         y = y.map(k => k.length == 1 ? "0" + k : k);
-                                        d = [x[0],x[2],x[1]].join("-");
+                                        d = [x[0], x[2], x[1]].join("-");
                                         t = y.join(":");
                                     }
                                     dt = d + "T" + t;
                                 } else {
-                                    dt=row.Ptime
+                                    dt = row.Ptime
                                 }
-                               
-                              
+
+
                                 if (row.Ptime != "") {
                                     let loc = "data_loc='" + row.TaskId + "'";
                                     return `<span time='${dt}' class="cptime" ${loc}>${new Date(dt).toLocaleDateString(undefined, optionsPtime)} <ion-icon  name="pencil-outline"></ion-icon></span>`
@@ -408,7 +409,7 @@
 
         function connectPT() {
 
-             $(".cptime").click(function () {
+            $(".cptime").click(function () {
                 $("#assigmentForm").slideToggle('2s');
                 selectedTsakId = this.getAttribute("data_loc");
                 console.log(selectedTaskId)
@@ -418,7 +419,7 @@
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
                 t.Ptime = dateTimeArr.join("T")
 
-                 $("#ptime").val(this.getAttribute("time"));
+                $("#ptime").val(this.getAttribute("time"));
 
             });
 

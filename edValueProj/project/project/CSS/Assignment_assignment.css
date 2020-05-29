@@ -10,12 +10,15 @@
     left: 0;
    border-color:rgba(0, 255, 33, 0.78)
 }
-#addFB{
-    z-index:20;
-    position:absolute;
-    top:25%;
-    left:25%;
-    background-color:#0094ff;
+#task_table_filter{
+    direction:ltr;
+}
+#addFB {
+    z-index: 20;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    background-color: #0094ff;
 }
 th.sorting {
     margin: 0;

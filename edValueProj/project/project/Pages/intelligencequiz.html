@@ -5,7 +5,7 @@
 
     <meta charset="utf-8" />
     <title></title>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="../Scripts/ajaxCalls.js"></script>
 
     <!-- Latest compiled and minified CSS -->
@@ -21,16 +21,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
-    
+
     <link href="../CSS/Intelligencequiz.css" rel="stylesheet" />
     <script>
+        document.title = "שאלון אינטליגנציות";
         var ICounter = 0;
         intelli = [];
         mail = "";
         $(document).ready(function () {
             console.log("ready!");
             user = JSON.parse(localStorage["user"])
-            document.getElementById("talmid").innerHTML = "שלום " + user.Name+" "+user.LastName;
+            document.getElementById("talmid").innerHTML = "שלום " + user.Name + " " + user.LastName;
 
             $("#send").click(function () {
 
@@ -49,7 +50,7 @@
                 }
 
                 console.log(intelli)
-                
+
                 mail = user.Mail;
                 var dict = {
                     "mail": mail,

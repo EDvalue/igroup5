@@ -294,6 +294,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="images\book.png" />
+    <Content Include="images\calendar.png" />
     <Content Include="images\cita.jpeg" />
     <Content Include="images\CompletedM.png" />
     <Content Include="images\CurrentM.png" />
@@ -313,6 +314,7 @@
     <Content Include="images\NewM.png" />
     <Content Include="images\pdf-icon.jpg" />
     <Content Include="images\personal.png" />
+    <Content Include="images\pptx-icon.png" />
     <Content Include="images\rar-icon.png" />
     <Content Include="images\school.jpg" />
     <Content Include="images\Science.png" />

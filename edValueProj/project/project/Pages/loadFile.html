@@ -7,7 +7,7 @@
 
     <meta charset="utf-8" />
     <title></title>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
@@ -28,40 +28,44 @@
     <link href="../CSS/LogInPage.css" rel="stylesheet" />
     <link href="../CSS/loadFile.css" rel="stylesheet" />
     <script>
-
+        document.title = "טעינת משתמשים-אקסל";
         $(document).ready(function () {
 
             $("#report").hide()
+            $("input[type='file']").change(function () {
+                loc = this.value.split('\\');
+                $("#ph_file").html("<img src='../images/excel-icon.png'/>" +loc[loc.length-1] )
+            });
+
+              $("#fileBTN").click(function () {
+
+                    $("input[type='file']").trigger("click");
+
+              });
 
             $('#sendBTN button').click(function () {
 
-                
-                    var data = new FormData();  
-                    var file = $("#files").get(0).files[0];
-                    data.append("UploadedFile", file);
 
-                     $.ajax({
-                        type: "POST",
-                        url: "../api/EDvalue/excelLoad",
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        success: PostDocSuccess,
-                        error:  PostDocError
-                    });
+                var data = new FormData();
+                var file = $("#files").get(0).files[0];
+                data.append("UploadedFile", file);
 
-                //var filePath = $(this).val();
-                //$("#fileRoute").val(filePath);
+                $.ajax({
+                    type: "POST",
+                    url: "../api/EDvalue/excelLoad",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: PostDocSuccess,
+                    error: PostDocError
+                });
+
+              
             });
 
         });
         var rep;
-        //function uploadDocument() {
-        //    apiLink = "../api/EDvalue/excelLoad";
-        //    loc = $("#fileRoute").val();
-
-        //    ajaxCall("POST", apiLink, JSON.stringify(loc), PostDocSuccess, PostDocError);
-        //}
+       
 
         function closeReport() {
             $("#report").hide()
@@ -70,14 +74,14 @@
         function PostDocSuccess(data) {
             rep = data;
             console.log(data)
-            if (data[0].msg===undefined) {
+            if (data[0].msg === undefined) {
                 $("#report").show();
                 createSTtable();
                 createExportTBL();
             } else {
                 swal(data[0].msg);
             }
-        
+
         }
         function PostDocError(err) {
             console.log(err)
@@ -87,18 +91,18 @@
             tblStr = "";
             tblStr += "<table id='export'>";
             tblStr += `  <tr>
-                                        <td>סוג משתמש</td>
-                                        <td>מפתח זיהוי</td>
-                                        <td>הודעה</td>
-                                        <td>הסבר</td>
+                                            <td>סוג משתמש</td>
+                                            <td>מפתח זיהוי</td>
+                                            <td>הודעה</td>
+                                            <td>הסבר</td>
 
-                                    </tr>`;
+                                        </tr>`;
             for (r in rep) {
                 tblStr += "<tr>";
                 tblStr += ` <td>${rep[r].type}</td>
-                                                <td>${rep[r].id}</td>
-                                                <td>${rep[r].message}</td>
-                                                <td>${rep[r].details}</td>`
+                                                    <td>${rep[r].id}</td>
+                                                    <td>${rep[r].message}</td>
+                                                    <td>${rep[r].details}</td>`
 
                 tblStr += "</tr>";
 
@@ -209,6 +213,8 @@
                 <div id="instruction">
                     <p> אנא וודא שהפרטים בקובץ מולאו נכון ובהתאם לפורמט</p>
                 </div>
+
+                <div id="ph_file"><p>לא נבחר קובץ</p></div>
                 <div class="row" id="uploadFile">
                     
           
@@ -216,7 +222,8 @@
                         
                         
                         <!--<a href="javascript:void(0)" class="btn1 btn-defult m-3"><i class="fa fa-paperclip"></i>          בחר קובץ</a>-->
-                        <input type="file" id="files" >
+                        <input  type="file" accept=".xlsx" id="files" >
+                        <input id="fileBTN" type="button" class="btn btn-info btn-group-lg" value="בחר קובץ" />
                         <div id="sendBTN"> <button  class="btn btn-primary btn-lg">שלח</button> </div>
 
                     </div>

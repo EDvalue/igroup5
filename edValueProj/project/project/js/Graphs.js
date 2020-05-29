@@ -13,14 +13,14 @@ var options = {
         yAxes: [{
             ticks: {
                 fontColor: 'black',
-                fontSize: 25,
+                fontSize: 18,
                
             }
         }],
         xAxes: [{
             ticks: {
                 fontColor: 'black',
-                fontSize: 25
+                fontSize: 18
             }
         }]
 
@@ -106,13 +106,13 @@ function GradesAvgChart() {
                         beginAtZero: true,   // minimum value will be 0.
                         suggestedMax: 100,
                         fontColor: 'black',
-                        fontSize: 25
+                        fontSize: 18
                     }
                 }],
                 xAxes: [{
                     ticks: {
                         fontColor: 'black',
-                        fontSize: 25
+                        fontSize: 18
                     }
                 }]
             },
@@ -198,7 +198,7 @@ function PercentageChart() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 25
+                    fontSize: 20
                 }
             }
         },
@@ -287,13 +287,13 @@ function ChartIntl() {
                         beginAtZero: true,   // minimum value will be 0.
                         suggestedMax: 10,
                         fontColor: 'black',
-                        fontSize: 25
+                        fontSize: 18
                     }
                 }],
                 xAxes: [{
                     ticks: {
                         fontColor: 'black',
-                        fontSize: 25
+                        fontSize: 18
                     }
                 }]
             }
@@ -362,7 +362,7 @@ function UpdateTaskDoughnut() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 25
+                    fontSize: 20
                 },
             },
 

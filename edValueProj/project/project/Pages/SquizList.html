@@ -10,6 +10,7 @@
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/SquizList.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -40,58 +41,59 @@
         $(document).ready(function () {
 
             $("#Nactive,#activeO,#activeC,#ch_q_div").hide();//hiding tasks till div will be ready
-            if(localStorage["user"])
+            if (localStorage["user"])
                 userOBJ = JSON.parse(localStorage["user"]);
+             document.title =`משימות- ${userOBJ.Name } ${userOBJ.LastName}`;
 
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);//print the user name in manage user div
 
-            if(localStorage["active_student_team"])
+            if (localStorage["active_student_team"])
                 teamOBJ = JSON.parse(localStorage["active_student_team"]);
 
             if (localStorage["active_student_team"])
                 activeStTeam = JSON.parse(localStorage["active_student_team"]);
-            if (localStorage["userMode"]) 
-                  perform_showQuiz_mode = localStorage["userMode"];
+            if (localStorage["userMode"])
+                perform_showQuiz_mode = localStorage["userMode"];
 
-              if ((localStorage["userMode"]))
+            if ((localStorage["userMode"]))
                 userMode = localStorage["userMode"];
-            if(localStorage['quiz'])
+            if (localStorage['quiz'])
                 el = JSON.parse(localStorage['quiz']);
             if (localStorage["performer"])
                 performer = localStorage["performer"];
-            if(localStorage['quiz_mode'])
+            if (localStorage['quiz_mode'])
                 modeQuiz = localStorage['quiz_mode'];
             if (localStorage['quizSubject'])
                 quizSubject = localStorage['quizSubject'];
 
-              localStorage.clear();
+            localStorage.clear();
             $(window).on('beforeunload', function () {
                 localStorage["user"] = JSON.stringify(userOBJ);
                 localStorage['userMode'] = userMode;
                 localStorage["active_student_team"] = JSON.stringify(activeStTeam);
                 localStorage['quizSubject'] = quizSubject;
-                 if(el)
+                if (el)
                     localStorage['quiz'] = JSON.stringify(el);
-                  if(modeQuiz)
+                if (modeQuiz)
                     localStorage['quiz_mode'] = modeQuiz;
-                 if(perform_showQuiz_mode)
+                if (perform_showQuiz_mode)
                     localStorage['userMode'] = perform_showQuiz_mode;
-                if (teamOBJ||activeStTeam)
+                if (teamOBJ || activeStTeam)
                     localStorage["active_student_team"] = JSON.stringify(teamOBJ);
-                 if(quizSubject )
-                localStorage['quizSubject'] = quizSubject;
+                if (quizSubject)
+                    localStorage['quizSubject'] = quizSubject;
             });
 
             userEmail = userOBJ.Mail.replace(".", ",");//need to change
             getTask = userEmail + "_" + teamOBJ.Id;
-            
+
             ajaxCall("GET", "../api/Student/getSTasks/" + getTask, "", getSTasksSuccess, getSTasksError)
 
         });
 
 
         function getSTasksSuccess(data) {
-            //task of student in team 
+            //task of student in team
             allTask = data;
             //sort tasks
             for (x in data) {
@@ -110,12 +112,12 @@
             printActiveClose(activeCloseArr);
 
             //connect page
-            if(NactiveArr.length>0)
+            if (NactiveArr.length > 0)
                 $("#Nactive").show();
             if (activeOpenArr.length > 0)
                 $("#activeO").show();
             if (activeCloseArr.length > 0)
-                 $("#activeC").show();
+                $("#activeC").show();
             $("#activeC .cq,.fb_content").hide();
             $("#activeO .cq").click(changeQ);
             $(".fb").click(showNote)
@@ -153,10 +155,10 @@
                     for (q in activeOpenArr[rt].Task.QuizList) {
                         if (activeOpenArr[rt].Task.QuizList[q].QuizID != qId) {
                             str += `<div class="cq_questionnaire">
-                                          <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
-                                        </div>`
-                        } 
-                       
+                                              <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
+                                            </div>`
+                        }
+
                     }
                     if (str != "") {
                         $("#ch_q_div").html(str);
@@ -165,7 +167,7 @@
                     } else {
                         swal('אין שאלון זמין להחלפה');
                     }
-                   
+
                 }
             }
 
@@ -185,10 +187,10 @@
                 .then(function (confirm) {
                     if (confirm) {
                         cq_activeTask.Task.QuizList[val.getAttribute("quizNum")].TaskId = 2;
-                        cq_activeTask.yearOfStudy=activeStTeam.Id;
+                        cq_activeTask.yearOfStudy = activeStTeam.Id;
                         cq_activeTask.StPerformer = userOBJ;
                         ajaxCall("PUT", "../api/Student/changeQ", JSON.stringify(cq_activeTask), changeQSuccess, changeQError)
-                        
+
                     }
                     else {
                         swal({
@@ -212,7 +214,7 @@
                     cq_activeTask.Task.QuizList[k].TaskId = cq_activeTask.Task.TaskId;
                     cq_activeTask.Task.QuizList[k].Title = cq_activeTask.Task.Title;
                     quizC = cq_activeTask.Task.QuizList[k];
-                    
+
                 }
             }
             el = quizC;
@@ -243,7 +245,7 @@
             return comparison;
         }
 
-        function compareSysPoints(a,b) {
+        function compareSysPoints(a, b) {
             // Use toUpperCase() to ignore character casing
             const A = a.Spoints;
             const B = b.Spoints;
@@ -268,59 +270,59 @@
                 for (z in data[x].Task.QuizList) {
                     Sobj = {
                         name: data[x].Task.QuizList[z].Inteligence.Ename,
-                        Spoints:data[x].Task.QuizList[z].Inteligence.Spoints
+                        Spoints: data[x].Task.QuizList[z].Inteligence.Spoints
                     };
-                    
+
                     systemPoints.push(Sobj)
                 }
 
-                
-                    systemPoints.sort(compareSysPoints)
-               
-            
-                str += `
-                        <div id="Task" class="col-md-6 col-12">
 
-                                <div class="content_new">
-                                    <div class="name_date">
-                                        <p>${data[x].Task.Title}</p> <div class="times">`
-                
+                systemPoints.sort(compareSysPoints)
+
+
+                str += `
+                            <div id="Task" class="col-md-6 col-12">
+
+                                    <div class="content_new">
+                                        <div class="name_date">
+                                            <p>${data[x].Task.Title}</p> <div class="times">`
+
                 if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
                     str += `<div class="time_for"><p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorO" name="caret-back-outline"></ion-icon></div>`
-                    str+=`<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
+                    str += `<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
                 } else {
                     str += `<div class="time_for"><p>עבור:</p><span>${new Date(data[x].ForDate).toLocaleDateString(undefined, options)}</span> <ion-icon class="colorC" name="caret-back-outline"></ion-icon></div>`
-                    str+=`<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
+                    str += `<div class="time_till"><p>עד:</p><span>${new Date(data[x].TillDate).toLocaleDateString(undefined, options)}</span></div>`
                 }
 
                 str += `</div></div>
 
-                  <div id="intelliO"><div id="sys_tit">דירוג מערכת</div>
-                     <div id="q_tit">דירוג שאלון<span>(ימין לשמאל)</span></div>`
-                
+                      <div id="intelliO"><div id="sys_tit">דירוג מערכת</div>
+                         <div id="q_tit">דירוג שאלון<span>(ימין לשמאל)</span></div>`
+
                 for (i in data[x].Task.QuizList) {
-                    str+="<div class='imgQuiz'>"
+                    str += "<div class='imgQuiz'>"
                     n = data[x].Task.QuizList[i].Inteligence.Ename;
-                    let span = `<div class='spanPoints'><span>${systemPoints.findIndex(x => x.name ===n)+1}</span></div>`;
+                    let span = `<div class='spanPoints'><span>${systemPoints.findIndex(x => x.name === n) + 1}</span></div>`;
                     if ((new Date(data[x].TillDate) > new Date() && new Date(data[x].ForDate) < new Date()) || (new Date(data[x].STime) > new Date())) {
                         str += `${span}<div class='NaImage'> <img title="פתח לביצוע"   task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" /></div>`
                     } else {
                         str += `${span}<div class='NaImage'> <img title="מטלה טרם נפתחה" task="${data[x].Task.TaskId}" quiz="${data[x].Task.QuizList[i].QuizID}" src="../images/${data[x].Task.QuizList[i].Inteligence.Ename}.png" /></div>`
                     }
-                    str+="</div>"
+                    str += "</div>"
                 }
 
                 str += ` </div>
-                                    <div id="ladder">
-                                        <p>מומלץ מאוד</p>
-                                        <ion-icon name="cellular-outline" style="font-size:35px"></ion-icon>
-                                        <p>פחות מומלץ</p>
+                                        <div id="ladder">
+                                            <p>מומלץ מאוד</p>
+                                            <ion-icon name="cellular-outline" style="font-size:35px"></ion-icon>
+                                            <p>פחות מומלץ</p>
 
+                                        </div>
                                     </div>
-                                </div>
 
 
-                            </div>`;
+                                </div>`;
 
             }
             $("#Nactive #tasks").text("")
@@ -367,35 +369,35 @@
             //create close/open active task div;
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             const shortDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const shorttime = {hour: 'numeric', minute: 'numeric' }
+            const shorttime = { hour: 'numeric', minute: 'numeric' }
             str = `<div id="SmallTask" class="col-lg-4 col-md-6 col-12">
 
-                                <div class="content_active">
-                                    <div class="right">
-                                        <div class="Name">
-                                            <p>${data.Task.Title}</p>
-                                        </div>
-                                        <div class="Time">
-                                            <p>${new Date(data.TillDate).toLocaleDateString(undefined, options)}</p><ion-icon class='color${arg}' name="caret-back"></ion-icon>
-                                        </div>
-                                        <div class="opt">
-                                            <div class="fb">
-                                                <ion-icon name="checkmark" class='color${arg}' size="large"></ion-icon>
-                                                <p>צפה במשוב</p>
-                                                 <div class='fb_content'><div class="note">${data.Note ? data.Note : "מטלה טרם קיבלה משוב"}</div><div class='score'>${data.Score ? data.Score : "none"}</div></div>
+                                    <div class="content_active">
+                                        <div class="right">
+                                            <div class="Name">
+                                                <p>${data.Task.Title}</p>
                                             </div>
-                                           <div task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" class="cq">
-                                                <ion-icon name="repeat" class='color${arg}' size="large"></ion-icon>
+                                            <div class="Time">
+                                                <p>${new Date(data.TillDate).toLocaleDateString(undefined, options)}</p><ion-icon class='color${arg}' name="caret-back"></ion-icon>
+                                            </div>
+                                            <div class="opt">
+                                                <div class="fb">
+                                                    <ion-icon name="checkmark" class='color${arg}' size="large"></ion-icon>
+                                                    <p>צפה במשוב</p>
+                                                     <div class='fb_content'><div class="note">${data.Note ? data.Note : "מטלה טרם קיבלה משוב"}</div><div class='score'>${data.Score ? data.Score : "none"}</div></div>
+                                                </div>
+                                               <div task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" class="cq">
+                                                    <ion-icon name="repeat" class='color${arg}' size="large"></ion-icon>
 
-                                                <p>החלף שאלון</p>
+                                                    <p>החלף שאלון</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="left">
-                                        <div class="classDate">
-                                            <p  title='${new Date(data.ForDate).toLocaleDateString(undefined, options)}'>${new Date(data.ForDate).toLocaleDateString(undefined, shortDate)}</p>
-                                        </div>
-                                        <div class="imgQuestionnire">`;
+                                        <div id="left">
+                                            <div class="classDate">
+                                                <p  title='${new Date(data.ForDate).toLocaleDateString(undefined, options)}'>${new Date(data.ForDate).toLocaleDateString(undefined, shortDate)}</p>
+                                            </div>
+                                            <div class="imgQuestionnire">`;
             if (arg == 'O') {
                 str += ` <img title="פתח לביצוע"  task="${data.Task.TaskId}" quiz="${data.Task.QuizList[num].QuizID}" src="../images/${data.Task.QuizList[num].Inteligence.Ename}.png" />`
             } else {
@@ -404,9 +406,9 @@
 
             str += ` </div>
 
+                                        </div>
                                     </div>
-                                </div>
-                            </div>`
+                                </div>`
             return str;
 
         }

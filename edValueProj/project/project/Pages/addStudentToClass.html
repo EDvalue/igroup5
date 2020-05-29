@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
@@ -23,6 +24,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
+        document.title = "ניהול קבוצה";
         var userOBJ;
         var mode = "";
         var teamid, team;
@@ -122,7 +124,7 @@
         }
 
         function createTeam() {
-        
+
             inTeam = replacebottomTLine(inTeam);
             Team = {
 
@@ -152,39 +154,39 @@
 
 
         }
-         function putTeamSuccess(data) {
+        function putTeamSuccess(data) {
             inTeam = replacedott(inTeam);
             $("body").text("");
-            
+
             console.log(data);
             swal({
-                
-                   title: "שינויים בוצעו בהצלחה✔",
-                   icon: "success",
-               })
-                    .then(function (confirm) {
-                        if (confirm)   window.history.back();
-                        else   window.history.back();
-                    })
+
+                title: "שינויים בוצעו בהצלחה✔",
+                icon: "success",
+            })
+                .then(function (confirm) {
+                    if (confirm) window.history.back();
+                    else window.history.back();
+                })
         }
-         function putTeamError(err) {
+        function putTeamError(err) {
             inTeam = replacedott(inTeam);
             console.log(err);
         }
         function postTeamSuccess(data) {
             inTeam = replacedott(inTeam);
             $("body").text("");
-            
+
             console.log(data);
             swal({
-                
-                   title: "שינויים בוצעו בהצלחה✔",
-                   icon: "success",
-               })
-                    .then(function (confirm) {
-                        if (confirm)   window.history.back();
-                        else   window.history.back();
-                    })
+
+                title: "שינויים בוצעו בהצלחה✔",
+                icon: "success",
+            })
+                .then(function (confirm) {
+                    if (confirm) window.history.back();
+                    else window.history.back();
+                })
         }
 
         function postTeamError(err) {
@@ -239,12 +241,12 @@
             }
 
             let unique = distinct.filter((item, i, ar) => ar.indexOf(item) === i);
-             unique.sort(function(a, b){return a-b})
+            unique.sort(function (a, b) { return a - b })
             for (x in unique) {
 
                 rdStr += `<div id="number_class">
-                                    <p>${unique[x]}</p><input onchange="radioselect(this)" id="${unique[x]}" type="checkbox">
-                                  </div>`
+                                        <p>${unique[x]}</p><input onchange="radioselect(this)" id="${unique[x]}" type="checkbox">
+                                      </div>`
 
             }
 
@@ -299,8 +301,8 @@
 
             for (x in inTeam) {
                 strIN = `<div class="student">
-                                    <input class="${inTeam[x].Email}" type="checkbox" name="it" id="${x}"/><span>${inTeam[x].Name} ${inTeam[x].LastName}-${inTeam[x].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                </div>`
+                                        <input class="${inTeam[x].Email}" type="checkbox" name="it" id="${x}"/><span>${inTeam[x].Name} ${inTeam[x].LastName}-${inTeam[x].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                    </div>`
                 $("#SlistR").append(strIN);
 
                 let index1 = removeSt.filter(st => st.Mail == inTeam[x].Mail)
@@ -314,8 +316,8 @@
 
             for (y in notInTeam) {
                 strOUT = `<div class="student">
-                                    <input class="${notInTeam[y].Mail}" type="checkbox"  name="nit" id="${y}"/><span>${notInTeam[y].Name} ${notInTeam[y].LastName}-${notInTeam[y].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                </div>`
+                                        <input class="${notInTeam[y].Mail}" type="checkbox"  name="nit" id="${y}"/><span>${notInTeam[y].Name} ${notInTeam[y].LastName}-${notInTeam[y].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                    </div>`
                 $("#SlistA").append(strOUT);
 
                 let index1 = newSt.filter(st => st.Mail == notInTeam[y].Mail)

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="../js/js.js"></script>
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -42,35 +42,35 @@
             $("#title>h1>span").html(userOBJ.Name);
             if ((localStorage["userMode"]))
                 userMode = localStorage["userMode"];
-            if(localStorage['quiz'])
+            if (localStorage['quiz'])
                 el = JSON.parse(localStorage['quiz']);
-            if(localStorage['quiz_mode'])
+            if (localStorage['quiz_mode'])
                 modeQuiz = localStorage['quiz_mode'];
-            if (localStorage["userMode"]) 
+            if (localStorage["userMode"])
                 perform_showQuiz_mode = localStorage["userMode"];
-                 if(localStorage["active_student_team"])
+            if (localStorage["active_student_team"])
                 teamOBJ = JSON.parse(localStorage["active_student_team"]);
             if (localStorage['quizSubject'])
                 quizSubject = localStorage['quizSubject'];
-           
 
+            document.title =`דשבורד תלמיד- ${userOBJ.Name } ${userOBJ.LastName}`;
             localStorage.clear();
             $(window).on('beforeunload', function (e) {
                 localStorage["user"] = JSON.stringify(userOBJ);
                 localStorage['userMode'] = userMode;
-                if(el)
+                if (el)
                     localStorage['quiz'] = JSON.stringify(el);
-                if(performer)
+                if (performer)
                     localStorage["performer"] = performer;
-                 if(modeQuiz)
+                if (modeQuiz)
                     localStorage['quiz_mode'] = modeQuiz;
-                 if(perform_showQuiz_mode)
+                if (perform_showQuiz_mode)
                     localStorage['userMode'] = perform_showQuiz_mode;
-                  if (teamOBJ)
+                if (teamOBJ)
                     localStorage["active_student_team"] = JSON.stringify(teamOBJ);
-                 if(quizSubject )
+                if (quizSubject)
                     localStorage['quizSubject'] = quizSubject;
-                 
+
 
             });
 
@@ -79,9 +79,9 @@
             //    localStorage["user"] = JSON.stringify(data);
             //     localStorage['userMode'] = userMode;
             //}
-   
-            
-            ajaxCall("PUT","../api/Student/getSTeams",JSON.stringify(userOBJ),getSTeamsSuccess,getSTeamsError)
+
+
+            ajaxCall("PUT", "../api/Student/getSTeams", JSON.stringify(userOBJ), getSTeamsSuccess, getSTeamsError)
         });
 
 
@@ -91,23 +91,23 @@
             for (t in data) {
 
                 teamStr = `<div id="team" class="col-12 col-md-6 col-lg-4">
-                        <div id="team_bar">
-                           
-                            <div id="name">
-                                <p>${data[t].Title}</p>
+                            <div id="team_bar">
+
+                                <div id="name">
+                                    <p>${data[t].Title}</p>
+                                </div>
+                                <div id="numOfNT">
+                                    <p dir="ltr">${data[t].Scode} מ.ח</p>
+                                </div>
                             </div>
-                            <div id="numOfNT">
-                                <p dir="ltr">${data[t].Scode} מ.ח</p>
+
+                            <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
+
+                                    <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
+
                             </div>
-                        </div>
 
-                        <div id="sub_img" onclick="openTeam(this)" team_id="${data[t].Id}">
-                           
-                                <img   id="subImg_el" src="${data[t].Subject.ImgLink}" />
-
-                        </div>
-
-                      </div>`;
+                          </div>`;
 
                 $("#teams").append(teamStr);
             }
@@ -124,7 +124,7 @@
                     localStorage["active_student_team"] = JSON.stringify(myTeams[team]);
                     teamOBJ = myTeams[team];
                     localStorage['quizSubject'] = myTeams[team].Subject.Name;
-                    quizSubject=myTeams[team].Subject.Name;
+                    quizSubject = myTeams[team].Subject.Name;
                     location.assign("SquizList.html");
 
                 }

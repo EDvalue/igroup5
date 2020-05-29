@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <title></title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
@@ -13,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Popper JS -->
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
@@ -25,6 +26,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
 
     <script>
+        document.title = "אדמין-ניהול בתי ספר";
         var searchedUser = {}, classPicked = {}, User = {};
         var activeSc;
         var modeSc = "";//save mode of class (edit/new)
@@ -39,7 +41,7 @@
 
         $(document).ready(function () {
 
-             $("#TList,#CitySCHOOLlist,#schoolList").focusout(validate)
+            $("#TList,#CitySCHOOLlist,#schoolList").focusout(validate)
 
             $("#myUserForm").submit(function (e) {
                 creatUpdateUser();
@@ -56,11 +58,11 @@
                 return false;
             });
             if (localStorage["user"]) {
-               userarg = JSON.parse(localStorage["user"]);
+                userarg = JSON.parse(localStorage["user"]);
                 $("#user_manage>button").append(userarg.Name);
             }
-               
-           
+
+
             //----getALLcities----------//
             ajaxCall("GET", "../api/Admin/getAllcities", "", getCitiesSuccess, getCitiesError);
             //--------------------------//
@@ -73,7 +75,7 @@
             $('#UserAdd').hide();
             $("#classAdd").hide();
 
-           
+
 
         });
 
@@ -84,7 +86,7 @@
 
                 activeSc = localStorage['activeSc_Admin'];
                 $("#filtList").trigger("change");
-                
+
 
             }
         }
@@ -93,23 +95,23 @@
             var val = $('#' + this.id).val();
             var dl = $("#" + this.getAttribute('name'));
             var options = $("#" + this.getAttribute('name'))[0].options
-            
+
             for (var i = 0; i < options.length; i++) {
 
                 optionValuesArr.push(options[i].value);
             }
 
-                
+
 
             if (val == "") {
-                
+
                 this.val('')
                 return false;
             } else if (optionValuesArr.indexOf(val) === -1) {
-                this.value=''
+                this.value = ''
                 swal("item not in list.!");
                 return false;
-                
+
 
             }
         }
@@ -120,9 +122,9 @@
             //alert("")
             sc = $("input[name='s']:checked").attr('id');
             activeSc = sc;
-           
-            localStorage['activeSc_Admin'] =activeSc;
-            
+
+            localStorage['activeSc_Admin'] = activeSc;
+
             apiLink = "../api/Admin/getClassBySchool/" + sc;
 
             ajaxCall("GET", apiLink, "", getClassBySchoolASuccess, getClassBySchoolAError);
@@ -136,17 +138,17 @@
             for (x in data) {
                 //data[x].Name = data[x].Name.replace("`", "'");
                 str1 += `<div class='col-lg-4 col-md-6 col-sm-6'>
-                                   <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="person-add-outline"></ion-icon></div>
-                                    <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
-                                        <div id='imgc'><img src='../images/cita.jpeg' /></div>
-                                        <div id='className'> <label> ${data[x].Name} </label></div>
-                                        <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
-                                        <div id='CmetaData'>
-                                            <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
-                                            <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                       <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="person-add-outline"></ion-icon></div>
+                                        <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
+                                            <div id='imgc'><img src='../images/cita.jpeg' /></div>
+                                            <div id='className'> <label> ${data[x].Name} </label></div>
+                                            <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
+                                            <div id='CmetaData'>
+                                                <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
+                                                <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                 </div>`
+                                     </div>`
             }
 
 
@@ -161,17 +163,17 @@
             $("#addingDiv").show();
             $('#UserAdd').show();
             $("#classAdd").hide();
-             classPicked = classes[num];
-             $("#disbackg").css("visibility", "visible");
+            classPicked = classes[num];
+            $("#disbackg").css("visibility", "visible");
             classPicked = classes[num];
 
-              var options = $('#schoolNU')[0].options;
-                for (v in options) {
-                    if (options[v].id == classes[num].InSchool) {
-                        $("#schoolList").prop("value", options[v].value);
-                    }
+            var options = $('#schoolNU')[0].options;
+            for (v in options) {
+                if (options[v].id == classes[num].InSchool) {
+                    $("#schoolList").prop("value", options[v].value);
                 }
-              
+            }
+
 
             $('#Grade').val(classes[num].Grade).trigger('change');
             $('#classNum').val(classes[num].GradeNumber);
@@ -230,12 +232,12 @@
 
         function postSchoolSuccess(data) {
 
-            
+
             swal({
-                
-                   title: "נוסף בית ספר חדש ",
-                   icon: "success",
-               })
+
+                title: "נוסף בית ספר חדש ",
+                icon: "success",
+            })
             console.log(data);
 
 
@@ -244,9 +246,9 @@
 
             console.log(data);
             swal({
-                
-                   title: "בית הספר עודכן ",
-                   icon: "success",
+
+                title: "בית הספר עודכן ",
+                icon: "success",
             })
             $("#disbackg").css("visibility", false);
             closeDivUS();
@@ -273,7 +275,7 @@
         }
 
         function newAClass(arg) {
-              $("#disbackg").css("visibility", "visible");
+            $("#disbackg").css("visibility", "visible");
             valID = arg.firstElementChild.id;
             valNAME = arg.children[1].textContent
 
@@ -364,11 +366,11 @@
 
             uArr.push(User)
             if (modeSt == "new") {
-                
+
                 apiLink = "../api/Admin/postNewUser";
                 ajaxCall("POST", apiLink, JSON.stringify(uArr), postNewUserSuccess, postNewUserError)
             } else {
-               
+
                 apiLink = "../api/Admin/UpdateUser";
                 ajaxCall("PUT", apiLink, JSON.stringify(uArr), UpsateUserSuccess, UpdateUserError)
             }
@@ -376,7 +378,7 @@
         }
 
         function postNewUserSuccess(data) {
-             modeSt = "";
+            modeSt = "";
             console.log(data);
             closeDivUS();
             swal("✔משתמש נוסף בהצלחה")
@@ -401,12 +403,12 @@
         }
 
         function UpsateUserSuccess(data) {
-             modeSt = "";
+            modeSt = "";
             console.log(data)
             closeDivUS();
             swal("✔העדכון הסתיים בהצלחה")
 
-             if (classes) {
+            if (classes) {
 
                 if (classes[0].InSchool == User.SCode) {
 
@@ -434,14 +436,14 @@
                         for (c in classes) {
 
                             if (classes[c].Grade == searchedUser.Grade && classes[c].GradeNumber == searchedUser.ClassNumber) {
-                                
+
                                 for (s in classes[c].Slist) {
 
                                     if (classes[c].Slist[s].Mail == searchedUser.orginal_mail) {
                                         flag = 1;
                                         classes[c].Slist.splice(s, 1)
                                         break;
-                                      
+
                                     }
                                 }
 
@@ -449,7 +451,7 @@
 
                             if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
                                 user1 = adjustUser(User)
-                                 classes[c].Slist.push(user1);                  
+                                classes[c].Slist.push(user1);
                             }
                         }
 
@@ -459,7 +461,7 @@
 
             }
 
-             getClassBySchoolASuccess(classes);
+            getClassBySchoolASuccess(classes);
         }
 
         function adjustUser(user) {
@@ -520,7 +522,7 @@
             if (Class.SCode == activeSc) {
                 bringClasses();
             }
-            
+
         }
         function schoolpicked() {
             $("#class_STdet>#Grade").prop('disabled', false);
@@ -577,23 +579,23 @@
             for (x in data) {
 
                 str += `<div id="school">
-                                        <input onclick="bringClasses()" type="radio" id="${data[x].SchoolCode}" name="s" /><span>${data[x].Name}</span><br />
-                                         <div id="edit_school" onclick="showSchool(this.parentNode)">
-                                            <ion-icon  name="pencil-outline" title="פתיחת כיתה"></ion-icon>
-                                        </div>
-                                        <div id="new_class" onclick="newAClass(this.parentNode)">
-                                           <ion-icon name="add-circle-outline"></ion-icon>
-                                        </div>
-                                    </div>`;
+                                            <input onclick="bringClasses()" type="radio" id="${data[x].SchoolCode}" name="s" /><span>${data[x].Name}</span><br />
+                                             <div id="edit_school" onclick="showSchool(this.parentNode)">
+                                                <ion-icon  name="pencil-outline" title="פתיחת כיתה"></ion-icon>
+                                            </div>
+                                            <div id="new_class" onclick="newAClass(this.parentNode)">
+                                               <ion-icon name="add-circle-outline"></ion-icon>
+                                            </div>
+                                        </div>`;
             }
             $("#SchoolList").text(" ");
             $("#SchoolList").append(str);
             if (activeSc && localStorage['activeSc_Admin']) {
-               
-                 $("#school>#" + activeSc).attr('checked', true).trigger('click');
+
+                $("#school>#" + activeSc).attr('checked', true).trigger('click');
             }
 
-           
+
 
             $("#newClass svg title").text("פתח משתמש")
         }
@@ -645,16 +647,16 @@
 
             $("#SCcode").val(data.SchoolCode);
             $("#SCName").val(data.Name);
-               var options = $('#citiesNU')[0].options;
-                for (v in options) {
-                    if (options[v].id == data.CityCode) {
-                         $("#CitySCHOOLlist").prop('value',options[v].value);
-                    }
+            var options = $('#citiesNU')[0].options;
+            for (v in options) {
+                if (options[v].id == data.CityCode) {
+                    $("#CitySCHOOLlist").prop('value', options[v].value);
                 }
-           
+            }
+
 
             if (modeSc == "edit") {
-                $("#SCcode").prop( "disabled",true)
+                $("#SCcode").prop("disabled", true)
             }
 
         }
@@ -678,14 +680,14 @@
                 $("#userLName").val(data.LastName);
                 $("#userMail").val(data.Email);
 
-                
+
                 var options = $('#schoolNU')[0].options;
                 for (v in options) {
                     if (options[v].id == data.SCode) {
                         $("#schoolList").prop("value", options[v].value);
                     }
                 }
-                
+
                 $('#schoolList option[id=' + data.SCode + ']').prop('selected', 'selected');
                 st_mail_update = data.Email;
 
@@ -700,7 +702,7 @@
                     $('#teacher_det>select option[value=' + data.SchoolAdmin + ']').prop('selected', 'selected');
                     $('#uType option[value="t"]').prop('selected', 'selected').trigger('change');
                     $('#uType').prop('disabled', true);
-                     
+
 
                     schoolTeacherSearch = data.SCode;
 
@@ -750,7 +752,7 @@
             document.getElementById('cities').innerHTML += str;
             document.getElementById('citiesNU').innerHTML += str;
 
-             activatePage();
+            activatePage();
         }
 
         function getCitiesError(err) {
@@ -773,7 +775,7 @@
                     if (searchedUser.SCode) {
 
                         bc = searchedUser.SCode + "," + $("#class_STdet>#Grade").val();
-                       
+
                     } else {
 
                         bc = activeSc + "," + $("#class_STdet>#Grade").val();
@@ -819,20 +821,20 @@
 
             }
 
-          
+
             $("#NCnumber,#class_STdet>#classNum").text("")
             $("#NCnumber").append(numstrNew);
             $("#class_STdet>#classNum").append(numstrExists);
 
-            if (searchedUser.ClassNumber && modeSt=="edit") {
+            if (searchedUser.ClassNumber && modeSt == "edit") {
 
                 $('#classNum').val(searchedUser.ClassNumber);
-               
 
-            } else if(classPicked.GradeNumber) {
+
+            } else if (classPicked.GradeNumber) {
 
                 $('#classNum').val(classPicked.GradeNumber);
-                classPicked=""
+                classPicked = ""
             }
         }
 
@@ -846,7 +848,7 @@
             localStorage["class"] = JSON.stringify(myClass);
             localStorage["userInClassInfo"] = "admin";
             if (activeSc) {
-                 localStorage['activeSc_Admin'] = activeSc;
+                localStorage['activeSc_Admin'] = activeSc;
             }
             location.assign("classInfo.html");
 

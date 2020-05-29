@@ -7,7 +7,7 @@
     <link href="../CSS/manageClass.css" rel="stylesheet" />
     <link href="../CSS/teacherDashbord.css" rel="stylesheet" />
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="../Scripts/ajaxCalls.js"></script>
     <script src="../js/js.js"></script>
     <script src="../js/Graphs.js"></script>
@@ -42,9 +42,9 @@
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
-    
-    <script>
 
+    <script>
+        document.title = "ניהול קבוצה";
         var myTeams;
         var userOBJ;
         var listdata;
@@ -91,6 +91,7 @@
                     }
                 }
                 printSortedTaskList();
+                $(".cancel .icon-inner title").html("בטל שיוך.")
 
             });
 
@@ -181,7 +182,8 @@
             t = getTakById(selectedTsakId);
             t.ForDate = $("#class_date>input[type='datetime-local']").val();
             t.OpenTill = $("#submition_date>input[type='datetime-local']").val()
-            printSortedTaskLOist();
+            printSortedTaskList();
+
 
             closeDivAU();
         }
@@ -192,6 +194,7 @@
             }
             $("#tasks").html(str);
             connectTaskList();
+            $(".cancel .icon-inner title").html("בטל שיוך.")
         }
 
         function updateAssigmentError(err) {
@@ -630,7 +633,7 @@
             var cstrC = "";
             var years = {}
             for (a in taskList) {
-                
+
                 dateTimeArr = taskList[a].ForDate.split(" ");
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
                 if (isNaN(new Date(dateTimeArr[0] + "T00:00:00").getTime())) {
@@ -639,15 +642,15 @@
                     x = dateTimeArr[0].split("-");
                     x = x.map(k => k.length == 1 ? "0" + k : k);
                     y = dateTimeArr[1].split(":");
-                    y[0] = e == "PM"&&parseInt(y[0])!=12? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
-                     y= y.map(k => k.length == 1 ? "0" + k : k);
+                    y[0] = e == "PM" && parseInt(y[0]) != 12 ? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
+                    y = y.map(k => k.length == 1 ? "0" + k : k);
                     taskList[a].ForDate = `${x[0]}-${x[2]}-${x[1]}T${y[0]}:${y[1]}:${y[2]}`;
-              
+
                 } else {
-                        taskList[a].ForDate = dateTimeArr[0]+"T"+dateTimeArr[1];
-                        
+                    taskList[a].ForDate = dateTimeArr[0] + "T" + dateTimeArr[1];
+
                 }
-      
+
                 dateTimeArr = taskList[a].OpenTill.split(" ");
                 dateTimeArr[0] = dateTimeArr[0].split("/").reverse().join("-");
                 if (isNaN(new Date(dateTimeArr[0] + "T00:00:00").getTime())) {
@@ -656,16 +659,16 @@
                     x = dateTimeArr[0].split("-");
                     x = x.map(k => k.length == 1 ? "0" + k : k);
                     y = dateTimeArr[1].split(":");
-                     y[0] = e == "PM"&&parseInt(y[0])!=12? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
-                    y= y.map(k => k.length == 1 ? "0" + k : k);
+                    y[0] = e == "PM" && parseInt(y[0]) != 12 ? parseInt(y[0]) + 12 : y[0] == "12" && e == "AM" ? "00" : y[0];
+                    y = y.map(k => k.length == 1 ? "0" + k : k);
                     taskList[a].OpenTill = `${x[0]}-${x[2]}-${x[1]}T${y[0]}:${y[1]}:${y[2]}`;
-                   
+
                 } else {
-                    taskList[a].OpenTill =dateTimeArr[0]+"T"+dateTimeArr[1];
-                    
-                }  
-                
-                
+                    taskList[a].OpenTill = dateTimeArr[0] + "T" + dateTimeArr[1];
+
+                }
+
+
 
                 yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
                     new Hebcal.HDate(new Date(new Date().getFullYear(), 8, 30)).toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``') :
@@ -686,9 +689,20 @@
             $('#years>select>option[value=' + yearOfStudy.replace("``", "") + ']').attr('selected', true);
             connectTaskList();
 
+
         }
 
         function connectTaskList() {
+
+            $(".cancel>ion-icon").hover(function () {
+
+                sd = document.querySelectorAll(".cancel ion-icon")
+                for (x in sd) {
+                    sd[x].shadowRoot.querySelector(".icon-inner title").innerHTML = "ביטול שיוך"
+                }
+
+            });
+
             $(".fr").click(function () {
 
                 ShowSubmitted(this.parentNode.id);
@@ -728,27 +742,27 @@
 
 
         function createTaskDiv(task) {
-            
+
 
             const optionsForDate = { weekday: 'long', month: 'long', day: 'numeric' };
             const timeForDate = { hour: 'numeric', minute: 'numeric' };
             const optionsTillDate = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
             cstr += `<div class="col-sm-6 col-md-4 col-12" id="${task.taskId}">
-                                 <div class="fr">
-                                     <div class="name">
-                                        <p>${task.Title}</p>
-                                      </div>
-                                    <div class="time">
-                                       <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                     <div class="fr">
+                                         <div class="name">
+                                            <p>${task.Title}</p>
+                                          </div>
+                                        <div class="time">
+                                           <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                         </div>
                                      </div>
-                                 </div>
 
-                                   <div class="sr">
+                                       <div class="sr">
 
-                                    <div class="c_time">
-                                       <span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                        <span>`
+                                        <div class="c_time">
+                                           <img src="../images/calendar.png" /><span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                            <span>`
             if (new Date(task.OpenTill) > new Date() && new Date(task.ForDate) < new Date())
 
                 cstr += ` <ion-icon id="green" name="play"></ion-icon>`
@@ -759,18 +773,18 @@
             cstr += `</span>`
 
             cstr += `</div>
-                                            </div>
-                                             <div class="tr">
-                                               <div class="notification">
-                                                   <p>${task.numWaiting}</p >
-                                               </div>
-                                              <div class="cancel">
-                                                 <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                </div>
+                                                 <div class="tr">
+                                                   <div class="notification">
+                                                       <p>${task.numWaiting}</p >
+                                                   </div>
+                                                  <div class="cancel">
+                                                     <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                  </div>
                                               </div>
-                                          </div>
 
 
-                                     </div>`
+                                         </div>`
 
             return cstr;
         }
@@ -969,7 +983,7 @@
                             </li>
                             <li class="nav-item">
                                 <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
-                                    <option team_Id="">בחר קבוצה</option>
+                                    <option team_Id="">הקבוצות שלי</option>
                                 </select><!---->
                             </li>
                             <li class="nav-item">
@@ -1086,9 +1100,8 @@
                             <p>משימות ששוייכו</p>
                         </div>
                             <div id="years">
-                                <select>
-                                    <option>תש"פ</option>
-                                    <option>תשפ"א</option>
+                                <select class="custom-select">
+                                    
                                 </select>
                             </div>
                

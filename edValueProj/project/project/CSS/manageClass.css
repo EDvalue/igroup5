@@ -5,27 +5,35 @@
     width: 100%;
     flex-flow: row wrap;
 }
-#tasksTitle>#years{
-    margin-right:3%;
+.c_time img{
+    height:22%;
+}
+
+#tasksTitle > #years {
+    margin-right: 3%;
 }
 .PastC{
     background-color:rgba(128, 128, 128, 0.68)
 }
 #sp_table_filter {
     direction: ltr;
-    margin-right: 170%;
     margin-bottom: 5%;
 }
 
-.content>.row{
-    margin:0;
+#sp_table_wrapper .row:nth-child(1){
+    direction:ltr;
+    width:100%;
+}
+
+.content > .row {
+    margin: 0;
 }
 #tasksTitle {
     margin-top: 7%;
     margin-bottom: 3%;
     display: flex;
     margin-right: 5%;
-    width: 40%;
+    width: 55%;
     align-items: baseline;
     font-size: 20px;
 }
@@ -429,6 +437,7 @@ element.style {
 }
 #class_info {
     display: flex;
+    margin-top:40px;
     flex-flow: row wrap;
     flex: 1 1 80%;
 }

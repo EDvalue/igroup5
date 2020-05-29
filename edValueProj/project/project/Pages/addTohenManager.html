@@ -8,6 +8,7 @@
     <link href="../CSS/scrollbar.css" rel="stylesheet" />
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/addTohenMannager.css" rel="stylesheet" />
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,7 +25,7 @@
     <script src="../Scripts/ajaxCalls.js"></script>
 
     <script>
-
+        document.title = "ניהול עורכי תוכן";
         var editors = [];
         var notEditors = [];
         var Tdata;
@@ -114,8 +115,8 @@
 
 
                 strEditor = `<div class="teacher">
-                                          <input class="${editors[e].Mail}" type="checkbox" name="e" id="${e}" /><span>${editors[e].Name} ${editors[e].LastName}-${editors[e].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                        </div>`;
+                                              <input class="${editors[e].Mail}" type="checkbox" name="e" id="${e}" /><span>${editors[e].Name} ${editors[e].LastName}-${editors[e].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                            </div>`;
 
                 $("#SlistR").append(strEditor);
 
@@ -128,8 +129,8 @@
             for (ne in notEditors) {
 
                 strNEditor = `<div class="teacher">
-                                            <input class="${notEditors[ne].Mail}" type="checkbox" name="ne" id="${ne}" /><span>${notEditors[ne].Name} ${notEditors[ne].LastName}-${notEditors[ne].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                           </div>`;
+                                                <input class="${notEditors[ne].Mail}" type="checkbox" name="ne" id="${ne}" /><span>${notEditors[ne].Name} ${notEditors[ne].LastName}-${notEditors[ne].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                               </div>`;
                 $("#SlistA").append(strNEditor);
 
                 let index1 = newEditors.filter(ed => ed.Mail == notEditors[ne].Mail)

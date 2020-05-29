@@ -11,6 +11,7 @@
             crossorigin="anonymous">
 
     </script>
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -28,6 +29,7 @@
 
     <title></title>
     <script>
+        document.title = "בניית שאלון";
         var count = 0;
         //var data = [];
         var quiz = {};
@@ -132,82 +134,82 @@
             count++;
             NewQestionString = ` <div id='Q${count}' class='Qclass'>
 
-                           <div id="question_content">
-                         <div id="title"><p>הכנס תוכן שאלה</p></div>
+                               <div id="question_content">
+                             <div id="title"><p>הכנס תוכן שאלה</p></div>
 
-                    <div id='txtArea'>
+                        <div id='txtArea'>
 
-                        <textarea required dir='rtl' id='text${count}' rows='10' cols='150'>  </textarea>
+                            <textarea required dir='rtl' id='text${count}' rows='10' cols='150'>  </textarea>
 
-                    </div>
-
-                </div>
-
-                <div id="question_controll">
-                    <div id="ans_controll">
-                        <span>:איך תראה התשובה</span>
-                        <select required onchange='BuildAnswer(this)' id="${count}">
-                            <option value=''> Choose Option </option>
-                            <option value='A'>אמריקאי </option>
-                            <option value='O'> פתוחה </option>
-                            <option value='U'>העלאת קובץ</option>
-                            <option value='M'> בחירה מרובה </option>
-                        </select>
-                         <div class="adding_btn"></div>
-
+                        </div>
 
                     </div>
-                    <div id="remove_QBTN">
-                        <button type="button" onclick=removeQ(this.parentNode.parentNode.parentNode)>הסר שאלה</button>
-                    </div>
-                </div>
-                <div id="ans_upload">
-                    <div id='op'>
 
+                    <div id="question_controll">
+                        <div id="ans_controll">
+                            <span>:איך תראה התשובה</span>
+                            <select required onchange='BuildAnswer(this)' id="${count}">
+                                <option value=''> Choose Option </option>
+                                <option value='A'>אמריקאי </option>
+                                <option value='O'> פתוחה </option>
+                                <option value='U'>העלאת קובץ</option>
+                                <option value='M'> בחירה מרובה </option>
+                            </select>
+                             <div class="adding_btn"></div>
+
+
+                        </div>
+                        <div id="remove_QBTN">
+                            <button type="button" onclick=removeQ(this.parentNode.parentNode.parentNode)>הסר שאלה</button>
+                        </div>
                     </div>
-                    <div id="add_VI">
-                        <div id="img_add">
-                          <input type="file" class="btn btn-info" onchange="showFile(${count})" accept="image/*" />
-                          <div id="img_holder"><div class='clearFile'>❌</div>`
+                    <div id="ans_upload">
+                        <div id='op'>
+
+                        </div>
+                        <div id="add_VI">
+                            <div id="img_add">
+                              <input type="file" class="btn btn-info" onchange="showFile(${count})" accept="image/*" />
+                              <div id="img_holder"><div class='clearFile'>❌</div>`
             if (QuestionnaireData) {
 
                 NewQestionString += `<img src="${QuestionnaireData.Question[quest].ImgLink}" width="150" alt="תצוגה מקדימה">
-                            </div>
-                                </div>`
+                                </div>
+                                    </div>`
             }
             else {
                 NewQestionString += `<img src="" width="150" alt="תצוגה מקדימה">
-                            </div>
-                                </div>`
+                                </div>
+                                    </div>`
             }
             if (QuestionnaireData) {
 
                 NewQestionString += `<div id="video_add">
-                           <span>צרף קישור לסרטון</span>
-                          <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="form-control"/>
-                           
+                               <span>צרף קישור לסרטון</span>
+                              <input value="${QuestionnaireData.Question[quest].VideoLink}" type="text" class="form-control"/>
+
+                            </div>
                         </div>
-                    </div>
-                   </div>
-                 </div>`
+                       </div>
+                     </div>`
             }
             else {
                 NewQestionString += `<div id="video_add">
-                           <span>צרף קישור לסרטון</span>
-                          <input value="" type="text" class="form-control"/>
-                           
+                               <span>צרף קישור לסרטון</span>
+                              <input value="" type="text" class="form-control"/>
+
+                            </div>
                         </div>
-                    </div>
-                   </div>
-                 </div>`
+                       </div>
+                     </div>`
             }
-                       
-                       
+
+
             $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             $('#main').append(NewQestionString);
             CKEDITOR.replace(`text${count}`);
             $(".clearFile").click(function () {
-                
+
                 $(this.parentNode).children('img').attr('src', '')
                 $(this.parentNode.parentNode).children('input[type="file"]').attr('type', 'text');
                 $(this.parentNode.parentNode).children('input[type="text"]').attr('type', 'file');
@@ -220,23 +222,22 @@
 
         }
 
-        function showFile(num)
-        {
+        function showFile(num) {
 
             var mydiv = document.querySelector(`#Q${num} #img_add`);
             var demoImage = mydiv.querySelector('img');
             var file = mydiv.querySelector('input[type=file]').files[0];
             var reader = new FileReader();
             uploadnumq = num;
-            
+
             reader.onload = function (event) {
 
                 demoImage.src = reader.result;
                 save()
-                }
-                reader.readAsDataURL(file);
+            }
+            reader.readAsDataURL(file);
             console.log(file)
-            
+
         }
 
         function BuildAnswer(arg) {
@@ -307,8 +308,8 @@
             strMradio = "";
             strMradio += "<div><span class='delete_opt_span' style='font-size:14px'>❌</span><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
             $("#Q" + num).find('#op').append(strMradio);
-              $(".delete_opt_span").click(function () {
-            
+            $(".delete_opt_span").click(function () {
+
                 $(this.parentNode).remove();
 
             });
@@ -323,7 +324,7 @@
             str1 += "<div><span class='delete_opt_span' style='font-size:14px'>❌</span><span>הכנס אופציה:</span> <input required type='text'><input name='chk" + num + "' type='checkbox'</div>";
             $("#Q" + num).find('#op').append(str1);
             $(".delete_opt_span").click(function () {
-            
+
                 $(this.parentNode).remove();
 
             });
@@ -353,23 +354,23 @@
 
         function save() {
 
-        //    }).then((response) => response.json())
-        //        .then((result) => {
-        //            console.log('Success:', result);
-        //            data = JSON.parse(result)
-        //            url3 = data.url;
-        //            url1 = url3.split("wwwRoot");
-        //            link= "proj.ruppin.ac.il" + url1[1];
-        //            return url3;
+            //    }).then((response) => response.json())
+            //        .then((result) => {
+            //            console.log('Success:', result);
+            //            data = JSON.parse(result)
+            //            url3 = data.url;
+            //            url1 = url3.split("wwwRoot");
+            //            link= "proj.ruppin.ac.il" + url1[1];
+            //            return url3;
             const files = document.querySelector('[type=file]').files
             const formData = new FormData()
 
-            
-                let file = files[0]
 
-       
-                formData.append('files[]', file)
-           
+            let file = files[0]
+
+
+            formData.append('files[]', file)
+
             const url = '../api/upload';
             fetch(url, {
                 method: 'POST',
@@ -380,22 +381,22 @@
                     console.log('Success:', result);
                     link = "";
                     data1 = JSON.parse(result)
-                    url3 = data1["url"] 
-                    if (url3.indexOf("wwwRoot")!=-1) {
+                    url3 = data1["url"]
+                    if (url3.indexOf("wwwRoot") != -1) {
                         url1 = url3.split("wwwRoot");
                         link = "https://proj.ruppin.ac.il" + url1[1]
                     } else {
-                         url1 = url3.split("project");
+                        url1 = url3.split("project");
                         link = "http://proj.ruppin.ac.il\igroup5\prod" + url1[2]
                     }
-                    
-                  
+
+
                     if ($(`#Q${uploadnumq} #img_add>.link`)) {
                         $(`#Q${uploadnumq} #img_add>.link`).remove();
                     }
-                     
+
                     $(`#Q${uploadnumq} #img_add`).append(`<div class="link">${link}</div>`)
-  
+
                 })
         }
 
@@ -411,7 +412,7 @@
                 "Inteligence": {
 
                     "Name": QmetaData.HInteligence,
-                    "Ename":QmetaData.EInteligence,
+                    "Ename": QmetaData.EInteligence,
                 },
 
                 'Sub': subjectHold,
@@ -437,37 +438,36 @@
 
                     }
                     //imgLink = $("#Q"+i+" #img_add .link").text() save("img_add");
-                    
-                    Type= document.getElementById("Q" + i).classList[1][1],
-                    //videoLink=save("video_add")
-                    Question = {
-                        "QuestionId": i + "|" + new Date().getTime() + "|",
-                        "Type": document.getElementById("Q" + i).classList[1][1],
-                        "Content": content,
-                        "Answer": Answer,
-                        "ImgLink": "", /*imgLink*/
-                        "VideoLink": $("#Q"+i+" #video_add>input[type='text']").val(),
-                        "OrderNum": qcounter,
 
-                    }
-                        if ($("#Q" + i + " #img_add .link").length) {
-                            
-                           Question.ImgLink = $("#Q" + i + " #img_add .link").text()
+                    Type = document.getElementById("Q" + i).classList[1][1],
+                        //videoLink=save("video_add")
+                        Question = {
+                            "QuestionId": i + "|" + new Date().getTime() + "|",
+                            "Type": document.getElementById("Q" + i).classList[1][1],
+                            "Content": content,
+                            "Answer": Answer,
+                            "ImgLink": "", /*imgLink*/
+                            "VideoLink": $("#Q" + i + " #video_add>input[type='text']").val(),
+                            "OrderNum": qcounter,
 
                         }
-                        else if ( QmetaData.quizMode == "edit")
-                        {
-                            l = i - 1;
-                            if (l >= QuestionnaireData.Question.length) {
-                                QuestionnaireData.Question.push(Question)
-                            }
-                            else {
-                                Question.ImgLink = QuestionnaireData.Question[l].ImgLink;
-                                }
+                    if ($("#Q" + i + " #img_add .link").length) {
+
+                        Question.ImgLink = $("#Q" + i + " #img_add .link").text()
+
+                    }
+                    else if (QmetaData.quizMode == "edit") {
+                        l = i - 1;
+                        if (l >= QuestionnaireData.Question.length) {
+                            QuestionnaireData.Question.push(Question)
+                        }
+                        else {
+                            Question.ImgLink = QuestionnaireData.Question[l].ImgLink;
+                        }
 
                     }
 
-                        data.push(Question);
+                    data.push(Question);
                 }
 
 
@@ -495,17 +495,17 @@
         function PostQuizSuccess(data) {
             console.log(data)
             //window.opener.location.reload();
-            $('body').text ( "");
+            $('body').text("");
             swal({
-                
-                   title: "גרסה חדשה נוצרה בהצלחה",
-                   icon: "success",
-               })
-                    .then(function (confirm) {
-                        if (confirm)   window.history.back();
-                        else   window.history.back();
-                    })
-           
+
+                title: "גרסה חדשה נוצרה בהצלחה",
+                icon: "success",
+            })
+                .then(function (confirm) {
+                    if (confirm) window.history.back();
+                    else window.history.back();
+                })
+
 
         }
 

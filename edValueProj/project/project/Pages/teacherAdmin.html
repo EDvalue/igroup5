@@ -6,7 +6,7 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
     <link href="../CSS/teacherAdmin.css" rel="stylesheet" />
-
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -28,17 +28,17 @@
         var userOBJ;
         const maxClassnum = 30;
         var schoolTeacherSearch;//save the origin teacher scode
-        var moseSt,modeSc;
-        var classes,sortedClasses;
-        var User,Class;//save data of new or update user/class
+        var moseSt, modeSc;
+        var classes, sortedClasses;
+        var User, Class;//save data of new or update user/class
         var st_mail_update;
-
+        document.title="מורה מנהל"
         $(document).ready(function () {
 
-             $("#TList").focusout(validate)
+            $("#TList").focusout(validate)
 
             userOBJ = JSON.parse(localStorage["user"]);
-             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
 
             $("#myUserForm").submit(function (e) {
                 createUpdateUser();
@@ -56,8 +56,8 @@
 
             $('#UserAdd').hide();
             $("#classAdd").hide();
-             
-             ajaxCall("GET", "../api/Admin/getTeacherByScode/" + userOBJ.SCode, "", getTeacherByScodeSuccess, getTeacherByScodeError)
+
+            ajaxCall("GET", "../api/Admin/getTeacherByScode/" + userOBJ.SCode, "", getTeacherByScodeSuccess, getTeacherByScodeError)
         });
         //user Search//
         function showUser() {
@@ -85,7 +85,7 @@
 
         function postNewClassSuccess(data) {
             console.log(data);
-        
+
             closeDivUS();
             $("#NCgrade").val("");
             $("#NCnumber").val("");
@@ -101,23 +101,23 @@
             var val = $('#' + this.id).val();
             var dl = $("#" + this.getAttribute('name'));
             var options = $("#" + this.getAttribute('name'))[0].options
-            
+
             for (var i = 0; i < options.length; i++) {
 
                 optionValuesArr.push(options[i].value);
             }
 
-                
+
 
             if (val == "") {
-                
+
                 this.val('')
                 return false;
             } else if (optionValuesArr.indexOf(val) === -1) {
-                this.value=''
+                this.value = ''
                 swal("item not in from list.!");
                 return false;
-                
+
 
             }
         }
@@ -139,7 +139,7 @@
             modeSt = "";
             console.log(data);
             searchedUser = data;
-            
+
             if (data.hasOwnProperty('Email')) {
                 if (data.SCode == userOBJ.SCode) {
                     $("#addingDiv").show();
@@ -183,7 +183,7 @@
                         dangerMode: true
                     });
                 }
-                    
+
 
             } else {
                 swal({
@@ -213,7 +213,7 @@
             $("#disbackg").css("visibility", "hidden");
             $("#UserAdd input[type='text'],#addingDiv select,#userMail").val('');
             $("#NCgrade,#NCnumber").val('')
-            
+
         }
 
         function createNewClass() {
@@ -237,7 +237,7 @@
 
         function newClass() {
             valID = userOBJ.SCode;
-           
+
             $("#addingDiv").show();
             $('#UserAdd').hide();
             $("#classAdd").show();
@@ -264,7 +264,7 @@
             console.log(data);
             str = "";
             for (x in data) {
-                
+
                 str += `<option id='${data[x].IdNumber}'>${data[x].Mail}-${data[x].Name} ${data[x].LastName}</option>`;
             }
 
@@ -340,14 +340,14 @@
             if (searchedUser.ClassNumber) {
 
                 $('#classNum').val(searchedUser.ClassNumber);
-               
 
-            } else if(classPicked.GradeNumber) {
+
+            } else if (classPicked.GradeNumber) {
 
                 $('#classNum').val(classPicked.GradeNumber);
-                classPicked=""
+                classPicked = ""
             }
-                
+
         }
 
         function getnumbersError(err) {
@@ -450,7 +450,7 @@
             closeDivUS();
 
             swal("✔העדכון הסתיים בהצלחה")
- 
+
             flag = 0;
             if (classes) {
 
@@ -480,14 +480,14 @@
                         for (c in classes) {
 
                             if (classes[c].Grade == searchedUser.Grade && classes[c].GradeNumber == searchedUser.ClassNumber) {
-                                
+
                                 for (s in classes[c].Slist) {
 
                                     if (classes[c].Slist[s].Mail == searchedUser.orginal_mail) {
                                         flag = 1;
                                         classes[c].Slist.splice(s, 1)
                                         break;
-                                      
+
                                     }
                                 }
 
@@ -496,8 +496,8 @@
 
                             if (classes[c].Grade == User.Grade && classes[c].GradeNumber == User.ClassNumber) {
                                 user1 = adjustUser(User)
-                                 classes[c].Slist.push(user1);
-                                 
+                                classes[c].Slist.push(user1);
+
                             }
                         }
 
@@ -521,7 +521,7 @@
         function showme(arg) {
             sortedClasses = [];
             for (c in classes) {
-                if (classes[c].Grade == arg || (arg == 0&&classes[c].Grade!=10)) {
+                if (classes[c].Grade == arg || (arg == 0 && classes[c].Grade != 10)) {
 
                     sortedClasses.push(classes[c])
                 }
@@ -544,9 +544,9 @@
             sortedClasses = [];
             for (x in data) {
                 if (data[x].Grade != 10)
-                      sortedClasses.push(data[x]);
+                    sortedClasses.push(data[x]);
             }
-          
+
             printClasses(sortedClasses);
         }
 
@@ -556,17 +556,17 @@
             for (x in data) {
                 //data[x].Name = data[x].Name.replace("`", "'");
                 str1 += `<div class='col-lg-4 col-md-6 col-sm-6'>
-                                    <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="person-add-outline"></ion-icon></div>
-                                    <div onclick="showClassInfo(this)" id="${x}" class='cInS'>                                        
-                                        <div id='imgc'><img src='../images/cita.jpeg' /></div>
-                                        <div id='className'> <label> ${data[x].Name} </label></div>
-                                        <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
-                                        <div id='CmetaData'>
-                                            <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
-                                            <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                        <div id="icon_AddS"><ion-icon onclick="addShere(${x})" name="person-add-outline"></ion-icon></div>
+                                        <div onclick="showClassInfo(this)" id="${x}" class='cInS'>
+                                            <div id='imgc'><img src='../images/cita.jpeg' /></div>
+                                            <div id='className'> <label> ${data[x].Name} </label></div>
+                                            <div id='Tname'><label> ${data[x].EdTeacher.Name} ${data[x].EdTeacher.LastName}-${data[x].EdTeacher.Mail}</label></div>
+                                            <div id='CmetaData'>
+                                                <div id='numS'><label>מספר סטודנטים: ${data[x].Slist.length} </label></div>
+                                                <div id='grade'><label> כיתה: ${data[x].Grade} </label></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                 </div>`
+                                     </div>`
             }
 
 
@@ -583,12 +583,12 @@
             $("#disbackg").css("visibility", "visible");
             classPicked = sortedClasses[num];
             $("#schoolList").val(sortedClasses[num].InSchool);
-           
+
             $('#Grade').val(sortedClasses[num].Grade).trigger('change');
             $('#classNum').val(sortedClasses[num].GradeNumber);
-            $('#uType').prop('disabled',true);
+            $('#uType').prop('disabled', true);
             $('#uType option[value="s"]').prop('selected', 'selected').trigger('change')
-     
+
         }
 
         function getClassBySchoolError(err) {
@@ -603,7 +603,7 @@
 
         }
         function bringSClasses() {
-            
+
             sc = userOBJ.SCode;
             apiLink1 = "../api/Admin/getClassBySchool/" + sc;
             apiLink2 = "../api/Admin/getSchoolName/" + sc;
