@@ -9,9 +9,15 @@
     width: max-content;
 }
 
+#sc_holder{
+    margin:10px;
+    background-color:#fff;
+    border-radius:5px;
+    box-shadow:1px 1px 1px #000;
+}
+
 .navBar {
     background-color: #007bff !important;
- 
 }
 
 li{
@@ -62,16 +68,20 @@ datalist{
     text-align: center;
     min-width: 200px;
     overflow-y: scroll;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow:2px 2px 2px #000;
     max-height: 300px;
 }
 #school {
-    display:flex;
-     width: 100%;
-    align-items:baseline;
-    align-content:space-between;
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    align-content: space-between;
     background-color: rgba(0, 123, 255, 0.68);
     margin: 2% 0 5% 0;
     color: white;
+    border-radius: 5px;
 }
 
 #new_class {

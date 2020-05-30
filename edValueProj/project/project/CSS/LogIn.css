@@ -1,6 +1,19 @@
-﻿#container{
-    background-color:#f1f1f1;
+﻿#container {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.60),rgba(255, 255, 255, 0.60)),url('../images/vippng.com-school-student-png-1790777.png');
+    background-position-x: center;
+    background-position-y: bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+}
+
+#container{
+    font-family:FbSpacer;
+    background-color:rgba(241, 241, 241, 0.1);
     height:100vh;
+    color:#007bff;
+    font-size:18px;
+
 }
 #header{
     
@@ -11,7 +24,7 @@
 }
 #signInCode {
     text-align: right;
-    border-left: 1px dotted white;
+    border-left: 10px dotted white;
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -23,7 +36,13 @@
         justify-content: center;
     }
 
+#forgotPassDiv input{
+    margin-right:5px;
+}
+
 #forgotPassDiv {
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px;
     position: fixed;
     flex: 0 1 auto;
     top: 50%; /* position the top  edge of the element at the middle of the parent */
@@ -97,11 +116,17 @@
     background: linear-gradient(#007bff,#ffff);
     font-size: 21px;
     width: 70%;
+    border-radius: 5px;
+    box-shadow: 1px 1px;
+    color:#fff;
 }
 
 #passForget {
     margin-top: 10px;
+    background-color: #fff;
     font-size: 15px;
+    box-shadow: 1px 1px #fff;
+    border-radius: 5px;
     color: #1B4DDD;
     border-bottom: 1px solid #1B4DDD;
     width: max-content;
@@ -112,12 +137,14 @@
     }
 
 #details {
-   
+    
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #000;
     border: 3px groove #f1f1f1;
     display: flex;
     align-items: center;
     height: 210px;
-    margin:0 auto;
+    margin: 0 auto;
 }
 img {
     height: 100px;

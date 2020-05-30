@@ -158,6 +158,10 @@
             inTeam = replacedott(inTeam);
             $("body").text("");
 
+            att = JSON.parse(localStorage["active_teacher_team"]);
+            att.StudentList = inTeam;
+            localStorage["active_teacher_team"] = JSON.stringify(att);
+
             console.log(data);
             swal({
 

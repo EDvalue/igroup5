@@ -40,7 +40,7 @@
 
         $(document).ready(function () {
 
-            $("#Nactive,#activeO,#activeC,#ch_q_div").hide();//hiding tasks till div will be ready
+            $("#Nactive,#activeO,#activeC,#cq_pop").hide();//hiding tasks till div will be ready
             if (localStorage["user"])
                 userOBJ = JSON.parse(localStorage["user"]);
              document.title =`משימות- ${userOBJ.Name } ${userOBJ.LastName}`;
@@ -148,13 +148,14 @@
             //open replace quiz
             taskId = this.getAttribute('task');
             qId = this.getAttribute('quiz');
-            str = "";
+            str = " ";
             for (rt in activeOpenArr) {
                 if (activeOpenArr[rt].Task.TaskId == taskId) {
                     cq_activeTask = activeOpenArr[rt];
                     for (q in activeOpenArr[rt].Task.QuizList) {
                         if (activeOpenArr[rt].Task.QuizList[q].QuizID != qId) {
                             str += `<div class="cq_questionnaire">
+                                     
                                               <img quizNum="${q}" quiz="${activeOpenArr[rt].Task.QuizList[q].QuestionnairId}" src="../images/${activeOpenArr[rt].Task.QuizList[q].Inteligence.Ename}.png" />
                                             </div>`
                         }
@@ -162,8 +163,11 @@
                     }
                     if (str != "") {
                         $("#ch_q_div").html(str);
-                        $("#ch_q_div").slideDown("slow");
+                        $("#cq_pop").slideDown("slow");
                         $(".cq_questionnaire>img").click(confirmChange);
+                        $("#cq_close").click(function () {
+                            $("#cq_pop").slideUp("slow");
+                        });
                     } else {
                         swal('אין שאלון זמין להחלפה');
                     }
@@ -533,7 +537,15 @@
 </head>
 <body dir="rtl">
     <div id="disbackg"></div>
-    <div id="ch_q_div"></div>
+
+    <div id="cq_pop">
+        <div id='cq_close'>close X</div>
+        <div id="ch_q_div">
+
+
+        </div>
+    </div>
+    
     <div id="container">
 
         <div id="header" class="row">

@@ -10,6 +10,11 @@
     width:350%;
     text-align:right;
 }
+
+#cq_close{
+    width:100%;
+    text-align:left;
+}
 .score {
     border: 1px solid #1BADDD;
     margin-right: auto;
@@ -98,7 +103,7 @@ ion-icon.colorC {
 }
 #sys_tit {
     position: absolute;
-    top: 27%;
+    top: 22%;
     right: 3%;
     color: #007bff;
 }
@@ -265,19 +270,23 @@ h3 {
 .ClassDate{
     font-size:12px;
 }
-#ch_q_div {
+
+#cq_pop {
     position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
-    transform: translate(-50%, -50%);
-    padding-top: 1.5%;
-    background-color:#262626;
+    transform: translate(-50%,-50%);
     border: 1px groove #808080;
     z-index: 3;
     background: rgba(255, 255, 255, 0.87);
-    display: flex;
     box-shadow: 2px 2px #fff;
     justify-content: center;
+    display:flex;
+    flex-direction:column;
+}
+#ch_q_div {
+    justify-content: center;
+    display: flex;
 }
 .cq_questionnaire{
     width:20%;

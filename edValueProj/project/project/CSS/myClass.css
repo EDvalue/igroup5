@@ -89,3 +89,8 @@ div#main{
     box-shadow: 2px 2px 2px #fff;
     margin-right: 3px;
 }
+
+#subjectsList > div, #stList>div {
+    box-shadow: 2px 2px 2px;
+    border-radius: 5px;
+}

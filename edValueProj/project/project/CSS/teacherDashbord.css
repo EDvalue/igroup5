@@ -76,12 +76,15 @@
     flex-direction: column-reverse;
 }
 
+#name {
+    margin-top: auto;
+}
     #name p{
         font-size:25px;
     }
     #addTaskBTN {
-        margin-top: auto;
-        margin-bottom:18%;
+        
+        margin-bottom:10%;
 
     }
 #numOfS > p {
