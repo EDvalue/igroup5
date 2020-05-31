@@ -160,6 +160,7 @@ canvas {
 #taskName > div{
     box-shadow: 2px 2px 2px;
     border-radius: 5px;
+    padding:3px;
     width: 100%;
 }
 #IntelligenceCheckBox > div {

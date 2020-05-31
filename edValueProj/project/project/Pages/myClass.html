@@ -176,8 +176,11 @@
             }
         }
         function createTList() {
-            myTeams = JSON.parse(localStorage["myTeams"]);
-            listdata = JSON.parse(localStorage["active_teacher_team"]);
+            listdata=""
+            if(localStorage["myTeams"])
+                myTeams = JSON.parse(localStorage["myTeams"]);
+            if(localStorage["active_teacher_team"])
+                listdata = JSON.parse(localStorage["active_teacher_team"]);
             console.log(myTeams)
             var cstr = "";
             for (a in myTeams) {
@@ -315,9 +318,24 @@
             if (arr.length > 0) {
                 for (x in graphData) {
 
-                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1) || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
-                        sortedGraphData.push(graphData[x])
-                    }
+                    if (sortTags["stArr"].length > 0) {
+                        if (sortTags["stArr"].indexOf(graphData[x].Mail) != -1) {
+                            if (sortTags["taskArr"].length > 0 || sortTags["intelligenceArr"].length > 0 || sortTags["subj"].length > 0) {
+                                if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                                    sortedGraphData.push(graphData[x])
+                                }
+                            } else {
+                                sortedGraphData.push(graphData[x])
+                            }
+                        }
+                        
+        
+                    } else  {
+                         if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                                sortedGraphData.push(graphData[x]);
+                         }
+                    }  
+  
                 }
                 for (s in intGraphData) {
                     if (sortTags["stArr"].indexOf(intGraphData[s].Mail) != -1) {

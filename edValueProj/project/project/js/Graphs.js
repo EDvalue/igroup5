@@ -6,7 +6,8 @@ var options = {
         labels: {
             // This more specific font property overrides the global property
             fontColor: 'black',
-            fontSize: 20
+            fontSize: 20,
+            fontFamily: "FbSpacer"
         }
     },
     scales: {
@@ -14,13 +15,15 @@ var options = {
             ticks: {
                 fontColor: 'black',
                 fontSize: 18,
+                fontFamily: "FbSpacer"
                
             }
         }],
         xAxes: [{
             ticks: {
                 fontColor: 'black',
-                fontSize: 18
+                fontSize: 18,
+                fontFamily: "FbSpacer"
             }
         }]
 
@@ -93,7 +96,8 @@ function GradesAvgChart() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 20
+                    fontSize: 20,
+                    fontFamily:"FbSpacer"
                 }
             },
             animation: {
@@ -106,13 +110,15 @@ function GradesAvgChart() {
                         beginAtZero: true,   // minimum value will be 0.
                         suggestedMax: 100,
                         fontColor: 'black',
-                        fontSize: 18
+                        fontSize: 18,
+                        fontFamily: "FbSpacer"
                     }
                 }],
                 xAxes: [{
                     ticks: {
                         fontColor: 'black',
-                        fontSize: 18
+                        fontSize: 18,
+                        fontFamily: "FbSpacer"
                     }
                 }]
             },
@@ -198,7 +204,8 @@ function PercentageChart() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 20
+                    fontSize: 20,
+                    fontFamily: "FbSpacer"
                 }
             }
         },
@@ -273,7 +280,8 @@ function ChartIntl() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 20
+                    fontSize: 20,
+                    fontFamily: "FbSpacer"
                 }
             },
 
@@ -287,13 +295,15 @@ function ChartIntl() {
                         beginAtZero: true,   // minimum value will be 0.
                         suggestedMax: 10,
                         fontColor: 'black',
-                        fontSize: 18
+                        fontSize: 18,
+                        fontFamily: "FbSpacer"
                     }
                 }],
                 xAxes: [{
                     ticks: {
                         fontColor: 'black',
-                        fontSize: 18
+                        fontSize: 18,
+                        fontFamily: "FbSpacer"
                     }
                 }]
             }
@@ -362,7 +372,9 @@ function UpdateTaskDoughnut() {
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
-                    fontSize: 20
+                    fontSize: 20,
+                    fontFamily: "FbSpacer"
+
                 },
             },
 

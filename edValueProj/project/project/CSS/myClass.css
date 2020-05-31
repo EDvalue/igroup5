@@ -92,5 +92,6 @@ div#main{
 
 #subjectsList > div, #stList>div {
     box-shadow: 2px 2px 2px;
+    padding:3px;
     border-radius: 5px;
 }

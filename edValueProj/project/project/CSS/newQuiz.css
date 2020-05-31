@@ -8,9 +8,10 @@ html {
 	height: max-content;
 }
 #container {
+	font-family: FbSpacer;
 	height: max-content;
 	/*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
-	background:#f1f1f1;
+	background: #f1f1f1;
 }
 
 .navbar button:hover, .navbar select:hover {
