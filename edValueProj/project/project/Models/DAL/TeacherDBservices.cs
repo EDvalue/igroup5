@@ -2003,5 +2003,60 @@ namespace project.Models.DAL
             return numEffected;
 
         }
+
+        public List<Dictionary<string, string>> getEditors(string mail)
+        {
+
+            List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
+            SqlConnection con = null;
+            Team t = new Team();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+
+                String selectSTR =@" select u.IdNumber,u.Email,u.Lname,u.Fname,u.SchoolCode,s.[Name]
+                                   from[User] as u inner join Teacher AS t on t.TeacherEmail = u.Email
+                                   inner join School as s on s.SchoolCode = u.SchoolCode
+                                   where t.isEditor = 1 and u.Email<>'"+mail+"'";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Dictionary<string, string> d = new Dictionary<string, string>();
+                    d["Fname"] = dr["Fname"].ToString();
+                    d["LastName"] = dr["Lname"].ToString();
+                    d["IdNumber"] = dr["IdNumber"].ToString();
+                    d["Mail"] = dr["Email"].ToString();
+                    d["SchoolCode"] = dr["SchoolCode"].ToString();
+                    d["SchoolName"] = dr["Name"].ToString();
+
+                    list.Add(d);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+            return list;
+
+        }
     }
 }

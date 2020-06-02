@@ -6,7 +6,7 @@
     flex-flow: row wrap;
 }
 .c_time img{
-    height:22%;
+    height:40%;
 }
 
 #tasksTitle > #years {
@@ -164,7 +164,7 @@ canvas {
     width: 100%;
 }
 #IntelligenceCheckBox > div {
-    box-shadow: 2px 2px 2px;
+   
     border-radius: 5px;
 }
 
@@ -263,7 +263,7 @@ canvas {
         border-radius: 5px;
     }
 #toggleTask {
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
     background-color: #fff;
     border-top-right-radius: 5px;
@@ -316,11 +316,16 @@ div#taskName {
 .sr {
     text-align: right;
     font-size:15px;
+    margin:auto 0;
+}
+#name {
+    width: 70%;
 }
     .sr ion-icon {
         padding-right: 6px;
         border-right: 1px dotted #000;
         margin-right: 5px;
+        font-size: 16px;
     }
 
 .cancel {
@@ -362,6 +367,9 @@ div#taskName {
 
 element.style {
 }
+.notification p{
+    margin-top:4px;
+}
 .notification {
     width: 40px;
     font-size: 20px;
@@ -369,10 +377,10 @@ element.style {
     display: flex;
     align-content: center;
     justify-content: center;
-    border: 1px solid white;
+    border: 1px solid #1BADDD;
     border-radius: 50% 50%;
     transform: translate(.0em, -.3em);
-    box-shadow: #1BADDD 2px 2px;
+    box-shadow: #1BADDD 1px 1px;
 }
 
 #sList {
@@ -469,7 +477,6 @@ element.style {
 
 #taskName, #subjectsList, #stList {
     display: flex;
-    display: flex;
     overflow-y: scroll;
     height: 420px;
     flex: 1;
@@ -480,7 +487,8 @@ element.style {
     text-align: right;
     background-color: white;
     box-shadow: 2px 2px 2px #000;
-    border-radius: 6%;
+    border-top-right-radius:5px;
+    border-top-left-radius:5px;
     margin-bottom: 2%;
 }
 }
@@ -564,7 +572,7 @@ ion-icon {
     padding-top:10px;
     border-bottom-right-radius: 50%;
     box-shadow: -2px 2px 2px #000;
-    font-size: 14px;
+    font-size: 15px;
     text-align: center;
     height: 73px;
     background-color: #fff;
@@ -594,57 +602,153 @@ ion-icon {
 }
 #stat_control_top {
     display: flex;
-
+    width: 90%;
 }
 #stat_control_left {
 
     margin-right: auto;
     margin-top: 3%;
 }
-@media screen and (max-width: 870px) {
 
-    #teamList {
-        position: absolute;
-        z-index: 2;
-        width:35%;
+.scroll-down {
+    opacity: 1;
+    -webkit-transition: all .5s ease-in 3s;
+    transition: all .5s ease-in 3s;
+}
 
-    }
+.scroll-down {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+    margin-left: -16px;
+    display: block;
+    width: 37px;
+    height: 37px;
+    border: 2px solid #FFF;
+    background-size: 14px auto;
+    border-radius: 50%;
+    z-index: 2;
+    -webkit-animation: bounce 2s infinite 2s;
+    animation: bounce 2s infinite 2s;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
 
-    #stat_control_left {
-        position: absolute;
-        left: 12px;
-       
-    }
-
-    div.content {
-        flex: 0 1 60%;
-        margin-right: 3%;
-        height: inherit;
-    }
-
-    #taskName {
-        
-    }
-
-    div.content {
-        flex: 0 1 90%;
-        margin-right: 5%;
-    }
-
-    #IntelligenceCheckBox {
-        flex: 0 1 100%;
-        display: flex;
-        flex-flow: row wrap;
-    }
-
-    #stat_control_top {
-        margin-right: 21px;
-        display: flex;
-        z-index: 3;
-    }
-
-    div#TaskView {
-        width: 100%;
-        margin-top: 8%;
+#intlCharts>h3{
+    margin-top:10px;
+}
+@media screen and (max-width: 990px)and (min-width:871px) {
+    .scroll-down {
+        top: 29%;
+        left: 35%;
     }
 }
+    @media screen and (max-width: 870px) {
+
+        canvas {
+            height: 350px !important;
+            margin-top: 6%;
+        }
+
+        #taskName, #subjectsList, #stList {
+            height: 270px;
+        }
+
+        #info {
+            height: 440px;
+        }
+
+        .scroll-down {
+            top: 24%;
+            left: 35%;
+        }
+
+        #teamList {
+            position: absolute;
+            z-index: 2;
+            width: 35%;
+        }
+
+        #stat_control_left {
+            position: absolute;
+            left: 12px;
+        }
+
+        div.content {
+            flex: 0 1 60%;
+            margin-right: 3%;
+            height: inherit;
+        }
+
+        #taskName {
+        }
+
+        div.content {
+            flex: 0 1 90%;
+            margin-right: 5%;
+        }
+
+        #IntelligenceCheckBox {
+            flex: 0 1 100%;
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        #stat_control_top {
+            margin-right: 21px;
+            display: flex;
+            z-index: 3;
+        }
+
+        #IntelligenceCheckBox span {
+            padding: 7px;
+        }
+
+        div#TaskView {
+            width: 100%;
+            margin-top: 8%;
+        }
+    }
+
+    section {
+        width: 100%;
+        display: table;
+    }
+
+        section.ok {
+            background-color: #555;
+        }
+
+
+    .scroll-down:before {
+        position: absolute;
+        top: calc(50% - 8px);
+        left: calc(50% - 6px);
+        transform: rotate(-45deg);
+        display: block;
+        width: 12px;
+        height: 12px;
+        content: "";
+        border: 2px solid white;
+        border-width: 0px 0 2px 2px;
+    }
+
+    @keyframes bounce {
+        0%, 100%, 20%, 50%, 80% {
+            -webkit-transform: translateY(0);
+            -ms-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -webkit-transform: translateY(-10px);
+            -ms-transform: translateY(-10px);
+            transform: translateY(-10px);
+        }
+
+        60% {
+            -webkit-transform: translateY(-5px);
+            -ms-transform: translateY(-5px);
+            transform: translateY(-5px);
+        }
+    }

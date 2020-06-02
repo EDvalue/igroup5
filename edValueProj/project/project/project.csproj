@@ -271,6 +271,7 @@
     <Content Include="CSS\addStudentToClass.css" />
     <Content Include="CSS\addTohenMannager.css" />
     <Content Include="CSS\Assignment_assignment.css" />
+    <Content Include="CSS\ChatEditors.css" />
     <Content Include="CSS\classInfo.css" />
     <Content Include="CSS\Intelligencequiz.css" />
     <Content Include="CSS\loadFile.css" />
@@ -291,12 +292,15 @@
     <Content Include="CSS\systemManager.css" />
     <Content Include="CSS\teacherAdmin.css" />
     <Content Include="CSS\teacherDashbord.css" />
+    <Content Include="CSS\TeamForun.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="images\assistant.png" />
     <Content Include="images\book.png" />
     <Content Include="images\calendar.png" />
     <Content Include="images\cita.jpeg" />
     <Content Include="images\CompletedM.png" />
+    <Content Include="images\contact.png" />
     <Content Include="images\CurrentM.png" />
     <Content Include="images\editor.jpg" />
     <Content Include="images\EDvalueBig.png" />
@@ -317,7 +321,7 @@
     <Content Include="images\pptx-icon.png" />
     <Content Include="images\rar-icon.png" />
     <Content Include="images\school.jpg" />
-    <Content Include="images\Science.png" />
+    <Content Include="images\Science.jpg" />
     <Content Include="images\spatial.png" />
     <Content Include="images\Bible.jpg" />
     <Content Include="images\tongue.png" />
@@ -327,10 +331,12 @@
     <Content Include="images\musicallyN.jpg" />
     <Content Include="images\vippng.com-school-student-png-1790777.png" />
     <Content Include="images\word-icon.png" />
+    <Content Include="js\ChatEditors.js" />
     <Content Include="js\fav.js" />
     <Content Include="js\Graphs.js" />
     <Content Include="js\js.js" />
     <Content Include="Pages\Assignment_assignment.html" />
+    <Content Include="Pages\ChatEditors.html" />
     <Content Include="Pages\classInfo.html" />
     <Content Include="images\clipart-school-cartoon-2.jpg" />
     <Content Include="Pages\Github.html" />
@@ -369,6 +375,7 @@
     <Content Include="Pages\systemManager.html" />
     <Content Include="Pages\teacherAdmin.html" />
     <Content Include="Pages\teacherDahBoard.html" />
+    <Content Include="Pages\TeamForum.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="ApplicationInsights.config">

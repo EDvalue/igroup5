@@ -7,13 +7,12 @@
  
 }
 
-#container{
-    font-family:FbSpacer;
-    background-color:rgba(241, 241, 241, 0.1);
-    height:100vh;
-    color:#007bff;
-    font-size:18px;
-
+#container {
+    font-family: Varela Round,Arial,sans-serif;
+    background-color: rgba(241, 241, 241, 0.1);
+    height: 100vh;
+    color: #007bff;
+    font-size: 18px;
 }
 #header{
     

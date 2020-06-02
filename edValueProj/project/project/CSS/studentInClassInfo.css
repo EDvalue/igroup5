@@ -4,6 +4,7 @@
     text-align: right;
     height: 100%;
     background-color: #f1f1f1 !important;
+    font-family: Varela Round,Arial,sans-serif;
 }
 /*img in dt*/
 #tbl_int {
@@ -26,6 +27,7 @@
 #container {
     /*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
     background: #f1f1f1;
+    font-family: Varela Round,Arial,sans-serif;
 }
 
 #main{
@@ -281,6 +283,8 @@ div#taskName {
     display: block;
     text-align: right;
 }
+
+
 
 @media screen and (max-width: 740px) {
 

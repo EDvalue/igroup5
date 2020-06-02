@@ -34,6 +34,11 @@
 
         $(document).ready(function () {
 
+            $("#chatBtn").click(function () {
+
+                window.open("ChatEditors.html")
+            });
+
             $(".inte_BTN>input[type=button]").click(openQuestionnaire)
             $("#questionnaire_div").hide();
             $("#myForm").hide();
@@ -532,7 +537,8 @@
             </div>
         </div>
         <div id="add_task">
-            <input type="button" value="New" class="btn btn-primary btn-lg" id="newBTN" />
+            <input type="button" value="צ'ט עורכים" class="btn btn-primary btn-lg" id="chatBtn" />
+            <input type="button" value="הוספת משימה" class="btn btn-primary btn-lg" id="newBTN" />
             <form id="myForm">
                 <div class="form-group row">
 

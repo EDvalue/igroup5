@@ -8,7 +8,7 @@ html {
 	height: max-content;
 }
 #container {
-	font-family: FbSpacer;
+	font-family: Varela Round,Arial,sans-serif;
 	height: max-content;
 	/*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
 	background: #f1f1f1;

@@ -242,5 +242,14 @@ namespace project.Controllers
             return c.changeClassName();
         }
 
+        [HttpPut]
+        [Route("api/Teacher/getEditors")]
+
+        public List<Dictionary<string, string>> getEditors([FromBody]Teacher t)
+        {
+           
+            return t.getEditors(t.Mail);
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
     <meta charset="utf-8" />
     <title></title>
     <link href="../CSS/newQuiz.css" rel="stylesheet" />
@@ -126,7 +127,7 @@
                 }
                 else {
                     $('#IntelligenceCheckBox').toggle();
-                    $("div#stat_control_top").css('width', 'inherit');
+                    $("div#stat_control_top").css('width', '90%');
                     $(".capr").css("border-radius", "0%");
                     $(".capr").css("border-top-right-radius", "50%");
                     $(".capr").css("border-bottom-right-radius", "50%");
@@ -135,6 +136,13 @@
                 }
 
             });
+
+
+            $('.scroll-down').click(function () {
+                $('html, body').animate({ scrollTop: $('#tasks').offset().top }, 'slow');
+                return false;
+            });
+
         });
 
         function submitTaskAssigment() {
@@ -372,7 +380,7 @@
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${intDictionary[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /><span>${intDictionary[x]}</span></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }
@@ -749,42 +757,42 @@
             const optionsTillDate = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             var cstr = "";
             cstr += `<div class="col-sm-6 col-md-4 col-12" id="${task.taskId}">
-                                     <div class="fr">
-                                         <div class="name">
-                                            <p>${task.Title}</p>
-                                          </div>
-                                        <div class="time">
-                                           <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                         <div class="fr">
+                                             <div class="name">
+                                                <p>${task.Title}</p>
+                                              </div>
+                                            <div class="time">
+                                               <p  title='${new Date(task.ForDate).toLocaleDateString(undefined, timeForDate)}'>${new Date(task.ForDate).toLocaleDateString(undefined, optionsForDate).replace("'", "")}'</p>
+                                             </div>
                                          </div>
-                                     </div>
 
-                                       <div class="sr">
+                                           <div class="sr">
 
-                                        <div class="c_time">
-                                           <img src="../images/calendar.png" /><span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
-                                            <span>`
+                                            <div class="c_time">
+                                               <img src="../images/calendar.png" /><span>${new Date(task.OpenTill).toLocaleDateString(undefined, optionsTillDate)}</span><ion-icon name="pencil-outline"></ion-icon>
+                                                <span>`
             if (new Date(task.OpenTill) > new Date() && new Date(task.ForDate) < new Date())
 
-                cstr += ` <ion-icon id="green" name="play"></ion-icon>`
+                cstr += ` <ion-icon id="green" name="play"></ion-icon><span>(פתוח)</span>`
 
             else
-                cstr += `<ion-icon id="red" name="play"></ion-icon>`
+                cstr += `<ion-icon id="red" name="play"></ion-icon><span>(סגור)</span>`
 
             cstr += `</span>`
 
             cstr += `</div>
-                                                </div>
-                                                 <div class="tr">
-                                                   <div class="notification">
-                                                       <p>${task.numWaiting}</p >
-                                                   </div>
-                                                  <div class="cancel">
-                                                     <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                    </div>
+                                                     <div class="tr">
+                                                       <div class="notification">
+                                                           <p>${task.numWaiting}</p >
+                                                       </div>
+                                                      <div class="cancel">
+                                                         <ion-icon name="close-circle-outline" size="large"></ion-icon>
+                                                      </div>
                                                   </div>
-                                              </div>
 
 
-                                         </div>`
+                                             </div>`
 
             return cstr;
         }
@@ -1051,6 +1059,14 @@
                             <div id="IntelligenceCheckBox">
                             </div>
                             <div class="capl"></div>
+                            
+                        </div>
+
+                        <div id="down">
+                            <section>
+                                <a href="#" class="scroll-down" address="true"></a>
+                            </section>
+                            
                         </div>
                         <div id="mainGraph">
                             <div class="content">

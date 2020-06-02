@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
     <meta charset="utf-8" />
     <title></title>
     <link href="../CSS/studentInClassInfo.css" rel="stylesheet" />
@@ -104,7 +105,7 @@
             graphData = studentGraphData;
             sortedGraphData = studentGraphData;
             $("#title>h3").html(studentGraphData[0].Fname + " " + studentGraphData[0].Lname)
-            document.title =`תלמיד בקבוצה- ${studentGraphData[0].Fname} ${studentGraphData[0].Lname}`;
+            document.title = `תלמיד בקבוצה- ${studentGraphData[0].Fname} ${studentGraphData[0].Lname}`;
             sortDivs();
             UpdateTaskDoughnut();
             GradesAvgChart()
@@ -252,7 +253,7 @@
         //-----------------יצירת רשימת הכיתות שלי----------------------------
         function createTDDL() {
             myTeams = JSON.parse(localStorage["myTeams"]);
-            var cstr = "<option>בחר כיתה</option>";
+            var cstr = "<option>בחר קבוצה</option>";
             for (a in myTeams) {
 
                 cstr += "<option id=plink  value=" + myTeams[a].Id + "><a  href='manageClass.html'>" + myTeams[a].Title + "</a></option>"

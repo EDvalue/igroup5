@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
     <meta charset="utf-8" />
     <title></title>
     <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
@@ -249,8 +250,8 @@
             for (x in unique) {
 
                 rdStr += `<div id="number_class">
-                                        <p>${unique[x]}</p><input onchange="radioselect(this)" id="${unique[x]}" type="checkbox">
-                                      </div>`
+                                            <p>${unique[x]}</p><input onchange="radioselect(this)" id="${unique[x]}" type="checkbox">
+                                          </div>`
 
             }
 
@@ -305,8 +306,8 @@
 
             for (x in inTeam) {
                 strIN = `<div class="student">
-                                        <input class="${inTeam[x].Email}" type="checkbox" name="it" id="${x}"/><span>${inTeam[x].Name} ${inTeam[x].LastName}-${inTeam[x].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                    </div>`
+                                            <input class="${inTeam[x].Email}" type="checkbox" name="it" id="${x}"/><span>${inTeam[x].Name} ${inTeam[x].LastName}-${inTeam[x].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                        </div>`
                 $("#SlistR").append(strIN);
 
                 let index1 = removeSt.filter(st => st.Mail == inTeam[x].Mail)
@@ -320,8 +321,8 @@
 
             for (y in notInTeam) {
                 strOUT = `<div class="student">
-                                        <input class="${notInTeam[y].Mail}" type="checkbox"  name="nit" id="${y}"/><span>${notInTeam[y].Name} ${notInTeam[y].LastName}-${notInTeam[y].Mail.replace("-", "@").replace("_", ".")}</span><br />
-                                    </div>`
+                                            <input class="${notInTeam[y].Mail}" type="checkbox"  name="nit" id="${y}"/><span>${notInTeam[y].Name} ${notInTeam[y].LastName}-${notInTeam[y].Mail.replace("-", "@").replace("_", ".")}</span><br />
+                                        </div>`
                 $("#SlistA").append(strOUT);
 
                 let index1 = newSt.filter(st => st.Mail == notInTeam[y].Mail)

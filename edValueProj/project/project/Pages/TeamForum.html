@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="../js/js.js"></script>
+    <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
+    <link href="../CSS/newQuiz.css" rel="stylesheet" />
+    <link href="../CSS/myClass.css" rel="stylesheet" />
+    <link href="../CSS/scrollbar.css" rel="stylesheet" />
+    <link href="../CSS/TeamForun.css" rel="stylesheet" />
+    <script src="../js/Graphs.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+
+    <title></title>
+
+    <script>
+        var userOBJ;
+        var userType;
+        var team;
+
+        $(document).ready(function () {
+
+            if (localStorage["active_teacher_team"]) {
+                team = JSON.parse(localStorage["active_teacher_team"])
+                $("#title>h3").html("פורום(" + team.Title+")");
+            }
+
+            if (localStorage["userMode"]) {
+                userType = localStorage["userMode"];
+                if (userType != "teacher") {
+                    $(".msgDelete").toggle();
+                }
+            }
+
+
+            if (localStorage["user"]) {
+                userOBJ = JSON.parse(localStorage["user"]);
+                $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
+            }
+
+            $(".resp").toggle();
+
+            $(".msg_controll>.respADD").click(function () {
+                $(this.parentNode.parentNode).find(".resp").toggle();
+            });
+
+
+
+        });
+
+    </script>
+
+</head>
+<body dir="rtl">
+    <div id="disbackg"></div>
+    <div id="container">
+
+        <div id="header">
+            <div class="row">
+
+                <div id="imgLogo" class="col-lg-3">
+
+                    <img src="../images/EDvalueSmall.png" />
+
+                </div>
+
+                <div id="title" class="col-lg-6">
+
+                    <h3>פורום</h3>
+
+                </div>
+
+                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                    <!--<img src="../images/MindCet.png" />-->
+
+                </div>
+
+                <div id="sNav">
+                    <div id="user_manage">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        </button>
+                        <div id="nav_cnt" class="dropdown-menu">
+                            <p id="disconnect" onclick="disconnect()">התנתק</p>
+                            <p id="cp" onclick="displayCP()">שנה סיסמא</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div id="main">
+
+                <div id="forum">
+                    <div id="titleLine">
+                        <div class="date_tit">תאריך</div>
+                        <div class="content_tit">שאילתא</div>
+                        <div class="resp_tit">מס' תגובות</div>
+                        <div class="controll_tit"></div>
+                    </div>
+
+                    <div class="msg">
+                        <div class="timeFrom">22/22/2222</div>
+                        <div class="msg_content">מה השאלה ומה התשובה לשאלה עם התמונה והסרטון ולמה?</div>
+                        <div class="num_ans">5</div>
+                        <div id="1" class="msg_controll">
+                            <input type="button" class="btn btn-primary respBTN" value="צפה בתגובות" />
+                            <input title="הוסף תגובה" type="button" class="btn btn-success respADD" value="+" />
+                            <input tytle="מחק שאילתא" type="button" class="btn btn-danger msgDelete" value="x" />
+                        </div>
+                        <div class="break"></div> <!-- break -->
+                        <div class="resp">1234</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCfL-YndHkW4g6Jdq4htnQ6WGBxXxPMqGM",
+            authDomain: "edvalue-fa3a0.firebaseapp.com",
+            databaseURL: "https://edvalue-fa3a0.firebaseio.com",
+            projectId: "edvalue-fa3a0",
+            storageBucket: "edvalue-fa3a0.appspot.com",
+            messagingSenderId: "340702330987",
+            appId: "1:340702330987:web:17ba7695db63f48648312e",
+            measurementId: "G-358ZZFVB6K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+
+
+</body>
+</html>

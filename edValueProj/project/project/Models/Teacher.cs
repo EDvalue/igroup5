@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using  project.Models.DAL;
 
 namespace project.Models
 {
@@ -10,18 +11,18 @@ namespace project.Models
     {
         bool isEditor;
         bool schoolAdmin;
-      
 
 
-        public Teacher():base() { }
-        public Teacher(string idNumber,string name,string lastName,string password,string mail,int scode,bool isEditor,bool schoolAdmin)
-         : base(name, lastName, password, mail, idNumber,scode)
+
+        public Teacher() : base() { }
+        public Teacher(string idNumber, string name, string lastName, string password, string mail, int scode, bool isEditor, bool schoolAdmin)
+         : base(name, lastName, password, mail, idNumber, scode)
         {
-            
+
             this.isEditor = isEditor;
             this.schoolAdmin = schoolAdmin;
         }
-       
+
 
         public bool IsEditor { get => isEditor; set => isEditor = value; }
         public bool SchoolAdmin { get => schoolAdmin; set => schoolAdmin = value; }
@@ -29,12 +30,12 @@ namespace project.Models
         public int postNewTeacher(List<Dictionary<string, string>> userDict)
         {
             List<Teacher> list = new List<Teacher>();
-            foreach(var x in userDict)
+            foreach (var x in userDict)
             {
-                Teacher t = new Teacher(x["IdNumber"],x["Name"],x["LastName"],x["Password"],x["Mail"],Convert.ToInt32(x["SCode"]),false,Convert.ToBoolean(Convert.ToInt32(x["SchoolAdmin"])));
+                Teacher t = new Teacher(x["IdNumber"], x["Name"], x["LastName"], x["Password"], x["Mail"], Convert.ToInt32(x["SCode"]), false, Convert.ToBoolean(Convert.ToInt32(x["SchoolAdmin"])));
                 list.Add(t);
             }
-            
+
             DBservices dbs = new DBservices();
             return dbs.postnEd(list);
         }
@@ -48,7 +49,7 @@ namespace project.Models
         public List<Teacher> getAllteachers()
         {
             DBservices dbs = new DBservices();
-           return dbs.getAllteachers();
+            return dbs.getAllteachers();
         }
 
 
@@ -58,5 +59,11 @@ namespace project.Models
             return dbs.updateEditors(tlist);
         }
 
+        public List<Dictionary<string, string>> getEditors(string mail)
+        {
+            TeacherDBservices dbs = new TeacherDBservices();
+            return dbs.getEditors(mail);
+
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
     <meta charset="utf-8" />
     <link rel="shortcut icon icon" type="image/png" href="../images/favicon.png" />
     <!--style sheets-->
@@ -176,10 +177,10 @@
             }
         }
         function createTList() {
-            listdata=""
-            if(localStorage["myTeams"])
+            listdata = ""
+            if (localStorage["myTeams"])
                 myTeams = JSON.parse(localStorage["myTeams"]);
-            if(localStorage["active_teacher_team"])
+            if (localStorage["active_teacher_team"])
                 listdata = JSON.parse(localStorage["active_teacher_team"]);
             console.log(myTeams)
             var cstr = "";
@@ -328,14 +329,14 @@
                                 sortedGraphData.push(graphData[x])
                             }
                         }
-                        
-        
-                    } else  {
-                         if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
-                                sortedGraphData.push(graphData[x]);
-                         }
-                    }  
-  
+
+
+                    } else {
+                        if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                            sortedGraphData.push(graphData[x]);
+                        }
+                    }
+
                 }
                 for (s in intGraphData) {
                     if (sortTags["stArr"].indexOf(intGraphData[s].Mail) != -1) {
