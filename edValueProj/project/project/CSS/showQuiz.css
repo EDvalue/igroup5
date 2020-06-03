@@ -17,13 +17,22 @@ span.markAns,p.markAns {
     color:#007bff;
 }
 
+#t_fb:hover{
+    box-shadow:0 0 11px rgba(33,33,33,.2);
+}
+
 
 #t_fb {
     display: flex;
     justify-items: center;
-    flex-direction:column;
+    flex-direction: column;
     width: max-content;
     margin: 0 auto;
+    margin: 24px auto;
+    transition: box-shadow .3s;
+    border-radius: 10px;
+    padding: 24px;
+    border: 1px solid #ccc;
 }
 .fb_content{
 
@@ -98,11 +107,20 @@ span.markAns,p.markAns {
     width:0;
 }
 
+.qu:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
 .qu {
     margin-bottom: 30px;
     padding: 50px;
-    box-shadow: 2px 2px 2px #000;
-    border-radius: 7%;
+    width: 80%;
+    margin-right: 10%;
+    transition: box-shadow .3s;
+    margin: 50px 100px 1px 100px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    
 }
 
 
@@ -164,7 +182,7 @@ span.markAns,p.markAns {
     width: 100%;
     justify-content: center;
     margin: 8% 0 5% 0;
-    box-shadow: 1px 1px 1px #000;
+
 }
 
 #AmericanAmswerBlock {
@@ -215,7 +233,6 @@ textarea {
     margin-bottom: 1%;
     margin-left: 30%;
     border: 1px solid black;
-    border-bottom-left-radius: 10%;
     float: right;
 }
 .Cradio, .Ctext,.Cupload {

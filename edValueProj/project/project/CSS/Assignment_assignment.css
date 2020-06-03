@@ -94,11 +94,24 @@ th.sorting {
         background-color: #007bff;
     }
 #class_date {
-    margin-left: -12%;
+    
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+}
+#assignmentFormBtn{
+    margin-bottom:20px;
+}
+#fb_metaData{
+
+    margin-bottom:20px;
 }
 
 #submition_date {
-    padding: 4px;
+    padding: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 #task_div{
     position:relative;

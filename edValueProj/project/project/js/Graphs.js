@@ -7,7 +7,7 @@ var options = {
             // This more specific font property overrides the global property
             fontColor: 'black',
             fontSize: 20,
-            fontFamily: "FbSpacer"
+            fontFamily: "Varela Round,Arial,sans-serif"
         }
     },
     scales: {
@@ -15,7 +15,7 @@ var options = {
             ticks: {
                 fontColor: 'black',
                 fontSize: 18,
-                fontFamily: "FbSpacer"
+                fontFamily: "Varela Round,Arial,sans-serif"
                
             }
         }],
@@ -23,7 +23,7 @@ var options = {
             ticks: {
                 fontColor: 'black',
                 fontSize: 18,
-                fontFamily: "FbSpacer"
+                fontFamily: "Varela Round,Arial,sans-serif"
             }
         }]
 
@@ -97,7 +97,7 @@ function GradesAvgChart() {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
                     fontSize: 20,
-                    fontFamily:"FbSpacer"
+                    fontFamily:"Varela Round,Arial,sans-serif"
                 }
             },
             animation: {
@@ -118,7 +118,7 @@ function GradesAvgChart() {
                     ticks: {
                         fontColor: 'black',
                         fontSize: 18,
-                        fontFamily: "FbSpacer"
+                        fontFamily: "Varela Round,Arial,sans-serif"
                     }
                 }]
             },
@@ -205,7 +205,7 @@ function PercentageChart() {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
                     fontSize: 20,
-                    fontFamily: "FbSpacer"
+                    fontFamily: "Varela Round,Arial,sans-serif"
                 }
             }
         },
@@ -281,7 +281,7 @@ function ChartIntl() {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
                     fontSize: 20,
-                    fontFamily: "FbSpacer"
+                    fontFamily: "Varela Round,Arial,sans-serif"
                 }
             },
 
@@ -303,7 +303,7 @@ function ChartIntl() {
                     ticks: {
                         fontColor: 'black',
                         fontSize: 18,
-                        fontFamily: "FbSpacer"
+                        fontFamily: "Varela Round,Arial,sans-serif"
                     }
                 }]
             }
@@ -373,7 +373,7 @@ function UpdateTaskDoughnut() {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
                     fontSize: 20,
-                    fontFamily: "FbSpacer"
+                    fontFamily: "Varela Round,Arial,sans-serif"
 
                 },
             },

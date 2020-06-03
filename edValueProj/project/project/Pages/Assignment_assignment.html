@@ -367,7 +367,7 @@
             avg = parseInt(sumScore / countFB);
             stars = "<ion-icon name='star'></ion-icon>".repeat(avg);
             $("#q_score").text('')
-            $("#q_score").append(`<h3>${avg}</h3><span>${stars}</span>`)
+            $("#q_score").append(`<span>${stars}</span>`)
             $("#w_fb").show("2s")
 
         }
@@ -597,6 +597,7 @@
         
         <form id="assigmentForm">
             <a onclick="closeDivUS()"><span>Close x</span></a>
+            <div id="ass_tit"><h3>שיוך משימה:</h3></div>
             <div id="class_date">
                 <span>עבור תאריך:</span>
                 <input type="datetime-local" id="classDate"/>
@@ -607,6 +608,7 @@
 
             </div>
             <div id="assignmentFormBtn">
+
                 <input type="submit" class="btn btn-info" value="שלח" />
             </div>
 

@@ -179,3 +179,6 @@ background-color:white;
 .navPadding{
     padding:0;
 }
+#team_bar button {
+    border-radius: 23px;
+}

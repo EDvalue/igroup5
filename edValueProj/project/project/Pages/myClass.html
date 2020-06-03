@@ -110,7 +110,13 @@
             });
 
             $("#toggleSt").click(function () {
-                 $("#stList").slideToggle('2s');
+                if ($('#stList').is(':visible')) {
+                    $("#stat_control_right").css("flex", "0 1 2%")
+                } else {
+                     $("#stat_control_right").css("flex", "0 1 18%")
+                }
+                $("#stList").slideToggle('2s');
+                
             });
              $(".capr").click(function () {
 
@@ -360,7 +366,7 @@
 
 
                     } else {
-                        if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1) {
+                        if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1 || sortTags["stArr"].indexOf(graphData[x].Mail) != -1 || sortTags["subj"].indexOf(graphData[x].SubjectName) != -1|| sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1) {
                             sortedGraphData.push(graphData[x]);
                         }
                     }
