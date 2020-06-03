@@ -52,11 +52,21 @@
 
             $(".resp").toggle();
 
-            $(".msg_controll>.respADD").click(function () {
+            $(".msg_controll>.respBTN").click(function () {
                 $(this.parentNode.parentNode).find(".resp").toggle();
             });
 
+            $("#addMsg>input[type='button']").click(function () {
 
+                firebase.database().ref(`/${team.Id}`).push().set({
+                    userName: userOBJ.Name + " " + userOBJ.LastName,
+                    userMail: userOBJ.Mail.replace(".", "_").replace("@", "~"),
+                    message: "1234",
+                    date: new Date().getTime()
+
+                })
+
+            });
 
         });
 
@@ -89,6 +99,9 @@
                 </div>
 
                 <div id="sNav">
+                    <div id="addMsg">
+                        <input type="button" class="btn btn-primary" value="הוסף פוסט"/>
+                    </div>
                     <div id="user_manage">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         </button>

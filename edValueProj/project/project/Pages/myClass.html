@@ -103,6 +103,34 @@
             })
             createTList();
             getClasses();
+
+             $("#toggleTask").click(function () {
+                 $("#taskName").slideToggle('2s');
+                 $("#subjectsList").slideToggle('1s');
+            });
+
+            $("#toggleSt").click(function () {
+                 $("#stList").slideToggle('2s');
+            });
+             $(".capr").click(function () {
+
+                if ($('#IntelligenceCheckBox').is(':visible')) {
+                    $('#IntelligenceCheckBox').toggle('drop');
+                    $("div#stat_control_top").css("width", "5%");
+                    $(".capr").css("border-radius", "50%");
+
+                }
+                else {
+                    $('#IntelligenceCheckBox').toggle();
+                    $("div#stat_control_top").css('width', '100%');
+                    $(".capr").css("border-radius", "0%");
+                    $(".capr").css("border-top-right-radius", "50%");
+                    $(".capr").css("border-bottom-right-radius", "50%");
+
+
+                }
+
+            });
         });
 
         function changeClassNameSuccess(data) {
@@ -252,7 +280,7 @@
                     graphObject.taskArr.push(graphData[x].TaskTitle)
                 }
                 if (!st[graphData[x].Mail]) {
-                    st[graphData[x].Mail] = graphData[x].Mail;
+                    st[graphData[x].Mail] = graphData[x].Fname + " "+graphData[x].Lname;
                     graphObject.stArr.push(graphData[x].Mail)
                 }
                 if (!sub[graphData[x].SubjectName]) {
@@ -270,7 +298,7 @@
         function printSt(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('stArr',this)" /><span>${x}</span></div>`
+                str += `<div title="${x}" id="${x}"><input type="checkbox" onchange="sortGraphData('stArr',this)" /><span>${obj[x]}</span></div>`
             }
             $("#stList").append(str);
         }
@@ -567,7 +595,7 @@
 
             <div id="statistics">
                 <div id="stat_control_top">
-                    <div class="capr"></div>
+                    <div class="capr"> גלול אינטליגנציות</div>
                     <div id="IntelligenceCheckBox">
                     </div>
                     <div class="capl"></div>
@@ -575,13 +603,9 @@
 
                 <div id="mainGraph">
                     <div id="stat_control_right">
+                        <div id="toggleSt">גלול תלמידים</div>
 
-                        <div id="slTitle">
-                            <h4>תלמידים</h4>
-                        </div>
                         <div id="stList">
-
-
 
                         </div>
 
@@ -617,6 +641,7 @@
 
 
                     <div id="stat_control_left">
+                        <div id="toggleTask">גלול אפשרויות</div>
                         <div id="taskName">
 
                         </div>
