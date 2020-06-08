@@ -233,7 +233,7 @@
             reader.onload = function (event) {
 
                 demoImage.src = reader.result;
-                save()
+                save(mydiv)
             }
             reader.readAsDataURL(file);
             console.log(file)
@@ -352,7 +352,7 @@
             });
         }
 
-        function save() {
+        function save(val) {
 
             //    }).then((response) => response.json())
             //        .then((result) => {
@@ -362,7 +362,7 @@
             //            url1 = url3.split("wwwRoot");
             //            link= "proj.ruppin.ac.il" + url1[1];
             //            return url3;
-            const files = document.querySelector('[type=file]').files
+            const files = val.querySelector('input[type="file"]').files
             const formData = new FormData()
 
 

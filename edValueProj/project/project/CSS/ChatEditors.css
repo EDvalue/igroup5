@@ -2,8 +2,8 @@
     height: 100%;
     margin: 0;
     background: #7F7FD5;
-    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
-    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+    background: -webkit-linear-gradient(to right, #fff, #ccc, #f1f1f1);
+    background: linear-gradient(to right, #fff, #ccc, #f1f1f1);
     font-family: Varela Round,Arial,sans-serif !important;
 }
 
@@ -22,7 +22,8 @@
     padding: 0.75rem 0 !important;
     overflow-y: auto;
     white-space: nowrap;
-    background-color:rgba(0, 123, 255, 0.70) !important;
+    background-color: #fff
+    !important;
 }
 
 .msg_card_body {
@@ -33,13 +34,13 @@
 .card-header {
     border-radius: 15px 15px 0 0 !important;
     border-bottom: 0 !important;
-    background-color: #007bff !important;
+    background-color: #f1f1f1 !important;
 }
 
 .card-footer {
     border-radius: 0 0 15px 15px !important;
     border-top: 0 !important;
-    background-color: #007bff !important;
+    background-color: #f1f1f1 !important;
 }
 
 .container {
@@ -56,7 +57,7 @@
     background-color:#007bff !important
 }
 .input-group-append {
-    background-color: #007bff !important
+    background-color: #f1f1f1 !important;
 }
 
 .type_msg {
@@ -125,8 +126,9 @@
 }
 
 .user_img_msg {
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
+    margin-top: 16px;
     border: 1.5px solid #f5f6fa;
     display: flex;
     justify-content: center;
@@ -173,12 +175,12 @@
 
     .user_info span {
         font-size: 20px;
-        color: white;
+        /*color: white;*/
     }
 
     .user_info p {
         font-size: 10px;
-        color: rgba(255,255,255,0.6);
+        /*color: rgba(255,255,255,0.6);*/
     }
 
 .video_cam {
@@ -203,6 +205,7 @@
     margin-left: 10px;
     border-radius: 25px;
     min-width: 130px;
+    max-width:250px;
     direction: rtl;
     display: flex;
     text-align: right;

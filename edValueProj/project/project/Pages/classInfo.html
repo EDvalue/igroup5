@@ -226,6 +226,7 @@
 
         function updateclassSuccess(data) {
             console.log(data);
+            localStorage["class"]=JSON.stringify(classPage)
             runPage();
             swal('✔עדכון הסתיים בהצלחה')
         }

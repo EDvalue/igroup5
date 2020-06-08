@@ -60,12 +60,39 @@ $(document).ready(function () {
 
         $('.type_msg').val(null);
         $('.contact.active .preview').html('<span>You: </span>' + message);
-        $(".msg_card_body").animate({ scrollTop: $(document).height() }, "fast");
+        $(".msg_card_body").animate({ scrollTop: $(".msg_card_body")[0].scrollHeight }, 1000);
       
     });
 
 
 
+});
+
+function getColorbyUser(userMail) {
+    for (x in editors) {
+
+        if (editors[x].Mail === userMail) {
+            return editors[x].randomColor;
+        }
+
+    }
+}
+
+function getRandomColor() {
+
+    return "hsl(" + 360 * Math.random() + ',' +
+        (90 + 10 * Math.random()) + '%,' +
+        (45 +5 * Math.random()) + '%)';
+//    var letters = '0123456789ABCDEF';
+//    var color = '#';
+//    for (var i = 0; i < 6; i++) {
+//        color += letters[Math.floor(Math.random() * 16)];
+//    }
+//    return color;
+}
+
+
+function startSI() {
     var flag = true;
     var lastDate = new Date(0);
     firebase.database().ref(`/${subDict[subj]}`).on('child_added', function (snapshot) {
@@ -75,16 +102,17 @@ $(document).ready(function () {
             var Fullname = snapshot.child("Fullname").val();
             var date = snapshot.child("date").val();
             var userMail = snapshot.child("userMail").val().replace("_", ".").replace("~", "@");
-            color = getColorbyUser(userMail);
+            
             if (date > lastDate) {
-
+                
                 if (userMail !== userOBJ.Mail) {
+                    color = getColorbyUser(userMail);
                     $(`	<div  class="d-flex justify-content-end mb-4">
                             <div  class="img_cont_msg">
                     <p style='background-color:${color}' class="rounded-circle user_img_msg">${Fullname.split(" ")[0][0]}.${Fullname.split(" ")[1][0]}</p>
                                 
                             </div>
-								<div class="msg_cotainer_send">
+								<div style='background-color:${color}' class="msg_cotainer_send">
                                  <span title='${userMail}'>${Fullname}:</span>
 									${message}
 									<span class="msg_time_send">${new Date(date).toLocaleDateString(undefined, timeForDate)}</span>
@@ -92,9 +120,10 @@ $(document).ready(function () {
 
                     $('.type_msg').val(null);
                     $('.contact.active .preview').html('<span>You: </span>' + message);
-                    $(".msg_card_body").animate({ scrollTop: $(document).height() }, "fast");
+                    
+                    //$(".msg_card_body").animate({ scrollTop: $(document).height() }, "fast");
 
-                    $(".msg_cotainer_send").css("background-color", color);
+                    
 
 
                 }
@@ -115,62 +144,50 @@ $(document).ready(function () {
 
                     $('.type_msg').val(null);
                     $('.contact.active .preview').html('<span>You: </span>' + message);
-                    $(".msg_card_body").animate({ scrollTop: $(document).height() }, "fast");
-
+                    //$(".msg_card_body").animate({ scrollTop: $(document).height() }, "fast");
+                    
                 }
                 lastDate = date;
 
-                setTimeout(function () { flag = false; }, 3000);
+                setTimeout(function () {
+                    if (flag) {
+                        $(".msg_card_body").animate({ scrollTop: $(".msg_card_body")[0].scrollHeight });
+                    }
+
+                    flag = false;
+                }, 3000);
             }
         }, 3000);
 
 
     });
-});
-
-function getColorbyUser(userMail) {
-    for (x in editors) {
-
-        if (editors[x].Mail === userMail) {
-            return editors[x].randomColor;
-        }
-
-    }
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
 
 function getEditorsSuccess(data) {
     editors = data;
 	console.log(data);
     tStr = "";
    
-	for (t in data) {
+    for (t in editors) {
         rc = getRandomColor();
-        data[t].randomColor = rc;
+        editors[t].randomColor = rc;
         tStr += `<li class="">
                       <div class="d-flex bd-highlight">
                                     <div  class="img_cont">
-                                        <p style='background-color:${rc}' class="rounded-circle user_img">${data[t].Fname[0]}.${data[t].LastName[0]}</p>
+                                        <p style='background-color:${rc}' class="rounded-circle user_img">${editors[t].Fname[0]}.${editors[t].LastName[0]}</p>
                                       
                                        
                                     </div>
                                     <div class="user_info">
-                                        <span>${data[t].Fname} ${data[t].LastName}</span>
-                                        <p>${data[t].SchoolName}</p>
+                                        <span>${editors[t].Fname} ${editors[t].LastName}</span>
+                                        <p>${editors[t].SchoolName}</p>
                                     </div>
                                 </div>
                             </li>`;
 
     }
-
+    startSI()
     $(".contacts").html(tStr);
 }
 

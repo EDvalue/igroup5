@@ -683,7 +683,7 @@
                     new Hebcal.HDate().toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``');
                 if (yearOfStudy == taskList[a].YearOfStudy) {
                     cstrA += createTaskDiv(taskList[a]);
-                    sortedTaskList.push();
+                    sortedTaskList.push(taskList[a]);
                 }
                 years[yearOfStudy] = yearOfStudy;
                 years[taskList[a].YearOfStudy] = taskList[a].YearOfStudy;

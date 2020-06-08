@@ -94,25 +94,25 @@
                 swal("התאריך הראשון מאוחר מהשני");
             else if (ClassDate < currentDate)
                 swal("התאריך של השיעור מוקדם מהתאריך של היום הנוכחי");
-            else {
-                yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
+           else  {
+                    yearOfStudy = (new Hebcal.HDate.prototype.getMonth() == 6 && new Date().getMonth == 8) ?
                     new Hebcal.HDate(new Date(new Date().getFullYear(), 8, 30)).toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``') :
                     new Hebcal.HDate().toString('h').replace(' ה', ' ').split(" ")[2].replace('"', '``');
 
 
-                assignment = {
-                    classTime: $("#class_date>input[type='datetime-local']").val(),
-                    submitionTime: $("#submition_date>input[type='datetime-local']").val(),
-                    TaskId: myTask_id,
-                    TeamId: active_team.Id,
-                    TeamSchoolCode: userOBJ.SCode,
-                    YearOfStudy: yearOfStudy,
-                }
+                   assignment = {
+                     classTime: $("#class_date>input[type='datetime-local']").val(),
+                     submitionTime: $("#submition_date>input[type='datetime-local']").val(),
+                     TaskId: myTask_id,
+                     TeamId: active_team.Id,
+                     TeamSchoolCode: userOBJ.SCode,
+                     YearOfStudy: yearOfStudy,
+                   }
                 console.log(assignment)
                 ajaxCall('POST', '../api/Teacher/postAssigment', JSON.stringify(assignment), postAssigmentSuccess, postAssigmentError)
 
 
-            }
+                 }
 
 
         }
@@ -147,7 +147,7 @@
 
                     myTask.QuizList[q].Title = myTask.Title;
                     localStorage["quiz"] = JSON.stringify(myTask.QuizList[q]);
-
+                    localStorage["quiz_mode"] = "watch";
                     window.open("showQuiz.html")
                 }
             }
@@ -209,7 +209,7 @@
 
                     myTask.QuizList[q].Title = myTask.Title;
                     localStorage["quiz"] = JSON.stringify(myTask.QuizList[q]);
-
+                    localStorage["quiz_mode"] = "watch";
                     window.open("showQuiz.html");
                     break;
                 }

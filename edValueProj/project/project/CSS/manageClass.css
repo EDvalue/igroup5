@@ -163,8 +163,9 @@ canvas {
     margin: 5px;
 }
 #IntelligenceCheckBox > div {
-   
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 7px;
+    border-radius: 20px;
 }
 
 #sList > ul > li {

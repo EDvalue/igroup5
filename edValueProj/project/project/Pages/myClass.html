@@ -220,14 +220,14 @@
             var cstr = "";
             for (a in myTeams) {
 
-                if (myTeams[a].Title != listdata.Title) {
+                
 
                     if (myTeams[a].Grade != 10)
                         cstr += `<option value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`;
                     else {
                         cstr += `<option class='PastC' value="${myTeams[a].Id}" >${myTeams[a].Title}</option>`
                     }
-                }
+                
             }
             $("#teamSelect").append(cstr);
 
