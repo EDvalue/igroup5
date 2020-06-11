@@ -20,7 +20,7 @@ namespace project.Models
 
         public int sysUpdates()
         {
-            int grade = 8;
+            int grade = 10;
 
             while (grade >= 7)
             {
