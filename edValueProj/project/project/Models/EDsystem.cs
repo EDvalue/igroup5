@@ -12,7 +12,7 @@ namespace project.Models
 
         Dictionary<int, string> gradesDict = new Dictionary<int, string>
         {
-             {7,"z"},
+             {7,"ז"},
              {8,"ח"},
              {9,"ט"},
              {10,"י"}
