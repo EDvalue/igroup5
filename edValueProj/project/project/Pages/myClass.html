@@ -304,21 +304,21 @@
         function printSt(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div title="${x}" id="${x}"><input type="checkbox" onchange="sortGraphData('stArr',this)" /><span>${obj[x]}</span></div>`
+                str += `<div title="${x}" id="${x}"><input type="checkbox" onchange="sortGraphData('stArr',this)" /><span>&nbsp;${obj[x]}</span></div>`
             }
             $("#stList").append(str);
         }
         function printSubj(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" /><span>${x}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('subj',this)" /><span>&nbsp;${x}</span></div>`
             }
             $("#subjectsList").append(str);
         }
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><span>${intDictionary[x]}</span><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /><span>&nbsp;${intDictionary[x]}</span></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }

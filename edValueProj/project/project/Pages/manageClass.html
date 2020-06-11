@@ -380,7 +380,7 @@
         function printIntelligence(obj) {
             var str = "";
             for (x in obj) {
-                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /><span>${intDictionary[x]}</span></div>`
+                str += `<div id="${x}"><input type="checkbox" onchange="sortGraphData('intelligenceArr',this)" /><span>&nbsp;${intDictionary[x]}</span></div>`
             }
             $("#IntelligenceCheckBox").append(str);
         }

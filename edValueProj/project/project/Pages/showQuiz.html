@@ -514,7 +514,7 @@
 
         function connectForm() {
 
-            if (modeQuiz != "watch" && modeQuiz != "check") {
+            if (modeQuiz != "watch" || modeQuiz != "check") {
 
                 window.onbeforeunload = function () {
                     return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";
