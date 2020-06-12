@@ -57,10 +57,9 @@ namespace project.Controllers
                 throw new Exception(ex.Message + ", file path: " + filePath);
             }
           
-
-
-
         }
+
+     
 
       [HttpPut]
       [Route("api/EDvalue/updatePass")]
@@ -94,6 +93,15 @@ namespace project.Controllers
             EDsystem s = new EDsystem();
             return s.sysUpdates();
         }
+
+        [HttpPut]
+        [Route("api/EDvalue/sys")]
+        public int sys()
+        {
+            EDsystem s = new EDsystem();
+            return s.sysUpdates();
+        }
+
 
     }
 }

@@ -9,17 +9,16 @@ namespace project.Models
 {
     public class EDsystem
     {
+        
 
-        Dictionary<int, string> gradesDict = new Dictionary<int, string>
-        {
-             {7,"ז"},
-             {8,"ח"},
-             {9,"ט"},
-             {10,"י"}
-        };
+        public EDsystem() { }
+
+
 
         public int sysUpdates()
         {
+
+            
             int grade = 10;
 
             while (grade >= 7)
@@ -32,14 +31,17 @@ namespace project.Models
                 dbs4=dbs4.getAllClassesByGrade(grade);
                 dbs2 = dbs2.getAllTeamsByGrade(grade);
                 dbs3 = dbs3.getAllStudentbyGrade(grade);
+                
                 if (grade == 10)
                 {
+                    
                     dbs3.dt=deleteIgradeSt(dbs3.dt);
                     dbs2.dt = DeleteTeamsOrClass(dbs2.dt);
                     dbs1.dt = DeleteTeamsOrClass(dbs1.dt);
-
+                   
                     dbs2.update();
                     dbs1.update();
+                    
                 }
                 else
                 {
@@ -81,7 +83,15 @@ namespace project.Models
 
         private DataTable createClasses(DataTable dt, DataTable dtHolder)
         {
-           int len = dt.Rows.Count-1;
+            Dictionary<int, string> gradesDict = new Dictionary<int, string>
+            {
+             {7,"ז"},
+             {8,"ח"},
+             {9,"ט"},
+             {10,"י"}
+            };
+
+            int len = dt.Rows.Count-1;
    
            while (len>=0)
            {

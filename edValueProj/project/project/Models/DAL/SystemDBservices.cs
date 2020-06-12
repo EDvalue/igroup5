@@ -461,7 +461,7 @@ namespace project.Models.DAL
             int numEffected = 0;
             SqlConnection con;
             SqlCommand cmd;
-
+            numEffected+=deleteFromPI(mail);
             try
             {
                 con = connect("DBConnectionString"); // create the connection
@@ -476,7 +476,60 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
 
-            sb.AppendFormat("DELETE from [Student] WHERE [Student].[StudentEmail]={0}", mail);
+            sb.AppendFormat("DELETE from [Student] WHERE [Student].[StudentEmail]='{0}'", mail);
+            String cStr = sb.ToString();
+            // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                numEffected += cmd.ExecuteNonQuery(); // execute the command
+
+            }
+            catch (Exception ex)
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+            return numEffected;
+        }
+
+        public int deleteFromPI(String mail)
+        {
+
+            int numEffected = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+          
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.AppendFormat("DELETE from PointsInIntelligence WHERE PointsInIntelligence.[StudentEmail]='{0}'", mail);
             String cStr = sb.ToString();
             // helper method to build the insert string
 
@@ -529,7 +582,7 @@ namespace project.Models.DAL
             StringBuilder sb = new StringBuilder();
 
 
-            sb.AppendFormat("DELETE from [User] WHERE [User].[Email]={0}", mail);
+            sb.AppendFormat("DELETE from [User] WHERE [User].[Email]='{0}'", mail);
             String cStr = sb.ToString();
             // helper method to build the insert string
 
