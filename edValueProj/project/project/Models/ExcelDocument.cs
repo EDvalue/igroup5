@@ -294,11 +294,29 @@ namespace project.Models
                 colRange++;
             }
 
-            for (int row = 1; row <= sheet.LastRowNum - 1; row++)
+            for (int row = 1; row <= sheet.LastRowNum;row++)
             {
+
+                if (report.Count > 0)
+                    return report;
+                string type;
                 u = new User();
                 Classroom c1 = new Classroom();
-                string type = sheet.GetRow(row).GetCell(firstRow["Type"]).ToString();           /* xlRange.Cells[i, 6].Value2;*/
+                try
+                {
+                     type = sheet.GetRow(row).GetCell(firstRow["Type"]).ToString();
+
+
+                }
+                catch (NullReferenceException ex)
+                {
+                    Dictionary<string, string> reportRow = new Dictionary<string, string>();
+                    reportRow.Add("msg", " שים לב שמחיקת רשומה באקסל מתבצעת על ידי סימון השורות בסרגל שסופר את התשובות בצד לחצן ימני ומחיקה!,הקובץ אינו תקין  ");
+                    report.Add(reportRow);
+                    return report;
+
+                }
+                /* xlRange.Cells[i, 6].Value2;*/
 
                 foreach (var j in firstRow)
                 {

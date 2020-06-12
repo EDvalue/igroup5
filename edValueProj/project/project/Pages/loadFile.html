@@ -30,7 +30,7 @@
     <script>
         document.title = "טעינת משתמשים-אקסל";
         $(document).ready(function () {
-
+            $(".loader").hide();
             $("#report").hide()
             $("input[type='file']").change(function () {
                 loc = this.value.split('\\');
@@ -45,7 +45,7 @@
 
             $('#sendBTN button').click(function () {
 
-
+                $(".loader").show();
                 var data = new FormData();
                 var file = $("#files").get(0).files[0];
                 data.append("UploadedFile", file);
@@ -73,6 +73,7 @@
 
         function PostDocSuccess(data) {
             rep = data;
+             $(".loader").hide();
             console.log(data)
             if (data[0].msg === undefined) {
                 $("#report").show();
@@ -84,7 +85,8 @@
 
         }
         function PostDocError(err) {
-            console.log(err)
+            alert("משהו השתבש בניסיון לטעון קובץ")
+           $(".loader").show();
         }
 
         function createExportTBL() {
@@ -129,7 +131,7 @@
 
                     ],
                 });
-                buttonEvents();
+             
             }
 
             catch (err) {
@@ -181,7 +183,7 @@
                 </tr>
             </thead>
         </table>
-        <button onclick="exportTableToExcel('rep_tbl',new Date())">Export Table Data To Excel File</button>
+        <button style="margin: 10px 30%;width: 40%;" class="btn btn-primary" onclick="exportTableToExcel('rep_tbl',new Date())">Export Table Data To Excel File</button>
     </div>
     <div id="container">
 
@@ -215,16 +217,17 @@
                 </div>
 
                 <div id="ph_file"><p>לא נבחר קובץ</p></div>
+                <div class="loader"></div>
                 <div class="row" id="uploadFile">
-                    
-          
+
+
                     <div class="form-group col-lg-4" id="file">
-                        
-                        
+
+
                         <!--<a href="javascript:void(0)" class="btn1 btn-defult m-3"><i class="fa fa-paperclip"></i>          בחר קובץ</a>-->
-                        <input  type="file" accept=".xlsx" id="files" >
+                        <input type="file" accept=".xlsx" id="files">
                         <input id="fileBTN" type="button" class="btn btn-info btn-group-lg" value="בחר קובץ" />
-                        <div id="sendBTN"> <button  class="btn btn-primary btn-lg">שלח</button> </div>
+                        <div id="sendBTN"> <button class="btn btn-primary btn-lg">שלח</button> </div>
 
                     </div>
 
