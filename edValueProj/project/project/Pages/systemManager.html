@@ -43,7 +43,7 @@
                 swal({
 
                     title: "האם אתה בטוח??",
-                    text: "מצב המערכת ישמר כגיבוי ושאר בכיתות והקבוצות יעלו שכבת גיל,שים לב שהמידע על תלמידי כיתה ט הנו בחייים לא יהיה זמין",
+                    text: "הכיתות והקבוצות יעלו שכבת גיל,שים לב שהמידע על תלמידי כיתה ישמר גם לשנת הלימודים הבאה",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true
@@ -58,7 +58,7 @@
                             }).then(function (confirm) {
                                 if (confirm) {
 
-                                    ajaxCall("PUT", "../api/EDvalue/sysUpdates/","", sysUpdateSuccess, sysUpateError);
+                                    ajaxCall("PUT", "../api/EDvalue/sysUpdates","", sysUpdateSuccess, sysUpateError);
 
                                 } else {
                                     swal("ביצוע עדכון בוטל");

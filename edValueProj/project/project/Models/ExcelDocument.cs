@@ -401,16 +401,15 @@ namespace project.Models
                             {
                                 c1.Grade = Convert.ToInt32(sheet.GetRow(row).GetCell(j.Value).ToString());
                             }
-                            if(type=="תלמיד" )
-                            {
+                            
                                 if (c1.Grade<7 || c1.Grade > 9)
                                 {
                                     Dictionary<string, string> reportRow = new Dictionary<string, string>();
-                                    reportRow.Add("msg", "in line " + row + "column" + j.Key + " content is invalid,must be only digits");
+                                    reportRow.Add("msg", "in line " + row + " column" + j.Key + " content is invalid,must be only digits(7,8,9)");
                                     report.Add(reportRow);
                                     flg = 1;
                                 } 
-                            }
+                            
                             break;
                         case "ClassNumber":
                             if (sheet.GetRow(row).GetCell(j.Value) == null)

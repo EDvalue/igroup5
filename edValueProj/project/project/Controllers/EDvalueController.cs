@@ -87,7 +87,7 @@ namespace project.Controllers
         }
 
         [HttpPut]
-        [Route("api/EDvalue/sysUpdates/")]
+        [Route("api/EDvalue/sysUpdates")]
         public int sysUpdates()
         {
 
