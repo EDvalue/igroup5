@@ -41,6 +41,8 @@
 
         function init() {
 
+          
+
             if (localStorage["studentData"])
                 studentGraphData = JSON.parse(localStorage['studentData']);
             if (localStorage["intStudentData"])
@@ -121,6 +123,18 @@
             ckReplace()
             connectCHK();
             connectForm();
+            $(".fb_txt>textarea").keyup(function () {
+                str = $(".fb_txt>textarea").val();
+                len = str.length;
+                $("#lett_counter>span").html(len);
+            });
+            
+                $("#quizForm").submit(function () {
+
+                    perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
+
+                    return false;
+                });
             if (perform_showQuiz_mode == "student" || (perform_showQuiz_mode == "teacher" && modeQuiz == "check")) {
                 //fill answer of quiz
                 fillANS();
@@ -236,7 +250,8 @@
                      <div class="fb_content">
                       <div class="note_fb">
                         <div clsss="p_note"><p>משוב לשאלון</p></div>
-                        <div class="fb_txt"><textarea rows="5" cols="40"></textarea></div>
+                        <div class="fb_txt"><textarea maxlength='1000' rows="5" cols="40"></textarea></div>
+                        <div id="lett_counter"><span>0</span>/1000</div>
                       </div>
                        <div class="grade_fb">
                         <div clsss="p_grade"><p>ציון</p></div>
@@ -352,6 +367,7 @@
                 else
                     Pobj = getPdataByTask(performer);
                 $(".fb_txt>textarea").val(Pobj.Note);
+                $("#lett_counter>span").html(Pobj.Note.length);
                 if (Pobj.Grade > 0)
                     $(".fb_grade>input[type='number']").val(Pobj.Grade);
 
@@ -371,7 +387,18 @@
                 mail: smail,
                 qid: el.QuizID,
             }
+            if (studentGraphData!=undefined) {
+                
+                for (q in studentGraphData) {
+                    if (studentGraphData[q].QuizID == el.QuizID) {
+                       studentGraphData[q].Grade = fb.grade;
+                        studentGraphData[q].isperform = "1";
+                    }
+                }
 
+                 
+            }
+           
             ajaxCall("PUT", "../api/Teacher/updateFB", JSON.stringify(fb), updateFBsuccess, updateFBerror)
         }
 
@@ -405,7 +432,10 @@
 
                     if (performers[s].isWaiting != 0) {
                         let x = performers[s].Grade ? "-" + performers[s].Grade : "";
-                        ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x} ${performers[s].title})</option>`;
+                        if(performers[s].title)
+                            ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x} ${performers[s].title})</option>`;
+                        else
+                             ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`
 
                     } else if (performers[s].isWaiting == undefined) {
                         localStorage["performer"] = performers[s].Mail
@@ -514,19 +544,13 @@
 
         function connectForm() {
 
-            if (modeQuiz != "watch" || modeQuiz != "check") {
+            if (perform_showQuiz_mode=="תלמיד"&&(modeQuiz != "watch")) {
 
                 window.onbeforeunload = function () {
                     return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";
 
                 };
 
-                $("#quizForm").submit(function () {
-
-                    perform_showQuiz_mode == "student" ? uploadeForm() : updateFB();
-
-                    return false;
-                });
 
                 $("input[type='file']").change(fileperform)
 

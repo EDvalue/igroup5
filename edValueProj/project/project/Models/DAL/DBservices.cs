@@ -822,14 +822,14 @@ namespace project.Models
                
                 }
 
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
 
             }
 
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
             return report;
         }
 

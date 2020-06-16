@@ -63,7 +63,10 @@
         }
         var sortedGraphData;
 
+       
+
         $(document).ready(function () {
+            $(".body_loading").hide();
             $("#changeName").toggle();
             if (localStorage["user"]) {
                 userOBJ = JSON.parse(localStorage["user"]);
@@ -421,7 +424,7 @@
                 dangerMode: true,
             }).then(function (isConfirm) {
                 if (isConfirm) {
-
+                    $(".body_loading").show();
                     OpenSignIn()
 
                 } else {
@@ -448,6 +451,8 @@
         }
 
         function openSIsuccess(data) {
+            console.log(data)
+            $(".body_loading").hide();
             swal({
                 title: 'הרשמה נפתחה!',
                 text: `כעת ניתן להירשם באמצעות הקוד:${SignIn.Code}`,
@@ -456,7 +461,7 @@
 
         }
 
-        function openSIerror(err) { }
+        function openSIerror(err) { $(".body_loading").hide();}
 
         function ChartChange() {
             $("#statistics").height("400px")
@@ -518,28 +523,29 @@
     </script>
 </head>
 <body dir="rtl">
+ 
     <div id="disbackg"></div>
     <div id="container">
         <div id="header">
             <div class="row">
 
-                <div id="imgLogo" class="col-lg-3">
+                <div onclick="location.assign('teacherDahBoard.html')" id="imgLogo" class="col-lg-3">
 
                     <img src="../images/EDvalueSmall.png" />
 
                 </div>
 
                 <div id="title" class="col-lg-6">
-                    <div id="changeName" >
+                    <div id="changeName">
                         <input type="text" />
                         <input type="button" value="עדכן" class="btn btn-info" />
                     </div>
-                  
+
                     <h3>שם הכיתה...</h3>
 
                 </div>
 
-                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+                <div  id="mindcetImg" class="col-lg-3 d-none d-lg-block">
 
                     <!--<img src="../images/MindCet.png" />-->
 
@@ -558,6 +564,14 @@
                         <li class="nav-item active">
                             <div id="open_signIn">
                                 <input type="button" class="btn btn-primary" onclick="confirmSignIn()" value="פתח רישום" />
+                                <div class="body_loading">
+                                    <div class="container_loading">
+                                        <div class="yellow"></div>
+                                        <div class="red"></div>
+                                        <div class="blue"></div>
+                                        <div class="violet"></div>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                         <li class="nav-item">

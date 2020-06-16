@@ -1031,21 +1031,22 @@ namespace project.Models.DAL
             return numEffected;
         }
 
-        public int openSI(Dictionary<string, string> dict)
+        public string openSI(Dictionary<string, string> dict)
         {
 
             int numEffected = 0;
             SqlConnection con;
             SqlCommand cmd;
-
-            var datetime = Convert.ToDateTime(dict["Time"])+":00";
+         
+            var datetime = Convert.ToDateTime(dict["Time"]).ToString("dd/MM/yyyy HH:mm:ss");
+            
             var date = datetime.Split(' ')[0];
             var time = datetime.Split(' ')[1];
             var fixDate = date.Split('/');
             var finTime = fixDate[2] + "-" + fixDate[1] + "-" + fixDate[0] + " " + time;
 
 
-
+            
 
 
             try
@@ -1062,7 +1063,7 @@ namespace project.Models.DAL
             String cStr = "UPDATE Class SET SignIn_Code ='"+dict["Code"]+ "',SignIn_Time='"+ finTime + "' WHERE Grade=" +dict["Grade"]+ " and GradeNumber="+dict["GradeNumber"]+ " and SchoolCode="+dict["School"];
 
 
-
+            
             // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
@@ -1087,7 +1088,7 @@ namespace project.Models.DAL
                 }
             }
             sendCodeMail(dict);
-            return numEffected;
+            return cStr;
 
         }
 

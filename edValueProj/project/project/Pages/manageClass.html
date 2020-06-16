@@ -909,6 +909,7 @@
     </script>
 </head>
 <body dir="rtl">
+    <div id="disbackg"></div>
     <div id="assigment">
         <form id="assigmentForm">
             <a onclick="closeDivAU()"><span>Close x</span></a>
@@ -926,211 +927,210 @@
             </div>
 
         </form>
-  </div>
+    </div>
 
-        <div id="ShowQuestionnaire">
-            <a onclick="closeDivUS()"><span>Close x</span></a>
-            <div id="TaskView">
-                <div id="addContent">
+    <div id="ShowQuestionnaire">
+        <a onclick="closeDivUS()"><span>Close x</span></a>
+        <div id="TaskView">
+            <div id="addContent">
 
-                    <table id="sp_table" class="display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
+                <table id="sp_table" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
 
-                                <th>מייל תלמיד</th>
-                                <th>ממתין לבדיקה</th>
-                                <th>ת.ז</th>
-                                <th>שם מלא</th>
-                                <th>שאלון</th>
-                                <th>ציון</th>
-                                <th>הערה</th>
-                            </tr>
-                        </thead>
-                    </table>
+                            <th>מייל תלמיד</th>
+                            <th>ממתין לבדיקה</th>
+                            <th>ת.ז</th>
+                            <th>שם מלא</th>
+                            <th>שאלון</th>
+                            <th>ציון</th>
+                            <th>הערה</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                </div>
             </div>
         </div>
+    </div>
 
-        <div id="container">
-            <div id="header">
-                <div class="row">
+    <div id="container">
+        <div id="header">
+            <div class="row">
 
-                    <div id="imgLogo" class="col-lg-3">
+                <div onclick="location.assign('teacherDahBoard.html')" id="imgLogo" class="col-lg-3">
 
-                        <img src="../images/EDvalueSmall.png" />
-
-                    </div>
-
-                    <div id="title" class="col-lg-6">
-                        <h3>שם הקבוצה...</h3>
-
-                    </div>
-
-                    <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
-
-                        <!--<img src="../images/MindCet.png" />-->
-
-                    </div>
+                    <img src="../images/EDvalueSmall.png" />
 
                 </div>
-                
-                <nav class="navbar navbar-expand-lg navbar-light navBar">
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                <div id="title" class="col-lg-6">
+                    <h3>שם הקבוצה...</h3>
+
+                </div>
+
+                <div id="mindcetImg" class="col-lg-3 d-none d-lg-block">
+
+                    <!--<img src="../images/MindCet.png" />-->
+
+                </div>
+
+            </div>
+
+            <nav class="navbar navbar-expand-lg navbar-light navBar">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
+                    <ul class="navbar-nav navPadding">
+                        <li class="nav-item">
+                            <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
+                        </li>
+                        <li class="nav-item">
+                            <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
+                                <option team_Id="">הקבוצות שלי</option>
+                            </select><!---->
+                        </li>
+                        <li class="nav-item">
+                            <select class="btn btn-primary btnonSmall" id="nav_classes" onchange="openClass()">
+                                <option>הכיתות שלי</option>
+                            </select>
+
+                        </li>
+
+
+                    </ul>
+
+                </div>
+                <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
+                    <option value="" disabled selected hidden>בחר גרף</option>
+                    <option value="TaskCharts">גרף הגשות</option>
+                    <option value="GradeCharts">גרף ממוצעי ציונים</option>
+                    <option value="PercentageCharts">אחוזי אינטלגנציות</option>
+                    <option value="intlCharts">ניקוד אינטליגנציות</option>
+                    <option value="CloseAll">לסגור הכל</option>
+                </select>
+                <div id="user_manage">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow:0">
-                        <ul class="navbar-nav navPadding">
-                            <li class="nav-item">
-                                <button class="btn btn-primary btnonSmall" onclick="addRemoveS()">ניהול קבוצה</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="btn btn-primary btnonSmall" onclick="addQuiz()">הוסף מטלה</button>
-                            </li>
-                            <li class="nav-item">
-                                <select class="btn btn-primary btnonSmall" id="teamSelect" onchange="openTeam()">
-                                    <option team_Id="">הקבוצות שלי</option>
-                                </select><!---->
-                            </li>
-                            <li class="nav-item">
-                                <select class="btn btn-primary btnonSmall" id="nav_classes" onchange="openClass()">
-                                    <option>הכיתות שלי</option>
-                                </select>
-
-                            </li>
-
-
-                        </ul>
-
+                    <div id="nav_cnt" class="dropdown-menu">
+                        <p id="disconnect" onclick="disconnect()">התנתק</p>
+                        <p id="cp" onclick="displayCP()">שנה סיסמא</p>
                     </div>
-                    <select class="btn btn-primary btnonSmall" id="mySelect" onchange="ChartChange()">
-                        <option value="" disabled selected hidden>בחר גרף</option>
-                        <option value="TaskCharts">גרף הגשות</option>
-                        <option value="GradeCharts">גרף ממוצעי ציונים</option>
-                        <option value="PercentageCharts">אחוזי אינטלגנציות</option>
-                        <option value="intlCharts">ניקוד אינטליגנציות</option>
-                        <option value="CloseAll">לסגור הכל</option>
-                    </select>
-                    <div id="user_manage">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        </button>
-                        <div id="nav_cnt" class="dropdown-menu">
-                            <p id="disconnect" onclick="disconnect()">התנתק</p>
-                            <p id="cp" onclick="displayCP()">שנה סיסמא</p>
-                        </div>
-                    </div>
-                </nav>
-
-
-            </div>
-               
-
-
-  
-
-
-            <div id="main">
-                
-                <div class="hide_list_teams change " onclick="myFunction(this)">
-                    <div class="bar1"></div>
-                    <div class="bar2"></div>
-                    <div class="bar3"></div>
                 </div>
-                <div id="teamList">
-
-                    <div id="slTitle">
-                        <h4>תלמידים</h4>
-                    </div>
-                    <div id="sList">
-
-                        <ul>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div id="info">
-                    <div id="statistics">
-                        <div id="stat_control_top">
-                            <div class="capr">גלול אינטליגנציות</div>
-                            <div id="IntelligenceCheckBox">
-                            </div>
-                            <div class="capl"></div>
-                            
-                        </div>
-
-                        <div id="down">
-                            <section>
-                                <a href="#" class="scroll-down" address="true"></a>
-                            </section>
-                            
-                        </div>
-                        <div id="mainGraph">
-                            <div class="content">
-                                <div class="row" id="intlCharts" style="display:none">
-                                    <h3 style="text-align:center">
-                                        גרף זה לא מסונן
-                                    </h3>
-                                    <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
-
-                                </div>
-                                <div class="row" id="TaskCharts" style="display:none">
-
-                                    <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
-
-                                </div>
-                                <div class="row" id="GradeCharts" style="display:none">
-
-                                    <div class="wrapper col-12"><canvas id="GradeChart"></canvas></div>
-
-                                </div>
-                                <div class="row" id="PercentageCharts" style="display:none">
-
-                                    <div class="wrapper col-12"><canvas id="PercentageChart"></canvas></div>
-
-                                </div>
-                            </div>
-
-                            <div id="stat_control_left">
-                                <div id="toggleTask">גלול משימות</div>
-                                <div id="taskName">
-
-                                </div>
-
-                            </div>
-                        </div>
+            </nav>
 
 
-
-                    </div>
-
-
-                </div>
-
-                <div class="" id="class_info">
-                    <div id="tasksTitle">
-                        <div id="title">
-                            <p>משימות ששוייכו</p>
-                        </div>
-                            <div id="years">
-                                <select class="custom-select">
-                                    
-                                </select>
-                            </div>
-               
-                    </div>
-
-                    <div class="" id="tasks">
-
-
-                    </div>
-
-                </div>
-
-            </div>
         </div>
+
+
+
+
+
+
+        <div id="main">
+
+            <div class="hide_list_teams change " onclick="myFunction(this)">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div id="teamList">
+
+                <div id="slTitle">
+                    <h4>תלמידים</h4>
+                </div>
+                <div id="sList">
+
+                    <ul>
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div id="info">
+                <div id="statistics">
+                    <div id="stat_control_top">
+                        <div class="capr">גלול אינטליגנציות</div>
+                        <div id="IntelligenceCheckBox">
+                        </div>
+                        <div class="capl"></div>
+
+                    </div>
+
+                    <div id="down">
+                        <section>
+                            <a href="#" class="scroll-down" address="true"></a>
+                        </section>
+
+                    </div>
+                    <div id="mainGraph">
+                        <div class="content">
+                            <div class="row" id="intlCharts" style="display:none">
+                                <h3 style="text-align:center">
+                                    גרף זה לא מסונן
+                                </h3>
+                                <div class="wrapper col-12"><canvas id="intlChart"></canvas></div>
+
+                            </div>
+                            <div class="row" id="TaskCharts" style="display:none">
+
+                                <div class="wrapper col-12"><canvas id="TaskChart"></canvas></div>
+
+                            </div>
+                            <div class="row" id="GradeCharts" style="display:none">
+
+                                <div class="wrapper col-12"><canvas id="GradeChart"></canvas></div>
+
+                            </div>
+                            <div class="row" id="PercentageCharts" style="display:none">
+
+                                <div class="wrapper col-12"><canvas id="PercentageChart"></canvas></div>
+
+                            </div>
+                        </div>
+
+                        <div id="stat_control_left">
+                            <div id="toggleTask">גלול משימות</div>
+                            <div id="taskName">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+            <div class="" id="class_info">
+                <div id="tasksTitle">
+                    <div id="title">
+                        <p>משימות ששוייכו</p>
+                    </div>
+                    <div id="years">
+                        <select class="custom-select">
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="" id="tasks">
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>

@@ -150,7 +150,7 @@ namespace project.Controllers
 
         [HttpPut]
         [Route("api/Teacher/openSI")]
-        public int openSI([FromBody] Dictionary<string, string> dict)
+        public string openSI([FromBody] Dictionary<string, string> dict)
         {
             Classroom c = new Classroom();
             return c.openSI(dict);

@@ -457,10 +457,10 @@ element.style {
 #TaskView {
     margin: auto;
     width: 90%;
-    margin-right: 5%;
+    margin-right: 3.8%;
 }
 #ShowQuestionnaire {
-    width: 70%;
+    width: 75%;
     height: 80%;
     position: fixed;
     top: 50%; /* position the top  edge of the element at the middle of the parent */

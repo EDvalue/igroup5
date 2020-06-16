@@ -13,14 +13,24 @@ html {
 	/*background: linear-gradient(rgba(65, 55, 55, 0.95),#fff);*/
 	background: #f1f1f1;
 }
-#nav_cnt{
-	cursor:pointer;
-	text-align:right;
+#nav_cnt {
+	cursor: pointer;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
 }
 
-.navbar button:hover, .navbar select:hover {
-	border-bottom: 1px solid white;
-}
+	#nav_cnt > p {
+		margin: 0;
+		border-bottom: 1px dotted black;
+	}
+	#nav_cnt > p:hover {
+		background:linear-gradient(#007bff,#fff);
+	}
+
+	.navbar button:hover, .navbar select:hover {
+		border-bottom: 1px solid white;
+	}
 
 
 
