@@ -482,6 +482,7 @@
             }
             $("#IntelligenceCheckBox").append(str);
         }
+
         function sortGraphData(arrName, val) {
             $("#statistics input[type='checkbox']").attr('disabled', 'disabled')
             setTimeout(function () { $("#statistics input[type=checkbox]").attr('disabled', false); }, 1100);
@@ -503,9 +504,21 @@
             if (arr.length > 0) {
                 for (x in graphData) {
 
-                    if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 || sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1)) {
-                        sortedGraphData.push(graphData[x])
+                    if (sortTags["intelligenceArr"].length > 0 && sortTags["taskArr"].length > 0) {
+                        if ((sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1 && sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1)) {
+                            sortedGraphData.push(graphData[x])
+                        }
+                    } else if (sortTags["intelligenceArr"].length > 0) {
+                        if (sortTags["intelligenceArr"].indexOf(graphData[x].IntelligenceName) != -1){
+                            sortedGraphData.push(graphData[x])
+                        }
+                    } else {
+                        if (sortTags["taskArr"].indexOf(graphData[x].TaskTitle.replace(`"`, "")) != -1) {
+                            sortedGraphData.push(graphData[x])
+                        }
                     }
+
+                    
                 }
                 console.log(sortedGraphData)
                 task.data.datasets = sortedGraphData
