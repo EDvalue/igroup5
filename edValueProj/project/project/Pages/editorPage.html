@@ -285,12 +285,14 @@
             }
             if (this.value == "צור שאלון") {
                 meta.quizMode = "new"
+                localStorage['quiz_mode'] = "new";
                 if (localStorage["edit-Questionnaire"]) {
                     localStorage.removeItem("edit-Questionnaire");
                 }
 
             } else {
                 meta.quizMode = "edit"
+                localStorage['quiz_mode'] = "edit";
                 myQuestionnaire = getSelectedQ()
                 localStorage["edit-Questionnaire"] = JSON.stringify(myQuestionnaire);
             }
