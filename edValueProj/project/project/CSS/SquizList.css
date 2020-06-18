@@ -305,7 +305,7 @@ h3 {
 }
     .cq_questionnaire > img {
         width: 100%;
-        height: inherit;
+        height: 100px;
     }
 
 #left {

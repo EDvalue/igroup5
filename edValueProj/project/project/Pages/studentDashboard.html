@@ -39,7 +39,7 @@
 
             userOBJ = JSON.parse(localStorage["user"])
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
-            $("#title>h1>span").html(userOBJ.Name);
+            $("#title>h1>span").html(" "+userOBJ.Name);
             if ((localStorage["userMode"]))
                 userMode = localStorage["userMode"];
             if (localStorage['quiz'])
@@ -146,8 +146,8 @@
             </div>
 
             <div id="title" class="col-lg-6">
-                <h1>שלום,<span>תלמיד</span></h1>
-                <p>בחר קבוצה מתאימה</p>
+                <h1>שלום<span>תלמיד</span></h1>
+                <!--<p>בחר קבוצה מתאימה</p>-->
             </div>
 
             <div id="mindcetImg" class="col-lg-3">

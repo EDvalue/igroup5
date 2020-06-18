@@ -36,7 +36,7 @@
             userOBJ = JSON.parse(localStorage["user"])
             $("#user_manage>button").append(userOBJ.Name + " " + userOBJ.LastName);
             document.title="דשבורד מורה-"+userOBJ.Name + " " + userOBJ.LastName
-            $("#title span").html(userOBJ.Name)
+            $("#title span").html(" "+userOBJ.Name)
             if (!userOBJ.SchoolAdmin) {
                 $("#saBTN").hide()
 
@@ -225,7 +225,7 @@
             </div>
 
             <div id="title" class="col-lg-6">
-                <h3> שלום,<span></span></h3>
+                <h3>שלום<span></span></h3>
                 <!--<p>בחר קבוצה מתאימה</p>-->
             </div>
 
