@@ -544,7 +544,7 @@
 
         function connectForm() {
 
-            if (perform_showQuiz_mode=="student"&&(modeQuiz == "edit")) {
+            if (perform_showQuiz_mode=="student"&&(modeQuiz == "edit"||modeQuiz == "new")) {
 
                 window.onbeforeunload = function () {
                     return "אתה בטוח שאתה רוצה לעזוב בלי לשמור את השינויים?";

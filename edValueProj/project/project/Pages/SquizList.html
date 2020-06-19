@@ -224,6 +224,7 @@
             el = quizC;
             localStorage["quiz"] = JSON.stringify(quizC);
             localStorage["perform_showQuiz_mode"] = "student";
+            perform_showQuiz_mode="student";
             localStorage['quiz_mode'] = "edit";
             modeQuiz = "edit";
             location.assign("showQuiz.html");
@@ -449,7 +450,7 @@
                                 arr[t].Task.QuizList[q].TaskId = arr[t].Task.TaskId;
                                 el = arr[t].Task.QuizList[q];
                                 localStorage["quiz"] = JSON.stringify(arr[t].Task.QuizList[q]);
-
+                                modeQuiz = "edit";
                                 location.assign("showQuiz.html");
                                 break;
                             }

@@ -123,3 +123,7 @@ th.sorting {
 .fb  p {
     margin-right:19%
 }
+#fbBTN {
+    display: flex;
+    margin-bottom: 10px;
+}

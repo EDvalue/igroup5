@@ -187,22 +187,25 @@ span.markAns,p.markAns {
 
 #AmericanAmswerBlock {
     display: flex;
-    align-items: center;
+   
 }
     #AmericanAmswerBlock span {
-        font-size: 25px;
+        font-size: 23px;
         margin: 0;
     }
 #Question_content{
     
 }
 #AmericanAmswerBlock p {
-    font-size: 25px;
-    margin: 0;
+    font-size: 20px;
+    
+    margin-right: 6px;
 }
-    input[type=checkbox] {
-        zoom: 2;
-    }
+input[type=checkbox] {
+    zoom: 2;
+    margin-top: 2px;
+    margin-right: 1px;
+}
 
 
 #header {
