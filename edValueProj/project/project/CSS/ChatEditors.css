@@ -218,6 +218,7 @@
 .msg_cotainer_send {
     min-width: 130px;
     direction: rtl;
+    max-width: 250px;
     display: flex;
     text-align: right;
     flex-direction: column;
@@ -226,7 +227,7 @@
     margin-right: 10px;
     border-radius: 25px;
     background-color: #78e08f;
-    padding:5px 10px;
+    padding: 5px 10px;
     position: relative;
 }
 

@@ -20,6 +20,16 @@
     <title></title>
 
     <script>
+
+        var intDictionary = {
+            "logically": "לוגית",
+            "movemental": "תנועתית",
+            "musically": "מוזיקלית",
+            "personal": "אישית",
+            "spatial": "מרחבית",
+            "tongue": "לשונית",
+            "לא ביצעו": "לא ביצעו"
+        };
         
         var str;
         var el; //save the quiz object;
@@ -433,9 +443,9 @@
                     if (performers[s].isWaiting != 0) {
                         let x = performers[s].Grade ? "-" + performers[s].Grade : "";
                         if(performers[s].title)
-                            ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x} ${performers[s].title})</option>`;
+                            ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${intDictionary[performers[s].IntelligenceName]} ${x} ${performers[s].title})</option>`;
                         else
-                             ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${performers[s].IntelligenceName} ${x})</option>`
+                             ncStr += `<option task="${performers[s].TaskId}" of="${performers[s].Mail}" class="Nc_opt">${performers[s].Fname} ${performers[s].Lname}(${intDictionary[performers[s].IntelligenceName]} ${x})</option>`
 
                     } else if (performers[s].isWaiting == undefined) {
                         localStorage["performer"] = performers[s].Mail

@@ -281,7 +281,7 @@ namespace project.Models.DAL
 
                     }
 
-                    MailMessage mm = new MailMessage("morptao@gmail.com", userName);
+                    MailMessage mm = new MailMessage("edvalue.rup@gmail.com", userName);
                     mm.Subject = "Password Recovery";
                     mm.Body = string.Format("Hi {0},<br /><br />Your password is {1}.<br /><br />Thank You.", name, password);
                     mm.IsBodyHtml = true;
@@ -289,8 +289,8 @@ namespace project.Models.DAL
                     smtp.Host = "smtp.gmail.com";
                     smtp.EnableSsl = true;
                     NetworkCredential NetworkCred = new NetworkCredential();
-                    NetworkCred.UserName = "morptao@gmail.com";
-                    NetworkCred.Password = "MorPinto123";
+                    NetworkCred.UserName = "edvalue.rup@gmail.com";
+                    NetworkCred.Password = "mordolevdavid";
                     smtp.UseDefaultCredentials = true;
                     smtp.Credentials = NetworkCred;
                     smtp.Port = 587;

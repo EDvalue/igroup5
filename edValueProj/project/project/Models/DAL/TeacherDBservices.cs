@@ -1094,7 +1094,7 @@ namespace project.Models.DAL
 
         public void sendCodeMail(Dictionary<string,string> d)
         {
-            MailMessage mm = new MailMessage("morptao@gmail.com", d["Mail"]);
+            MailMessage mm = new MailMessage("edvalue.rup@gmail.com", d["Mail"]);
             mm.Subject = "Code for registration";
             mm.Body = string.Format("Hi,<br /><br />Your code is {0} for class {1}.<br /><br />Thank You.", d["Code"], d["Title"]);
             mm.IsBodyHtml = true;
@@ -1102,8 +1102,8 @@ namespace project.Models.DAL
             smtp.Host = "smtp.gmail.com";
             smtp.EnableSsl = true;
             NetworkCredential NetworkCred = new NetworkCredential();
-            NetworkCred.UserName = "morptao@gmail.com";
-            NetworkCred.Password = "MorPinto123";
+            NetworkCred.UserName = "edvalue.rup@gmail.com";
+            NetworkCred.Password = "mordolevdavid";
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = NetworkCred;
             smtp.Port = 587;
