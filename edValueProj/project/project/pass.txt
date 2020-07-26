@@ -1,0 +1,13 @@
+משתמש מורה:
+שם משתמש:morptao@gmail.com
+סיסמא:305779449
+משתמש תלמיד:
+שם משתמש:dvdbobr@gmail.com
+סיסמא:305779449
+משתמש אדמין:
+שם משתמש:Admin
+סיסמא:Admin12345
+
+לינק למערכת על השרת של רופין:
+http://proj.ruppin.ac.il/igroup5//prod/pages/LogIn.html
+
